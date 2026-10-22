@@ -8,7 +8,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f5f7f3" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f1a19" media="(prefers-color-scheme: dark)">
-
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap">
@@ -867,6 +866,26 @@ const LA=[
  ['Prilocaine 4%',40,8,600],
  ['Bupivacaine 0.5% + epi',5,1.3,90]];
 const RCRI=['High-risk surgery (intraperitoneal, intrathoracic, suprainguinal vascular)','Ischemic heart disease','Heart failure history','Cerebrovascular disease','Insulin-treated diabetes','Creatinine >2.0 mg/dL'];
+function sedHTML(){
+ const a3=S.asa==='3';
+ const rows=[
+  ['Midazolam',F('1–2 mg IV'),'Upfront; anxiolysis, amnesia'],
+  ['Precedex',a3?DR(0.3,0.5,null,'mcg'):D(0.5,null,'mcg',0),a3?'Single slow load over 10–15 min':'Single slow load over ~10 min'],
+  ...(a3?[['Precedex re-bolus',DR(0.1,0.2,null,'mcg'),'q45–60 min to hold the floor']]:[]),
+  ['Ketamine',a3?F('10–20 mg touches'):DR(0.25,0.5,null,'mg'),a3?'Small touches':'Titrated'],
+  ['Propofol',a3?F('10 mg increments'):F('10–20 mg touches'),'Reserve for depth only'],
+  ['Decadron',F('4–10 mg IV'),'Swelling, PONV'],
+  ['Glycopyrrolate',F('0.1–0.2 mg IV'),'Drawn up: bradycardia, secretions']];
+ return `<details class="box" open><summary>Your sedation protocol <em>no pump · ASA ${a3?'III':'I–II'}</em></summary><div class="inner">
+ <div class="toggles" style="margin-bottom:8px"><button class="tg${a3?'':' on'}" data-asa="12" aria-pressed="${!a3}">ASA I–II · short case</button><button class="tg${a3?' on':''}" data-asa="3" aria-pressed="${a3}">ASA III · long / full-arch</button></div>
+ <table class="ctab"><tr><th>Drug</th><th>Dose</th><th>Use</th></tr>${rows.map(([n,d,u])=>`<tr><td>${n}</td><td>${d}</td><td>${u}</td></tr>`).join('')}</table>
+ <div class="calc">Monitor: ${a3?'continuous capnography + BP q3 min · re-baseline between quadrants · moderate–deep, never general':'capnography + BP q5 min · short case: no Precedex re-bolus'}</div>
+ <div class="sub">Faster Precedex load (caution${a3?' — avoid in fragile ASA III hearts':''})</div>
+ <p class="caveat" style="margin:0">${D(0.25,null,'mcg',1)} over ~5 min. Glycopyrrolate drawn up before the push. Expect brief hypertension, then rebound bradycardia.</p>
+ <div class="sub">Red flags</div>
+ <ul class="caveat" style="margin:0;padding-left:18px"><li>Midazolam + propofol: main apnea source.</li><li>Ketamine: secretions, laryngospasm — glyco ready, suction close.</li><li>OSA / difficult airway: cut propofol first.</li><li>Capnography warns first; SpO₂ lags.</li></ul>
+ <p class="caveat" style="margin:10px 0 0">Personal protocol${UNV} — doses not label-verified (as of Oct 22, 2026). Rescue: SOS tab. ${srcLink('mysed')}</p></div></details>`;
+}
 function calcHTML(){
  const w=S.wt;
  const la=LA.map(([n,mgml,pk,cap])=>{if(!w)return`<tr><td>${n}</td><td>${pk} mg/kg${cap?` · max ${cap} mg`:''}</td><td>–</td></tr>`;
@@ -875,6 +894,7 @@ function calcHTML(){
  const rc=S.rcri||{},rn=Object.values(rc).filter(Boolean).length,rr=['0.4%','0.9%','6.6%','≥11%'][Math.min(rn,3)];
  const mf=w?(w<=10?w*4:w<=20?40+(w-10)*2:60+(w-20)):null;
  return `<div class="wtbar"><label class="fld" for="in-wt">Weight, kg<input id="in-wt" data-wt inputmode="decimal" placeholder="kg" value="${esc(w??'')}"></label><div class="note">Shared with the Emergency tab.</div></div>
+ ${sedHTML()}
  <details class="box" open><summary>Local anesthetic maximum <em>1.7 mL cartridges</em></summary><div class="inner"><table class="ctab"><tr><th>Agent</th><th>Max dose</th><th>Carps</th></tr>${la}</table>
  <p class="caveat" style="margin:10px 0 0">Combining agents: doses add; stay under the lower ceiling. Cardiac patients: the classic 0.04 mg epinephrine cap (≈2 carps 1:100k) lacks research support; a systematic review found up to 4 carps 1:100k well tolerated with monitoring. Recent MI, decompensated heart failure or significant arrhythmia: physician consult first. ${srcLink('epicat')} Reduce for elderly, liver disease, and children. ${srcLink('malamed')}</p></div></details>
  <details class="box"><summary>Revised Cardiac Risk Index <em>${rn}/6</em></summary><div class="inner"><div class="chk">${RCRI.map((t,k)=>`<button class="tg${rc[k]?' on':''}" data-rc="${k}" aria-pressed="${!!rc[k]}" style="text-align:left">${esc(t)}</button>`).join('')}</div>
@@ -885,7 +905,7 @@ function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v=
 function view(v){
  if(v==='decide')return home();
  S.mod=null;S.view=v;
- app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.4.1</span></div>${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():calcHTML()}</div>`;
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.5.0</span></div>${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():calcHTML()}</div>`;
  window.scrollTo(0,0);try{history.replaceState(null,'','#'+v)}catch(e){}
 }
 function rebody(){const b=document.getElementById('vbody');if(!b)return;
@@ -904,7 +924,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const M=id=>MODS.find(m=>m.id===id);
 function home(){
  S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const groups=[...new Set(MODS.map(m=>m.g))].sort((x,y)=>ORDER.indexOf(x)-ORDER.indexOf(y));
- app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.4.1 · Oct 22, 2026</span></div>`+tabsHTML('decide')+
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.5.0 · Oct 22, 2026</span></div>`+tabsHTML('decide')+
  groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+
  `<p class="foot">Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`;
  window.scrollTo(0,0);
@@ -980,6 +1000,7 @@ function showCopy(t){const x=document.getElementById('copybox');if(!x)return;x.h
 app.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
  if(b.dataset.view)return view(b.dataset.view);
+ if(b.dataset.asa){S.asa=b.dataset.asa==='3'?'3':'12';return rebody()}
  if(b.dataset.rc!=null){const rc=S.rcri=S.rcri||{};rc[b.dataset.rc]=!rc[b.dataset.rc];return rebody()}
  if(b.dataset.open)return open(b.dataset.open);
  if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
