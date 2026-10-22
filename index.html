@@ -113,6 +113,10 @@ details.box>summary em{font-style:normal;font-weight:600;font-size:12px;color:va
 .go{display:inline-block;margin-top:10px;border:1px solid currentColor;background:none;color:inherit;border-radius:8px;padding:7px 12px;font-weight:700;font-size:13px}
 .copybox{display:block;width:100%;min-height:140px;margin-top:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:8px;font-size:13px}
 .caveat{font-size:12px;color:var(--muted);margin:10px 0 14px;line-height:1.5}
+.handoff{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;color:var(--ink);min-height:56px}
+.handoff b{display:block;font:700 15px var(--display)}
+.handoff span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+.handoff i{font-style:normal;color:var(--accent);font-size:18px}
 .look h4{margin:12px 0 4px;font-size:13px}
 .look ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5;color:var(--muted)}
 .look li{margin:3px 0}
@@ -367,7 +371,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const M=id=>MODS.find(m=>m.id===id);
 function home(){
  S.mod=null;const groups=[...new Set(MODS.map(m=>m.g))];
- app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">v1.0 · Oct 21, 2026</span></div>`+
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">v1.1 · Oct 22, 2026</span></div>`+
  groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+
  `<p class="foot">Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.</p>`;
  window.scrollTo(0,0);
@@ -420,10 +424,14 @@ function calcs(m){
  if(t){const bits=[];if(r.cpi!=null)bits.push(`CPI ${r.cpi}`);if(r.grade)bits.push(`GCPS grade ${r.grade}`);if(r.phq!=null)bits.push(`PHQ-4 ${r.phq} (${r.phqBand})`);if(r.joint)bits.push('severe joint limitation');t.hidden=!bits.length;t.textContent=bits.join(' · ')}
 }
 function refresh(){const m=M(S.mod);document.getElementById('flow').innerHTML=flowHTML(m);calcs(m)}
+const TRIAGE_PROMPT='Run my pre-op triage on the attached photo (H&P, med list, or radiograph). Assume local anesthesia unless I note sedation. Use age/sex and clinical facts only; ignore any identifiers.';
+function handoffHTML(){return`<a class="handoff" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener"><div><b>📷 Photo triage in Claude</b><span>Opens Claude with the prompt ready (also copied). Attach the photo there. Crop out name, DOB and MRN first.</span></div><i>↗</i></a>`}
+document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 function open(id){
  const m=M(id);if(!m)return home();S.mod=id;
  app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="All decisions">‹</button><h2>${esc(m.title)}</h2><button class="icon-btn" data-reset>Reset</button></div>
  ${m.red?`<div class="red">${m.red}</div>`:''}
+ ${id==='preop'?handoffHTML():''}
  ${inputsHTML(m)}
  <div id="flow"></div>
  <p class="caveat">${esc(m.caveat)}</p>
