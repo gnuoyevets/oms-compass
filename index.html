@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#f5f7f3" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f1a19" media="(prefers-color-scheme: dark)">
 
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap">
 <style>
@@ -113,16 +114,43 @@ details.box>summary em{font-style:normal;font-weight:600;font-size:12px;color:va
 .go{display:inline-block;margin-top:10px;border:1px solid currentColor;background:none;color:inherit;border-radius:8px;padding:7px 12px;font-weight:700;font-size:13px}
 .copybox{display:block;width:100%;min-height:140px;margin-top:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:8px;font-size:13px}
 .caveat{font-size:12px;color:var(--muted);margin:10px 0 14px;line-height:1.5}
-.handoff{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;color:var(--ink);min-height:56px}
-.handoff b{display:block;font:700 15px var(--display)}
-.handoff span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
-.handoff i{font-style:normal;color:var(--accent);font-size:18px}
 .look h4{margin:12px 0 4px;font-size:13px}
 .look ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5;color:var(--muted)}
 .look li{margin:3px 0}
 .src{padding:8px 0;border-top:1px solid var(--line);font-size:13px;line-height:1.45}
 .src:first-child{border-top:0}
 .src span{display:block;font-size:12px;color:var(--muted)}
+/* Tabs, emergency, calculators */
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0 0 6px}
+.tabs button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:14px;color:var(--muted)}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button.em{color:var(--red-ink);border-color:var(--red-line);background:var(--red-bg)}
+.tabs button.em.on{background:var(--red-ink);color:var(--bg);border-color:var(--red-ink)}
+.icon-btn.sos{color:var(--red-ink);border-color:var(--red-line);background:var(--red-bg);font-weight:800}
+.wtbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);padding:8px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;border-bottom:1px solid var(--line);margin-bottom:10px}
+.wtbar input{width:100%;font-size:20px;font-weight:700;padding:10px 12px;border:2px solid var(--accent);border-radius:10px;background:var(--surface);color:var(--ink);font-variant-numeric:tabular-nums}
+.wtbar .note{font-size:12px;color:var(--muted);line-height:1.35;max-width:150px}
+.call{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:12px;padding:10px 14px;font-size:13.5px;font-weight:600;margin-bottom:10px}
+details.em{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--red-ink);border-radius:12px;margin-bottom:8px}
+details.em>summary{list-style:none;padding:13px 14px;min-height:50px;display:flex;justify-content:space-between;align-items:center;gap:10px;font:700 16px var(--display)}
+details.em>summary::-webkit-details-marker{display:none}
+details.em>summary span{font:500 12px var(--sans);color:var(--muted);display:block;margin-top:2px}
+details.em>summary::after{content:'+';color:var(--red-ink);font-size:20px}
+details.em[open]>summary::after{content:'−'}
+.em ol{margin:0;padding:0 14px 6px 34px;font-size:14.5px;line-height:1.5}
+.em ol li{margin:6px 0}
+.dose{display:inline-block;background:var(--chip);color:var(--chip-ink);border-radius:6px;padding:1px 7px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.unv{display:inline-block;margin-left:4px;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--warn-ink);background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:4px;padding:0 5px}
+.em .meta{padding:0 14px 12px;font-size:12px;display:flex;flex-wrap:wrap;gap:6px 12px}
+.ctab{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.ctab th,.ctab td{text-align:left;padding:7px 6px;border-top:1px solid var(--line);vertical-align:top}
+.ctab th{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);border-top:0}
+.ctab td b{font-size:15px}
+.chk{display:flex;flex-direction:column;gap:6px}
+.handoff{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;color:var(--ink);min-height:56px}
+.handoff b{display:block;font:700 15px var(--display)}
+.handoff span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+.handoff i{font-style:normal;color:var(--accent);font-size:18px}
 @media (min-width:560px){.top h1{font-size:28px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -132,7 +160,64 @@ details.box>summary em{font-style:normal;font-weight:600;font-size:12px;color:va
 <script>
 /* ===== Sources (checked Oct 21, 2026) ===== */
 const SRC={
-acc:{n:'ACC/AHA perioperative guideline (Fleisher et al.)',v:'2014',u:'https://pubmed.ncbi.nlm.nih.gov/?term=Fleisher+2014+ACC%2FAHA+perioperative+noncardiac+surgery+guideline'},
+acc:{n:'AHA/ACC perioperative cardiovascular guideline (Thompson et al.)',v:'2024 · replaces 2014',u:'https://www.acc.org/Latest-in-Cardiology/ten-points-to-remember/2024/09/23/04/15/2024-aha-acc-perioperative-guideline-gl'},
+chest:{n:'CHEST · Perioperative management of antithrombotic therapy (Douketis et al.)',v:'2022 · summary AAFP 2023',u:'https://www.aafp.org/afp/2023/0800/practice-guidelines-perioperative-management-antithrombotic-medi'},
+allyn:{n:'Allyn, Bentov & Dillon · Perioperative optimization of the OMS patient',v:'J Oral Maxillofac Surg 2024;82:364',u:'https://doi.org/10.1016/j.joms.2023.11.015'},
+glp1:{n:'Multisociety guidance · GLP-1 receptor agonists before procedures (ASA et al.)',v:'Oct 29, 2024',u:'https://asahq.org/about-asa/newsroom/news-releases/2024/10/new-multi-society-glp-1-guidance'},
+parcare:{n:'AAOMS · Parameters of Care (ParCare)',v:'2023 ed. · JOMS 81(11) Suppl',u:'https://members.aaoms.org/PRODUCTFILES/77216029/PARCAR07_TOC.pdf'},
+aha25:{n:'AHA · Adult cardiac arrest algorithm',v:'2025 CPR & ECC guidelines',u:'https://cpr.heart.org/-/media/CPR-Files/CPR-Guidelines-Files/2025-Accessible/Algorithm-ACLS-CA-LngDscrp-250725-Ed.pdf'},
+aha25s:{n:'AHA · Special circumstances of resuscitation (Part 10)',v:'2025 CPR & ECC guidelines',u:'https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-and-pediatric-special-circumstances-of-resuscitation'},
+anaph:{n:'Anaphylaxis practice parameter update (Shaker et al.)',v:'J Allergy Clin Immunol 2020 · via CCJM 2022',u:'https://www.ccjm.org/content/ccjom/89/2/106.full.pdf'},
+last:{n:'Lipid rescue for LAST (ASRA-based institutional protocol)',v:'Updated Feb 25, 2022',u:'https://southalabama.edu/colleges/com/departments/surgery/resources/cardiovascular/lipid-rescue-for-local-anesthetic-systemic-toxicity.pdf'},
+apsf:{n:'APSF · Checklist for treating LAST',v:'Drugs to avoid; epinephrine <1 mcg/kg',u:'https://www.apsf.org/article/a-checklist-for-treating-local-anesthetic-systemic-toxicity/'},
+aes:{n:'Status epilepticus benzodiazepine dosing (AES 2016)',v:'via UMEM pearl',u:'https://em.umaryland.edu/educational_pearls/3615/'},
+mh:{n:'OpenAnesthesia · Malignant hyperthermia (MHAUS-aligned)',v:'Dantrolene 2.5 mg/kg',u:'https://www.openanesthesia.org/keywords/malignant-hyperthermia/'},
+lspasm:{n:'OpenAnesthesia · Laryngospasm',v:'CPAP, jaw thrust, Larson; IM succinylcholine',u:'https://www.openanesthesia.org/keywords/laryngospasm/'},
+anaph2:{n:'CMAJ · Anaphylaxis emergency management (2023)',v:'IM q5–15 min; IV infusion if refractory',u:'https://www.cmaj.ca/content/195/19/E683.full.pdf'},
+lsprop:{n:'Propofol 0.5 mg/kg for resistant laryngospasm (Braz J Anesthesiol 2018)',v:'Non-randomized; pediatric 0.25–0.8 mg/kg',u:'https://scielo.br/j/rba/a/YV3dkgWFwngHTdSM8hT6RCj/?lang=en'},
+litfl:{n:'LITFL · Laryngospasm',v:'Succinylcholine 0.1–0.5 / 1–2 mg/kg IV; 3–4 mg/kg IM',u:'https://litfl.com/laryngospasm/'},
+nalox:{n:'Naloxone injection · FDA label',v:'Postop depression 0.1–0.2 mg IV q2–3 min',u:'https://medlibrary.org/lib/rx/meds/naloxone-hydrochloride-14/page/3/'},
+fluma:{n:'Flumazenil injection · FDA label',v:'0.2 mg q60 s, max 1 mg; 3 mg/h',u:'https://medlibrary.org/lib/rx/meds/flumazenil-13/page/7/'},
+brady:{n:'AHA · Adult bradycardia algorithm',v:'2025 CPR & ECC guidelines',u:'https://cpr.heart.org/-/media/CPR-Files/CPR-Guidelines-Files/2025-Accessible/Algorithm-ACLS-Bradycardia-LngDscrp-250725-Ed.pdf'},
+adahypo:{n:'American Diabetes Association · Hypoglycemia treatment',v:'15-15 rule; May 2025',u:'https://professional.diabetes.org/sites/dpro/files/2025-05/hypoglycemia-hcp-5-27-25.pdf'},
+d50:{n:'Dextrose 50% injection · FDA label',v:'10–25 g (20–50 mL) IV',u:'https://labeling.pfizer.com/ShowLabeling.aspx?id=4422'},
+ntg:{n:'Nitrostat (nitroglycerin SL) · FDA label',v:'0.4 mg q5 min, max 3 in 15 min',u:'https://www.drugs.com/pro/nitrostat.html'},
+merck:{n:'Merck Manual · Medications for ACS',v:'Aspirin 160–325 mg chewed',u:'https://www.merckmanuals.com/professional/cardiovascular-disorders/coronary-artery-disease/medications-for-acute-coronary-syndromes'},
+epicat:{n:'UTHSCSA CAT · Research fails to support an epinephrine limit',v:'Godzieba 2014 SR: ≤4 carps 1:100k',u:'https://cats.uthscsa.edu/found_cats_view.php?id=3263'},
+asaps:{n:'ASA Physical Status Classification',v:'Approved 2014; examples updated',u:'https://asahq.org/resources/clinical-information/asa-physical-status-classification-system'},
+fast:{n:'ASA preoperative fasting guideline (2023 modular update of 2017)',v:'Anesthesiology 2023 · summary',u:'https://www.consultant360.com/exclusive/updated-guidelines-address-preoperative-fasting-elective-procedures'},
+asamon:{n:'ASA Standards for Basic Anesthetic Monitoring',v:'Capnography for moderate/deep sedation',u:'https://beckersasc.com/anesthesia/asas-standards-revision-focusing-on-ventilation-methods-set-to-take-effect.html'},
+mysed:{n:'Your Chairside Sedation Card — No-Pump (ASA I–III)',v:'Oct 7, 2026 · personal protocol; doses not label-verified',u:'https://docs.google.com/document/d/1_me16BdLXlR7RPbVQZq1Ar4XKjt43jNKUcixff7S948/edit'},
+dm26:{n:'Perioperative diabetes care in 2026 (NYSORA, ADA-aligned)',v:'A1C >8% → consider postponing',u:'https://nysora.com/?p=66496'},
+filippi:{n:'Filippi, Saccardin & Kühl · Advanced Oral Surgery (textbook)',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
+andersson:{n:'Andersson, Kahnberg & Pogrel · Oral and Maxillofacial Surgery (textbook)',v:'Dialysis timing · Readwise',u:'https://read.readwise.io/'},
+dialysis:{n:'Dentalcare CE628 · Dental management of dialysis patients',v:'P&G CE course',u:'https://www.dentalcare.com/en-us/ce-courses/ce628/dialysis'},
+liver:{n:'Mostoufi et al. · Pre-surgical INR testing in liver disease',v:'J Global Oral Health 2020;3:89',u:'https://jglobaloralhealth.org/the-role-of-pre-surgical-inr-testing-in-dental-patients-with-liver-diseases/'},
+preg:{n:'ADA · Pregnancy (oral health topic; cites ACOG 569 and 775)',v:'Updated Jul 14, 2025',u:'https://www.ada.org/en/resources/ada-library/oral-health-topics/pregnancy'},
+nsaidpreg:{n:'FDA · Avoid NSAIDs at ≥20 weeks of pregnancy',v:'Oct 15, 2020',u:'https://www.fda.gov/drugs/drug-safety-and-availability/fda-recommends-avoiding-use-nsaids-pregnancy-20-weeks-or-later-because-they-can-result-low-amniotic'},
+orn:{n:'ISOO-MASCC-ASCO · Osteoradionecrosis prevention and management',v:'2024 guideline · summary table',u:'https://society.asco.org/sites/new-www.asco.org/files/content-files/practice-and-guidelines/documents/2024-ORN-Summary-Table.pdf'},
+steroid:{n:'Steroid cover for dental procedures (NHS Highland guidance, Oct 2025)',v:'via iatrox summary',u:'https://www.iatrox.com/q/69f2f444e09ff9bd00caa4ac/steroid-management'},
+ada24:{n:'ADA · Acute dental pain guideline, adults & adolescents ≥12',v:'JADA Feb 2024',u:'https://cce.upmc.com/system/files/course/2026-06/Acute%20Dental%20Pain%20Guideline_Emergency%20Medicine_2025.pdf'},
+aoprev:{n:'Cochrane · Local interventions for dry socket (Daly et al.) — prevention',v:'2012 · via Dental Elf',u:'https://www.nationalelfservice.net/publication-types/systematic-review/moderate-evidence-that-chlorhexidine-rinse-or-gel-provides-a-benefit-in-preventing-dry-socket/'},
+aotx:{n:'Cochrane · Local interventions for dry socket — treatment',v:'Sep 26, 2022 update',u:'https://www.cochrane.org/CD006968/ORAL_local-interventions-management-alveolar-osteitis-dry-socket'},
+secrets:{n:'Abubaker, Lam & Benson · OMS Secrets (textbook)',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
+txa:{n:'Therapeutic Guidelines: Oral & Dental · Tranexamic acid 5% mouthwash',v:'ETG 46, 2015 (patient sheet)',u:'https://www.dhsv.org.au/__data/assets/pdf_file/0006/157632/Tranexamic-acid-mouthwash.pdf'},
+meyer:{n:'Goodson et al. · Classifications and Lists in OMFS — Meyer protocol, Seddon/Sunderland',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
+atls:{n:'ATLS 11th ed. update — hemorrhage-first primary survey (Mayo Clinic)',v:'Implemented Jan 2026',u:'https://www.mayoclinic.org/medical-professionals/trauma/news/atls-update-what-trauma-professionals-need-to-know/mac-20602992'},
+canth:{n:'emDocs · Retrobulbar hematoma and lateral canthotomy',v:'IOP >40; act within ~2 h',u:'https://www.emdocs.net/em3am-retrobulbar-hematoma/'},
+fxabx:{n:'Harryman et al. · Prophylactic antibiotics in mandible fractures (TRIO Best Practice)',v:'Laryngoscope 2023',u:'https://www.enttoday.org/article/prophylactic-antibiotics-should-be-used-conservatively-in-setting-mandibular-fractures/'},
+lect:{n:'Your OMS Lecture Pearls (Drive) — infections, mandible fractures',v:'Jun 2026 · lecture notes',u:'https://drive.google.com/file/d/1KKI7X5dwrOVV1oFIWOo5q__TgCMON8UP/view'},
+board:{n:'Your OMS Clinical Protocols — Board Review (Readwise)',v:'Board-review notes; textbook-derived',u:'https://read.readwise.io/'},
+dysp:{n:'AAOMS · Position paper on oral mucosal dysplasia (Carlson et al.)',v:'J Oral Maxillofac Surg 2023;81:1042',u:'https://read.readwise.io/read/01h769fmrm3d2wt17f4vk2jjbb'},
+fa6:{n:'Your Full-Arch Preop Decision Checklist v6',v:'Oct 12, 2026 · cites Schwarz et al. 2026 Global Consensus',u:'https://drive.google.com/file/d/1QiMOj9LzOmz4No1OkiBV8VTQFgw4SsVJ/view'},
+schwarz:{n:'Schwarz et al. · Global Consensus, full-arch maxilla',v:'Clin Oral Implants Res 2026;37 Suppl 30:S7–S27',u:'https://doi.org/10.1111/clr.70084'},
+goodson:{n:'Goodson et al. · Classifications and Lists in OMFS (impacted canines, cleft timing)',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
+kademani:{n:'Kademani & Tiwana · Atlas of OMS (canine exposure techniques)',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
+mynotes:{n:'Your Readwise clinical notes (immediate placement, socket shield, PATZy, short implants)',v:'Personal protocol notes',u:'https://read.readwise.io/'},
+perio6:{n:'Periospot · A 6-mm implant is not a shortcut',v:'Via your Readwise checklist',u:'https://www.periospot.com/'},
+binder:{n:'Your Office Emergency Binder',v:'May 2026 · cites ACLS 2020 · needs re-verification',u:'https://drive.google.com/file/d/1cm2t4yNo2BUDjviZJHhqzFfdJD7dEgTi/view'},
+lee:{n:'Revised Cardiac Risk Index (Lee et al.)',v:'Circulation 1999',u:'https://pubmed.ncbi.nlm.nih.gov/10477528/'},
+malamed:{n:'Maximum recommended LA doses (Malamed, Handbook of Local Anesthesia; FDA labels)',v:'Textbook values · verify vs label',u:'https://pubmed.ncbi.nlm.nih.gov/?term=Malamed+maximum+recommended+dose+local+anesthetic'},
 aha:{n:'AHA · Prevention of viridans group streptococcal IE (Wilson et al.)',v:'Circulation 2021;143:e963',u:'https://www.ahajournals.org/doi/10.1161/CIR.0000000000000969'},
 adaPro:{n:'ADA · Antibiotic prophylaxis prior to dental procedures',v:'Updated Jul 15, 2026',u:'https://www.ada.org/resources/ada-library/oral-health-topics/antibiotic-prophylaxis/'},
 sdcep:{n:'SDCEP · Anticoagulants & antiplatelets, quick reference',v:'2nd ed., Mar 2022 · UK',u:'https://www.SDCEP.org.uk/media/imrflqss/sdcep-anticoagulants-quick-reference-guide-2nd-edition.pdf'},
@@ -163,25 +248,231 @@ gramp:{n:'NHS Grampian · TMD protocol',v:'Aligned with RCS · UK',u:'https://ww
 /* ===== Modules. Node: {q,h?,yes,no,auto?} | {note,t,src?,next} | {out,tone?,src?,go?} ===== */
 const MODS=[
 {id:'preop',g:'Start here',title:'Pre-op clearance',d:'Defer or proceed · IE prophylaxis · antithrombotics · MRONJ · sedation fit',
- inputs:['stopbang'],start:'a',refs:['acc','aha','adaPro','sdcep','aaoms','stopbang'],
- caveat:'Antithrombotic steps follow SDCEP (UK); confirm against your institution. Drug changes are the prescriber’s call.',
+ inputs:['stopbang'],start:'a',refs:['acc','chest','allyn','sdcep','aha','adaPro','aaoms','glp1','stopbang','parcare'],
+ caveat:'US anchors: 2024 AHA/ACC, CHEST 2022, Allyn 2024. SDCEP (UK) kept for DOAC timing detail. Drug changes are the prescriber’s call.',
  nodes:{
- a:{q:'Unstable or unoptimized medical condition?',h:['MI, stroke or coronary stent in the last 60 days (ACC/AHA 2014)','Unstable angina, decompensated heart failure, uncontrolled arrhythmia','BP ≥180/110 (common cutoff, unverified)','Uncontrolled diabetes; active bleeding disorder'],yes:'oDefer',no:'b'},
- oDefer:{out:'Defer elective surgery. Optimize with the patient’s physician, then re-run this flow.',tone:'urgent',src:'acc',ex:'Urgent problems (spreading infection, airway) go to a monitored or hospital setting instead.'},
+ a:{q:'Unstable or unoptimized medical condition?',h:['Recent MI, stroke or coronary stent (confirm deferral window with cardiology; 2024 AHA/ACC)','Unstable angina, decompensated heart failure, uncontrolled arrhythmia','BP ≥180/110 (common cutoff; no strong outcome data below it)','Uncontrolled diabetes; active bleeding disorder'],yes:'oDefer',no:'b'},
+ oDefer:{out:'Defer elective surgery. Optimize with the patient’s physician, then re-run this flow.',tone:'urgent',src:'acc',go:'htn',go2:'dm',ex:'Urgent problems (spreading infection, airway) go to a monitored or hospital setting instead.'},
  b:{q:'High-risk cardiac condition for endocarditis?',h:['Prosthetic valve (incl. TAVR) or valve-repair material','Prior infective endocarditis','Heart transplant with valve regurgitation','Unrepaired cyanotic CHD, or repaired CHD with residual shunt/regurgitation at a prosthetic site','Prosthetic joints alone: prophylaxis not routinely recommended (ADA)'],yes:'nIE',no:'c'},
  nIE:{note:1,t:'Endocarditis prophylaxis',x:'30–60 min pre-op, one dose: amoxicillin 2 g PO. Penicillin allergy without anaphylaxis, angioedema or urticaria: cephalexin 2 g. Otherwise azithromycin or clarithromycin 500 mg, or doxycycline 100 mg. Clindamycin is no longer recommended. Missed dose: give up to 2 h after.',src:'aha',next:'c'},
  c:{q:'Taking an anticoagulant or antiplatelet?',yes:'nBleed',no:'d'},
- nBleed:{note:1,t:'Antithrombotic plan',x:'Do not stop for mechanical valves, stents, or VTE in the last 3 months. Warfarin: INR within 24 h (72 h if stable); proceed if INR <4, otherwise delay or refer. DOAC + surgical extraction, implants, flap or biopsy: apixaban/dabigatran skip the morning dose; morning rivaroxaban/edoxaban waits until 4 h after hemostasis. Aspirin alone: continue. P2Y12 inhibitor or dual therapy: ask the prescriber. Operate early in the day; suture and pack.',src:'sdcep',next:'d'},
- d:{q:'Antiresorptive/antiangiogenic drug, or head-and-neck radiation to the site?',h:['Bisphosphonate, denosumab, bevacizumab, TKIs','Oncologic dosing carries far higher risk than osteoporosis dosing'],yes:'nBone',no:'e'},
- nBone:{note:1,t:'MRONJ / ORN risk',x:'Oncologic-dose antiresorptives: avoid elective extractions and implants; choose conservative options. Osteoporosis dosing: low risk; proceed with documented consent, atraumatic technique and primary closure. Drug holidays have no consensus (AAOMS 2022); coordinate with the prescriber. Radiation: get the dose to the site from radiation oncology before surgery.',src:'aaoms',next:'e'},
+ nBleed:{note:1,t:'Antithrombotic plan',x:'Low-bleed dental work (1–3 extractions, I&D): continue warfarin, DOACs and antiplatelets (CHEST 2022). Intermediate (>3 extractions, implants, grafts, biopsy): usually continue; local hemostasis. High (orthognathic, reconstruction, open trauma): plan with the prescriber (Allyn 2024). Heparin bridging is generally harmful; reserve for mechanical mitral valve, recent LV thrombus, or AF with recent stroke (2024 AHA/ACC). Warfarin: INR within 24 h; proceed if <4. DOAC timing detail (SDCEP, UK): apixaban/dabigatran skip the morning dose. Never stop dual antiplatelets after a stent without cardiology. Operate early; suture and pack.',src:'chest',next:'d'},
+ d:{q:'Antiresorptive/antiangiogenic drug, or head-and-neck radiation to the site?',h:['Bisphosphonate, denosumab, bevacizumab, TKIs','Oncologic dosing carries far higher risk than osteoporosis dosing'],yes:'nBone',no:'d2'},
+ d2:{q:'Taking an SGLT2 inhibitor or GLP-1 receptor agonist?',h:['SGLT2: -gliflozin (empagliflozin, dapagliflozin…)','GLP-1 RA: semaglutide, tirzepatide, liraglutide, dulaglutide'],yes:'nMeds',no:'e'},
+ nMeds:{note:1,t:'SGLT2 / GLP-1',x:'SGLT2 inhibitor: hold 3–4 days before surgery (ketoacidosis risk; 2024 AHA/ACC). GLP-1 RA: most patients continue. If sedating, defer elective cases during dose escalation or with active GI symptoms; highest-risk patients take clear liquids only for 24 h; plan for aspiration risk (multisociety 2024).',src:'glp1',next:'e'},
+ nBone:{note:1,t:'MRONJ / ORN risk',x:'Oncologic-dose antiresorptives: avoid elective extractions and implants; choose conservative options. Osteoporosis dosing: low risk; proceed with documented consent, atraumatic technique and primary closure. Drug holidays have no consensus (AAOMS 2022); coordinate with the prescriber. Radiation: get the dose to the site from radiation oncology before surgery. Established exposed bone: MRONJ staging module; radiation details: Radiation & chemotherapy module.',src:'aaoms',next:'d2'},
  e:{q:'IV sedation or general anesthesia planned?',yes:'f',no:'oLocal'},
  oLocal:{out:'Local anesthesia in the office.',ex:'Confirm consent, alternatives (including no treatment), and after-hours contact.'},
  f:{q:'STOP-Bang ≥3 (intermediate or high OSA risk)?',auto:r=>r.sb==null?undefined:r.sb>=3,ah:r=>r.sb!=null?`STOP-Bang ${r.sb}/8 · ${r.sbCat} risk`:'',h:['Score it in the STOP-Bang box above to answer automatically'],yes:'oAir',no:'g'},
  g:{q:'Difficult-airway signs?',h:['Mallampati III–IV, limited opening or neck extension, short thyromental distance','Prior difficult airway or anesthesia complication'],yes:'oAir',no:'oSed'},
- oAir:{out:'Sedation needs a deliberate airway plan before booking.',tone:'action',src:'stopbang',ex:'Options: lighter sedation or local only, anesthesia or sleep consult, or a hospital setting. Confirm rescue airway equipment and capnography.'},
- oSed:{out:'Office sedation appropriate.',ex:'Confirm NPO, escort, monitoring with capnography, and rescue drugs and airway equipment.'}
+ oAir:{out:'Sedation needs a deliberate airway plan before booking.',tone:'action',src:'stopbang',go:'sed',ex:'Options: lighter sedation or local only, anesthesia or sleep consult, or a hospital setting. Confirm rescue airway equipment and capnography.'},
+ oSed:{out:'Office sedation appropriate.',ex:'Confirm NPO, escort, monitoring with capnography, and rescue drugs and airway equipment.',go:'sed'}
  },
  look:[['History',['Allergy phenotype: rash vs anaphylaxis vs intolerance (latex, chlorhexidine, antibiotics, LA)','Exercise tolerance; recent hospitalization or new diagnoses','CKD/dialysis, liver disease with coagulopathy, steroids, immunosuppressants, chemotherapy']],['Exam',['Resting BP, HR, SpO₂; repeat abnormal values','ASA class from current ASA definitions','Airway: Mallampati, opening, neck mobility, dentition, BMI, neck size']]]},
+
+{id:'sed',g:'Anesthesia & medical',title:'Office sedation plan',d:'Office vs hospital · airway · NPO · GLP-1 · monitoring',
+ inputs:['stopbang'],start:'a',refs:['asaps','stopbang','fast','glp1','asamon','mysed','parcare'],
+ caveat:'Adults only. Pediatric sedation is out of scope for this tool.',
+ nodes:{
+ a:{q:'ASA IV or higher?',h:['Constant threat to life: MI, stroke, TIA or stents <3 months; ongoing ischemia; severe valve disease; severely reduced EF; sepsis; ESRD not on dialysis','ASA III examples: poorly controlled DM/HTN, COPD, BMI ≥40, ESRD on dialysis, pacemaker, MI/stroke >3 months'],yes:'oHosp',no:'b'},
+ oHosp:{out:'Not an office sedation case. Local only for urgent care, or hospital setting with anesthesia.',tone:'urgent',src:'asaps',go:'preop'},
+ b:{q:'ASA III?',yes:'n3',no:'c'},
+ n3:{note:1,t:'ASA III',x:'Optimize with the physician first. Your card: Precedex 0.3–0.5 mcg/kg over 10–15 min; re-bolus 0.1–0.2 mcg/kg q45–60 min; small ketamine/propofol touches; BP q3 min; stay moderate–deep, never general (personal protocol; doses not label-verified).',src:'mysed',next:'c'},
+ c:{q:'STOP-Bang ≥3 or difficult-airway signs?',auto:r=>r.sb==null?undefined:(r.sb>=3?true:undefined),ah:r=>r.sb!=null?`STOP-Bang ${r.sb}/8 · ${r.sbCat} risk`:'',h:['Mallampati III–IV, limited opening or neck extension, short thyromental distance','Prior difficult airway'],yes:'oAir',no:'d'},
+ oAir:{out:'Airway plan first: lighter sedation or local only, cut propofol first, or hospital setting.',tone:'action',src:'stopbang',ex:'Confirm rescue airway equipment, suction and capnography before booking.'},
+ d:{q:'Fasting requirements met?',h:['Clear liquids, including carbohydrate drinks (water, black coffee, pulp-free juice): up to 2 h before (ASA 2023)','Solids: light meal 6 h, fatty meal 8 h (ASA 2017, unchanged in 2023)','No gum in the mouth before sedation'],yes:'e',no:'oNPO'},
+ oNPO:{out:'Delay sedation until fasting is met, or proceed under local only.',tone:'action',src:'fast'},
+ e:{q:'GLP-1 RA with high-risk features?',h:['Dose escalation phase (first 4–8 weeks)','Active nausea, vomiting, abdominal pain or constipation','High dose, or another cause of slow gastric emptying'],yes:'oGlp',no:'oGo'},
+ oGlp:{out:'Defer elective sedation until escalation ends and GI symptoms resolve, or 24 h clear liquids for highest risk.',tone:'action',src:'glp1',ex:'Most patients on GLP-1 RAs continue them; decide with the prescriber.'},
+ oGo:{out:'Office sedation appropriate.',src:'asamon',ex:'Moderate/deep sedation: capnography required, plus pulse oximetry, BP and ECG as indicated. Escort, written instructions, rescue drugs drawn or ready (Emergency tab).'}
+ },
+ look:[['Before booking',['ASA class against current definitions','Last meal and drink, GLP-1/SGLT2 use','Escort and ride home','IV access sites; fistula arm off-limits']]]},
+
+{id:'dm',g:'Anesthesia & medical',title:'Diabetes',d:'A1C gate · day-of meds · glucose on arrival',
+ start:'a',refs:['dm26','allyn','glp1','adahypo','filippi'],
+ caveat:'Medication changes are the prescriber’s call; this follows Allyn 2024 (JOMS) and ADA-aligned 2026 guidance.',
+ nodes:{
+ a:{q:'Elective case with A1C >8% (within 3 months)?',yes:'oA1c',no:'b'},
+ oA1c:{out:'Consider postponing elective surgery and optimize with the physician.',tone:'action',src:'dm26',ex:'Do not delay urgent care (infection, pain) for A1C.'},
+ b:{q:'On insulin, a sulfonylurea or an SGLT2 inhibitor?',yes:'nMed',no:'c'},
+ nMed:{note:1,t:'Day-of medications',x:'Evening before: long-acting insulin ~75% of usual. Morning of surgery: 50% of long/intermediate insulin; hold oral agents. SGLT2 inhibitor: stop 3–4 days before. Book early morning.',src:'allyn',next:'c'},
+ c:{q:'Arrival glucose outside 80–180 mg/dL?',yes:'oGlu',no:'oOk'},
+ oGlu:{out:'Correct before proceeding. <70: treat (Emergency → Hypoglycemia). Markedly high: discuss with the physician; reschedule elective care.',tone:'action',src:'allyn'},
+ oOk:{out:'Proceed. Recheck glucose after sedation; resume meds with eating.',src:'allyn',ex:'Poorly controlled diabetes or major surgery: consider antibiotics to support healing (Filippi).'}
+ }},
+
+{id:'htn',g:'Anesthesia & medical',title:'Hypertension',d:'Proceed, defer, or refer at chairside BP',
+ start:'a',refs:['allyn'],
+ caveat:'No validated BP cutoff exists for oral surgery; 180/110 is the accepted perioperative ceiling (Allyn 2024). Recheck after rest before deciding.',
+ nodes:{
+ a:{q:'Symptoms of end-organ damage?',h:['New headache, vision change, chest pain, shortness of breath, neuro deficit'],yes:'oEr',no:'b'},
+ oEr:{out:'Stop. Hypertensive emergency workup: ED or 911.',tone:'urgent',src:'allyn'},
+ b:{q:'BP still ≥180/110 after rest and recheck?',yes:'oDef',no:'oGo'},
+ oDef:{out:'Defer elective surgery; refer to the physician (hypertensive urgency).',tone:'action',src:'allyn',ex:'Urgent infection or pain: control the source with the least invasive option and monitoring.'},
+ oGo:{out:'Proceed. Overall cardiovascular risk, not BP alone, sets the plan.',src:'allyn',ex:'Anxiety control helps; continue usual antihypertensives.'}
+ }},
+
+{id:'renal',g:'Anesthesia & medical',title:'Kidney disease & dialysis',d:'Timing · fistula arm · analgesics',
+ start:'a',refs:['asaps','andersson','dialysis'],
+ caveat:'Renally cleared drugs (some antibiotics, gabapentinoids) need dose checks with pharmacy or nephrology.',
+ nodes:{
+ a:{q:'ESRD not on regular dialysis?',yes:'oHosp',no:'b'},
+ oHosp:{out:'ASA IV: physician/nephrology input before anything elective; hospital setting for surgery.',tone:'urgent',src:'asaps'},
+ b:{q:'On hemodialysis?',yes:'nHd',no:'oCkd'},
+ nHd:{note:1,t:'Hemodialysis',x:'Operate the day after dialysis (heparin cleared, uremia lowest). Resume dialysis ~2 days post-op when heparin is safer for hemostasis (Andersson). Never use the shunt/fistula arm for BP or IV. Check platelets; local hemostasis.',src:'andersson',next:'oHd'},
+ oHd:{out:'Proceed on a non-dialysis day with local hemostasis.',src:'dialysis',ex:'Analgesia: avoid aspirin and NSAIDs; low-dose acetaminophen. ASA III.'},
+ oCkd:{out:'Proceed with renal dosing and NSAID avoidance.',src:'dialysis',ex:'Confirm current eGFR and potassium if sedating.'}
+ }},
+
+{id:'liver',g:'Anesthesia & medical',title:'Liver disease',d:'History over INR · hemostasis',
+ start:'a',refs:['liver','asaps'],
+ caveat:'INR in liver disease (not on warfarin) predicts bleeding poorly; it is not a stand-alone gate (Mostoufi 2020).',
+ nodes:{
+ a:{q:'Decompensated: ascites, jaundice, encephalopathy, or prior surgical bleeding?',yes:'oDec',no:'oComp'},
+ oDec:{out:'Hepatology input before elective surgery; plan CBC/platelets and hospital-level hemostasis.',tone:'action',src:'liver'},
+ oComp:{out:'Proceed with careful history, CBC/LFT/coags for reference, and local hemostatic measures.',src:'liver',ex:'Local measures are effective, including in transplant candidates. Active hepatitis = ASA III.'}
+ }},
+
+{id:'preg',g:'Anesthesia & medical',title:'Pregnancy',d:'Treat now or defer · drugs to use and avoid',
+ start:'a',refs:['preg','nsaidpreg'],
+ caveat:'Coordinate analgesic choice with the obstetrician.',
+ nodes:{
+ a:{q:'Infection, pain or other urgent need?',yes:'oNow',no:'b'},
+ oNow:{out:'Treat now, any trimester. Delay makes problems worse.',src:'preg',ex:'Radiographs are safe; abdominal/thyroid shields no longer recommended. LA with epinephrine is fine. Antibiotics: penicillin, amoxicillin, cephalosporins, clindamycin, metronidazole. Avoid nitrous oxide. No NSAIDs at ≥20 weeks (FDA).'},
+ b:{q:'Elective major surgery (implants, grafting, sedation, third molars without disease)?',yes:'oDefer',no:'oRoutine'},
+ oDefer:{out:'Defer until after delivery.',tone:'action',src:'preg',ex:'Per ACOG/ASA 775 on nonobstetric surgery, cited by ADA.'},
+ oRoutine:{out:'Diagnostic and minor procedures are safe throughout pregnancy.',src:'preg',ex:'No NSAIDs at ≥20 weeks; avoid entirely at ≥30 weeks (FDA).'}
+ }},
+
+{id:'onc',g:'Anesthesia & medical',title:'Radiation & chemotherapy',d:'ORN prevention · pre-RT extractions · chemo timing',
+ start:'a',refs:['orn','filippi','aaoms'],
+ caveat:'Get the jaw dose map from radiation oncology. Antiresorptives → Pre-op (MRONJ).',
+ nodes:{
+ a:{q:'Radiation planned but not started?',yes:'oPre',no:'b'},
+ oPre:{out:'Remove poor-prognosis teeth in the field ≥2 weeks before RT; don’t delay RT for fast tumors.',tone:'action',src:'orn',ex:'If extractions change the bite, do them before the mask is made. Start daily prescription fluoride.'},
+ b:{q:'Prior jaw dose ≥50 Gy at the surgical site?',yes:'nOrn',no:'c'},
+ nOrn:{note:1,t:'ORN high-risk zone',x:'Prefer endo/restoration over extraction; avoid implants unless nothing else restores function. If you must extract: atraumatic, smooth bone, primary closure. Optional: pentoxifylline 400 mg BID + tocopherol 1000 IU daily from ≥1 week before to ~4 weeks after; antibiotics before/after. HBO not routine (consider when a large jaw volume received >50 Gy).',src:'orn',next:'c'},
+ c:{q:'On active chemotherapy?',yes:'oChemo',no:'oGo'},
+ oChemo:{out:'Avoid oral surgery during chemo; if unavoidable, agree timing with oncology using current neutrophil and platelet counts.',tone:'action',src:'filippi',ex:'Antibiotics per findings. Most patients resume normal care after chemotherapy ends.'},
+ oGo:{out:'Proceed with standard care plus any risk steps listed here.',src:'orn'}
+ }},
+
+{id:'steroid',g:'Anesthesia & medical',title:'Chronic steroids',d:'Stress dosing or not',
+ start:'a',refs:['steroid'],
+ caveat:'UK-based guidance; confirm with endocrinology for primary adrenal insufficiency.',
+ nodes:{
+ a:{q:'GA, major surgery, prolonged procedure, or patient unwell?',yes:'oCover',no:'oNo'},
+ oCover:{out:'Steroid cover per the prescriber or endocrinology (e.g., IV hydrocortisone at induction).',tone:'action',src:'steroid'},
+ oNo:{out:'Routine extraction under local: continue the usual dose; no extra cover.',src:'steroid',ex:'Never withhold the usual steroid. Seek advice if the case becomes prolonged or the patient becomes unwell.'}
+ }},
+
+{id:'pain',g:'Post-op & complications',title:'Post-op analgesia',d:'NSAID first · when an opioid is allowed',
+ start:'a',refs:['ada24','nsaidpreg','dialysis'],
+ caveat:'ADA 2024 suggests against adding corticosteroids for pain after surgical extraction. Daily max: ibuprofen 2400 mg, naproxen sodium 1100 mg, acetaminophen 4000 mg (all sources).',
+ nodes:{
+ a:{q:'NSAID contraindicated?',h:['Pregnancy ≥20 weeks (FDA)','Kidney disease or dialysis','NSAID allergy, active GI bleed or ulcer, or prescriber advice to avoid'],yes:'oApap',no:'b'},
+ oApap:{out:'Acetaminophen 1000 mg (max 4000 mg/day, all sources).',src:'ada24',ex:'If inadequate: acetaminophen 325 mg plus one acetaminophen 325 mg/opioid tablet — only if the opioid step below allows it.'},
+ b:{q:'NSAID + acetaminophen expected to fail, or already failed?',h:['e.g., difficult surgical extraction','Severe pain at 72 h: examine for a complication first'],yes:'c',no:'oFirst'},
+ oFirst:{out:'Ibuprofen 400 mg or naproxen sodium 440 mg, alone or with acetaminophen 500 mg.',src:'ada24',ex:'Scheduled dosing for the first days. No “just in case” opioid.'},
+ c:{q:'On a benzodiazepine, gabapentinoid, other CNS-active drug, or opioids already?',yes:'oNoOp',no:'oOp'},
+ oNoOp:{out:'No opioid. Maximize NSAID + acetaminophen and re-examine for a complication.',tone:'action',src:'ada24'},
+ oOp:{out:'Keep the NSAID; add acetaminophen 325 mg plus one hydrocodone 5–7.5 mg or oxycodone 5 mg/acetaminophen 325 mg tablet.',tone:'action',src:'ada24',ex:'Lowest dose, fewest tablets, rarely >3 days. Informed consent; counsel on storage and disposal.'}
+ }},
+
+{id:'ao',g:'Post-op & complications',title:'Dry socket',d:'Alveolar osteitis vs infection · treatment · prevention',
+ start:'a',refs:['secrets','andersson','aotx','aoprev'],
+ caveat:'Antibiotics do not treat alveolar osteitis.',
+ nodes:{
+ a:{q:'Fever, spreading swelling or pus?',yes:'oInf',no:'b'},
+ oInf:{out:'Surgical-site infection, not dry socket.',tone:'action',go:'infection',src:'andersson'},
+ b:{q:'New severe throbbing pain on day 3–5, malodor, empty socket with exposed bone?',yes:'oAo',no:'oOther'},
+ oAo:{out:'Dry socket: gentle saline irrigation, medicated dressing, analgesics. Recheck in 2–3 days.',src:'secrets',ex:'Do not curette (delays healing, spreads inflammation). Alveogyl may reduce pain (very-low-certainty evidence).'},
+ oOther:{out:'Look for another cause: retained root or sequestrum, fracture, infection, or referred pain.',tone:'action',src:'ada24'}
+ },
+ look:[['Prevention (Cochrane 2012)',['Chlorhexidine rinse 0.12–0.2% before and after: ~42% fewer dry sockets (NNT ~8 for surgical thirds)','Chlorhexidine 0.2% gel in the socket: ~58% fewer (NNT ~6 at 30% baseline)']]]},
+
+{id:'bleed',g:'Post-op & complications',title:'Post-op bleeding',d:'Local measures · TXA · when to escalate',
+ start:'a',refs:['andersson','secrets','filippi','txa','chest'],
+ caveat:'Do not stop anticoagulants to manage a socket bleed without the prescriber.',
+ nodes:{
+ a:{q:'Airway threat, unstable vitals, or expanding floor-of-mouth/neck swelling?',yes:'oEr',no:'b'},
+ oEr:{out:'Emergency: secure the airway, call 911, transfer.',tone:'urgent',go:'infection'},
+ b:{q:'Active bleeding despite firm gauze pressure?',yes:'nLocal',no:'oOoze'},
+ oOoze:{out:'Oozing up to 36–72 h is expected. Reinforce instructions and pressure.',src:'andersson'},
+ nLocal:{note:1,t:'Local measures',x:'Clear clot, LA with epinephrine, find the source. Bone bleeders: burnish, crush, or bone wax. Socket: remove granulation tissue, pack oxidized cellulose/collagen/gelatin, suture over it. Anticoagulated: tranexamic acid 5% 10 mL, hold 2 min, QID for 2–5 days.',src:'secrets',next:'c'},
+ c:{q:'Still bleeding after local measures?',yes:'oLab',no:'oDone'},
+ oLab:{out:'Check INR/CBC; call the prescriber or hematology; ED if uncontrolled.',tone:'action',src:'chest'},
+ oDone:{out:'Controlled. Review technique and medications; recheck next day.',src:'filippi'}
+ }},
+
+{id:'nerve',g:'Post-op & complications',title:'Nerve injury (IAN / lingual)',d:'Repair now, refer at 1 or 3 months, or observe',
+ start:'a',refs:['andersson','meyer','secrets'],
+ caveat:'Map the deficit at every visit (brush direction, 2-point, touch, pin) with dated photos.',
+ nodes:{
+ a:{q:'Witnessed transection (especially lingual), or symptomatic endodontic paste in the IAN canal?',yes:'oNow',no:'b'},
+ oNow:{out:'Refer for microneurosurgical repair within 3–7 days.',tone:'urgent',src:'andersson',ex:'Transected lingual nerve ends retract; spontaneous recovery is rare.'},
+ b:{q:'Complete anesthesia at 1 month?',yes:'oOne',no:'c'},
+ oOne:{out:'Refer for microsurgery evaluation now (complete anesthesia is treated earlier).',tone:'action',src:'meyer'},
+ c:{q:'At 3 months: persistent moderate-severe loss, or painful dysesthesia?',h:['Dysesthesia: test allodynia (brush), hyperpathia (repeated stimulus), hyperalgesia (pin)','Hypoesthesia: 2-point → touch → pain'],yes:'oThree',no:'oObs'},
+ oThree:{out:'Refer for microsurgery evaluation. Dysesthesia: diagnostic nerve block first — relief favors surgery; no relief favors medical/CBT care.',tone:'action',src:'meyer'},
+ oObs:{out:'Observe with serial neurosensory testing; most neurapraxias recover within weeks.',src:'meyer',ex:'Seddon/Sunderland: neurapraxia (≤1 mo) → axonotmesis (2–3 mo) → neurotmesis (needs repair).'}
+ }},
+
+{id:'oac',g:'Post-op & complications',title:'Oroantral communication',d:'Size-based closure · sinus precautions',
+ start:'a',refs:['secrets'],
+ caveat:'Confirm with a gentle nose-blow test; don’t probe aggressively.',
+ nodes:{
+ a:{q:'Root or tooth displaced into the sinus?',yes:'oDisp',no:'b'},
+ oDisp:{out:'Manage the displaced fragment first.',tone:'action',go:'displaced'},
+ b:{q:'Opening >6 mm?',yes:'oFlap',no:'c'},
+ oFlap:{out:'Primary closure: buccal advancement or palatal flap (score periosteum).',tone:'action',src:'secrets',ex:'Sinus precautions. Antibiotics and decongestants if sinusitis.'},
+ c:{q:'Opening 2–6 mm?',yes:'oFig',no:'oNone'},
+ oFig:{out:'Figure-of-eight suture over the socket plus sinus precautions.',src:'secrets',ex:'No nose blowing, straws, smoking; sneeze open-mouthed. Avoid gelatin sponge packed in the socket.'},
+ oNone:{out:'Under 2 mm: no surgery if hemostasis is good. Sinus precautions.',src:'secrets'}
+ }},
+
+{id:'displaced',g:'Post-op & complications',title:'Displaced tooth or root',d:'Retrieve now or close and stage',
+ start:'a',refs:['secrets'],
+ caveat:'Document the event, imaging and the discussion.',
+ nodes:{
+ a:{q:'Visible and retrievable now with good access?',yes:'oNow',no:'oLater'},
+ oNow:{out:'Retrieve with light, suction and a widened approach; avoid pushing it deeper.',src:'secrets'},
+ oLater:{out:'Stop. Close the incision, inform the patient, prescribe prophylactic antibiotics.',tone:'action',src:'secrets',ex:'Localize on CBCT; re-attempt in 4–6 weeks (needle-guided; OR if access is poor). Asymptomatic patients may decline removal — document it.'}
+ }},
+
+{id:'trauma',g:'Trauma',title:'Facial trauma triage',d:'Life threats · orbit · septum · route to definitive care',
+ start:'a',refs:['atls','canth','secrets','fxabx'],
+ red:'<b>xABCDE (ATLS 11):</b> control exsanguinating hemorrhage first, then airway with C-spine protection, breathing, circulation, disability, exposure.',
+ caveat:'Facial injuries wait for the primary survey. Assume C-spine injury until cleared.',
+ nodes:{
+ a:{q:'Life threat: major hemorrhage, airway obstruction, or unstable vitals?',h:['Flail anterior mandible with tongue falling back','Expanding floor-of-mouth or neck hematoma','Severe midface bleeding'],yes:'oAtls',no:'b'},
+ oAtls:{out:'Trauma activation: hemorrhage control, secure airway (surgical airway if needed), transfer.',tone:'urgent',src:'atls',ex:'Midface bleeding: anterior/posterior packing; pull a flail mandible forward.'},
+ b:{q:'Orbital compartment signs?',h:['Severe eye pain, proptosis, tense lids, ophthalmoplegia','Vision loss, relative afferent pupillary defect','IOP >40 mmHg'],yes:'oCanth',no:'c'},
+ oCanth:{out:'Lateral canthotomy and inferior cantholysis now — don’t wait for ophthalmology.',tone:'urgent',src:'canth',ex:'Optic nerve ischemia can become irreversible in ~60–120 min; aim within 2 h. Recheck IOP, pupils and acuity; cut the superior crus if IOP stays high.'},
+ c:{q:'Nasal fracture with septal hematoma?',yes:'nSept',no:'d'},
+ nSept:{note:1,t:'Septal hematoma',x:'Incise and drain now, then pack — undrained hematoma leads to abscess, perforation or saddle nose.',src:'secrets',next:'d'},
+ d:{q:'Mandible fracture?',yes:'oMand',no:'oFace'},
+ oMand:{out:'Go to the mandible fracture pathway.',tone:'action',go:'mandfx'},
+ oFace:{out:'CT face (fine cuts, 3D) for midface/orbit; document CN V and VII; plan definitive repair.',src:'atls',ex:'Antibiotics only for open/compound fractures (tooth-bearing segment or exposed bone).'}
+ }},
+
+{id:'mandfx',g:'Trauma',title:'Mandible fracture',d:'Closed vs ORIF · condyle · antibiotics',
+ start:'a',refs:['lect','board','fxabx','atls'],
+ caveat:'Describe every fracture by site, displacement, favorability and type. Panoramic misses medial pole condyle fractures — get CT.',
+ nodes:{
+ a:{q:'Airway threatened (bilateral parasymphyseal flail, floor-of-mouth hematoma)?',yes:'oAir',no:'b'},
+ oAir:{out:'Airway first: pull the segment forward, secure the airway, then fix.',tone:'urgent',go:'trauma'},
+ b:{q:'Open fracture (tooth-bearing segment or exposed bone)?',yes:'nAbx',no:'c'},
+ nAbx:{note:1,t:'Antibiotics',x:'Give pre/perioperative antibiotics for compound or comminuted fractures. No evidence that postoperative antibiotics help.',src:'fxabx',next:'c'},
+ c:{q:'Condylar fracture?',yes:'d',no:'e'},
+ d:{q:'Any open-treatment criterion?',h:['Ramus height loss ≥2 mm or ≥45° tilt','Bilateral condyles with midface fracture','Can’t achieve occlusion; condyle in middle cranial fossa; foreign body','Unstable occlusion, poor dentition (<3 teeth/quadrant), physiotherapy impossible'],yes:'oCondOrif',no:'oCondClosed'},
+ oCondOrif:{out:'Open reduction (retromandibular for neck, preauricular for high fractures).',tone:'action',src:'board',ex:'Consider disc repositioning in severe displacement. Cochrane: no high-quality evidence mandates open over closed overall.'},
+ oCondClosed:{out:'Closed treatment: short elastic MMF, then early function and physiotherapy.',src:'lect',ex:'Children: conservative almost always; avoid prolonged rigid MMF; long-term growth follow-up.'},
+ e:{q:'Displaced/unfavorable, multiple fractures, or MMF contraindicated?',h:['MMF poorly tolerated: seizures, psychiatric illness, pregnancy, severe GI or pulmonary disease','Non-union or fibrous union'],yes:'oOrif',no:'oClosed'},
+ oOrif:{out:'ORIF.',tone:'action',src:'lect',ex:'Angle: Champy superior-border miniplate (~3.8% complications). Symphysis: 2 lag screws, ≥7° divergence. Reconstruction plates: ≥3 screws per side, away from the fracture line. Close mentalis carefully; marginal mandibular nerve can sit 1 cm below the border.'},
+ oClosed:{out:'Closed reduction with MMF (arch bars or hybrid bars); plan nutrition first.',src:'lect',ex:'Best for non-displaced favorable, grossly comminuted, soft-tissue loss, or developing dentition. Trend: shorter MMF, elastics over wire.'}
+ },
+ look:[['Exam',['Compress both angles toward each other (mobility)','Floor-of-mouth ecchymosis, steps, malocclusion, loose teeth','CN V and VII documented before treatment']],['Atrophic edentulous (<10 mm)',['~20% complications; periosteal blood supply — minimize stripping','Load-bearing plate angle to angle; no screws near the fracture line','Antibiotic prophylaxis']]]},
 
 {id:'extraction',g:'Dentoalveolar & acute',title:'Third molars & extractions',d:'Remove, coronectomy, or surveil',
  start:'a',refs:['third','rood','sdcep'],
@@ -198,6 +489,21 @@ const MODS=[
  oRemN:{out:'Removal with nerve-injury consent.',tone:'action',src:'rood',ex:'CBCT if it would change the approach. Document baseline sensation; arrange neurosensory follow-up if altered.'}
  },
  look:[['Imaging',['Root number, curvature, dilaceration','Maxillary: sinus floor proximity','Pericoronal radiolucency; adjacent root resorption']],['Consent',['Swelling, trismus, alveolar osteitis, nerve injury, sinus communication','Patient preference recorded']]]},
+
+{id:'canine',g:'Dentoalveolar & acute',title:'Impacted canine',d:'Interceptive extraction, expose, transplant, or remove',
+ start:'a',refs:['goodson','kademani'],
+ caveat:'Plan with the orthodontist; localize on CBCT.',
+ nodes:{
+ a:{q:'Age 10–13 and canine not severely displaced?',yes:'oInt',no:'b'},
+ oInt:{out:'Extract the primary canine (maintain space if needed); re-evaluate in 12 months.',src:'goodson'},
+ b:{q:'Orthodontically feasible (not in the midline, above the apices, or horizontal)?',yes:'c',no:'d'},
+ c:{q:'Patient willing to wear braces?',yes:'oExp',no:'oTrans'},
+ oExp:{out:'Expose and align.',tone:'action',src:'goodson',ex:'Buccal: bond and chain; palatal: per orthodontist. Technique: gingivectomy if crown is coronal to the MGJ with keratinized tissue and little bone cover; apically positioned flap if crown is apical to the MGJ; closed flap if high in the alveolus (or palatal).'},
+ oTrans:{out:'Consider autotransplantation.',tone:'action',src:'goodson',ex:'Root >¾ formed: endodontics at ~10 days.'},
+ d:{q:'Resorbing adjacent teeth or other pathology?',yes:'oExt',no:'oMon'},
+ oExt:{out:'Extract the permanent canine.',tone:'action',src:'goodson',ex:'If laterals are resorbing, consider replacing them with the canines.'},
+ oMon:{out:'Monitor radiographically if the patient declines treatment and there is no pathology.',src:'goodson'}
+ }},
 
 {id:'implant',g:'Implants',title:'Single & multiple implants',d:'Immediate vs early/delayed placement; augment first or not',
  start:'a',refs:['iti18'],
@@ -253,10 +559,10 @@ const MODS=[
  },
  look:[['CBCT',['Septa in about a third of sinuses: perforation about 40% vs 12% (Yang 2024)','PSAA about 7 mm above the floor; >2 mm diameter raises bleeding risk','Membrane <0.5 mm tears easily; >3 mm may signal pathology (Periospot, unreferenced)']],['Perforation plan',['<5 mm: fold or suture; 5–10 mm: collagen membrane; >10 mm: laminar plate + collagen, consider staging','Perforation alone did not lower survival: 97.7% vs 98.9% (Diaz-Olivares 2021)']],['Graft & aftercare',['Survival similar across materials; DBBM holds volume best (Del Fabbro 2004)','Sinus precautions: no nose-blowing, sneeze open-mouthed, no straws, flying or diving short-term','Positional vertigo after osteotome malleting usually settles within about a month (Testori 2023)']]]},
 
-{id:'arch',g:'Implants',title:'Full-arch',d:'Immediate vs delayed loading',
- start:'a',refs:['iti13','iti18'],
+{id:'arch',g:'Implants',title:'Full-arch',d:'Immediate vs delayed loading · v6 checklist',
+ start:'a',refs:['iti13','iti18','schwarz','fa6','board'],
  red:'Plan and consent a delayed-loading fallback before any immediate-load surgery.',
- caveat:'Torque/ISQ thresholds stay case-specific; confirm loading criteria with the restorative team.',
+ caveat:'No validated torque/ISQ cutoff; set a case-specific threshold before surgery (v6). Maxilla: 2026 Global Consensus sets 4 implants as the minimum and prefers 5–6 when anatomy allows; your v6 accepts 4 with good AP spread and a rigid splint.',
  nodes:{
  a:{q:'Fixed or removable endpoint agreed with the restorative team and lab?',h:['Transition line hidden at full smile; restorative space after planned reduction','Lip support, phonetics, hygiene access'],yes:'b',no:'o1'},
  o1:{out:'Settle the prosthetic endpoint first.',tone:'action'},
@@ -266,16 +572,16 @@ const MODS=[
  o3:{out:'Immediate loading with a splinted provisional.',src:'iti13',ex:'Verify passive fit, cantilever limits and provisional occlusion.'},
  o4:{out:'Use the planned delayed-loading fallback.',tone:'action'}
  },
- look:[['Plan',['AP spread and cantilever vs the prosthetic plan','Implant positions clear of sinus and IAN','Opposing arch and occlusal load']],['Delivery',['Photogrammetry/IOS accuracy check','Maintenance interval; who removes the prosthesis for cleaning']]]},
+ look:[['1 · Patient (v6)',['ASA, anesthesia type; STOP-Bang if sedated','Smoking, HbA1c, anticoagulant plan, head/neck radiation','Antiresorptive/antiangiogenic: agent, route, duration → MRONJ risk consented','Consent: fixed vs overdenture vs denture; failure/conversion plan']],['2 · Prosthetic endpoint',['Restorative + lab approved setup: fixed vs overdenture; FP1/FP2 vs FP3','Transition line hidden; restorative space → planned reduction','Space: ≥13–15 mm acrylic hybrid; 8–10 mm monolithic zirconia; <7 mm crown & bridge only (board notes)']],['3 · Anatomy & plan',['CBCT merged with setup: sinus/nasal floor (max); IAN, mental loop, lingual concavity (mand)','Grafting: none / sinus / GBR; immediate vs delayed placement','AP spread, cantilever (≤1.5 × AP spread), guide: static / dynamic / freehand']],['4 · Configuration',['Maxilla fixed: 4 acceptable with good AP spread + rigid splint; 5–6 if soft bone, short AP spread or heavy load','Mandible fixed: 4 with good AP spread + rigid splint','Overdenture: maxilla ≥4; mandible 2 interforaminal minimum','Tilted posterior implants (17°/30°) to widen spread; plan one extra when bone quality is uncertain']],['5 · Loading go / no-go',['Record torque and ISQ per site against your preset threshold','Stability met, cross-arch splint, passive fit, no cantilever contact','No-go: denture, delayed fixed, add implant, or stage — record the reason']],['6 · Handoff',['Post-op instructions; soft diet; night guard if bruxism','Baseline probing + radiographs at delivery; risk-based recall','Photogrammetry/IOS accuracy check; who removes the prosthesis for cleaning']]]},
 
 {id:'infection',g:'Dentoalveolar & acute',title:'Odontogenic infection',d:'Hospital vs office · antibiotics or not',
- start:'a',refs:['adaAbx','sdcepAbs'],
+ start:'a',refs:['adaAbx','sdcepAbs','lect','board'],
  red:'<b>Airway first.</b> Voice change, drooling, stridor, can’t swallow saliva, raised floor of mouth, severe trismus, or toxic appearance: emergency department now.',
  caveat:'ADA 2019 regimens are for immunocompetent adults. Antibiotics never replace source control.',
  nodes:{
  a:{q:'Airway threat or severe systemic illness?',h:['See the red box','Fever with tachycardia, hypotension, dehydration, lethargy'],yes:'oER',no:'b'},
- oER:{out:'Emergency / hospital care now.',tone:'urgent',src:'sdcepAbs',ex:'CT with contrast, IV antibiotics, airway management and surgical drainage.'},
- b:{q:'Spread beyond the vestibule into fascial spaces?',h:['Submandibular, sublingual, submental, masticator, lateral pharyngeal, periorbital','Significant trismus usually means masticator-space spread'],yes:'oER',no:'c'},
+ oER:{out:'Emergency / hospital care now.',tone:'urgent',src:'lect',ex:'CT with contrast before any procedure if airway at risk; anesthesia early (awake fiberoptic/video), pre-mark the cricothyrotomy site. IV ampicillin-sulbactam, or IV penicillin + metronidazole, or IV clindamycin. Drain every involved space through a dependent incision; never needle-drain the lateral pharyngeal space. Culture.'},
+ b:{q:'Admission trigger present?',h:['FAST: Fever, Airway, rapid Spread, Sick host (A1C >8, immunosuppressed), multiple Spaces, altered menTal status','Fascial spread: submandibular, sublingual, submental, masticator, lateral pharyngeal, periorbital','Ludwig’s angina, or failed outpatient treatment / non-compliance'],yes:'oER',no:'c'},
  c:{q:'Can you get source control today (drainage, extraction or pulp access)?',yes:'nSC',no:'oNoSC'},
  nSC:{note:1,t:'Source control',x:'Drain the collection and remove the source (extraction or pulp access) in the same visit.',next:'d'},
  oNoSC:{out:'Antibiotics now, plus urgent referral for source control.',tone:'action',src:'adaAbx',ex:'Amoxicillin 500 mg TID (or penicillin VK 500 mg QID), 3–7 days. Allergy without anaphylaxis/angioedema/hives: cephalexin 500 mg QID. With that history: azithromycin 500 mg day 1, then 250 mg × 4 days (ADA 2019 also lists clindamycin 300 mg QID). Recheck within 3 days.'},
@@ -283,7 +589,7 @@ const MODS=[
  oAbx:{out:'Source control plus antibiotics.',tone:'action',src:'adaAbx',ex:'Amoxicillin 500 mg TID, 3–7 days; allergy options as above. Stop 24 h after symptoms resolve. Recheck within 3 days; escalate if worse. Failure: add metronidazole 500 mg TID or switch to amoxicillin-clavulanate 500/125 mg TID, 7 days.'},
  oNo:{out:'Source control alone. No antibiotics.',src:'adaAbx',ex:'Give return precautions: swallowing, breathing, spreading swelling, fever.'}
  },
- look:[['Exam',['Swelling distribution, fluctuance, mouth opening, tongue elevation','Diabetes, immunosuppression, pregnancy','Allergy phenotype, renal/hepatic function, interactions (e.g., warfarin)']]]},
+ look:[['Exam',['Swelling distribution, fluctuance, mouth opening, tongue elevation','Diabetes, immunosuppression, pregnancy','Allergy phenotype, renal/hepatic function, interactions (e.g., warfarin)']],['Culture when',['Rapid spread, post-op or recurrent infection, no response to treatment','Immunocompromised host; osteomyelitis, actinomycosis, suspected fungal']],['Not improving? Check',['Wrong or missed space; source not removed — re-image','Hardware or foreign body','Non-compliance, wrong antibiotic, fungal infection in immunocompromised']],['Pitfalls',['Ciprofloxacin has no anaerobic cover — never for odontogenic infection','Cutaneous fistula: treat the tooth, not the tract','Submandibular mass without pus: think lymphoma, biopsy']]]},
 
 {id:'lesion',g:'Pathology & pain',title:'Oral mucosal lesion',d:'Biopsy now, remove cause and recheck, or refer',
  start:'a',refs:['oralca'],
@@ -297,6 +603,46 @@ const MODS=[
  o3:{out:'Biopsy, or document why a short review is justified.',tone:'action',src:'oralca'}
  },
  look:[['History',['Duration and change; tobacco, alcohol, areca nut; prior oral cancer']],['Exam',['Floor of mouth, lateral and ventral tongue, soft palate','Size, color, surface, induration; nodes: size, fixation, tenderness']]]},
+
+{id:'rl',g:'Pathology & pain',title:'Jaw radiolucency differential',d:'Unilocular vs multilocular · odontogenic or not',
+ start:'a',refs:['board'],
+ red:'Ragged borders, “floating teeth”, or numb lip: think malignancy — biopsy promptly.',
+ caveat:'Differential only — histology decides. Reference list from board-review notes.',
+ nodes:{
+ a:{q:'Multilocular?',yes:'b',no:'c'},
+ b:{q:'In tooth-bearing bone or tooth-associated?',yes:'oMo',no:'oMn'},
+ oMo:{out:'Ameloblastoma, OKC (KCOT), odontogenic myxoma, CEOT (Pindborg), ameloblastic fibroma.',tone:'action',go:'jaw',src:'board'},
+ oMn:{out:'Central giant cell granuloma, aneurysmal bone cyst, cherubism, brown tumor.',tone:'action',go:'jaw',src:'board',ex:'Check serum calcium and PTH before surgery: high values point to brown tumor — treat the parathyroid first.'},
+ c:{q:'Tooth-associated?',yes:'oUo',no:'oUn'},
+ oUo:{out:'Radicular (periapical), dentigerous, unicystic ameloblastoma, AOT, OKC.',go:'jaw',src:'board',ex:'Non-vital tooth + classic periapical lesion: treat the tooth first.'},
+ oUn:{out:'Stafne defect, nasopalatine duct cyst (if >6 mm), traumatic bone cyst, metastasis.',go:'jaw',src:'board',ex:'Stafne: below the canal, posterior mandible — image, don’t operate.'}
+ }},
+
+{id:'dysplasia',g:'Pathology & pain',title:'Oral epithelial dysplasia',d:'After biopsy: observe, ablate, or excise',
+ start:'a',refs:['dysp'],
+ caveat:'All grades can transform; follow-up is long-term, often lifelong. Shared decision-making.',
+ nodes:{
+ a:{q:'Severe dysplasia or carcinoma in situ (high grade)?',yes:'oSev',no:'b'},
+ oSev:{out:'Scalpel or laser excision with margins, then frequent long-term follow-up.',tone:'action',src:'dysp',ex:'Do not laser-ablate high-grade dysplasia or any clinically suspicious lesion (no specimen for margins).'},
+ b:{q:'High-risk patient or lesion features?',h:['Age >60, tobacco/alcohol, multiple lesions (PVL), lichen planus, unreliable follow-up','Erythroplakia/erythroleukoplakia, non-homogeneous, ill-defined margins, large or high-risk site'],yes:'oHi',no:'oLo'},
+ oHi:{out:'Excision (scalpel or laser) with long-term follow-up.',tone:'action',src:'dysp'},
+ oLo:{out:'Mild/moderate, low risk: observe, laser ablation, or excision — patient choice.',src:'dysp',ex:'Untreated high-grade dysplasia transformed in ~29% vs ~6–12% when treated (retrospective data).'}
+ }},
+
+{id:'mronj',g:'Pathology & pain',title:'MRONJ staging & management',d:'At risk · stage 0–3 · nonoperative vs operative',
+ start:'a',refs:['aaoms','board'],
+ caveat:'AAOMS 2022: nonoperative and operative care are both acceptable at every stage; choose by disease, comorbidity and patient goals.',
+ nodes:{
+ a:{q:'Exposed bone, or fistula probing to bone, for >8 weeks?',h:['Current or prior antiresorptive/antiangiogenic therapy','No jaw radiation or jaw metastasis (otherwise not MRONJ)'],yes:'c',no:'b'},
+ b:{q:'Unexplained jaw pain, loose teeth, swelling, altered sensation, or sclerosis/non-healing socket on imaging?',yes:'oS0',no:'oRisk'},
+ oRisk:{out:'At risk, no disease: prevention.',src:'aaoms',ex:'Optimize oral health; avoid elective bone surgery on oncologic dosing. Denosumab effect fades ~6 months after stopping; bisphosphonates persist for years.'},
+ oS0:{out:'Stage 0 (non-exposed variant). Symptom control, close surveillance.',tone:'action',src:'aaoms',ex:'Up to 50% progress to Stage 1. Rule out odontogenic and other causes.'},
+ c:{q:'Any Stage 3 feature?',h:['Necrosis beyond alveolar bone (inferior border, ramus, sinus, zygoma)','Pathologic fracture, extraoral fistula, oroantral/oronasal communication','Osteolysis to the inferior border or sinus floor'],yes:'oS3',no:'d'},
+ oS3:{out:'Stage 3. Resection to vital bleeding bone, or nonoperative care if a poor surgical candidate.',tone:'urgent',src:'aaoms',ex:'Treat infection with antibiotics; manage pain. Resection specimens may reveal metastasis.'},
+ d:{q:'Pain or signs of infection?',yes:'oS2',no:'oS1'},
+ oS2:{out:'Stage 2. Antibiotics, antimicrobial rinse, pain control; debridement or resection by judgment.',tone:'action',src:'aaoms'},
+ oS1:{out:'Stage 1. Antimicrobial rinse, education, surveillance; surgery (even resection) is an option.',src:'aaoms',ex:'Sequestra often exfoliate and resolve with nonoperative care.'}
+ }},
 
 {id:'jaw',g:'Pathology & pain',title:'Jaw lesion',d:'Specialist workup, biopsy, or diagnosis-specific treatment',
  start:'a',refs:[],
@@ -365,15 +711,202 @@ function walk(m){
  return{steps,r};
 }
 
+/* ===== Emergency & calculators (weight entered once, shared) ===== */
+const UNV='<span class="unv">verify</span>';
+const r1=v=>Math.round(v*10)/10;
+function D(perKg,cap,unit,dec){const w=S.wt;if(!w)return`<span class="dose">${perKg} ${unit}/kg${cap!=null?` (max ${cap} ${unit})`:''}</span>`;let v=perKg*w;const capped=cap!=null&&v>cap;if(capped)v=cap;const k=10**(dec??1);v=Math.round(v*k)/k;return`<span class="dose">${v} ${unit}${capped?' (max)':''}</span>`}
+function DR(lo,hi,cap,unit,dec){const w=S.wt;if(!w)return`<span class="dose">${lo}–${hi} ${unit}/kg${cap!=null?` (max ${cap} ${unit})`:''}</span>`;const k=10**(dec??0),f=v=>Math.round(Math.min(v*w,cap??1e9)*k)/k,a=f(lo),b=f(hi);return`<span class="dose">${a===b?a:a+'–'+b} ${unit}${cap!=null&&hi*w>cap?' (max)':''}</span>`}
+function F(t){return`<span class="dose">${t}</span>`}
+const EMS=[
+{id:'arrest',t:'Cardiac arrest',s:'Unresponsive, no normal breathing, no pulse',src:['aha25'],steps:()=>[
+ `Call for help and 911. Start CPR: ${F('100–120/min')}, depth ${F('≥5 cm')}, full recoil. Rotate compressor every 2 min.`,
+ `AED/defibrillator on. Shockable (VF/pVT): shock, resume CPR at once. Biphasic ${F('120–200 J')} or device max.`,
+ `No advanced airway: ${F('30:2')}. Advanced airway: ${F('1 breath q6 s')} with continuous compressions.`,
+ `Epinephrine ${F('1 mg IV/IO q3–5 min')}. Non-shockable: give as soon as possible. Shockable: after the second shock.`,
+ `Refractory VF/pVT: amiodarone ${F('300 mg')}, then ${F('150 mg')}; or lidocaine ${DR(1,1.5,null,'mg')}, then ${DR(0.5,0.75,null,'mg')}.`,
+ `Treat causes: hypoxia, hypovolemia, acidosis, K⁺, hypothermia, tension pneumothorax, tamponade, toxins (incl. local anesthetic → LAST card), thrombosis.`]},
+{id:'anaph',t:'Anaphylaxis',s:'Hives/flushing plus airway, breathing or BP compromise',src:['anaph','anaph2','aha25s'],steps:()=>[
+ `Stop the suspected drug or latex. Call 911.`,
+ `Epinephrine IM, mid-outer thigh, 1 mg/mL: ${D(0.01,0.5,'mg',2)} (${S.wt?Math.round(Math.min(0.01*S.wt,0.5)*100)/100+' mL':'0.01 mL/kg'}). Repeat every 5–15 min if no response.`,
+ `Supine, legs up (sit up if airway swelling). 100% O₂. Large-bore IV; isotonic fluid bolus for hypotension.`,
+ `Still refractory after 2 IM doses: epinephrine infusion ${F('5–20 mcg/min')} IV (1 mg in 1 L = 1 mcg/mL).`,
+ `On a β-blocker and refractory: glucagon ${F('1–5 mg IV')} (adult).`,
+ `Antihistamine, steroid, albuterol are second-line. They never replace epinephrine.`,
+ `Arrest: Cardiac arrest card. Standard IM dose may be inadequate in arrest; give IV epinephrine.`]},
+{id:'lspasm',t:'Laryngospasm',s:'Stridor or silent obstruction, paradoxical chest movement under sedation',src:['lspasm','lsprop','litfl'],steps:()=>[
+ `Stop stimulation. Pack the site; suction the pharynx.`,
+ `100% O₂ with tight-mask CPAP. Vigorous jaw thrust plus Larson maneuver (pressure behind the ramus at the styloid notch).`,
+ `Still obstructed: deepen with propofol ${D(0.5,null,'mg',0)} IV (range 0.25–0.8 mg/kg; limited evidence).`,
+ `Still obstructed or SpO₂ falling: succinylcholine ${DR(0.1,0.5,null,'mg')} IV, then mask ventilate. Severe or intubating: ${DR(1,2,null,'mg')} IV. No IV: ${DR(3,4,null,'mg')} IM.`,
+ `Atropine ready for bradycardia after succinylcholine. Intubation or LMA if ventilation fails.`,
+ `Watch for negative-pressure pulmonary edema in recovery.`]},
+{id:'resp',t:'Oversedation / apnea',s:'Falling ETCO₂ waveform or SpO₂, no response to voice',src:['aha25s','nalox','fluma'],steps:()=>[
+ `Stop sedatives. Stimulate. Jaw thrust, chin lift; nasal or oral airway.`,
+ `100% O₂. Bag-mask ventilate if breathing is inadequate.`,
+ `Opioid given: naloxone ${F('0.1–0.2 mg IV')} every 2–3 min, titrated to breathing. Apneic overdose: ${F('0.4–2 mg IV')}; IM if no IV.`,
+ `Benzodiazepine given: flumazenil ${F('0.2 mg IV')} over 15 s; repeat ${F('0.2 mg')} every 60 s to ${F('1 mg')} total. Resedation: repeat q20 min, max ${F('3 mg/h')}. Seizure risk with chronic benzodiazepine use.`,
+ `Monitor ≥2 h after reversal; re-sedation can outlast the antagonist.`,
+ `No response or arrest: Cardiac arrest card.`]},
+{id:'last',t:'Local anesthetic toxicity (LAST)',s:'Perioral tingling, tinnitus, agitation → seizure, arrhythmia, collapse',src:['last','apsf'],steps:()=>[
+ `Stop injecting. Call for help and the lipid kit. 100% O₂; secure the airway.`,
+ `Seizure: benzodiazepine (see Seizure card). Avoid propofol if BP is unstable.`,
+ `Lipid emulsion 20%: bolus ${D(1.5,null,'mL',0)} IV over 1–3 min (lean body weight).`,
+ `Then infusion ${D(0.25,null,'mL/min')}; double to ${D(0.5,null,'mL/min')} if BP stays low. Repeat bolus once or twice for persistent collapse.`,
+ `Cap ≈ ${D(12,null,'mL',0)} (10–12 mL/kg) in the first 30 min.`,
+ `Arrest: CPR with small epinephrine doses under ${D(1,null,'mcg',0)} (&lt;1 mcg/kg) per dose. Avoid vasopressin, β-blockers, calcium-channel blockers, lidocaine.`]},
+{id:'seizure',t:'Seizure',s:'Convulsion >5 min or repeated without recovery',src:['aes','binder'],steps:()=>[
+ `Protect from injury; do not restrain. Clear the field; suction. 100% O₂. Call 911.`,
+ `Check glucose. Low: Hypoglycemia card.`,
+ `No IV: midazolam ${F(S.wt&&S.wt<=40?'5 mg IM':'10 mg IM')}${S.wt?'':' (>40 kg; 5 mg if 13–40 kg)'}.`,
+ `IV: lorazepam ${D(0.1,4,'mg')}, or diazepam ${DR(0.15,0.2,10,'mg')}. One full dose; repeat once.`,
+ `Recovery position afterwards. Local anesthetic just given: think LAST.`]},
+{id:'hypo',t:'Hypoglycemia',s:'Diabetic, sweaty, confused or unresponsive',src:['adahypo','d50'],steps:()=>[
+ `Check glucose. <70 mg/dL with symptoms: treat.`,
+ `Awake and swallowing: ${F('15 g')} fast carbohydrate (gel, juice). Recheck in 15 min; repeat until >70.`,
+ `Unresponsive, no IV: glucagon ${F('1 mg IM')} or ${F('3 mg nasal')} (ready-to-use forms preferred).`,
+ `IV in place: dextrose 50% ${F('20–50 mL (10–25 g) IV')}, slowly, into a large vein.`,
+ `Nothing by mouth while obtunded. No response in 10–15 min: 911.`]},
+{id:'chest',t:'Chest pain / ACS',s:'Pressure, radiation to arm or jaw, diaphoresis',src:['merck','ntg'],steps:()=>[
+ `Stop the procedure. 911. Sit up. Monitor; AED nearby.`,
+ `Aspirin ${F('160–325 mg')} chewed (not enteric-coated), unless true allergy.`,
+ `Nitroglycerin ${F('0.4 mg SL')} every 5 min, max 3 in 15 min. Not with hypotension or shock, PDE-5 inhibitors (sildenafil, tadalafil, vardenafil, avanafil), or riociguat.`,
+ `O₂ only if SpO₂ is low or the patient is breathless.`,
+ `Arrest: Cardiac arrest card.`]},
+{id:'brady',t:'Bradycardia / vagal syncope',s:'HR <50 with symptoms, pallor, fainting',src:['brady'],steps:()=>[
+ `Supine, legs up. O₂. Stop stimulation. Most vasovagal episodes resolve in under a minute.`,
+ `Symptomatic bradycardia: atropine ${F('1 mg IV')} every 3–5 min to ${F('3 mg')} total.`,
+ `No response: transcutaneous pacing, or epinephrine ${F('2–10 mcg/min')} or dopamine ${F('5–20 mcg/kg/min')} infusion; 911.`,
+ `No recovery within 60 s: consider seizure, hypoglycemia, arrhythmia, stroke.`]},
+{id:'mh',t:'Malignant hyperthermia',s:'Rising ETCO₂, rigidity, tachycardia after succinylcholine',src:['mh'],steps:()=>[
+ `Call for help. 911. MH hotline ${F('1-800-644-9737')}. Stop succinylcholine and any volatile agent.`,
+ `Dantrolene ${D(2.5,null,'mg',0)} IV rapidly. Repeat until ETCO₂ and rigidity settle; average total ≈ 5 mg/kg. Over 10 mg/kg without effect: rethink the diagnosis.`,
+ `Ryanodex: 250 mg vial in 5 mL water. Older dantrolene: 20 mg vial in 60 mL water (≈9 vials for 70 kg).`,
+ `100% O₂ at high flow. Cool with cold IV fluids and ice; stop cooling below 38 °C.`,
+ `Treat hyperkalemia and arrhythmias. Transfer to ICU.`]}
+];
+function emHTML(){
+ return `<div class="wtbar"><label class="fld" for="in-wt">Weight, kg<input id="in-wt" data-wt inputmode="decimal" placeholder="kg" value="${esc(S.wt??'')}"></label><div class="note">Adults. Doses update from this weight. Tap a card.</div></div>
+ <div class="call">Any emergency: call for help, stop the procedure, 100% O₂, monitors on. Call 911 early.</div>
+ ${EMS.map(e=>`<details class="em" id="em-${e.id}"${S.emOpen===e.id?' open':''}><summary><div>${esc(e.t)}<span>${esc(e.s)}</span></div></summary><ol>${e.steps().map(x=>`<li>${x}</li>`).join('')}</ol><div class="meta">${e.src.map(srcLink).join('')}</div></details>`).join('')}
+ <p class="caveat">Rebuilt from 2025 AHA guidelines and cited sources. Every dose is checked against a guideline or FDA label (Oct 22, 2026). Confirm against your crash-cart concentrations.</p>`;
+}
+const REF=[
+{t:'Immediate implant placement',k:'implant esthetic socket buccal',src:['mynotes','board'],i:[
+ 'Buccal wall <1 mm on CBCT: do not place immediately — stage with GBR',
+ 'Thin biotype: add a connective tissue graft',
+ 'Palatal position; seat ≥3 mm apical to crest; prosthetically driven axis first',
+ 'Torque 25–35 Ncm minimum; immediate loading needs ISQ ≥70 + good bone + occlusal control',
+ 'Graft any esthetic-zone gap; ≥2 mm gap: slowly resorbing xenograft',
+ '≥2 mm keratinized mucosa before committing',
+ 'Immediate implants do not prevent buccal bundle-bone resorption — set expectations']},
+{t:'Socket shield (partial extraction)',k:'implant shield ace bundle bone',src:['mynotes'],i:[
+ 'Single-rooted anterior, intact (even thin) buccal plate, no active periapical infection',
+ 'Crescent shield mesio- to disto-buccal line angle, full socket depth, 1.0–1.5 mm thick (>2 mm risks implant contact)',
+ 'Bevel to or just below crest; ~1 mm below the gingival margin',
+ 'Extract the palatal half with palatal force only; any shield mobility → abort to ridge preservation',
+ 'Technique-sensitive; limited long-term data']},
+{t:'6-mm implant vs sinus lift',k:'short implant sinus posterior maxilla',src:['perio6','iti18'],i:[
+ 'Candidate: single posterior maxillary site, 5–7 mm residual height on CBCT, adequate width',
+ 'Plan for primary stability in D3/D4; be ready to abort to grafting',
+ 'Delayed loading; screw-retained; controlled occlusion; assess crown-to-implant ratio',
+ 'Don’t substitute when: <5 mm height, no long-term maintenance, 4–5 mm “ultrashort”']},
+{t:'Zygomatic implants (PATZy)',k:'zygoma quad pterygoid atrophic maxilla',src:['mynotes'],i:[
+ 'Zones: inadequate premolar zone → double zygoma; premolar + anterior → quad',
+ 'Always cross-arch splint; place anterior implants first',
+ 'Posterior zygoma as posterior as possible (keeps a rescue option)',
+ 'Block extraorally at the zygoma before infiltration; never deglove before injecting',
+ 'Window parallel to the anterior/posterior wall line; see the 2.9 mm drill tip through the zygoma']},
+{t:'Implant outcomes & removal',k:'implant survival failure peri-implantitis',src:['board'],i:[
+ '5-year combined success ~94.6%; mandible 15-yr ~91%; maxilla ~84%; irradiated maxilla ~80%',
+ 'Remove if mobile or <2–3 mm supporting bone; ≥50% bone loss: strongly consider removal',
+ 'Pockets ≥6 mm elsewhere seed implants; disease surfaces ~2–3 years later',
+ 'Swelling ~3 weeks after graft/implant: suspect necrotic bone — re-expose and debride']},
+{t:'Cephalometric norms',k:'orthognathic ceph steiner',src:['board'],i:[
+ 'SNA 81 ± 3° · SNB 79 ± 3° · ANB 2 ± 2° (Steiner)',
+ 'Occlusal plane 7–8° to Frankfort',
+ 'Holdaway ratio: 0.5 women, 1 men',
+ 'Interpupillary distance 65 ± 3 mm; gingival show on smile ≤1–2 mm']},
+{t:'Cleft care timing',k:'cleft lip palate alveolar bone graft',src:['goodson','lect','board'],i:[
+ 'Lip: 3–5 months (Goodson) or 4–6 months (lecture); Rule of 10s: ≥10 weeks, ≥10 lb, Hb ≥10 g/dL',
+ 'Palate: 6–9 months (Goodson) or 10–12 months (lecture); before 12 months → fewer misarticulations',
+ 'Speech surgery 3–5 y · alveolar bone graft 9–11 y (canine root ½–⅔) · orthodontics ~12 y · orthognathic 16 F / 18 M',
+ 'Submucous cleft: ~25% VPI after adenotonsillectomy — screen first',
+ '22q11: image for medialized carotids before pharyngoplasty; recheck after retractor placement',
+ 'Stickler (cleft palate): early pediatric ophthalmology referral']},
+{t:'Vascular lesions',k:'hemangioma malformation avm',src:['lect'],i:[
+ 'Present at birth → malformation; rapid postnatal growth or involution → hemangioma',
+ 'Compressible, enlarges with Valsalva → venous; fluctuates with infection → lymphatic; pulsatile, bruit, warm → AVM (high flow)',
+ 'MRI/MRA is the gold standard; biopsy is usually unnecessary; phleboliths = low flow',
+ 'Infantile hemangioma: propranolol first line; ~50% resolved by age 5',
+ 'Kasabach-Merritt (low platelets, low fibrinogen): emergency — hematology before any surgery']},
+{t:'Salivary glands',k:'parotid submandibular stone tumor ranula',src:['lect','board'],i:[
+ 'Malignancy rate rises as glands get smaller: parotid ~20%, submandibular ~35–50%, minor 50–85%',
+ 'Fine-needle aspiration before any surgery (sens ~78%, spec ~97%)',
+ 'Only ~20% of parotid stones show on plain film — CT if negative; distal stones: sialendoscopy',
+ 'Pleomorphic adenoma: excise with pseudocapsule intact; new facial palsy → carcinoma ex-PA',
+ 'Sialadenitis: hydration, sialogogues, warm compresses, hygiene, antibiotics',
+ 'Plunging ranula: check the airway']},
+{t:'TMJ arthrocentesis',k:'tmj arthrocentesis arthroscopy',src:['lect'],i:[
+ '20–21 G needles into the superior joint space; avoid scuffing the fossa',
+ 'Lavage ≥60 mL lactated Ringer’s (200 mL clears degraded proteins)',
+ 'Finish with steroid or hyaluronic acid (avoid HA with avian allergy), then stretch',
+ 'Exercises, Rule of 10: 10 reps of opening, laterals, protrusion, for ≥10 days',
+ 'Expect ~47% pain reduction (arthroscopy ~70%); better results if symptoms <6 months']}
+];
+function refHTML(){
+ const q=(S.refq||'').toLowerCase().trim();
+ const list=REF.filter(r=>!q||(r.t+' '+r.k+' '+r.i.join(' ')).toLowerCase().includes(q));
+ return `<div class="wtbar" style="grid-template-columns:1fr"><label class="fld" for="in-refq">Search reference<input id="in-refq" data-refq placeholder="e.g. cleft, socket shield, parotid" value="${esc(S.refq||'')}"></label></div>
+ ${list.map(r=>`<details class="box"><summary>${esc(r.t)}</summary><div class="inner look"><ul>${r.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small" style="margin-top:8px">${r.src.map(srcLink).join(' · ')}</div></div></details>`).join('')||'<p class="caveat">No match.</p>'}
+ <p class="caveat">Reference cards summarize your notes and cited sources; your personal protocols are labeled as such.</p>`;
+}
+const LA=[
+ ['Lidocaine 2% + epi',20,7,500],
+ ['Articaine 4% + epi',40,7,null],
+ ['Mepivacaine 3% plain',30,6.6,400],
+ ['Prilocaine 4%',40,8,600],
+ ['Bupivacaine 0.5% + epi',5,1.3,90]];
+const RCRI=['High-risk surgery (intraperitoneal, intrathoracic, suprainguinal vascular)','Ischemic heart disease','Heart failure history','Cerebrovascular disease','Insulin-treated diabetes','Creatinine >2.0 mg/dL'];
+function calcHTML(){
+ const w=S.wt;
+ const la=LA.map(([n,mgml,pk,cap])=>{if(!w)return`<tr><td>${n}</td><td>${pk} mg/kg${cap?` · max ${cap} mg`:''}</td><td>–</td></tr>`;
+  let mg=pk*w;const capped=cap!=null&&mg>cap;if(capped)mg=cap;const carp=Math.floor(mg/(mgml*1.7)*10)/10;
+  return`<tr><td>${n}</td><td><b>${Math.round(mg)} mg</b>${capped?' (cap)':''}</td><td><b>${carp}</b></td></tr>`}).join('');
+ const rc=S.rcri||{},rn=Object.values(rc).filter(Boolean).length,rr=['0.4%','0.9%','6.6%','≥11%'][Math.min(rn,3)];
+ const mf=w?(w<=10?w*4:w<=20?40+(w-10)*2:60+(w-20)):null;
+ return `<div class="wtbar"><label class="fld" for="in-wt">Weight, kg<input id="in-wt" data-wt inputmode="decimal" placeholder="kg" value="${esc(w??'')}"></label><div class="note">Shared with the Emergency tab.</div></div>
+ <details class="box" open><summary>Local anesthetic maximum <em>1.7 mL cartridges</em></summary><div class="inner"><table class="ctab"><tr><th>Agent</th><th>Max dose</th><th>Carps</th></tr>${la}</table>
+ <p class="caveat" style="margin:10px 0 0">Combining agents: doses add; stay under the lower ceiling. Cardiac patients: the classic 0.04 mg epinephrine cap (≈2 carps 1:100k) lacks research support; a systematic review found up to 4 carps 1:100k well tolerated with monitoring. Recent MI, decompensated heart failure or significant arrhythmia: physician consult first. ${srcLink('epicat')} Reduce for elderly, liver disease, and children. ${srcLink('malamed')}</p></div></details>
+ <details class="box"><summary>Revised Cardiac Risk Index <em>${rn}/6</em></summary><div class="inner"><div class="chk">${RCRI.map((t,k)=>`<button class="tg${rc[k]?' on':''}" data-rc="${k}" aria-pressed="${!!rc[k]}" style="text-align:left">${esc(t)}</button>`).join('')}</div>
+ <div class="calc">RCRI ${rn} · major cardiac event ≈ ${rr} (Lee 1999)</div><p class="caveat" style="margin:10px 0 0">Most OMS cases are low-risk surgery. Testing only when poor functional capacity and elevated risk would change management (2024 AHA/ACC). ${srcLink('lee')} ${srcLink('acc')}</p></div></details>
+ <details class="box"><summary>Maintenance fluids <em>4-2-1</em></summary><div class="inner"><div class="calc">${mf!=null?`${Math.round(mf)} mL/h`:'Enter weight'}</div><p class="caveat" style="margin:10px 0 0">Holliday–Segar: 4 mL/kg/h for the first 10 kg, 2 for the next 10, 1 per kg after. NPO deficit ≈ rate × hours fasting.</p></div></details>`;
+}
+function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v==='decide'?'on':''}" data-view="decide">Decide</button><button class="em${v==='emergency'?' on':''}" data-view="emergency">SOS</button><button class="${v==='calc'?'on':''}" data-view="calc">Calc</button><button class="${v==='ref'?'on':''}" data-view="ref">Ref</button></div>`}
+function view(v){
+ if(v==='decide')return home();
+ S.mod=null;S.view=v;
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.4.1</span></div>${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():calcHTML()}</div>`;
+ window.scrollTo(0,0);try{history.replaceState(null,'','#'+v)}catch(e){}
+}
+function rebody(){const b=document.getElementById('vbody');if(!b)return;
+ const open=[...b.querySelectorAll('details[open]')].map(d=>d.id||d.querySelector('summary').textContent);
+ const a=document.activeElement,wasWt=a&&(a.hasAttribute('data-wt')||a.hasAttribute('data-refq')),sel=a&&a.hasAttribute('data-refq')?'[data-refq]':'[data-wt]',pos=wasWt?a.selectionStart:null;
+ b.innerHTML=S.view==='emergency'?emHTML():S.view==='ref'?refHTML():calcHTML();
+ b.querySelectorAll('details').forEach(d=>{const k=d.id||d.querySelector('summary').textContent;if(open.includes(k))d.open=true});
+ if(wasWt){const n=b.querySelector(sel);n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}
+
+const TRIAGE_PROMPT='Run my pre-op triage on the attached photo (H&P, med list, or radiograph). Assume local anesthesia unless I note sedation. Use age/sex and clinical facts only; ignore any identifiers.';
+function handoffHTML(){return`<a class="handoff" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener"><div><b>📷 Photo triage in Claude</b><span>Opens Claude with the prompt ready (also copied). Attach the photo there. Crop out name, DOB and MRN first.</span></div><i>↗</i></a>`}
+document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 /* ===== Render ===== */
 const app=document.getElementById('app');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const M=id=>MODS.find(m=>m.id===id);
 function home(){
- S.mod=null;const groups=[...new Set(MODS.map(m=>m.g))];
- app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">v1.1 · Oct 22, 2026</span></div>`+
+ S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const groups=[...new Set(MODS.map(m=>m.g))].sort((x,y)=>ORDER.indexOf(x)-ORDER.indexOf(y));
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.4.1 · Oct 22, 2026</span></div>`+tabsHTML('decide')+
  groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+
- `<p class="foot">Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.</p>`;
+ `<p class="foot">Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`;
  window.scrollTo(0,0);
 }
 function inputsHTML(m){
@@ -424,12 +957,9 @@ function calcs(m){
  if(t){const bits=[];if(r.cpi!=null)bits.push(`CPI ${r.cpi}`);if(r.grade)bits.push(`GCPS grade ${r.grade}`);if(r.phq!=null)bits.push(`PHQ-4 ${r.phq} (${r.phqBand})`);if(r.joint)bits.push('severe joint limitation');t.hidden=!bits.length;t.textContent=bits.join(' · ')}
 }
 function refresh(){const m=M(S.mod);document.getElementById('flow').innerHTML=flowHTML(m);calcs(m)}
-const TRIAGE_PROMPT='Run my pre-op triage on the attached photo (H&P, med list, or radiograph). Assume local anesthesia unless I note sedation. Use age/sex and clinical facts only; ignore any identifiers.';
-function handoffHTML(){return`<a class="handoff" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener"><div><b>📷 Photo triage in Claude</b><span>Opens Claude with the prompt ready (also copied). Attach the photo there. Crop out name, DOB and MRN first.</span></div><i>↗</i></a>`}
-document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 function open(id){
  const m=M(id);if(!m)return home();S.mod=id;
- app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="All decisions">‹</button><h2>${esc(m.title)}</h2><button class="icon-btn" data-reset>Reset</button></div>
+ app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="All decisions">‹</button><h2>${esc(m.title)}</h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button><button class="icon-btn" data-reset>Reset</button></div>
  ${m.red?`<div class="red">${m.red}</div>`:''}
  ${id==='preop'?handoffHTML():''}
  ${inputsHTML(m)}
@@ -449,6 +979,8 @@ function showCopy(t){const x=document.getElementById('copybox');if(!x)return;x.h
 /* ===== Events ===== */
 app.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.view)return view(b.dataset.view);
+ if(b.dataset.rc!=null){const rc=S.rcri=S.rcri||{};rc[b.dataset.rc]=!rc[b.dataset.rc];return rebody()}
  if(b.dataset.open)return open(b.dataset.open);
  if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
  const id=S.mod;if(!id)return;
@@ -460,14 +992,12 @@ app.addEventListener('click',e=>{
  if(b.dataset.sb){const k='sb_'+b.dataset.sb;i[k]=!i[k];i.sbTouched=true;b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
  if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
 });
-app.addEventListener('input',e=>{const el=e.target;if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
+app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return rebody()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
 app.addEventListener('change',e=>{const el=e.target;if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
 const start=(location.hash||'').slice(1);
-M(start)?open(start):home();
-</script>
-
-<script>
+start==='emergency'||start==='calc'||start==='ref'?view(start):M(start)?open(start):home();
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 </script>
+
 </body></html>
