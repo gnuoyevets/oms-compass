@@ -1,0 +1,465 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>OMS Compass</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Compass">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f7f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1a19" media="(prefers-color-scheme: dark)">
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap">
+<style>
+/* Layout: one phone column. Home = grouped decision list. Module = red flags → inputs → yes/no path → plan card → collapsed look-fors and sources. */
+:root{
+ --bg:#f5f7f3;--surface:#ffffff;--ink:#17312e;--muted:#5a6b67;--line:#dfe5de;--soft:#e9f0e8;
+ --accent:#0f6a5e;--accent-ink:#ffffff;--chip:#dcebe3;--chip-ink:#1f5245;
+ --warn-bg:#fff4e2;--warn-line:#ecd2a6;--warn-ink:#6f4f1c;
+ --red-bg:#fbece8;--red-line:#ebc1b5;--red-ink:#8b3322;
+ --ok-bg:#e8f3ea;--ok-line:#c4dcc8;--ok-ink:#25563a;
+ --display:'Manrope','DM Sans',system-ui,-apple-system,sans-serif;--sans:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#0f1a19;--surface:#162423;--ink:#e6efeb;--muted:#9db0aa;--line:#28403c;--soft:#1d2f2d;
+ --accent:#4fb8a5;--accent-ink:#06211d;--chip:#21403a;--chip-ink:#bfe3d7;
+ --warn-bg:#2e2412;--warn-line:#5a4520;--warn-ink:#f0cf92;
+ --red-bg:#341a15;--red-line:#6a3226;--red-ink:#f2b2a2;
+ --ok-bg:#16301f;--ok-line:#2c5539;--ok-ink:#a9dcb7;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#0f1a19;--surface:#162423;--ink:#e6efeb;--muted:#9db0aa;--line:#28403c;--soft:#1d2f2d;
+ --accent:#4fb8a5;--accent-ink:#06211d;--chip:#21403a;--chip-ink:#bfe3d7;
+ --warn-bg:#2e2412;--warn-line:#5a4520;--warn-ink:#f0cf92;
+ --red-bg:#341a15;--red-line:#6a3226;--red-ink:#f2b2a2;
+ --ok-bg:#16301f;--ok-line:#2c5539;--ok-ink:#a9dcb7;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding-block:12px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.3px;text-wrap:balance;margin:0}
+.lab{font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+
+/* Home */
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0 14px}
+.top h1{font-size:24px;font-weight:800}
+.top h1 span{color:var(--accent)}
+.group{margin:16px 0 6px}
+.mods{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.mod{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:13px 14px;min-height:56px}
+.mod:first-child{border-top:0}
+.mod:hover{background:var(--soft)}
+.mod b{display:block;font:700 15.5px var(--display)}
+.mod span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:1px}
+.mod i{font-style:normal;color:var(--accent);font-size:18px}
+.foot{margin-top:22px;font-size:11.5px;color:var(--muted);line-height:1.6}
+
+/* Module */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);margin-bottom:12px}
+.bar h2{flex:1;min-width:0;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;min-width:44px;height:44px;padding:0 12px;color:var(--accent);font-weight:600;font-size:13px}
+.icon-btn.back{font-size:20px;padding:0}
+.red{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:12px;padding:11px 14px;font-size:13.5px;line-height:1.5;margin-bottom:12px}
+.red b{font-weight:700}
+details.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+details.box>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;min-height:46px;font-weight:600;font-size:14px}
+details.box>summary::-webkit-details-marker{display:none}
+details.box>summary::after{content:'+';color:var(--accent);font-size:18px;line-height:1}
+details.box[open]>summary::after{content:'−'}
+details.box>summary em{font-style:normal;font-weight:600;font-size:12px;color:var(--accent);margin-left:auto}
+.inner{padding:0 14px 14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+.fld input,.fld select{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 10px;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.tg{border:1px solid var(--line);background:var(--bg);border-radius:18px;padding:7px 11px;font-size:13px;min-height:36px;color:var(--muted)}
+.tg.on{background:var(--chip);border-color:var(--chip);color:var(--chip-ink);font-weight:700}
+.calc{margin-top:10px;font-size:13px;font-weight:600;color:var(--chip-ink);background:var(--chip);border-radius:8px;padding:7px 10px;font-variant-numeric:tabular-nums}
+.sub{font-size:12px;font-weight:700;color:var(--muted);margin:12px 0 6px}
+
+.path{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.step{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 8px 8px 12px}
+.step .qt{font-size:13px;line-height:1.4;color:var(--muted)}
+.step .qt small{display:inline-block;margin-left:4px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:6px 12px;min-height:34px;font-size:13px;font-weight:600;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.notechip{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:600}
+.cur{background:var(--surface);border:2px solid var(--accent);border-radius:12px;padding:14px}
+.cur .q{font:700 17px/1.4 var(--display);margin:4px 0 6px}
+.cur .h{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.cur .h ul{margin:4px 0 0;padding-left:18px}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.yn button{min-height:52px;border-radius:10px;font-weight:700;font-size:16px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.yn button.y{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.autohint{font-size:12px;color:var(--chip-ink);background:var(--chip);border-radius:6px;padding:5px 8px;margin-bottom:10px}
+
+.plan{border-radius:12px;padding:14px;border:1px solid var(--ok-line);background:var(--ok-bg);color:var(--ok-ink)}
+.plan.action{border-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-ink)}
+.plan.urgent{border-color:var(--red-line);background:var(--red-bg);color:var(--red-ink)}
+.plan .lab{color:inherit;opacity:.85}
+.plan .pt{font:700 17px/1.4 var(--display);margin:4px 0 0;color:inherit}
+.plan ol{margin:10px 0 0;padding-left:20px;font-size:14px;line-height:1.5}
+.plan ol li{margin:6px 0}
+.plan ol b{font-weight:700}
+.plan .meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:12px;font-size:12px}
+.plan .meta a{color:inherit;font-weight:600}
+.go{display:inline-block;margin-top:10px;border:1px solid currentColor;background:none;color:inherit;border-radius:8px;padding:7px 12px;font-weight:700;font-size:13px}
+.copybox{display:block;width:100%;min-height:140px;margin-top:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:8px;font-size:13px}
+.caveat{font-size:12px;color:var(--muted);margin:10px 0 14px;line-height:1.5}
+.look h4{margin:12px 0 4px;font-size:13px}
+.look ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5;color:var(--muted)}
+.look li{margin:3px 0}
+.src{padding:8px 0;border-top:1px solid var(--line);font-size:13px;line-height:1.45}
+.src:first-child{border-top:0}
+.src span{display:block;font-size:12px;color:var(--muted)}
+@media (min-width:560px){.top h1{font-size:28px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+/* ===== Sources (checked Oct 21, 2026) ===== */
+const SRC={
+acc:{n:'ACC/AHA perioperative guideline (Fleisher et al.)',v:'2014',u:'https://pubmed.ncbi.nlm.nih.gov/?term=Fleisher+2014+ACC%2FAHA+perioperative+noncardiac+surgery+guideline'},
+aha:{n:'AHA · Prevention of viridans group streptococcal IE (Wilson et al.)',v:'Circulation 2021;143:e963',u:'https://www.ahajournals.org/doi/10.1161/CIR.0000000000000969'},
+adaPro:{n:'ADA · Antibiotic prophylaxis prior to dental procedures',v:'Updated Jul 15, 2026',u:'https://www.ada.org/resources/ada-library/oral-health-topics/antibiotic-prophylaxis/'},
+sdcep:{n:'SDCEP · Anticoagulants & antiplatelets, quick reference',v:'2nd ed., Mar 2022 · UK',u:'https://www.SDCEP.org.uk/media/imrflqss/sdcep-anticoagulants-quick-reference-guide-2nd-edition.pdf'},
+aaoms:{n:'AAOMS · MRONJ position paper (Ruggiero et al.)',v:'J Oral Maxillofac Surg 2022',u:'https://pubmed.ncbi.nlm.nih.gov/?term=Ruggiero+2022+medication-related+osteonecrosis+jaw+position+paper'},
+stopbang:{n:'STOP-Bang questionnaire (Chung et al.)',v:'stopbang.ca',u:'https://www.psychdb.com/_media/sleep/stop-bang.pdf'},
+third:{n:'AAOMS · Management of third molar teeth',v:'2016 white paper',u:'https://aaoms.org/wp-content/uploads/2024/03/management_third_molar_white_paper.pdf'},
+rood:{n:'Rood & Shehab · Radiological prediction of IAN injury',v:'Br J Oral Maxillofac Surg 1990',u:'https://pubmed.ncbi.nlm.nih.gov/?term=Rood+Shehab+radiological+prediction+inferior+alveolar+nerve'},
+iti18:{n:'ITI · Implant placement and loading protocols',v:'2018 consensus',u:'https://academy.iti.org/academy/consensus-database/consensus-statement/-/consensus/implant-placement-and-loading-protocols/1802'},
+iti13:{n:'ITI · Loading protocols, fixed prostheses in edentulous jaws',v:'2013 consensus',u:'https://academy.iti.org/academy/consensus-database/consensus-statement/-/consensus/loading-protocols-for-fixed-prostheses-in-edentulous-jaws/1313'},
+lyu:{n:'Lyu et al. · Sinus floor augmentation decision tree',v:'Int J Oral Sci 2023;15:41',u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC10504247/'},
+yang:{n:'Yang et al. · Septa and membrane perforation',v:'PLOS One 2024 · SR',u:'https://pubmed.ncbi.nlm.nih.gov/39116075/'},
+diaz:{n:'Diaz-Olivares et al. · Perforation management, lateral approach',v:'Int J Implant Dent 2021',u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC8273047/'},
+pjet:{n:'Pjetursson et al. · Lateral sinus floor elevation',v:'SR 2008',u:'https://pubmed.ncbi.nlm.nih.gov/18724852/'},
+tan:{n:'Tan et al. · Transalveolar sinus floor elevation',v:'SR 2008',u:'https://pubmed.ncbi.nlm.nih.gov/18724853/'},
+delf:{n:'Del Fabbro et al. · Implant survival in grafted sinuses',v:'IJPRD 2004',u:'https://pubmed.ncbi.nlm.nih.gov/15626319/'},
+testori:{n:'Testori et al. · Sinus elevation complications',v:'Periodontol 2000, 2023',u:'https://onlinelibrary.wiley.com/doi/10.1111/prd.12480'},
+perio:{n:'Periospot · Sinus lift: lateral window or transcrestal? (Teixeira Barbosa)',v:'Narrative review, updated Oct 13, 2026',u:'https://www.periospot.com/blog/sinus-lift'},
+adaAbx:{n:'ADA · Antibiotics for dental pain and swelling (chairside guide)',v:'2019 guideline',u:'https://www.ferris.edu/pharmacy/michigan-antibiotic-resistance-reduction-coalition/Documents/ADA_Chairside_Guide_Antibiotics_TNA.pdf'},
+sdcepAbs:{n:'SDCEP · Dental abscess',v:'Online prescribing guidance · UK',u:'https://sdcepdentalprescribing.nhs.scot/guidance/bacterial-infections/dental-abscess/'},
+oralca:{n:'ADA · Oral cancer living guideline',v:'Final recs Sep 28, 2026 (replaces 2017)',u:'https://www.ada.org/resources/research/science-and-research-institute/evidence-based-dental-research/oral-cancer-guideline'},
+dctmd:{n:'DC/TMD diagnostic criteria (Schiffman et al.)',v:'2014',u:'https://ubwp.buffalo.edu/rdc-tmdinternational/wp-content/uploads/sites/58/2017/01/DC-TMD-Diagnostic-Criteria_2014_01_21.pdf'},
+dcscore:{n:'DC/TMD self-report scoring manual (GCPS, PHQ-4)',v:'2014-06-06',u:'https://dentistry.uiowa.edu/sites/dentistry.uiowa.edu/files/2026-05/DC-TMD-Self-report-Instrument-Scoring-Manual_2014_06_06.pdf'},
+rcs:{n:'RCS England · Painful TMD in adults',v:'v1.1, Aug 2025 · UK',u:'https://www.rcseng.ac.uk/-/media/FDS/Comprehensive-guideline-Management-of-painful-Temporomandibular-disorder-in-adults.pdf'},
+bmj:{n:'BMJ · Chronic TMD pain guideline (Busse et al.)',v:'BMJ 2023;383:e076227',u:'https://www.bmj.com/content/383/bmj-2023-076227'},
+gramp:{n:'NHS Grampian · TMD protocol',v:'Aligned with RCS · UK',u:'https://www.hi-netgrampian.scot.nhs.uk/wp-content/uploads/2026/08/Temporomandibular-Disorders.pdf'}
+};
+
+/* ===== Modules. Node: {q,h?,yes,no,auto?} | {note,t,src?,next} | {out,tone?,src?,go?} ===== */
+const MODS=[
+{id:'preop',g:'Start here',title:'Pre-op clearance',d:'Defer or proceed · IE prophylaxis · antithrombotics · MRONJ · sedation fit',
+ inputs:['stopbang'],start:'a',refs:['acc','aha','adaPro','sdcep','aaoms','stopbang'],
+ caveat:'Antithrombotic steps follow SDCEP (UK); confirm against your institution. Drug changes are the prescriber’s call.',
+ nodes:{
+ a:{q:'Unstable or unoptimized medical condition?',h:['MI, stroke or coronary stent in the last 60 days (ACC/AHA 2014)','Unstable angina, decompensated heart failure, uncontrolled arrhythmia','BP ≥180/110 (common cutoff, unverified)','Uncontrolled diabetes; active bleeding disorder'],yes:'oDefer',no:'b'},
+ oDefer:{out:'Defer elective surgery. Optimize with the patient’s physician, then re-run this flow.',tone:'urgent',src:'acc',ex:'Urgent problems (spreading infection, airway) go to a monitored or hospital setting instead.'},
+ b:{q:'High-risk cardiac condition for endocarditis?',h:['Prosthetic valve (incl. TAVR) or valve-repair material','Prior infective endocarditis','Heart transplant with valve regurgitation','Unrepaired cyanotic CHD, or repaired CHD with residual shunt/regurgitation at a prosthetic site','Prosthetic joints alone: prophylaxis not routinely recommended (ADA)'],yes:'nIE',no:'c'},
+ nIE:{note:1,t:'Endocarditis prophylaxis',x:'30–60 min pre-op, one dose: amoxicillin 2 g PO. Penicillin allergy without anaphylaxis, angioedema or urticaria: cephalexin 2 g. Otherwise azithromycin or clarithromycin 500 mg, or doxycycline 100 mg. Clindamycin is no longer recommended. Missed dose: give up to 2 h after.',src:'aha',next:'c'},
+ c:{q:'Taking an anticoagulant or antiplatelet?',yes:'nBleed',no:'d'},
+ nBleed:{note:1,t:'Antithrombotic plan',x:'Do not stop for mechanical valves, stents, or VTE in the last 3 months. Warfarin: INR within 24 h (72 h if stable); proceed if INR <4, otherwise delay or refer. DOAC + surgical extraction, implants, flap or biopsy: apixaban/dabigatran skip the morning dose; morning rivaroxaban/edoxaban waits until 4 h after hemostasis. Aspirin alone: continue. P2Y12 inhibitor or dual therapy: ask the prescriber. Operate early in the day; suture and pack.',src:'sdcep',next:'d'},
+ d:{q:'Antiresorptive/antiangiogenic drug, or head-and-neck radiation to the site?',h:['Bisphosphonate, denosumab, bevacizumab, TKIs','Oncologic dosing carries far higher risk than osteoporosis dosing'],yes:'nBone',no:'e'},
+ nBone:{note:1,t:'MRONJ / ORN risk',x:'Oncologic-dose antiresorptives: avoid elective extractions and implants; choose conservative options. Osteoporosis dosing: low risk; proceed with documented consent, atraumatic technique and primary closure. Drug holidays have no consensus (AAOMS 2022); coordinate with the prescriber. Radiation: get the dose to the site from radiation oncology before surgery.',src:'aaoms',next:'e'},
+ e:{q:'IV sedation or general anesthesia planned?',yes:'f',no:'oLocal'},
+ oLocal:{out:'Local anesthesia in the office.',ex:'Confirm consent, alternatives (including no treatment), and after-hours contact.'},
+ f:{q:'STOP-Bang ≥3 (intermediate or high OSA risk)?',auto:r=>r.sb==null?undefined:r.sb>=3,ah:r=>r.sb!=null?`STOP-Bang ${r.sb}/8 · ${r.sbCat} risk`:'',h:['Score it in the STOP-Bang box above to answer automatically'],yes:'oAir',no:'g'},
+ g:{q:'Difficult-airway signs?',h:['Mallampati III–IV, limited opening or neck extension, short thyromental distance','Prior difficult airway or anesthesia complication'],yes:'oAir',no:'oSed'},
+ oAir:{out:'Sedation needs a deliberate airway plan before booking.',tone:'action',src:'stopbang',ex:'Options: lighter sedation or local only, anesthesia or sleep consult, or a hospital setting. Confirm rescue airway equipment and capnography.'},
+ oSed:{out:'Office sedation appropriate.',ex:'Confirm NPO, escort, monitoring with capnography, and rescue drugs and airway equipment.'}
+ },
+ look:[['History',['Allergy phenotype: rash vs anaphylaxis vs intolerance (latex, chlorhexidine, antibiotics, LA)','Exercise tolerance; recent hospitalization or new diagnoses','CKD/dialysis, liver disease with coagulopathy, steroids, immunosuppressants, chemotherapy']],['Exam',['Resting BP, HR, SpO₂; repeat abnormal values','ASA class from current ASA definitions','Airway: Mallampati, opening, neck mobility, dentition, BMI, neck size']]]},
+
+{id:'extraction',g:'Dentoalveolar & acute',title:'Third molars & extractions',d:'Remove, coronectomy, or surveil',
+ start:'a',refs:['third','rood','sdcep'],
+ caveat:'Disease-free third molars need an individualized removal-vs-surveillance discussion.',
+ nodes:{
+ a:{q:'Any Pre-op flag still open (medical, antithrombotic, MRONJ/radiation)?',yes:'o0',no:'b'},
+ o0:{out:'Finish Pre-op clearance before choosing the approach.',tone:'action',go:'preop'},
+ b:{q:'Disease or symptoms linked to the tooth?',h:['Caries, pericoronitis, distal caries or bone loss on the second molar','Cyst/follicle enlargement, resorption of the adjacent root','Non-restorable or periodontally hopeless'],yes:'c',no:'oSurv'},
+ oSurv:{out:'Discuss removal vs active surveillance.',src:'third',ex:'Absence of pain is not absence of disease. If retained: periodic clinical and radiographic review.'},
+ c:{q:'Panoramic sign of close IAN relationship?',h:['Darkening of the root','Interruption of the canal white line','Diversion of the canal (Rood & Shehab)'],yes:'d',no:'oRem'},
+ oRem:{out:'Removal.',ex:'Plan access, sectioning, hemostasis, and a specimen if pericoronal tissue looks abnormal.'},
+ d:{q:'Tooth vital, caries-free, and without pericoronal pathology?',h:['These make coronectomy an option'],yes:'oCor',no:'oRemN'},
+ oCor:{out:'Offer coronectomy vs removal.',src:'rood',ex:'CBCT if it would change the approach. Document baseline lip, chin and tongue sensation. Consent for root migration and possible later retrieval.'},
+ oRemN:{out:'Removal with nerve-injury consent.',tone:'action',src:'rood',ex:'CBCT if it would change the approach. Document baseline sensation; arrange neurosensory follow-up if altered.'}
+ },
+ look:[['Imaging',['Root number, curvature, dilaceration','Maxillary: sinus floor proximity','Pericoronal radiolucency; adjacent root resorption']],['Consent',['Swelling, trismus, alveolar osteitis, nerve injury, sinus communication','Patient preference recorded']]]},
+
+{id:'implant',g:'Implants',title:'Single & multiple implants',d:'Immediate vs early/delayed placement; augment first or not',
+ start:'a',refs:['iti18'],
+ caveat:'Placement timing and loading timing are separate decisions. One stability number does not settle eligibility.',
+ nodes:{
+ a:{q:'Restorative endpoint agreed with the restoring dentist and lab?',yes:'b',no:'o1'},
+ o1:{out:'Settle the prosthetic plan first, then return.',tone:'action'},
+ b:{q:'Uncontrolled risk factor?',h:['Uncontrolled diabetes, heavy smoking, active periodontitis','Antiresorptives or radiation (see Pre-op)','Poor hygiene or maintenance likelihood'],yes:'o2',no:'c'},
+ o2:{out:'Control the risk factor and document it before surgery.',tone:'action',go:'preop'},
+ c:{q:'Bone envelope supports the planned 3D position?',h:['Width, height, buccal plate on CBCT','Clearance from IAN, mental foramen, sinus, nasal floor, adjacent roots'],yes:'d',no:'o3'},
+ o3:{out:'Augment first, or simultaneously if the defect is contained.',go:'graft',go2:'sinus'},
+ d:{q:'Fresh socket that meets immediate-placement criteria?',h:['Intact socket walls; facial wall ≥1 mm; thick soft tissue','No acute infection; bone apical/palatal for primary stability (ITI 2018)'],yes:'o4',no:'o5'},
+ o4:{out:'Immediate placement, with early placement as the fallback.',src:'iti18',ex:'Decide loading separately, from primary stability, occlusion and esthetic risk.'},
+ o5:{out:'Early (4–8 wk soft tissue) or delayed placement.',src:'iti18',ex:'Consider ridge preservation at extraction. Decide loading separately.'}
+ },
+ look:[['Esthetic risk',['High smile line, thin phenotype, facial wall loss','Keratinized tissue width; adjacent periapical/periodontal lesions']],['Plan',['Guided vs freehand; restoratively driven position','Fallback: different dimensions, staged approach, or abort','Handoff record: system, size, platform; maintenance interval']]]},
+
+{id:'graft',g:'Implants',title:'Ridge augmentation',d:'Simultaneous vs staged GBR, or an alternative',
+ start:'a',refs:['iti18','iti13'],
+ caveat:'Author-created planning flow; not a source-validated grafting protocol.',
+ nodes:{
+ a:{q:'Required restorative position defined?',yes:'b',no:'o1'},
+ o1:{out:'Define the restorative position first.',tone:'action'},
+ b:{q:'Implant reaches the planned position with primary stability inside the bony envelope (contained defect)?',yes:'o2',no:'c'},
+ o2:{out:'Simultaneous placement and contour augmentation.',ex:'Particulate graft plus membrane; tension-free closure.'},
+ c:{q:'Patient and site suit staged reconstruction?',h:['Healing risk (smoking, diabetes, radiation, antiresorptives, prior graft failure)','Tolerance for more surgery'],yes:'o3',no:'o4'},
+ o3:{out:'Staged augmentation, then implant.',ex:'Set re-entry criteria and imaging before placement.'},
+ o4:{out:'Choose an alternative: short or narrow implant, tilted implant, or a different prosthesis.',tone:'action'}
+ },
+ look:[['Defect',['Horizontal, vertical, or combined','Contained (walled) vs non-contained','Soft-tissue thickness and keratinized tissue']],['At closure',['Graft containment, membrane fixation','Tension-free flap release','Plan for exposure or graft mobility']]]},
+
+{id:'sinus',g:'Implants',title:'Sinus lift',d:'Transcrestal vs lateral window; simultaneous vs staged',
+ inputs:['cbct'],start:'a',refs:['lyu','perio','yang','diaz','pjet','tan','delf','testori'],
+ red:'<b>Do not graft a diseased sinus:</b> uncontrolled sinusitis, blocked ostium, untreated odontogenic source, or suspected mass. Treat or refer to ENT first. Relative: heavy smoking, uncontrolled diabetes, antiresorptives, prior sinus surgery.',
+ caveat:'Bone height guides the approach; primary stability decides simultaneous placement. Survival data come from separate 2004–2008 reviews, not head-to-head trials.',
+ nodes:{
+ a:{q:'Active or untreated sinus disease?',h:['Sinusitis, blocked ostium, odontogenic source, suspected mass','Mucosal thickening >2 mm alone is common and usually not pathologic'],yes:'o1',no:'b'},
+ o1:{out:'Treat the sinus first: ENT referral and dental source control. Do not graft yet.',tone:'urgent',src:'perio'},
+ b:{q:'Can a short, tilted or zygomatic implant, or another prosthesis, meet the goal without a lift?',yes:'o2',no:'c'},
+ o2:{out:'No elevation. Use the alternative implant or prosthetic plan.',src:'perio'},
+ c:{q:'Residual bone height >6 mm?',auto:r=>r.rbh==null?undefined:r.rbh>6,ah:r=>r.rbh!=null?`RBH ${r.rbh} mm`:'',yes:'oTC',no:'d'},
+ d:{q:'Residual bone height 4–6 mm?',auto:r=>r.rbh==null?undefined:r.rbh>=4,ah:r=>r.rbh!=null?`RBH ${r.rbh} mm`:'',yes:'e',no:'f'},
+ e:{q:'Membrane suitable for crestal elevation (about 0.5–3 mm, no septum at the osteotomy)?',auto:r=>(r.septum==='yes'||(r.mem!=null&&(r.mem<0.5||r.mem>3)))?false:(r.mem!=null&&r.septum==='no')?true:undefined,ah:r=>[r.mem!=null?`Membrane ${r.mem} mm`:'',r.septum?`septum ${r.septum}`:''].filter(Boolean).join(' · '),h:['Enter membrane thickness and septum above to answer automatically'],yes:'oTC',no:'nLat'},
+ f:{q:'Residual bone height 2–<4 mm?',auto:r=>r.rbh==null?undefined:r.rbh>=2,ah:r=>r.rbh!=null?`RBH ${r.rbh} mm`:'',yes:'h',no:'o6'},
+ h:{q:'Lateral wall <2 mm thick?',auto:r=>r.wall==null?undefined:r.wall<2,ah:r=>r.wall!=null?`Lateral wall ${r.wall} mm`:'',yes:'nLat',no:'oTC2'},
+ oTC:{out:'Transcrestal elevation with a simultaneous implant.',src:'lyu',ex:'Expect a modest gain. If primary stability fails, stage it and convert to a lateral window.'},
+ oTC2:{out:'Thick lateral wall at 2–4 mm: transcrestal (advanced technique) if stability is achievable; otherwise lateral window, staged.',tone:'action',src:'lyu'},
+ o6:{out:'Under 2 mm: individualize. Usually a staged lateral window, or an alternative implant plan.',tone:'action',src:'lyu',ex:'Simultaneous placement only with proven primary stability.'},
+ nLat:{note:1,t:'Lateral window set-up',x:'Plan the window around septa (two windows if needed) and below a PSAA >2 mm. Cover the window with a barrier membrane; use rough-surface implants (Pjetursson 2008).',src:'pjet',next:'g'},
+ g:{q:'Primary stability achievable today?',yes:'o4',no:'o5'},
+ o4:{out:'Lateral window with a simultaneous implant.',src:'pjet',ex:'Graft only the volume needed; keep the ostium clear.'},
+ o5:{out:'Lateral window, staged.',src:'perio',ex:'Graft now; place the implant after about 6–9 months, longer with xenograft.'}
+ },
+ look:[['CBCT',['Septa in about a third of sinuses: perforation about 40% vs 12% (Yang 2024)','PSAA about 7 mm above the floor; >2 mm diameter raises bleeding risk','Membrane <0.5 mm tears easily; >3 mm may signal pathology (Periospot, unreferenced)']],['Perforation plan',['<5 mm: fold or suture; 5–10 mm: collagen membrane; >10 mm: laminar plate + collagen, consider staging','Perforation alone did not lower survival: 97.7% vs 98.9% (Diaz-Olivares 2021)']],['Graft & aftercare',['Survival similar across materials; DBBM holds volume best (Del Fabbro 2004)','Sinus precautions: no nose-blowing, sneeze open-mouthed, no straws, flying or diving short-term','Positional vertigo after osteotome malleting usually settles within about a month (Testori 2023)']]]},
+
+{id:'arch',g:'Implants',title:'Full-arch',d:'Immediate vs delayed loading',
+ start:'a',refs:['iti13','iti18'],
+ red:'Plan and consent a delayed-loading fallback before any immediate-load surgery.',
+ caveat:'Torque/ISQ thresholds stay case-specific; confirm loading criteria with the restorative team.',
+ nodes:{
+ a:{q:'Fixed or removable endpoint agreed with the restorative team and lab?',h:['Transition line hidden at full smile; restorative space after planned reduction','Lip support, phonetics, hygiene access'],yes:'b',no:'o1'},
+ o1:{out:'Settle the prosthetic endpoint first.',tone:'action'},
+ b:{q:'Augmentation or sinus elevation needed?',yes:'o2',no:'c'},
+ o2:{out:'Delayed loading likely; confirm with the restorative team.',src:'iti13',go:'sinus',go2:'graft'},
+ c:{q:'At surgery: each implant stable, with adequate distribution and AP spread?',yes:'o3',no:'o4'},
+ o3:{out:'Immediate loading with a splinted provisional.',src:'iti13',ex:'Verify passive fit, cantilever limits and provisional occlusion.'},
+ o4:{out:'Use the planned delayed-loading fallback.',tone:'action'}
+ },
+ look:[['Plan',['AP spread and cantilever vs the prosthetic plan','Implant positions clear of sinus and IAN','Opposing arch and occlusal load']],['Delivery',['Photogrammetry/IOS accuracy check','Maintenance interval; who removes the prosthesis for cleaning']]]},
+
+{id:'infection',g:'Dentoalveolar & acute',title:'Odontogenic infection',d:'Hospital vs office · antibiotics or not',
+ start:'a',refs:['adaAbx','sdcepAbs'],
+ red:'<b>Airway first.</b> Voice change, drooling, stridor, can’t swallow saliva, raised floor of mouth, severe trismus, or toxic appearance: emergency department now.',
+ caveat:'ADA 2019 regimens are for immunocompetent adults. Antibiotics never replace source control.',
+ nodes:{
+ a:{q:'Airway threat or severe systemic illness?',h:['See the red box','Fever with tachycardia, hypotension, dehydration, lethargy'],yes:'oER',no:'b'},
+ oER:{out:'Emergency / hospital care now.',tone:'urgent',src:'sdcepAbs',ex:'CT with contrast, IV antibiotics, airway management and surgical drainage.'},
+ b:{q:'Spread beyond the vestibule into fascial spaces?',h:['Submandibular, sublingual, submental, masticator, lateral pharyngeal, periorbital','Significant trismus usually means masticator-space spread'],yes:'oER',no:'c'},
+ c:{q:'Can you get source control today (drainage, extraction or pulp access)?',yes:'nSC',no:'oNoSC'},
+ nSC:{note:1,t:'Source control',x:'Drain the collection and remove the source (extraction or pulp access) in the same visit.',next:'d'},
+ oNoSC:{out:'Antibiotics now, plus urgent referral for source control.',tone:'action',src:'adaAbx',ex:'Amoxicillin 500 mg TID (or penicillin VK 500 mg QID), 3–7 days. Allergy without anaphylaxis/angioedema/hives: cephalexin 500 mg QID. With that history: azithromycin 500 mg day 1, then 250 mg × 4 days (ADA 2019 also lists clindamycin 300 mg QID). Recheck within 3 days.'},
+ d:{q:'Systemic involvement (fever, malaise, lymphadenopathy), spreading cellulitis, incomplete drainage, or immunocompromise?',yes:'oAbx',no:'oNo'},
+ oAbx:{out:'Source control plus antibiotics.',tone:'action',src:'adaAbx',ex:'Amoxicillin 500 mg TID, 3–7 days; allergy options as above. Stop 24 h after symptoms resolve. Recheck within 3 days; escalate if worse. Failure: add metronidazole 500 mg TID or switch to amoxicillin-clavulanate 500/125 mg TID, 7 days.'},
+ oNo:{out:'Source control alone. No antibiotics.',src:'adaAbx',ex:'Give return precautions: swallowing, breathing, spreading swelling, fever.'}
+ },
+ look:[['Exam',['Swelling distribution, fluctuance, mouth opening, tongue elevation','Diabetes, immunosuppression, pregnancy','Allergy phenotype, renal/hepatic function, interactions (e.g., warfarin)']]]},
+
+{id:'lesion',g:'Pathology & pain',title:'Oral mucosal lesion',d:'Biopsy now, remove cause and recheck, or refer',
+ start:'a',refs:['oralca'],
+ red:'Any suspicious lesion: prompt biopsy or specialist referral. Do not use an observation interval to delay it.',
+ caveat:'Adjuncts (cytology, light-based, salivary) are not recommended for routine biopsy decisions and never replace an indicated biopsy (ADA 2026).',
+ nodes:{
+ a:{q:'Any suspicious feature?',h:['Induration, fixation, non-healing ulcer, rolled borders','Red or mixed red-white areas','Unexplained numbness, bleeding, or tooth mobility; cervical nodes'],yes:'o1',no:'b'},
+ o1:{out:'Biopsy now (punch or scalpel) or refer promptly.',tone:'urgent',src:'oralca',ex:'Sample the most representative non-necrotic area. Assign who tracks the result and tells the patient.'},
+ b:{q:'Clear local cause you can remove (sharp tooth, denture flange, habit)?',yes:'o2',no:'o3'},
+ o2:{out:'Remove the cause; recheck in 10–14 days.',src:'oralca',ex:'Not resolved by then: biopsy or refer.'},
+ o3:{out:'Biopsy, or document why a short review is justified.',tone:'action',src:'oralca'}
+ },
+ look:[['History',['Duration and change; tobacco, alcohol, areca nut; prior oral cancer']],['Exam',['Floor of mouth, lateral and ventral tongue, soft palate','Size, color, surface, induration; nodes: size, fixation, tenderness']]]},
+
+{id:'jaw',g:'Pathology & pain',title:'Jaw lesion',d:'Specialist workup, biopsy, or diagnosis-specific treatment',
+ start:'a',refs:[],
+ red:'Possible vascular lesion (pulsatility, bruit, blood on aspiration): stop and image before any sampling.',
+ caveat:'Author-created workup flow; no lesion-specific algorithm is source-validated here.',
+ nodes:{
+ a:{q:'Aggressive features or unexplained sensory change?',h:['Lip/chin numbness, rapid expansion, cortical perforation','Ill-defined border, root resorption, tooth displacement'],yes:'o1',no:'b'},
+ o1:{out:'Specialist workup before intervention; rule out vascularity before sampling.',tone:'urgent'},
+ b:{q:'Diagnosis established by histology and correlated with imaging?',yes:'o3',no:'c'},
+ c:{q:'Non-vital associated tooth with a classic periapical lesion?',yes:'o4',no:'o2'},
+ o4:{out:'Treat the tooth (endodontics or extraction); biopsy if it fails to heal.'},
+ o2:{out:'Aspirate, then incisional biopsy (or excisional if small).',tone:'action',ex:'Differential must include odontogenic tumors and malignancy.'},
+ o3:{out:'Diagnosis-specific treatment (decompression, enucleation, resection) and assigned surveillance.'}
+ },
+ look:[['Imaging',['Unilocular vs multilocular; corticated vs ill-defined','Expansion, perforation, resorption, displacement']]]},
+
+{id:'tmd',g:'Pathology & pain',title:'TMD & orofacial pain',d:'Self-care, refer to PT/CBT, or urgent workup',
+ inputs:['tmd'],start:'a',refs:['dctmd','dcscore','rcs','bmj','gramp'],
+ red:'<b>Not TMD until proven:</b> prior cancer with new facial pain, face/neck mass, jaw claudication, weight loss, fever with swelling or trismus, neuro signs, pain on coughing/straining, acute trismus, ulcer or hoarseness ≥3 weeks, new occlusal change, new jaw pain on antiresorptives (RCS).',
+ caveat:'Questionnaires screen; they do not diagnose. BMJ 2023 conditionally advises against reversible splints; RCS allows them as an adjunct for muscle pain.',
+ nodes:{
+ a:{q:'Any red flag (red box)?',yes:'o1',no:'b'},
+ o1:{out:'Investigate before treating as TMD: urgent workup or referral.',tone:'urgent',src:'rcs'},
+ b:{q:'Pain changed by jaw function, and familiar pain reproduced on palpation or opening?',yes:'c',no:'o2'},
+ o2:{out:'Not TMD by DC/TMD criteria. Look for dental, ear, headache, neuropathic or other causes.',src:'dctmd'},
+ c:{q:'Suicidal ideation, or PHQ-4 ≥9?',auto:r=>(r.si||(r.phq!=null&&r.phq>=9))?true:undefined,ah:r=>r.phq!=null?`PHQ-4 ${r.phq} (${r.phqBand})${r.si?' · suicidal ideation':''}`:(r.si?'Suicidal ideation noted':''),h:['Ask directly; PHQ-4 alone does not screen for suicidality'],yes:'nPsy',no:'d'},
+ nPsy:{note:1,t:'Mental-health referral',x:'Suicidal ideation: same-day assessment. PHQ-4 ≥9: urgent medical or mental-health referral. Continue TMD care in parallel.',src:'rcs',next:'d'},
+ d:{q:'Severe joint limitation?',auto:r=>r.joint?true:undefined,ah:r=>r.joint?'Meets a severe-limitation trigger':'',h:['Closed lock affecting eating','Opening <25 mm under age 25','Joint pain with CPI >50, diet restriction and opening <30 mm'],yes:'o3',no:'e'},
+ o3:{out:'Expedited joint assessment (OMS/TMJ).',tone:'urgent',src:'rcs',ex:'Surgery is not always indicated; discectomy is strongly advised against for chronic TMD pain (BMJ 2023).'},
+ e:{q:'GCPS grade III–IV, PHQ-4 3–8, or pain ≥3 months with other chronic pain?',auto:r=>{const hi=(r.grade==='III'||r.grade==='IV')||(r.phq!=null&&r.phq>=3);return hi?true:undefined},ah:r=>r.grade?`GCPS grade ${r.grade} · CPI ${r.cpi}${r.phq!=null?` · PHQ-4 ${r.phq}`:''}`:'',yes:'o4',no:'o5'},
+ o4:{out:'Self-management plus physiotherapy and CBT referral.',tone:'action',src:'bmj',ex:'Strong recommendations for chronic TMD pain: CBT, therapist-assisted mobilisation, manual trigger-point therapy, supervised jaw/postural exercise. Avoid irreversible splints, discectomy, NSAID–opioid combinations. Mapping by score level is author-created.'},
+ o5:{out:'Supported self-management.',src:'gramp',ex:'Education, jaw exercises, heat or cold, self-massage, soft diet, parafunction review. Review at about 6 weeks: CPI, opening, adherence (≥5 of 7 days). Adherent but not improving: escalate.'}
+ },
+ look:[['DC/TMD exam',['Pain-free, unassisted and assisted opening (incl. incisal overlap)','Familiar muscle pain → myalgia; spreading beyond the muscle → myofascial with referral; familiar TMJ pain → arthralgia','Click opening and closing → disc displacement with reduction; crepitus → degenerative joint disease','Assisted opening <40 mm with a lock history → DD without reduction with limited opening']],['Also screen',['CN V and VII, nodes, parotid, ears, teeth, occlusion','Sleep (STOP-Bang if snoring), other pain conditions, parafunction']]]}
+];
+
+/* ===== State & scoring (session only; nothing saved) ===== */
+const S={mod:null,ans:{},inp:{}};
+const SB=[['s','Snores loudly'],['t','Tired in daytime'],['o','Observed apnea/choking'],['p','Hypertension'],['b','BMI >35'],['a','Age >50'],['n','Neck ≥43 cm ♂ / ≥41 cm ♀'],['g','Male']];
+const PHQ=['Nervous, anxious, on edge','Can’t stop or control worrying','Little interest or pleasure','Down, depressed, hopeless'];
+const num=v=>v===''||v==null||isNaN(+v)?null:+v;
+function R(id){
+ const i=S.inp[id]||{},r={};
+ if(i.sbTouched){const on=SB.filter(([k])=>i['sb_'+k]).map(([k])=>k);r.sb=on.length;const stop=['s','t','o','p'].filter(k=>on.includes(k)).length;
+  r.sbCat=r.sb>=5?'high':r.sb>=3?((stop>=2&&['g','b','n'].some(k=>on.includes(k)))?'high':'intermediate'):'low'}
+ r.rbh=num(i.rbh);r.wall=num(i.wall);r.mem=num(i.mem);r.septum=i.septum||'';
+ const p=[i.p1,i.p2,i.p3].map(num),f=[i.f1,i.f2,i.f3].map(num),days=num(i.days);
+ if(p.every(v=>v!=null)){r.cpi=Math.round(p.reduce((a,b)=>a+b,0)/3*10);
+  if(f.every(v=>v!=null)&&days!=null){const isc=Math.round(f.reduce((a,b)=>a+b,0)/3*10);
+   const pts=(days<=1?0:days===2?1:days<=5?2:3)+(isc<30?0:isc<50?1:isc<70?2:3);
+   r.grade=r.cpi===0?'0':pts>=5?'IV':pts>=3?'III':r.cpi>=50?'II':'I'}}
+ const q=[i.q0,i.q1,i.q2,i.q3].map(num);if(q.every(v=>v!=null)){r.phq=q.reduce((a,b)=>a+b,0);r.phqBand=r.phq>=9?'severe':r.phq>=6?'moderate':r.phq>=3?'mild':'normal'}
+ r.si=!!i.si;const op=num(i.open);
+ r.joint=!!(i.lock||(op!=null&&op<25&&i.u25)||(i.arth&&i.diet&&op!=null&&op<30&&r.cpi!=null&&r.cpi>50));
+ return r;
+}
+function walk(m){
+ const r=R(m.id),a=S.ans[m.id]||{},steps=[];let id=m.start,guard=0;
+ while(id&&guard++<40){const n=m.nodes[id];if(!n)break;
+  if(n.note){steps.push({id,n,note:true});id=n.next;continue}
+  if(n.out)return{steps,out:n,r};
+  const auto=n.auto?n.auto(r):undefined,man=a[id],val=man!==undefined?man:auto;
+  steps.push({id,n,val,auto:man===undefined&&auto!==undefined});
+  if(val===undefined)return{steps,cur:{id,n},r};
+  id=val?n.yes:n.no}
+ return{steps,r};
+}
+
+/* ===== Render ===== */
+const app=document.getElementById('app');
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const M=id=>MODS.find(m=>m.id===id);
+function home(){
+ S.mod=null;const groups=[...new Set(MODS.map(m=>m.g))];
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">v1.0 · Oct 21, 2026</span></div>`+
+ groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+
+ `<p class="foot">Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.</p>`;
+ window.scrollTo(0,0);
+}
+function inputsHTML(m){
+ const i=S.inp[m.id]||{};
+ const out=[];
+ if((m.inputs||[]).includes('stopbang'))out.push(`<details class="box"><summary>STOP-Bang <em>if sedating</em></summary><div class="inner"><div class="toggles">${SB.map(([k,t])=>`<button class="tg${i['sb_'+k]?' on':''}" data-sb="${k}" aria-pressed="${!!i['sb_'+k]}">${esc(t)}</button>`).join('')}</div><div class="calc" id="calc-sb"></div></div></details>`);
+ if((m.inputs||[]).includes('cbct'))out.push(`<details class="box" open><summary>CBCT at the site <em>answers bone-height steps</em></summary><div class="inner"><div class="grid3">
+  <label class="fld" for="in-rbh">Residual bone height, mm<input id="in-rbh" data-in="rbh" inputmode="decimal" value="${esc(i.rbh??'')}"></label>
+  <label class="fld" for="in-wall">Lateral wall, mm<input id="in-wall" data-in="wall" inputmode="decimal" value="${esc(i.wall??'')}"></label>
+  <label class="fld" for="in-mem">Membrane, mm<input id="in-mem" data-in="mem" inputmode="decimal" value="${esc(i.mem??'')}"></label>
+  <label class="fld" for="in-septum">Septum at site<select id="in-septum" data-in="septum"><option value="">–</option><option value="no"${i.septum==='no'?' selected':''}>No</option><option value="yes"${i.septum==='yes'?' selected':''}>Yes</option></select></label></div></div></details>`);
+ if((m.inputs||[]).includes('tmd')){
+  const sel=(k,max)=>`<select id="in-${k}" data-in="${k}"><option value="">–</option>${Array.from({length:max+1},(_,n)=>`<option${String(i[k])===String(n)?' selected':''}>${n}</option>`).join('')}</select>`;
+  const cb=(k,t)=>`<button class="tg${i[k]?' on':''}" data-flag="${k}" aria-pressed="${!!i[k]}">${t}</button>`;
+  out.push(`<details class="box"><summary>Scores: GCPS · PHQ-4 · joint <em>optional</em></summary><div class="inner">
+  <div class="sub">GCPS pain, 0–10 (last 30 days)</div><div class="grid3"><label class="fld" for="in-p1">Now${sel('p1',10)}</label><label class="fld" for="in-p2">Worst${sel('p2',10)}</label><label class="fld" for="in-p3">Average${sel('p3',10)}</label></div>
+  <div class="sub">Interference, 0–10 · disability days</div><div class="grid3"><label class="fld" for="in-f1">Daily life${sel('f1',10)}</label><label class="fld" for="in-f2">Social${sel('f2',10)}</label><label class="fld" for="in-f3">Work${sel('f3',10)}</label></div>
+  <div class="grid3" style="margin-top:8px"><label class="fld" for="in-days">Days kept from activity${sel('days',30)}</label></div>
+  <div class="sub">PHQ-4, 0–3 (last 2 weeks)</div><div class="grid3" style="grid-template-columns:repeat(2,minmax(0,1fr))">${PHQ.map((t,n)=>`<label class="fld" for="in-q${n}">${t}${sel('q'+n,3)}</label>`).join('')}</div>
+  <div class="toggles" style="margin-top:8px">${cb('si','Suicidal ideation')}</div>
+  <div class="sub">Joint</div><div class="grid3"><label class="fld" for="in-open">Max opening, mm<input id="in-open" data-in="open" inputmode="numeric" value="${esc(i.open??'')}"></label></div>
+  <div class="toggles" style="margin-top:8px">${cb('lock','Closed lock affects eating')}${cb('u25','Under 25')}${cb('arth','Joint pain')}${cb('diet','Diet restricted')}</div>
+  <div class="calc" id="calc-tmd"></div></div></details>`)}
+ return out.join('');
+}
+function srcLink(k){const s=SRC[k];return s?`<a href="${s.u}" target="_blank" rel="noopener">${esc(s.n.split(' · ')[0])} ↗</a>`:''}
+function flowHTML(m){
+ const w=walk(m),r=w.r,parts=[];
+ const notes=w.steps.filter(s=>s.note);
+ parts.push('<div class="path">'+w.steps.map(s=>{
+  if(s.note)return`<div class="notechip">＋ ${esc(s.n.t)}</div>`;
+  if(s.val===undefined)return'';
+  return`<div class="step"><div class="qt">${esc(s.n.q)}${s.auto?'<small>auto</small>':''}</div><div class="seg"><button class="${s.val?'on':''}" data-a="${s.id}" data-v="1">Yes</button><button class="${s.val===false?'on':''}" data-a="${s.id}" data-v="0">No</button></div></div>`}).join('')+'</div>');
+ if(w.cur){const n=w.cur.n,ah=n.ah?n.ah(r):'';
+  parts.push(`<div class="cur"><div class="lab">Next question</div><div class="q">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}<div class="yn"><button class="y" data-a="${w.cur.id}" data-v="1">Yes</button><button data-a="${w.cur.id}" data-v="0">No</button></div></div>`)}
+ if(w.out){const o=w.out,items=[];
+  if(o.ex)items.push(`<li>${esc(o.ex)}</li>`);
+  notes.forEach(s=>items.push(`<li><b>${esc(s.n.t)}:</b> ${esc(s.n.x)}${s.n.src?` <span class="small">(${esc(SRC[s.n.src].n.split(' · ')[0])})</span>`:''}</li>`));
+  const srcs=[o.src,...notes.map(s=>s.n.src)].filter((v,i,a)=>v&&a.indexOf(v)===i);
+  const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
+  parts.push(`<div class="plan ${o.tone||''}"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':'Plan'}</div><div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.join('')}</ol>`:''}${go?`<div>${go}</div>`:''}${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<button class="go" data-copy>Copy plan for the note</button><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div>`)}
+ return parts.join('');
+}
+function calcs(m){
+ const r=R(m.id);const sb=document.getElementById('calc-sb');
+ if(sb){sb.hidden=r.sb==null;sb.textContent=r.sb!=null?`STOP-Bang ${r.sb}/8 · ${r.sbCat} OSA risk`:''}
+ const t=document.getElementById('calc-tmd');
+ if(t){const bits=[];if(r.cpi!=null)bits.push(`CPI ${r.cpi}`);if(r.grade)bits.push(`GCPS grade ${r.grade}`);if(r.phq!=null)bits.push(`PHQ-4 ${r.phq} (${r.phqBand})`);if(r.joint)bits.push('severe joint limitation');t.hidden=!bits.length;t.textContent=bits.join(' · ')}
+}
+function refresh(){const m=M(S.mod);document.getElementById('flow').innerHTML=flowHTML(m);calcs(m)}
+function open(id){
+ const m=M(id);if(!m)return home();S.mod=id;
+ app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="All decisions">‹</button><h2>${esc(m.title)}</h2><button class="icon-btn" data-reset>Reset</button></div>
+ ${m.red?`<div class="red">${m.red}</div>`:''}
+ ${inputsHTML(m)}
+ <div id="flow"></div>
+ <p class="caveat">${esc(m.caveat)}</p>
+ ${m.look?`<details class="box"><summary>What to look for</summary><div class="inner look">${m.look.map(([h,l])=>`<h4>${esc(h)}</h4><ul>${l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`).join('')}</div></details>`:''}
+ ${m.refs.length?`<details class="box"><summary>Sources <em>${m.refs.length}</em></summary><div class="inner">${m.refs.map(k=>{const s=SRC[k];return`<div class="src"><a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a><span>${esc(s.v)}</span></div>`}).join('')}</div></details>`:''}`;
+ refresh();window.scrollTo(0,0);
+ try{history.replaceState(null,'','#'+id)}catch(e){}
+}
+
+function planText(m,w){const L=[`OMS Compass · ${m.title} · ${new Date().toLocaleDateString()}`];
+ w.steps.forEach(s=>{if(s.note)return;L.push(`- ${s.n.q} ${s.val?'Yes':'No'}${s.auto?' (from entered data)':''}`)});
+ if(w.out){L.push(`Plan: ${w.out.out}`);if(w.out.ex)L.push(w.out.ex);w.steps.filter(s=>s.note).forEach(s=>L.push(`${s.n.t}: ${s.n.x}`))}
+ L.push('Decision support only; clinician judgment applies.');return L.join('\n')}
+function showCopy(t){const x=document.getElementById('copybox');if(!x)return;x.hidden=false;x.value=t;x.focus();x.select()}
+/* ===== Events ===== */
+app.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.open)return open(b.dataset.open);
+ if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
+ const id=S.mod;if(!id)return;
+ if(b.hasAttribute('data-copy')){const m=M(id),w=walk(m),t=planText(m,w);try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}
+ if(b.hasAttribute('data-reset')){S.ans[id]={};S.inp[id]={};return open(id)}
+ if(b.dataset.a){const a=S.ans[id]=S.ans[id]||{};const v=b.dataset.v==='1';a[b.dataset.a]=v;refresh();
+  if(!b.closest('.path')){const f=document.getElementById('flow').lastElementChild;f&&f.scrollIntoView({block:'nearest',behavior:'smooth'})}return}
+ const i=S.inp[id]=S.inp[id]||{};
+ if(b.dataset.sb){const k='sb_'+b.dataset.sb;i[k]=!i[k];i.sbTouched=true;b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
+ if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
+});
+app.addEventListener('input',e=>{const el=e.target;if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
+app.addEventListener('change',e=>{const el=e.target;if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
+
+const start=(location.hash||'').slice(1);
+M(start)?open(start):home();
+</script>
+
+<script>
+if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+</script>
+</body></html>
