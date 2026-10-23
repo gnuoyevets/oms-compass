@@ -9,6 +9,7 @@ Offline web app version of OMS Compass. This repo is the canonical copy; the "OM
 - `CHANGELOG.md` — dated change log
 - `handouts/index.html` — standalone patient handouts (EN/ES); text mirrors the Compass Post-op tab
 - `*.png` — app icons
+- `tests/run.cjs` — automated checks (software behavior, not clinical validation). Run: `npm i -D playwright && npx playwright install chromium && node tests/run.cjs`
 
 ## Publish (GitHub Pages, free)
 1. Sign in at github.com and create a repo named `oms-compass`.
