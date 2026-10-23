@@ -151,6 +151,12 @@ details.em[open]>summary::after{content:'−'}
 .handoff b{display:block;font:700 15px var(--display)}
 .handoff span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
 .handoff i{font-style:normal;color:var(--accent);font-size:18px}
+.tribar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13px;line-height:1.45}
+.tribar b{display:block;font-weight:700}
+.tribar .vbtn{color:inherit}
+.cur.tricur{border-color:var(--warn-ink)}
+.trihint{font-size:13px;color:var(--warn-ink);background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:6px;padding:6px 9px;margin-bottom:10px}
+.step .qt small.trs{color:var(--warn-ink)}
 .top .small{white-space:nowrap}
 .srch{margin:2px 0 4px}
 .srch input{width:100%;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
@@ -826,12 +832,14 @@ function R(id){
  return r;
 }
 function walk(m){
- const r=R(m.id),a=S.ans[m.id]||{},steps=[];let id=m.start,guard=0;
+ const r=R(m.id),a=S.ans[m.id]||{},t=triFor(m.id),steps=[];let id=m.start,guard=0;
  while(id&&guard++<40){const n=m.nodes[id];if(!n)break;
   if(n.note){steps.push({id,n,note:true});id=n.next;continue}
   if(n.out)return{steps,out:n,r};
-  const auto=n.auto?n.auto(r):undefined,man=a[id],val=man!==undefined?man:auto;
-  steps.push({id,n,val,auto:man===undefined&&auto!==undefined});
+  const auto=n.auto?n.auto(r):undefined,man=a[id],val=man!==undefined?man:auto,sug=t[id];
+  /* Triage answers are suggestions only: the walk stops on them until the clinician taps. */
+  if(val===undefined&&sug!==undefined)return{steps,cur:{id,n,sug},r};
+  steps.push({id,n,val,auto:man===undefined&&auto!==undefined,tri:man!==undefined&&sug!==undefined,triFlip:man!==undefined&&sug!==undefined&&man!==sug});
   if(val===undefined)return{steps,cur:{id,n},r};
   id=val?n.yes:n.no}
  return{steps,r};
@@ -1089,12 +1097,45 @@ function rebody(){const b=document.getElementById('vbody');if(!b)return;
  if(wasWt){const n=b.querySelector(sel);n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}
 
 const TRIAGE_PROMPT='Run my pre-op triage on the attached photo (H&P, med list, or radiograph). Assume local anesthesia unless I note sedation. Use age/sex and clinical facts only; ignore any identifiers.';
-function handoffHTML(){return`<a class="handoff" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener"><div><b>📷 Photo triage in Claude</b><span>Opens Claude with the prompt ready (also copied). Attach the photo there. Crop out name, DOB and MRN first.</span></div><i>↗</i></a>`}
+function handoffHTML(){return`<a class="handoff" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener"><div><b>📷 Photo triage in Claude</b><span>Opens Claude with the prompt ready (also copied). Attach the photo there. Crop out name, DOB and MRN first. Tap “Open in Compass” in the report, or paste its code below.</span></div><i>↗</i></a>
+ <details class="box" id="tri-paste"${S.triErr?' open':''}><summary>Paste triage code <em>if the link didn’t open here</em></summary><div class="inner"><div class="srch" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px"><input id="in-tri" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CT1;preop:a0,b0,…" aria-label="Triage code"><button class="icon-btn" data-triload>Load</button></div>${S.triErr?`<div class="red" style="margin:8px 0 0">${esc(S.triErr)}</div>`:''}</div></details>`}
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
+/* ===== Photo triage import =====
+ Code: CT1;preop:a0,b1,c1,d0,d20,e1,f1,g0;sed:a0,b1,c1;asa:3;sb:4
+ Node id + 1 (Yes) or 0 (No). Unknowns are left out and stay unanswered.
+ asa and sb are context; they also suggest sed a/b/c and preop f when those are not given.
+ Only yes/no flags and scores: no identifiers. Every value is a suggestion the clinician confirms. */
+const TRI_MODS=['preop','sed'];
+function parseTri(raw){
+ let s=String(raw||'').trim();try{s=decodeURIComponent(s)}catch(e){}
+ s=s.replace(/^.*?#?triage=/i,'').replace(/\s+/g,'');
+ if(!/^CT1;/i.test(s))return{err:'Not a Compass triage code. It should start with CT1;'};
+ const out={mods:{},asa:null,sb:null};let n=0;
+ s.slice(4).split(';').filter(Boolean).forEach(part=>{const [k,v='']=part.split(':');const key=k.toLowerCase();
+  if(key==='asa'){const a=v.toUpperCase().replace(/^ASA/,'');const map={'1':1,'I':1,'2':2,'II':2,'3':3,'III':3,'4':4,'IV':4,'5':5,'V':5};if(map[a])out.asa=map[a];return}
+  if(key==='sb'){const b=parseInt(v,10);if(b>=0&&b<=8)out.sb=b;return}
+  if(!TRI_MODS.includes(key))return;const m=M(key);
+  v.split(',').forEach(t=>{const mm=/^([a-z][a-z0-9]*)([01])$/i.exec(t);if(!mm)return;const node=m.nodes[mm[1]];
+   if(!node||!node.q)return;(out.mods[key]=out.mods[key]||{})[mm[1]]=mm[2]==='1';n++})});
+ if(!n&&out.asa==null&&out.sb==null)return{err:'Code read, but it had no answers Compass recognizes.'};
+ return out}
+function triFor(id){const t=S.tri;if(!t||!TRI_MODS.includes(id))return{};const o={...(t.mods[id]||{})};
+ if(id==='sed'&&t.asa!=null){if(o.a===undefined)o.a=t.asa>=4;if(o.b===undefined&&t.asa<4)o.b=t.asa===3}
+ if(t.sb!=null&&t.sb>=3){if(id==='sed'&&o.c===undefined)o.c=true;if(id==='preop'&&o.f===undefined)o.f=true}
+ if(t.sb!=null&&t.sb<3&&id==='preop'&&o.f===undefined)o.f=false;
+ return o}
+function loadTri(raw){const t=parseTri(raw);if(t.err){S.triErr=t.err;return false}
+ S.triErr='';S.tri=t;TRI_MODS.forEach(id=>{S.ans[id]={}});return true}
+function triBannerHTML(id){const t=S.tri;if(!t||!TRI_MODS.includes(id))return'';
+ const ks=Object.keys(triFor(id)),w=walk(M(id)),pending=w.cur&&w.cur.sug!==undefined;
+ const ctx=[t.asa?`ASA ${['','I','II','III','IV','V'][t.asa]}`:'',t.sb!=null?`STOP-Bang ${t.sb}/8`:''].filter(Boolean).join(' · ');
+ return`<div class="tribar"><div><b>📷 Photo triage loaded</b><span>${ctx?esc(ctx)+' · ':''}${ks.length} step${ks.length===1?'':'s'} suggested. ${pending?'Confirm or change each step below.':'Suggestions on this path confirmed.'} Steps triage couldn’t read are left for you.</span></div><button class="vbtn" data-triclear>Clear</button></div>`}
+
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.13.1';
+const VER='2.14.0';
 const CHANGES=[
+{v:'2.14.0',d:'Oct 23, 2026',i:['Photo triage → Pre-op clearance: the triage report’s “Open in Compass” link (or its pasted CT1 code) pre-fills Pre-op clearance and Office sedation (ASA class, STOP-Bang, airway). Each pre-filled step is a suggestion tagged verify; the path stops until you tap Yes or No, so no plan appears from triage alone. Copied plan notes mark steps confirmed or changed from triage. The code carries only yes/no flags and scores, no identifiers.']},
 {v:'2.13.1',d:'Oct 23, 2026',i:['Handouts streamlined (~22% fewer words, all four languages): related lines merged (bleeding, swelling, cleaning, pain, normal findings), extraction 18→13 items, pre-sedation 10→7, IV sedation 8→7. No instructions removed. Compass Post-op tab and patient handouts page (Dr. Young and Bayside) verified identical.']},
 {v:'2.13.0',d:'Oct 23, 2026',i:['New handout: Before IV sedation (EN/ES/Kriolu/中文) — no solids 8 h, clear liquids until 2 h (ASA 2023), GLP-1 and blood thinner disclosure, no smoking 12 h, no cannabis 3 days, escort, clothing, illness.','Extraction handout additions (from Bayside surgical instructions): tea bag for bleeding, ice 36 h then moist heat, sit up 1 min before standing, high-protein diet, nausea steps, normal findings (bruising, trismus, sore throat, bony edges, cracked lips), dissolving stitches, dry socket signs.','OTC pain regimen on extraction, implant and full-arch handouts: ibuprofen 400 mg q6h + Tylenol 500–1,000 mg q6h, may take together, Tylenol ≤3,000 mg/day, contraindications, no duplicate acetaminophen; opioid only if insufficient (ADA 2024: non-opioid first line).','Implant handout: ice 36 h then heat; no rinsing day of surgery, then Peridex twice daily + salt water after meals; no chewing on implant side 3–4 weeks; denture out as much as possible, no eating with it until adjusted.']},
 {v:'2.12.2',d:'Oct 23, 2026',i:['Bayside review button now opens the Bayside Google review form directly (g.page review link) instead of the Maps profile.']},
@@ -1231,14 +1272,14 @@ function inputsHTML(m){
 }
 function srcLink(k){const s=SRC[k];return s?`<a href="${s.u}" target="_blank" rel="noopener">${esc(s.n.split(' · ')[0])} ↗</a>`:''}
 function flowHTML(m){
- const w=walk(m),r=w.r,parts=[];
+ const w=walk(m),r=w.r,parts=[triBannerHTML(m.id)];
  const notes=w.steps.filter(s=>s.note);
  parts.push('<div class="path">'+w.steps.map(s=>{
   if(s.note)return`<div class="notechip">＋ ${esc(s.n.t)}</div>`;
   if(s.val===undefined)return'';
-  return`<div class="step"><div class="qt">${esc(s.n.q)}${s.auto?'<small>auto</small>':''}</div><div class="seg"><button class="${s.val?'on':''}" data-a="${s.id}" data-v="1">Yes</button><button class="${s.val===false?'on':''}" data-a="${s.id}" data-v="0">No</button></div></div>`}).join('')+'</div>');
- if(w.cur){const n=w.cur.n,ah=n.ah?n.ah(r):'';
-  parts.push(`<div class="cur"><div class="lab">Next question</div><div class="q">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}<div class="yn"><button class="y" data-a="${w.cur.id}" data-v="1">Yes</button><button data-a="${w.cur.id}" data-v="0">No</button></div></div>`)}
+  return`<div class="step"><div class="qt">${esc(s.n.q)}${s.auto?'<small>auto</small>':''}${s.tri?`<small class="trs">${s.triFlip?'changed from triage':'triage ✓'}</small>`:''}</div><div class="seg"><button class="${s.val?'on':''}" data-a="${s.id}" data-v="1">Yes</button><button class="${s.val===false?'on':''}" data-a="${s.id}" data-v="0">No</button></div></div>`}).join('')+'</div>');
+ if(w.cur){const n=w.cur.n,ah=n.ah?n.ah(r):'',sug=w.cur.sug,hasS=sug!==undefined;
+  parts.push(`<div class="cur${hasS?' tricur':''}"><div class="lab">Next question</div><div class="q">${esc(n.q)}</div>${hasS?`<div class="trihint">📷 Photo triage says <b>${sug?'Yes':'No'}</b> <span class="unv">verify</span> — confirm or change.</div>`:''}${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}<div class="yn"><button class="${!hasS||sug?'y':''}" data-a="${w.cur.id}" data-v="1">Yes</button><button class="${hasS&&!sug?'y':''}" data-a="${w.cur.id}" data-v="0">No</button></div></div>`)}
  if(w.out){const o=w.out,items=[];
   if(o.ex)items.push(`<li>${escV(o.ex)}</li>`);
   notes.forEach(s=>items.push(`<li><b>${esc(s.n.t)}:</b> ${escV(s.n.x)}${s.n.src?` <span class="small">(${esc(SRC[s.n.src].n.split(' · ')[0])})</span>`:''}</li>`));
@@ -1269,7 +1310,7 @@ function open(id){
 }
 
 function planText(m,w){const L=[`OMS Compass · ${m.title} · ${new Date().toLocaleDateString()}`];
- w.steps.forEach(s=>{if(s.note)return;L.push(`- ${s.n.q} ${s.val?'Yes':'No'}${s.auto?' (from entered data)':''}`)});
+ w.steps.forEach(s=>{if(s.note)return;L.push(`- ${s.n.q} ${s.val?'Yes':'No'}${s.auto?' (from entered data)':''}${s.tri?(s.triFlip?' (changed from photo triage)':' (photo triage, confirmed)'):''}`)});
  if(w.out){L.push(`Plan: ${w.out.out}`);if(w.out.ex)L.push(w.out.ex);w.steps.filter(s=>s.note).forEach(s=>L.push(`${s.n.t}: ${s.n.x}`))}
  L.push('Decision support only; clinician judgment applies.');return L.join('\n')}
 function showCopy(t){const x=document.getElementById('copybox');if(!x)return;x.hidden=false;x.value=t;x.focus();x.select()}
@@ -1287,6 +1328,8 @@ app.addEventListener('click',e=>{
  if(b.dataset.site){S.site=b.dataset.site;return rebody()}
  if(b.dataset.share)return shareHO(b.dataset.share,b);
  if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
+ if(b.hasAttribute('data-triload')){const x=document.getElementById('in-tri');loadTri(x&&x.value);return open('preop')}
+ if(b.hasAttribute('data-triclear')){S.tri=null;S.triErr='';TRI_MODS.forEach(k=>{S.ans[k]={}});return open(S.mod||'preop')}
  const id=S.mod;if(!id)return;
  if(b.hasAttribute('data-copy')){const m=M(id),w=walk(m),t=planText(m,w);try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}
  if(b.hasAttribute('data-reset')){S.ans[id]={};S.inp[id]={};return open(id)}
@@ -1297,9 +1340,12 @@ app.addEventListener('click',e=>{
  if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
 });
 app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q')){S.q=el.value.trim();const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return rebody()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
+app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='in-tri'){e.preventDefault();loadTri(e.target.value);open('preop')}});
 app.addEventListener('change',e=>{const el=e.target;if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
-const start=(location.hash||'').slice(1);
+let start=(location.hash||'').slice(1);
+if(/^triage=/i.test(start)){loadTri(start);start='preop'}
+addEventListener('hashchange',()=>{const h=(location.hash||'').slice(1);if(/^triage=/i.test(h)&&acked()){loadTri(h);open('preop')}});
 const go=()=>start==='emergency'||start==='calc'||start==='ref'||start==='new'||start==='handouts'?view(start):M(start)?open(start):home();
 acked()?go():gate(go);
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}

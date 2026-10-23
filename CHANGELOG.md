@@ -2,6 +2,11 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.14.0 — Oct 23, 2026
+- Photo triage → Pre-op clearance. The pre-op triage report ends with an "Open in Compass" link and a `CT1;…` code. The link (or the code pasted into the new "Paste triage code" box on Pre-op clearance) pre-fills Pre-op clearance and Office sedation, including ASA class (sed steps a/b) and STOP-Bang (preop f, sed c).
+- Pre-filled answers are suggestions tagged verify. The path stops on each one until the clinician taps Yes or No; no plan appears from triage alone. Unreadable items stay blank. Copied plan notes mark each step "photo triage, confirmed" or "changed from photo triage".
+- Code format: `CT1;preop:a0,b1,…;sed:…;asa:3;sb:4` — node id + 1/0. Yes/no flags and scores only; no identifiers in the URL.
+
 ## v2.13.1 + Handouts app v1.7 — Oct 23, 2026
 - Streamlined all five handouts in EN/ES/Kriolu/中文 (~22% fewer words): merged related lines; extraction 18→13 items, implant 14→13, full-arch 11→10, before sedation 10→7, after sedation 8→7. No instruction removed. Dry socket folded into the extraction "Call us" line. Compass Post-op tab and /handouts/ (both ?site versions) checked identical by script.
 
