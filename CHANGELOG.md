@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.10.2 — Oct 23, 2026
+- Handouts: no salt-water rinse when Augma Shield was used for grafting — added to the implant/graft handout and to the extraction handout (socket grafts), EN/ES. Steven’s protocol.
+
 ## v2.10.1 — Oct 23, 2026
 - Handouts moved to a fifth tab labelled “Post-op” (Decide · SOS · Calc · Ref · Post-op); bottom-of-home entry removed.
 
