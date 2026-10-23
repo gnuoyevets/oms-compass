@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.8.0 — Oct 23, 2026
+- New Trauma module: Dentoalveolar trauma. Avulsion by dry time and apex stage, replant contraindications, alveolar fracture, extrusion/lateral luxation, intrusion by depth, root fracture, crown fracture with pulp exposure (Cvek), minor injuries; primary teeth never replanted. Base: IADT 2020 via AAPD 2025 flowsheet and published summaries. AAE Apr 2026 guidelines noted; full text not yet reviewed.
+
 ## v2.7.1 — Oct 23, 2026
 - Full-arch: new bruxism question. Yes adds a load-control note to the plan (splint, flat occlusion, short cantilevers, extra implant, night guard) and botulinum toxin A as an optional pre-surgical adjunct. Evidence: J Oral Rehabil 2023 meta-analysis (OR 2.19 for failure in bruxers); Mijiritsky 2016 retrospective series (n=26). Timing "~1–2 weeks before" tagged verify.
 

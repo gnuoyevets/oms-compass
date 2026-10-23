@@ -259,6 +259,10 @@ adrenal:{n:'Tennessee EMS · Adrenal insufficiency protocol',v:'Hydrocortisone 1
 coreem:{n:'emDocs / CoreEM · Adrenal crisis',v:'May 2017 · hydrocortisone 100 mg; dexamethasone 4 mg IV',u:'https://www.emdocs.net/core-em-adrenal-crisis/'},
 brux:{n:'Bruxism and dental implants · systematic review & meta-analysis (Malmö)',v:'J Oral Rehabil 2023 · OR 2.19 for failure',u:'https://dentalresourceasia.com/dental-implants-at-risk-bruxism-linked-to-higher-failure-rates/'},
 mijir:{n:'Mijiritsky et al. · BoNT-A before immediately loaded full-arch implants in bruxers',v:'J Craniofac Surg 2016;27:668 · retrospective, n=26',u:'https://research.uniupo.it/en/publications/botulinum-toxin-type-a-as-preoperative-treatment-for-immediately-/'},
+aapdav:{n:'AAPD Reference Manual · Avulsed permanent tooth flowsheet (IADT 2020, Fouad et al.)',v:'2025 · Dent Traumatol 2020;36:331',u:'https://www.aapd.org/globalassets/media/policies_guidelines/r_traumaflowsheet25.pdf'},
+iadtfx:{n:'IADT 2020 · Fractures and luxations (Bourguignon et al.), summarized in Eur J Paediatr Dent',v:'Dent Traumatol 2020;36:314 · EJPD 2024',u:'https://iris.unica.it/bitstream/11584/426805/1/focus-ejpd-2024-02.pdf'},
+oep:{n:'IADT 2020 study summary (splint times, intrusion, Cvek pulpotomy)',v:'Secondary summary · open-exam-prep',u:'https://open-exam-prep.com/study-guides/au-adc-written/dental-emergencies/trauma-emergency-management'},
+aae26:{n:'AAE · Guidelines for the treatment of traumatic dental injuries',v:'J Endod, Apr 2026 · not yet reviewed in full',u:'https://newsroom.aae.org/featured-stories/american-association-of-endodontists-releases-updated-guidelines-for-the-treatment-of-traumatic-dental-injuries/'},
 bont:{n:'Ferrillo et al. · Botulinum toxin for TMD: current evidence (narrative review)',v:'Toxins 2026;18:419 · Sep 29, 2026',u:'https://www.mdpi.com/2072-6651/18/10/419'},
 bontnhs:{n:'NHS Humber & North Yorkshire · Botulinum toxin to masticatory muscles (policy)',v:'2025 · not commissioned; relapse ~3 months',u:'https://humberandnorthyorkshire.icb.nhs.uk/wp-content/uploads/2025/07/145-Botulinum-Toxin-A-injection-to-Masticatory-Muscles.docx'},
 dant:{n:'Dantrium Intravenous · prescribing information',v:'20 mg vial + 60 mL sterile water; max 10 mg/kg',u:'https://www.rxlist.com/dantrium-drug.htm'},
@@ -493,6 +497,35 @@ const MODS=[
  oClosed:{out:'Closed reduction with MMF (arch bars or hybrid bars); plan nutrition first.',src:'lect',ex:'Best for non-displaced favorable, grossly comminuted, soft-tissue loss, or developing dentition. Trend: shorter MMF, elastics over wire.'}
  },
  look:[['Exam',['Compress both angles toward each other (mobility)','Floor-of-mouth ecchymosis, steps, malocclusion, loose teeth','CN V and VII documented before treatment']],['Atrophic edentulous (<10 mm)',['~20% complications; periosteal blood supply — minimize stripping','Load-bearing plate angle to angle; no screws near the fracture line','Antibiotic prophylaxis']]]},
+
+{id:'dentotrauma',g:'Trauma',title:'Dentoalveolar trauma',d:'Avulsion · luxation · root, crown and alveolar fractures',
+ start:'a',refs:['aapdav','iadtfx','oep','aae26'],
+ red:'<b>Avulsed permanent tooth:</b> replant at once, or store in milk, saline, saliva or HBSS. Handle by the crown only. Never replant a primary tooth.',
+ caveat:'Based on IADT 2020 (via AAPD 2025 and published summaries). AAE issued updated US guidelines in Apr 2026 (J Endod); full text not yet reviewed here. Record photos, pulp tests, tetanus status, and radiographs from 2+ angles; CBCT when it changes management.',
+ nodes:{
+ a:{q:'Head injury, loss of consciousness, airway concern, or a jaw/facial fracture?',yes:'oFace',no:'b'},
+ oFace:{out:'Facial trauma triage first; teeth come after the primary survey.',tone:'urgent',go:'trauma',go2:'mandfx'},
+ b:{q:'Primary tooth?',yes:'oPrim',no:'c'},
+ oPrim:{out:'Do not replant an avulsed primary tooth. Minimal intervention; refer to pediatric dentistry.',tone:'action',src:'oep',ex:'Image intruded or displaced primary teeth for their relation to the permanent successor.'},
+ c:{q:'Tooth avulsed (fully out of the socket)?',yes:'d',no:'f'},
+ d:{q:'Replantation contraindicated?',h:['Non-restorable tooth or severe periodontal disease','Severe immunocompromise or uncontrolled medical condition','Tooth crushed or lost; patient cannot cooperate'],yes:'oNoRep',no:'e'},
+ oNoRep:{out:'Do not replant. Manage the socket and plan the space.',tone:'action',ex:'Ridge preservation if appropriate; implant after growth is complete.'},
+ e:{q:'Replanted at the scene, or extraoral dry time ≤60 min (or kept in milk, saline, saliva or HBSS)?',yes:'oRep',no:'oLate'},
+ oRep:{out:'Replant and splint. Closed apex: root canal within 2 weeks. Open apex: watch for revascularization.',tone:'action',src:'aapdav',ex:'Rinse the root with saline; do not scrub. LA without vasoconstrictor; irrigate the socket, remove clot gently; replant with light pressure; confirm on radiograph. Flexible passive splint 2 weeks (rigid 4 weeks with alveolar fracture). Amoxicillin or penicillin 7 days; chlorhexidine twice daily 2 weeks; tetanus check; soft diet. Closed apex: start root canal (calcium hydroxide) within 2 weeks, before the splint comes off. Review at 2 weeks, then 1, 3, 6 and 12 months, then yearly for 5 years.'},
+ oLate:{out:'Dry >60 min: usually still replant to keep bone; expect ankylosis and replacement resorption.',tone:'action',src:'aapdav',ex:'Wipe non-viable tissue off the root with gauze. Root canal before replantation or within 2 weeks. Same splint, antibiotics, chlorhexidine and tetanus steps. Growing patient: plan decoronation when infraocclusion appears; implant after growth.'},
+ f:{q:'Several teeth moving together as a segment (alveolar fracture)?',yes:'oAlv',no:'g'},
+ oAlv:{out:'Reposition the segment and splint for 4 weeks.',tone:'action',src:'oep',go:'mandfx',ex:'CBCT or 2+ angle films; check for a jaw fracture. Pulp tests at follow-up.'},
+ g:{q:'Tooth displaced (extruded, laterally luxated or intruded)?',yes:'h',no:'k'},
+ h:{q:'Intruded?',yes:'oIntr',no:'oLux'},
+ oIntr:{out:'Intrusion: plan by apex stage and depth. Splint 4 weeks once repositioned.',tone:'action',src:'oep',ex:'Open apex: allow re-eruption; no movement in 4 weeks → orthodontic repositioning. Closed apex <3 mm: allow re-eruption; none in 8 weeks → reposition. 3–7 mm: orthodontic or surgical repositioning. >7 mm: surgical repositioning. Closed apex: pulp necrosis is expected; start root canal within 2 weeks.'},
+ oLux:{out:'Reposition under LA and splint: extrusion 2 weeks, lateral luxation 4 weeks.',tone:'action',src:'iadtfx',ex:'Lateral luxation: free the apex from its bony lock first. Closed apex: assess the pulp at 2 weeks; signs of necrosis → root canal with calcium hydroxide. Open apex: watch for revascularization. Soft diet; chlorhexidine.'},
+ k:{q:'Root fracture on radiographs (2+ angles or CBCT)?',yes:'oRoot',no:'l'},
+ oRoot:{out:'Reposition the coronal fragment; flexible splint 4 weeks (cervical third: up to 4 months).',tone:'action',src:'oep',ex:'Most heal. If the coronal segment becomes necrotic, treat only that segment endodontically.'},
+ l:{q:'Crown fracture exposing the pulp?',yes:'oPulp',no:'oMinor'},
+ oPulp:{out:'Keep the pulp alive: partial (Cvek) pulpotomy, especially with an open apex.',tone:'action',src:'oep',ex:'Remove 1–2 mm of pulp; rinse with 1–5% NaOCl; hemostasis within 5 min (if not, go deeper); MTA or Biodentine ≥2 mm; glass ionomer; composite or bond the fragment.'},
+ oMinor:{out:'Concussion, subluxation or enamel–dentin fracture: conservative care and follow-up.',src:'oep',ex:'Bond the fragment or restore with composite; cover exposed dentin. Subluxation: optional flexible splint up to 2 weeks for comfort. Soft diet 1–2 weeks. An early negative pulp test alone is not a reason to start a root canal.'}
+ },
+ look:[['History',['Time of injury and extraoral dry time; storage medium','Tetanus status; head injury or LOC','Previous trauma to the same teeth']],['Exam',['Mobility (single tooth vs segment), percussion note, displacement','Pulp tests baseline (often negative early)','Soft-tissue lacerations: radiograph lips for fragments']]]},
 
 {id:'extraction',g:'Dentoalveolar & acute',title:'Third molars & extractions',d:'Remove, coronectomy, or surveil',
  start:'a',refs:['third','rood','sdcep'],
@@ -991,8 +1024,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.7.1';
+const VER='2.8.0';
 const CHANGES=[
+{v:'2.8.0',d:'Oct 23, 2026',i:['New Trauma module: Dentoalveolar trauma. Avulsion (dry time, apex stage), luxations, intrusion by depth, root, crown and alveolar fractures, primary-tooth rule (IADT 2020).']},
 {v:'2.7.1',d:'Oct 23, 2026',i:['Full-arch: bruxism step. Load-control checklist, plus botulinum toxin as an optional pre-surgical adjunct (low evidence).']},
 {v:'2.7.0',d:'Oct 23, 2026',i:['TMD: botulinum toxin step for muscle pain that persists after adequate conservative care, with consent points, dose ranges from the literature and contraindications.']},
 {v:'2.6.1',d:'Oct 23, 2026',i:['Adrenal crisis: dexamethasone (Decadron) 4 mg IV as the alternative to Solu-Cortef.','Draft artifact deleted; GitHub is the only source.']},
