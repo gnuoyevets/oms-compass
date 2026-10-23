@@ -145,7 +145,7 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  page=await fresh(ctx);
  const r8=await E(page,()=>{const bad=[];for(const m of MODS){try{open(m.id);if(!document.getElementById('flow').innerHTML)bad.push(m.id)}catch(e){bad.push(m.id+':'+e.message)}}
   for(const v of ['emergency','calc','ref','handouts','new']){try{view(v);if(!document.getElementById('vbody').innerHTML.length)bad.push(v)}catch(e){bad.push(v+':'+e.message)}}return{n:MODS.length,bad}});
- ok(r8.bad.length===0&&r8.n===34,`All ${r8.n} modules and 5 tabs render (bad: ${r8.bad})`);
+ ok(r8.bad.length===0&&r8.n===35,`All ${r8.n} modules and 5 tabs render (bad: ${r8.bad})`);
  await E(page,()=>home());await page.fill('#in-q','Dantrium');ok(await page.locator('#hits [data-em]').count()>0,'Search still reaches SOS (Dantrium)');
  await page.fill('#in-q','avulsion');ok(await page.locator('#hits [data-open="dentotrauma"]').count()>0,'Search still reaches modules (avulsion)');
  await page.fill('#in-q','tooth removal');ok(await page.locator('#hits [data-ho]').count()>0,'Search still reaches handouts');

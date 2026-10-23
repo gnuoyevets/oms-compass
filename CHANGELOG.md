@@ -2,6 +2,12 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.2.0 (draft, branch `deep-neck-draft`) — Oct 23, 2026
+- New module: **Deep neck space infection** (hospital consult flow). Airway first → can lie supine for CT → workup (CT neck ± chest, labs, cultures) → empiric IV antibiotics by host → necrotizing/septic/mediastinal → abscess or multispace → single low-risk space medical trial. Look-fors: spread routes, Lemierre, mediastinitis, cavernous sinus thrombosis, non-improvement, discharge.
+- Listed under Hospital on-call; Odontogenic infection's emergency outcome links to it.
+- Sources: Long et al., Am J Emerg Med 2021 (Ludwig's angina evidence-based review); UNC Radiology teaching file (DNM, Endo classification); your lecture pearls and board notes. Chest-CT threshold, dexamethasone and medical-trial timing tagged verify.
+- Awaiting Steven's review before merge.
+
 ## v3.1.0 — Oct 23, 2026
 - **Medical gate.** Colour-coded block at the top of procedure modules (sedation, extractions, canine, implants, grafting, sinus, full-arch, peri-implantitis, biopsy, infection, mandible fracture, dentoalveolar trauma, displaced root, oroantral) summarizing Pre-op clearance answers. Red = unstable condition, defer elective. Amber = item to address (IE prophylaxis, antithrombotic, MRONJ/ORN, SGLT2/GLP-1, airway) or any Unknown or incomplete screen. Green only when the screen is complete with no hit, labelled "not a clearance". Links to Pre-op clearance and, when findings exist, the Assessment.
 - **Hospital on-call switch** on Home, remembered on the device (preference only, no patient data). On: Facial trauma triage, Mandible fracture, Dentoalveolar trauma and Odontogenic infection listed first under "Hospital on-call". Off: the first two are hidden from the list; dentoalveolar trauma moves to Dentoalveolar & acute. All 30+ modules kept; search reaches everything.
