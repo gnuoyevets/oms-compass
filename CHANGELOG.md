@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.10.1 — Oct 23, 2026
+- Handouts moved to a fifth tab labelled “Post-op” (Decide · SOS · Calc · Ref · Post-op); bottom-of-home entry removed.
+
 ## v2.10.0 — Oct 23, 2026
 - Handouts approved by Steven and made live: home-screen “Post-op handouts” entry, “Patient handout” button on Extractions, Dry socket, Implants, Ridge augmentation, Sinus lift, Full-arch and Office sedation plans; included in search.
 

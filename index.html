@@ -120,8 +120,9 @@ details.box>summary em{font-style:normal;font-weight:600;font-size:12px;color:va
 .src:first-child{border-top:0}
 .src span{display:block;font-size:12px;color:var(--muted)}
 /* Tabs, emergency, calculators */
-.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0 0 6px}
-.tabs button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:14px;color:var(--muted)}
+.tabs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;margin:0 0 6px}
+.tabs button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:14px;color:var(--muted);padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:400px){.tabs button{font-size:13px}}
 .tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .tabs button.em{color:var(--red-ink);border-color:var(--red-line);background:var(--red-bg)}
 .tabs button.em.on{background:var(--red-ink);color:var(--bg);border-color:var(--red-ink)}
@@ -1071,7 +1072,7 @@ function calcHTML(){
  <div class="calc">RCRI ${rn} · major cardiac event ≈ ${rr} (Lee 1999)</div><p class="caveat" style="margin:10px 0 0">Most OMS cases are low-risk surgery. Testing only when poor functional capacity and elevated risk would change management (2024 AHA/ACC). ${srcLink('lee')} ${srcLink('acc')}</p></div></details>
  <details class="box"><summary>Maintenance fluids <em>4-2-1</em></summary><div class="inner"><div class="calc">${mf!=null?`${Math.round(mf)} mL/h`:'Enter weight'}</div><p class="caveat" style="margin:10px 0 0">Holliday–Segar: 4 mL/kg/h for the first 10 kg, 2 for the next 10, 1 per kg after. NPO deficit ≈ rate × hours fasting.</p></div></details>`;
 }
-function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v==='decide'?'on':''}" data-view="decide">Decide</button><button class="em${v==='emergency'?' on':''}" data-view="emergency">SOS</button><button class="${v==='calc'?'on':''}" data-view="calc">Calc</button><button class="${v==='ref'?'on':''}" data-view="ref">Ref</button></div>`}
+function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v==='decide'?'on':''}" data-view="decide">Decide</button><button class="em${v==='emergency'?' on':''}" data-view="emergency">SOS</button><button class="${v==='calc'?'on':''}" data-view="calc">Calc</button><button class="${v==='ref'?'on':''}" data-view="ref">Ref</button>${HANDOUTS_LIVE?`<button class="${v==='handouts'?'on':''}" data-view="handouts" aria-label="Post-op patient handouts">Post-op</button>`:''}</div>`}
 function view(v){
  if(v==='decide')return home();
  S.mod=null;S.view=v;
@@ -1090,8 +1091,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.10.0';
+const VER='2.10.1';
 const CHANGES=[
+{v:'2.10.1',d:'Oct 23, 2026',i:['Patient handouts moved to a fifth tab, “Post-op”, next to Ref.']},
 {v:'2.10.0',d:'Oct 23, 2026',i:['Post-op handouts live (English/Español): extractions, implants/grafts/sinus lift, full-arch, IV sedation. Open from the home screen or the “Patient handout” button on matching plans; share by text.']},
 {v:'2.9.1',d:'Oct 23, 2026',i:['Feedback link on every screen (emails the author with module and version).','Handout drafts completed: full-arch diet and cleaning timing, office phone.']},
 {v:'2.9.0',d:'Oct 23, 2026',i:['Search box on the home screen: finds modules, SOS cards and Ref cards.','New modules: Peri-implantitis (EFP S3 2023), Biopsy & specimens, Local anesthetic complications.','Post-op handouts (English/Spanish) drafted for review; hidden until approved.','Feedback button built; appears once a feedback email is set.']},
@@ -1171,7 +1173,7 @@ function home(){
  S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const groups=[...new Set(MODS.map(m=>m.g))].sort((x,y)=>ORDER.indexOf(x)-ORDER.indexOf(y));
  app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · <button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button></span></div>`+tabsHTML('decide')+
  `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Search everything — e.g. avulsion, Dantrium, sinus" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="groups"${S.q?' hidden':''}>`+
- groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+(HANDOUTS_LIVE?`<div class="lab group">Patients</div><div class="mods"><button class="mod" data-view="handouts"><div><b>Post-op handouts</b><span>English · Español · share by text</span></div><i aria-hidden="true">›</i></button></div>`:'')+`</div>`+
+ groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
  `<p class="foot">Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);
 }
