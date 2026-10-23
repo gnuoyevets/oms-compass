@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.13.1 + Handouts app v1.7 — Oct 23, 2026
+- Streamlined all five handouts in EN/ES/Kriolu/中文 (~22% fewer words): merged related lines; extraction 18→13 items, implant 14→13, full-arch 11→10, before sedation 10→7, after sedation 8→7. No instruction removed. Dry socket folded into the extraction "Call us" line. Compass Post-op tab and /handouts/ (both ?site versions) checked identical by script.
+
 ## v2.13.0 + Handouts app v1.6 — Oct 23, 2026
 - New handout: Before IV sedation (4 languages). No solid food/milk/gum 8 h; clear liquids until 2 h (ASA 2023 fasting update); ask which usual meds to take; disclose weekly GLP-1 injections (2024 multisociety guidance) and blood thinners; no smoking 12 h; no cannabis 3 days; escort stays and drives; loose sleeves, flat shoes; remove contacts/jewelry/dentures, no nail polish; call if sick. Note: Bayside website still says no water for 8 h — align office instructions.
 - Extraction handout: added tea-bag pressure, ice 36 h then moist heat, sit 1 min before standing, high-protein/no skipped meals, salt water 4–6×/day after meals and bedtime, nausea steps, normal findings, dissolving stitches/socket fills ~1 month, dry socket signs, antibiotic reaction.
