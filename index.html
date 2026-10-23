@@ -1090,8 +1090,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.9.1';
+const VER='2.10.0';
 const CHANGES=[
+{v:'2.10.0',d:'Oct 23, 2026',i:['Post-op handouts live (English/Español): extractions, implants/grafts/sinus lift, full-arch, IV sedation. Open from the home screen or the “Patient handout” button on matching plans; share by text.']},
 {v:'2.9.1',d:'Oct 23, 2026',i:['Feedback link on every screen (emails the author with module and version).','Handout drafts completed: full-arch diet and cleaning timing, office phone.']},
 {v:'2.9.0',d:'Oct 23, 2026',i:['Search box on the home screen: finds modules, SOS cards and Ref cards.','New modules: Peri-implantitis (EFP S3 2023), Biopsy & specimens, Local anesthetic complications.','Post-op handouts (English/Spanish) drafted for review; hidden until approved.','Feedback button built; appears once a feedback email is set.']},
 {v:'2.8.0',d:'Oct 23, 2026',i:['New Trauma module: Dentoalveolar trauma. Avulsion (dry time, apex stage), luxations, intrusion by depth, root, crown and alveolar fractures, primary-tooth rule (IADT 2020).']},
@@ -1120,7 +1121,7 @@ function gate(go){
 }
 
 /* ===== Patient handouts (EN/ES). Drafts until HANDOUTS_LIVE is true. ===== */
-const HANDOUTS_LIVE=false;
+const HANDOUTS_LIVE=true;
 const PHONE='(401) 273-7802';
 const HO=[
 {id:'ext',src:['mcgill'],t:{en:'After tooth removal',es:'Después de una extracción dental'},i:{

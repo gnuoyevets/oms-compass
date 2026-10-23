@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.10.0 — Oct 23, 2026
+- Handouts approved by Steven and made live: home-screen “Post-op handouts” entry, “Patient handout” button on Extractions, Dry socket, Implants, Ridge augmentation, Sinus lift, Full-arch and Office sedation plans; included in search.
+
 ## v2.9.1 — Oct 23, 2026
 - Feedback link live on every screen (mailto zeniths-raised-7a@icloud.com, pre-filled with module and version).
 - Handouts: full-arch liquids 2 weeks, fork-tender food ~3 months, water flosser lowest setting from ~day 7 (from Steven's Drive post-op sheet); office phone (401) 273-7802. Still gated pending final approval.
