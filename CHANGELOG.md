@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.0.0 — Oct 23, 2026 (preview on branch `findings-v3`, not published)
+## v3.0.0 — Oct 23, 2026
 - **Findings layer.** Search a medication (brand or generic), lab, or prior treatment → what changes, provisional action, what it depends on, targeted questions, next steps, escalation triggers, and an expandable Why (linked module text, sources with publication and check dates). 12 findings: DOACs, warfarin, antiplatelets, antiresorptives/antiangiogenics, GLP-1 RA, SGLT2 inhibitors, chronic steroids, head & neck radiation/chemotherapy, INR, platelets, HbA1c, kidney disease/dialysis. Findings reuse existing module nodes and sources (one source of truth).
 - **Search fix.** Root cause of "Eliquis → No match": literal substring search over module text that never named brands. Now: synonym tables, prefix match, typo tolerance (transposition-aware). A miss says "No Compass entry — not the same as no surgical implications."
 - **Unknown everywhere.** Every yes/no step has Unknown (?). Unknown halts the path at "Plan pending · verify first"; it is never read as No. Finding actions stay "provisional" while any visible question is unanswered or Unknown.
