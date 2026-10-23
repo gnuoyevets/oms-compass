@@ -2,6 +2,11 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.11.0 + Handouts app v1.1 — Oct 23, 2026
+- Handouts (Compass Post-op tab and /handouts/): added Kriolu (Cape Verdean Creole, Santiago variant) and Mandarin (Simplified Chinese) for all four handouts. Machine-drafted by Claude; pending native-speaker review. Handouts app auto-detects Chinese phones (zh) and pt-CV/kea; direct links e.g. #ext-kea, #ext-zh.
+- No smoking or vaping: extraction ≥72 h, ideally 1 week (dry socket); implant/graft/sinus and full-arch ≥2 weeks, quitting best. Full-arch previously had no smoking line. Steven's protocol.
+- Extraction handout: soft foods 2 weeks; no hard, crunchy or seedy food 3 weeks (was 3 and 5 days). Steven's protocol.
+
 ## Handouts app v1.0 — Oct 23, 2026
 - New standalone patient page at /handouts/ (gnuoyevets.github.io/oms-compass/handouts/). Same four approved handouts as the Compass Post-op tab, EN/ES (auto-detects Spanish phones), one link per handout (e.g. #ext-es) for texting or QR codes, tap-to-call office, Share and Print. No clinician content or sources shown. Text is copied from Compass; edit both together.
 
