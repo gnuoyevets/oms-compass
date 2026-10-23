@@ -151,6 +151,10 @@ details.em[open]>summary::after{content:'−'}
 .handoff span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
 .handoff i{font-style:normal;color:var(--accent);font-size:18px}
 .top .small{white-space:nowrap}
+.srch{margin:2px 0 4px}
+.srch input{width:100%;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+#hits .mods{margin-top:8px}
+
 .vbtn{border:0;background:none;padding:0;font:inherit;font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:2px;min-height:24px}
 .gate{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:8px}
 .gate h2{font-size:19px;margin-bottom:8px}
@@ -263,6 +267,13 @@ aapdav:{n:'AAPD Reference Manual · Avulsed permanent tooth flowsheet (IADT 2020
 iadtfx:{n:'IADT 2020 · Fractures and luxations (Bourguignon et al.), summarized in Eur J Paediatr Dent',v:'Dent Traumatol 2020;36:314 · EJPD 2024',u:'https://iris.unica.it/bitstream/11584/426805/1/focus-ejpd-2024-02.pdf'},
 oep:{n:'IADT 2020 study summary (splint times, intrusion, Cvek pulpotomy)',v:'Secondary summary · open-exam-prep',u:'https://open-exam-prep.com/study-guides/au-adc-written/dental-emergencies/trauma-emergency-management'},
 aae26:{n:'AAE · Guidelines for the treatment of traumatic dental injuries',v:'J Endod, Apr 2026 · not yet reviewed in full',u:'https://newsroom.aae.org/featured-stories/american-association-of-endodontists-releases-updated-guidelines-for-the-treatment-of-traumatic-dental-injuries/'},
+efp:{n:'EFP S3 guideline · Prevention and treatment of peri-implant diseases (Herrera et al.)',v:'J Clin Periodontol 2023;50 Suppl 26:4–76',u:'https://www.efp.org/fileadmin/uploads/efp/Documents/Other_publications/Clinical_guidelines/peri-implantitis-guideline-03-peri-implant-diseases.pdf'},
+usc:{n:'Al-Eryani · How to perform an oral biopsy (USC Ostrow)',v:'2020, updated 2024',u:'https://ostrowonline.usc.edu/?p=1878'},
+needle:{n:'Kim & Moon · Removal of a broken needle using 3D CT',v:'J Korean Assoc Oral Maxillofac Surg 2013;39:251',u:'https://synapse.koreamed.org/articles/1091749'},
+methb:{n:'emDocs · Methemoglobinemia',v:'Nov 2020 · methylene blue 1–2 mg/kg',u:'https://www.emdocs.net/?p=17799'},
+kodsi:{n:'Kodsi · Nerve damage associated with IAN block',v:'J Can Dent Assoc 2012;78:c127',u:'https://jcda.ca/node/13440'},
+mcgill:{n:'McGill OMFS · Patient instructions (extractions; bone graft/sinus lift)',v:'Patient information pages',u:'https://www.mcgill.ca/omfs/patient-info/teeth-extractions'},
+hsdm:{n:'Harvard School of Dental Medicine · Pre- and post-sedation instructions',v:'Patient sheet',u:'https://www.hsdm.harvard.edu/resource/preandpostsedationpostopinstructions-qrpdf'},
 bont:{n:'Ferrillo et al. · Botulinum toxin for TMD: current evidence (narrative review)',v:'Toxins 2026;18:419 · Sep 29, 2026',u:'https://www.mdpi.com/2072-6651/18/10/419'},
 bontnhs:{n:'NHS Humber & North Yorkshire · Botulinum toxin to masticatory muscles (policy)',v:'2025 · not commissioned; relapse ~3 months',u:'https://humberandnorthyorkshire.icb.nhs.uk/wp-content/uploads/2025/07/145-Botulinum-Toxin-A-injection-to-Masticatory-Muscles.docx'},
 dant:{n:'Dantrium Intravenous · prescribing information',v:'20 mg vial + 60 mL sterile water; max 10 mg/kg',u:'https://www.rxlist.com/dantrium-drug.htm'},
@@ -646,6 +657,61 @@ const MODS=[
  },
  look:[['Exam',['Swelling distribution, fluctuance, mouth opening, tongue elevation','Diabetes, immunosuppression, pregnancy','Allergy phenotype, renal/hepatic function, interactions (e.g., warfarin)']],['Culture when',['Rapid spread, post-op or recurrent infection, no response to treatment','Immunocompromised host; osteomyelitis, actinomycosis, suspected fungal']],['Not improving? Check',['Wrong or missed space; source not removed — re-image','Hardware or foreign body','Non-compliance, wrong antibiotic, fungal infection in immunocompromised']],['Pitfalls',['Ciprofloxacin has no anaerobic cover — never for odontogenic infection','Cutaneous fistula: treat the tooth, not the tract','Submandibular mass without pus: think lymphoma, biopsy']]]},
 
+{id:'periimpl',g:'Implants',title:'Peri-implantitis',d:'Mucositis vs peri-implantitis · nonsurgical → surgical · explant',
+ start:'a',refs:['efp','board'],
+ caveat:'EFP S3 2023. Peri-implantitis is not curable; a treated implant is “stable peri-implantitis” and needs lifelong supportive care.',
+ nodes:{
+ a:{q:'Bleeding (more than one spot) or suppuration on gentle probing?',yes:'b',no:'oHealth'},
+ oHealth:{out:'Peri-implant health. Continue supportive care.',src:'efp'},
+ b:{q:'Bone loss beyond initial remodeling?',h:['Compare with the radiograph taken at loading','No baseline: probing depth ≥6 mm and bone ≥3 mm apical to the top of the intraosseous implant'],yes:'c',no:'oMuc'},
+ oMuc:{out:'Peri-implant mucositis: biofilm control, then reassess in 2–3 months.',src:'efp',ex:'Oral hygiene instruction, professional mechanical cleaning, risk-factor control; modify the prosthesis if it blocks cleaning. Repeat if bleeding persists.'},
+ c:{q:'Implant mobile or not worth keeping?',h:['Mobility, or ≥50% bone loss with little support left','Malposition or a prosthesis that cannot be made cleansable','Patient preference after counselling'],yes:'oExp',no:'nNS'},
+ oExp:{out:'Remove the implant; plan site reconstruction and replacement.',tone:'action',src:'board'},
+ nNS:{note:1,t:'Nonsurgical step first',x:'Oral hygiene instruction; control smoking, diabetes and periodontitis; clean, remove or modify the prosthesis; sub-marginal instrumentation with curettes and/or ultrasonics. EFP advises against: lasers, photodynamic therapy, local antimicrobials, routine systemic antibiotics, air polishing, desiccant gels, probiotics.',src:'efp',next:'d'},
+ d:{q:'At re-evaluation: probing ≤5 mm, bleeding at ≤1 site, no suppuration?',yes:'oStable',no:'e'},
+ oStable:{out:'Stable peri-implantitis: supportive peri-implant care.',src:'efp',ex:'Periodic probing and radiographs; reinforce home care.'},
+ e:{q:'Can the patient keep adequate home care?',yes:'f',no:'oNoSurg'},
+ oNoSurg:{out:'Do not operate yet. Repeat nonsurgical care and fix home care, or consider removal.',tone:'action',src:'efp'},
+ f:{q:'Contained intraosseous defect ≥3 mm deep?',yes:'oRecon',no:'oAccess'},
+ oRecon:{out:'Access flap with reconstructive therapy (bone graft ± membrane).',tone:'action',src:'efp',ex:'Remove the prosthesis if feasible. Mechanical decontamination (curettes; titanium brushes acceptable). Avoid as adjuncts: systemic antibiotics, Er:YAG, air polishing, chlorhexidine, photodynamic therapy. Implantoplasty: insufficient evidence. Reassess clinically at 6 months, radiographs at 12 months.'},
+ oAccess:{out:'Access flap or resective surgery.',tone:'action',src:'efp',ex:'Same decontamination rules. Success: probing ≤5 mm, bleeding at ≤1 site, no suppuration, no further bone loss.'}
+ }},
+
+{id:'biopsy',g:'Pathology & pain',title:'Biopsy & specimens',d:'Incisional vs excisional · handling · results tracking',
+ start:'a',refs:['usc','oralca','lect'],
+ red:'Name the person who tracks the result and tells the patient before the patient leaves.',
+ caveat:'If the pathology does not match your clinical impression, call the pathologist; a repeat biopsy may be needed.',
+ nodes:{
+ a:{q:'Possible vascular lesion?',h:['Pulsatile, bruit, blue and compressible, or blood on aspiration'],yes:'oVasc',no:'b'},
+ oVasc:{out:'Stop. Image (Doppler, MRI/MRA) before any sampling.',tone:'urgent',src:'lect'},
+ b:{q:'Suspected vesiculobullous disease (pemphigus, mucous membrane pemphigoid)?',yes:'oVB',no:'c'},
+ oVB:{out:'Perilesional biopsy at the edge, including normal tissue, plus a second specimen in Michel’s solution for immunofluorescence.',tone:'action',src:'usc',ex:'Do not put the immunofluorescence specimen in formalin.'},
+ c:{q:'Suspicious for malignancy, or too large to remove without significant morbidity?',yes:'oInc',no:'d'},
+ oInc:{out:'Incisional biopsy of the most representative area.',tone:'action',src:'usc',ex:'Avoid necrotic tissue. Leukoplakia or early carcinoma: a representative central sample or a margin with normal tissue. Mark with an orientation suture if a later excision depends on margins.'},
+ d:{q:'Lesion about 1 cm or smaller?',yes:'oExc',no:'oInc'},
+ oExc:{out:'Excisional biopsy with a margin of normal tissue.',src:'usc',ex:'Orientation suture if the lesion looks suspicious.'}
+ },
+ look:[['Specimen handling',['One labelled bottle per specimen','Formalin at least 20× the specimen volume','No crushing, suction, or cutting the specimen open','Mucosal specimens: lay flat on a small piece of paper before fixing']],['Requisition',['Site, size, duration, appearance, symptoms','History, risk factors (tobacco, alcohol, areca), differential diagnosis','Clinical photos if available; do not draw on the lesion']],['Results',['Log the expected date; chase if late','Tell the patient in person or by phone; document it']]]},
+
+{id:'lacx',g:'Post-op & complications',title:'Local anesthetic complications',d:'Broken needle · methemoglobinemia · paresthesia · palsy · hematoma',
+ start:'a',refs:['needle','methb','kodsi','malamed','last'],
+ caveat:'Systemic toxicity (LAST) and anaphylaxis are on the SOS tab.',
+ nodes:{
+ a:{q:'Broken needle?',yes:'oNeedle',no:'b'},
+ oNeedle:{out:'Visible: retrieve now with a fine hemostat. Not visible: tell the patient, image, and plan retrieval.',tone:'action',src:'needle',ex:'Do not explore blindly. Panoramic film confirms; CT/CBCT localizes. Prompt planned retrieval limits migration, pain and trismus. Prevention: no 30-gauge needle for IAN blocks, do not bend, do not insert to the hub.'},
+ b:{q:'Cyanosis or SpO₂ ~85% that does not improve with O₂, after prilocaine or benzocaine?',yes:'oMet',no:'c'},
+ oMet:{out:'Suspect methemoglobinemia. 100% O₂ and transfer to the ED.',tone:'urgent',src:'methb',ex:'Confirm with co-oximetry (pulse oximetry is unreliable). Methylene blue 1–2 mg/kg IV over 5 min if symptomatic or MetHb >25%; may repeat once. Ineffective or harmful in G6PD deficiency; caution with SSRIs.'},
+ c:{q:'Perioral tingling, tinnitus, agitation, seizure or arrhythmia?',yes:'oLast',no:'d'},
+ oLast:{out:'Local anesthetic systemic toxicity: stop injecting; open SOS → LAST.',tone:'urgent',src:'last'},
+ d:{q:'Facial palsy (cannot close the eye) right after an IAN block?',yes:'oPalsy',no:'e'},
+ oPalsy:{out:'Transient facial palsy from anesthetic reaching the parotid. Reassure; it resolves as the anesthetic wears off.',src:'malamed',ex:'Protect the eye until blink returns: lubricant and tape the lid closed. Persisting beyond the anesthetic duration: evaluate for another cause.'},
+ e:{q:'Rapid swelling after the injection (hematoma)?',yes:'oHem',no:'f'},
+ oHem:{out:'Firm pressure for at least 2 min, then ice.',src:'malamed',ex:'Expect bruising for 1–2 weeks. Expanding floor-of-mouth or neck swelling: airway first, ED.'},
+ f:{q:'Numbness or altered sensation after the anesthetic should have worn off?',yes:'oPar',no:'oOther'},
+ oPar:{out:'Map and document the deficit; recheck at 2 weeks.',tone:'action',src:'kodsi',go:'nerve',ex:'Over 85% resolve within 8 weeks. No improvement at 2 weeks: neurosensory testing / microsurgery evaluation. The lingual nerve is affected more often than the IAN. Some authors advise caution with 4% articaine or prilocaine for IAN blocks (controversial).'},
+ oOther:{out:'Consider trismus, infection at the injection site, or allergy.',src:'malamed',ex:'True amide allergy is rare; consider the sulfite preservative in epinephrine-containing cartridges, or latex. Anaphylaxis: SOS tab.'}
+ }},
+
 {id:'lesion',g:'Pathology & pain',title:'Oral mucosal lesion',d:'Biopsy now, remove cause and recheck, or refer',
  start:'a',refs:['oralca'],
  red:'Any suspicious lesion: prompt biopsy or specialist referral. Do not use an observation interval to delay it.',
@@ -1009,13 +1075,13 @@ function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v=
 function view(v){
  if(v==='decide')return home();
  S.mod=null;S.view=v;
- app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · <button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button></span></div>${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():v==='new'?newHTML():calcHTML()}</div>`;
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · <button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button></span></div>${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():v==='new'?newHTML():v==='handouts'?hoHTML():calcHTML()}</div>${fbHTML(v==='emergency'?'SOS':v==='handouts'?'Handouts':v)}`;
  window.scrollTo(0,0);try{history.replaceState(null,'','#'+v)}catch(e){}
 }
 function rebody(){const b=document.getElementById('vbody');if(!b)return;
  const open=[...b.querySelectorAll('details[open]')].map(d=>d.id||d.querySelector('summary').textContent);
  const a=document.activeElement,wasWt=a&&(a.hasAttribute('data-wt')||a.hasAttribute('data-refq')),sel=a&&a.hasAttribute('data-refq')?'[data-refq]':'[data-wt]',pos=wasWt?a.selectionStart:null;
- b.innerHTML=S.view==='emergency'?emHTML():S.view==='ref'?refHTML():S.view==='new'?newHTML():calcHTML();
+ b.innerHTML=S.view==='emergency'?emHTML():S.view==='ref'?refHTML():S.view==='new'?newHTML():S.view==='handouts'?hoHTML():calcHTML();
  b.querySelectorAll('details').forEach(d=>{const k=d.id||d.querySelector('summary').textContent;if(open.includes(k))d.open=true});
  if(wasWt){const n=b.querySelector(sel);n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}
 
@@ -1024,8 +1090,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.8.0';
+const VER='2.9.0';
 const CHANGES=[
+{v:'2.9.0',d:'Oct 23, 2026',i:['Search box on the home screen: finds modules, SOS cards and Ref cards.','New modules: Peri-implantitis (EFP S3 2023), Biopsy & specimens, Local anesthetic complications.','Post-op handouts (English/Spanish) drafted for review; hidden until approved.','Feedback button built; appears once a feedback email is set.']},
 {v:'2.8.0',d:'Oct 23, 2026',i:['New Trauma module: Dentoalveolar trauma. Avulsion (dry time, apex stage), luxations, intrusion by depth, root, crown and alveolar fractures, primary-tooth rule (IADT 2020).']},
 {v:'2.7.1',d:'Oct 23, 2026',i:['Full-arch: bruxism step. Load-control checklist, plus botulinum toxin as an optional pre-surgical adjunct (low evidence).']},
 {v:'2.7.0',d:'Oct 23, 2026',i:['TMD: botulinum toxin step for muscle pain that persists after adequate conservative care, with consent points, dose ranges from the literature and contraindications.']},
@@ -1050,6 +1117,50 @@ function gate(go){
  <button class="gobtn" data-ack>I understand</button></div>`;
  app.querySelector('[data-ack]').addEventListener('click',e=>{e.stopPropagation();try{localStorage.setItem(ACK,'1')}catch(x){}go()},{once:true});
 }
+
+/* ===== Patient handouts (EN/ES). Drafts until HANDOUTS_LIVE is true. ===== */
+const HANDOUTS_LIVE=false;
+const PHONE='[office phone]';
+const HO=[
+{id:'ext',src:['mcgill'],t:{en:'After tooth removal',es:'Después de una extracción dental'},i:{
+en:['Bite firmly on the gauze for 30 minutes. Some oozing for 1–2 days is normal.','Heavy bleeding: fold clean gauze, place it on the site and bite firmly for 1 hour. Still bleeding? Call us.','Ice the cheek 20 minutes on, 20 minutes off, for the first 2 days. Swelling is worst on day 2–3.','Keep your head raised on pillows for 2 nights.','First 24 hours: no rinsing, spitting, straws or smoking. They can pull out the blood clot.','From day 2: rinse gently with warm salt water (½ teaspoon in 1 cup) after meals.','Soft foods for 3 days. No hard or crunchy food for 5 days. Drink plenty of fluids.','Take pain medicine as directed. Start before the numbness wears off. Finish any antibiotic.','No alcohol for 24 hours, or while taking opioid pain medicine.','Call us: bleeding that will not stop with pressure; pain or swelling getting worse after day 3; fever over 100.4°F (38°C); bad taste or pus; numb lip, chin or tongue the next day.','Trouble breathing or swallowing: call 911.'],
+es:['Muerda firmemente la gasa durante 30 minutos. Es normal un poco de sangrado leve por 1–2 días.','Sangrado abundante: doble una gasa limpia, colóquela sobre la herida y muerda firme por 1 hora. ¿Sigue sangrando? Llámenos.','Aplique hielo en la mejilla 20 minutos sí y 20 minutos no durante los primeros 2 días. La hinchazón es mayor el día 2–3.','Duerma con la cabeza elevada sobre almohadas durante 2 noches.','Primeras 24 horas: no se enjuague, no escupa, no use popotes (pajillas) y no fume. Esto puede desprender el coágulo.','Desde el día 2: enjuáguese suavemente con agua tibia con sal (½ cucharadita en 1 taza) después de comer.','Comidas blandas por 3 días. Nada duro ni crujiente por 5 días. Tome muchos líquidos.','Tome el medicamento para el dolor según las indicaciones. Empiece antes de que se pase la anestesia. Termine el antibiótico si se lo recetaron.','No tome alcohol por 24 horas, ni mientras tome analgésicos opioides.','Llámenos si tiene: sangrado que no para con presión; dolor o hinchazón que empeora después del día 3; fiebre de más de 100.4°F (38°C); mal sabor o pus; labio, mentón o lengua adormecidos al día siguiente.','Dificultad para respirar o tragar: llame al 911.']}},
+{id:'imp',src:['mcgill'],t:{en:'After implant, bone graft or sinus lift surgery',es:'Después de implantes, injerto óseo o elevación de seno'},i:{
+en:['Bite on the gauze for 30 minutes. Some oozing for 1–2 days is normal.','Ice 20 minutes on, 20 off, for 2 days. Keep your head raised for 2 nights.','Do not chew on the surgery side. Do not touch the site with your tongue or fingers, or pull your lip to look.','Soft foods until we tell you otherwise. No hard or crunchy food.','Brush your other teeth normally. Use the rinse we prescribed, or warm salt water from day 2.','Wear a denture or flipper only as we instructed. It must not press on the surgery site.','Small sand-like graft granules may come out for a few days. This is normal.','Sinus lift: do not blow your nose for at least 1 week. Sneeze with your mouth open. No flying for 2 weeks. No straws.','Do not smoke. Smoking raises the risk that the implant or graft fails.','Call us: bleeding that will not stop; pain or swelling getting worse after day 3; fever; pus; a loose healing cap; exposed graft or membrane; air or fluid passing between your mouth and nose; numbness the next day.'],
+es:['Muerda la gasa durante 30 minutos. Es normal un poco de sangrado leve por 1–2 días.','Hielo 20 minutos sí y 20 no durante 2 días. Duerma con la cabeza elevada por 2 noches.','No mastique del lado de la cirugía. No toque la zona con la lengua ni los dedos, ni jale el labio para mirar.','Comidas blandas hasta que le indiquemos lo contrario. Nada duro ni crujiente.','Cepille sus otros dientes normalmente. Use el enjuague recetado, o agua tibia con sal desde el día 2.','Use su dentadura o puente removible solo como le indicamos. No debe presionar la zona operada.','Pueden salir pequeños gránulos del injerto, como arena, por unos días. Es normal.','Elevación de seno: no se suene la nariz por al menos 1 semana. Estornude con la boca abierta. No viaje en avión por 2 semanas. No use popotes.','No fume. Fumar aumenta el riesgo de que fallen el implante o el injerto.','Llámenos si tiene: sangrado que no para; dolor o hinchazón que empeora después del día 3; fiebre; pus; un tornillo de cicatrización flojo; injerto o membrana expuestos; paso de aire o líquido entre la boca y la nariz; adormecimiento al día siguiente.']}},
+{id:'arch',src:['mcgill'],t:{en:'After full-arch (fixed teeth same day) surgery',es:'Después de cirugía de arcada completa (dientes fijos el mismo día)'},i:{
+en:['First 2 days: gauze, ice and head raised, as for any oral surgery.','Your new teeth are temporary and fixed in place. Do not try to remove them.','Diet: liquids and very soft food for the first [__] weeks, then fork-tender food until we clear you (usually [__] weeks). Do not bite into hard food with your front teeth.','Clean under the bridge twice a day with a water flosser from day [__]. Use the rinse we prescribed.','Your speech and bite will feel different for a few weeks. This is normal.','Wear your night guard every night if we gave you one.','Call us: a loose, cracked or moving bridge; a bite that feels uneven or hurts on one spot; swelling, pus or fever.','Keep every follow-up visit. They protect the implants while they heal.'],
+es:['Primeros 2 días: gasa, hielo y cabeza elevada, como en cualquier cirugía oral.','Sus dientes nuevos son provisionales y están fijos. No intente quitarlos.','Dieta: líquidos y comida muy blanda las primeras [__] semanas; después, comida que se pueda partir con un tenedor hasta que le demos el alta (por lo general [__] semanas). No muerda comida dura con los dientes de enfrente.','Limpie debajo del puente dos veces al día con un irrigador de agua desde el día [__]. Use el enjuague recetado.','Su forma de hablar y su mordida se sentirán diferentes por unas semanas. Es normal.','Use su protector nocturno todas las noches si le dimos uno.','Llámenos si: el puente está flojo, roto o se mueve; la mordida se siente dispareja o duele en un punto; tiene hinchazón, pus o fiebre.','Asista a todas sus citas de control. Protegen los implantes mientras sanan.']}},
+{id:'sed',src:['hsdm'],t:{en:'After IV sedation',es:'Después de la sedación intravenosa'},i:{
+en:['A responsible adult must take you home and stay with you for the rest of the day (at least 4 hours).','Until tomorrow morning: no driving, machinery, cooking on the stove, or important decisions or signing documents.','No alcohol for 24 hours. Do not drive while taking opioid pain medicine.','Do not care for young children alone today.','Start with sips of clear fluids, then light food. For nausea, take small sips; ginger ale can help.','Rest with your head raised. You may feel sleepy or forgetful today.','A small bruise at the IV site is normal. Call us for a red, painful streak or swelling in the arm.','Call 911: trouble breathing, cannot be woken, or chest pain.'],
+es:['Un adulto responsable debe llevarlo a casa y quedarse con usted el resto del día (al menos 4 horas).','Hasta mañana por la mañana: no maneje, no use maquinaria, no cocine en la estufa, ni tome decisiones importantes o firme documentos.','No tome alcohol por 24 horas. No maneje mientras tome analgésicos opioides.','No cuide solo a niños pequeños hoy.','Empiece con sorbos de líquidos claros y luego comida ligera. Si tiene náuseas, tome sorbos pequeños; el ginger ale puede ayudar.','Descanse con la cabeza elevada. Puede sentirse con sueño u olvidadizo hoy.','Es normal un pequeño moretón donde estuvo el suero. Llámenos si hay una línea roja y dolorosa o hinchazón en el brazo.','Llame al 911 si: le cuesta respirar, no se puede despertar o tiene dolor en el pecho.']}}];
+const HO_FOR={extraction:'ext',ao:'ext',implant:'imp',graft:'imp',sinus:'imp',arch:'arch',sed:'sed'};
+function hoText(h,l){return `${h.t[l]}\n\n${h.i[l].map(x=>'• '+x.replace('[office phone]',PHONE)).join('\n')}\n\n${l==='es'?'Teléfono':'Phone'}: ${PHONE}`}
+function hoHTML(){const l=S.lang||'en';
+ return `${HANDOUTS_LIVE?'':'<div class="red"><b>DRAFT — pending Dr. Young’s review.</b> Not linked in the app yet. Fill the [__] blanks and the office phone before release.</div>'}
+ <div class="toggles" style="margin-bottom:10px"><button class="tg${l==='en'?' on':''}" data-lang="en" aria-pressed="${l==='en'}">English</button><button class="tg${l==='es'?' on':''}" data-lang="es" aria-pressed="${l==='es'}">Español</button></div>
+ ${HO.map(h=>`<details class="box" id="ho-${h.id}"${S.hoOpen===h.id?' open':''}><summary>${esc(h.t[l])}</summary><div class="inner look"><ul>${h.i[l].map(x=>`<li>${esc(x)}</li>`).join('')}</ul><button class="go" data-share="${h.id}">${l==='es'?'Compartir':'Share'} ↗</button> <span class="small">${h.src.map(srcLink).join(' · ')}</span></div></details>`).join('')}
+ <textarea id="copybox" class="copybox" hidden aria-label="Handout text"></textarea><p class="caveat">Plain-language drafts written from published patient instructions; edit to match your practice.</p>`}
+async function shareHO(id,btn){const h=HO.find(x=>x.id===id),l=S.lang||'en',t=hoText(h,l);
+ try{if(navigator.share){await navigator.share({title:h.t[l],text:t});return}}catch(e){if(e&&e.name==='AbortError')return}
+ try{await navigator.clipboard.writeText(t);btn.textContent=l==='es'?'Copiado':'Copied'}catch(e){showCopy(t)}}
+
+/* ===== Feedback (hidden until an address is set) ===== */
+const FEEDBACK='';
+function fbHTML(where){if(!FEEDBACK)return'';const sub=encodeURIComponent(`OMS Compass v${VER} · ${where}`),body=encodeURIComponent(`Module/section: ${where}\nVersion: v${VER}\n\nWhat looks wrong or is missing:\n\n(No patient identifiers, please.)`);
+ return`<p class="caveat"><a href="mailto:${FEEDBACK}?subject=${sub}&body=${body}">Report a problem or suggest a change ↗</a></p>`}
+
+/* ===== Search across modules, SOS and Ref ===== */
+let IDX=null;
+function idx(){if(IDX)return IDX;const strip=t=>String(t).replace(/<[^>]+>/g,' ');
+ IDX=[...MODS.map(m=>({k:'mod',id:m.id,t:m.title,sub:m.g,x:[m.title,m.d,m.red||'',m.caveat,JSON.stringify(m.nodes),JSON.stringify(m.look||'')].join(' ').toLowerCase()})),
+  ...EMS.map(e=>({k:'em',id:e.id,t:e.t,sub:'SOS',x:[e.t,e.s,strip(e.steps().join(' '))].join(' ').toLowerCase()})),
+  ...REF.map(r=>({k:'ref',id:r.t,t:r.t,sub:'Ref',x:[r.t,r.k,r.i.join(' ')].join(' ').toLowerCase()})),
+  ...(HANDOUTS_LIVE?HO.map(h=>({k:'ho',id:h.id,t:h.t.en,sub:'Patient handout',x:(h.t.en+' '+h.i.en.join(' ')).toLowerCase()})):[])];return IDX}
+function hitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);
+ const hits=idx().filter(e=>terms.every(t=>e.x.includes(t))).sort((a,b)=>(terms.every(t=>b.t.toLowerCase().includes(t))-terms.every(t=>a.t.toLowerCase().includes(t))));
+ if(!hits.length)return'<p class="caveat">No match.</p>';
+ return`<div class="mods">${hits.slice(0,25).map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`}
 /* ===== Render ===== */
 const app=document.getElementById('app');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1057,8 +1168,9 @@ const M=id=>MODS.find(m=>m.id===id);
 function home(){
  S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const groups=[...new Set(MODS.map(m=>m.g))].sort((x,y)=>ORDER.indexOf(x)-ORDER.indexOf(y));
  app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · <button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button></span></div>`+tabsHTML('decide')+
- groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+
- `<p class="foot">Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`;
+ `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Search everything — e.g. avulsion, Dantrium, sinus" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="groups"${S.q?' hidden':''}>`+
+ groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+(HANDOUTS_LIVE?`<div class="lab group">Patients</div><div class="mods"><button class="mod" data-view="handouts"><div><b>Post-op handouts</b><span>English · Español · share by text</span></div><i aria-hidden="true">›</i></button></div>`:'')+`</div>`+
+ `<p class="foot">Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);
 }
 function inputsHTML(m){
@@ -1099,7 +1211,7 @@ function flowHTML(m){
   notes.forEach(s=>items.push(`<li><b>${esc(s.n.t)}:</b> ${esc(s.n.x)}${s.n.src?` <span class="small">(${esc(SRC[s.n.src].n.split(' · ')[0])})</span>`:''}</li>`));
   const srcs=[o.src,...notes.map(s=>s.n.src)].filter((v,i,a)=>v&&a.indexOf(v)===i);
   const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
-  parts.push(`<div class="plan ${o.tone||''}"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':'Plan'}</div><div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.join('')}</ol>`:''}${go?`<div>${go}</div>`:''}${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<button class="go" data-copy>Copy plan for the note</button><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div>`)}
+  parts.push(`<div class="plan ${o.tone||''}"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':'Plan'}</div><div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.join('')}</ol>`:''}${go?`<div>${go}</div>`:''}${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<button class="go" data-copy>Copy plan for the note</button>${HANDOUTS_LIVE&&HO_FOR[m.id]?` <button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button>`:''}<textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div>`)}
  return parts.join('');
 }
 function calcs(m){
@@ -1118,7 +1230,7 @@ function open(id){
  <div id="flow"></div>
  <p class="caveat">${esc(m.caveat)}</p>
  ${m.look?`<details class="box"><summary>What to look for</summary><div class="inner look">${m.look.map(([h,l])=>`<h4>${esc(h)}</h4><ul>${l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`).join('')}</div></details>`:''}
- ${m.refs.length?`<details class="box"><summary>Sources <em>${m.refs.length}</em></summary><div class="inner">${m.refs.map(k=>{const s=SRC[k];return`<div class="src"><a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a><span>${esc(s.v)}</span></div>`}).join('')}</div></details>`:''}`;
+ ${m.refs.length?`<details class="box"><summary>Sources <em>${m.refs.length}</em></summary><div class="inner">${m.refs.map(k=>{const s=SRC[k];return`<div class="src"><a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a><span>${esc(s.v)}</span></div>`}).join('')}</div></details>`:''}${fbHTML(m.title)}`;
  refresh();window.scrollTo(0,0);
  try{history.replaceState(null,'','#'+id)}catch(e){}
 }
@@ -1135,6 +1247,11 @@ app.addEventListener('click',e=>{
  if(b.dataset.asa){S.asa=b.dataset.asa==='3'?'3':'12';return rebody()}
  if(b.dataset.rc!=null){const rc=S.rcri=S.rcri||{};rc[b.dataset.rc]=!rc[b.dataset.rc];return rebody()}
  if(b.dataset.open)return open(b.dataset.open);
+ if(b.dataset.em){S.emOpen=b.dataset.em;view('emergency');const d=document.getElementById('em-'+b.dataset.em);d&&d.scrollIntoView({block:'start'});return}
+ if(b.dataset.reff){S.refq=b.dataset.reff;return view('ref')}
+ if(b.dataset.ho){S.hoOpen=b.dataset.ho;view('handouts');const d=document.getElementById('ho-'+b.dataset.ho);d&&d.scrollIntoView({block:'start'});return}
+ if(b.dataset.lang){S.lang=b.dataset.lang;return rebody()}
+ if(b.dataset.share)return shareHO(b.dataset.share,b);
  if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
  const id=S.mod;if(!id)return;
  if(b.hasAttribute('data-copy')){const m=M(id),w=walk(m),t=planText(m,w);try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}
@@ -1145,11 +1262,11 @@ app.addEventListener('click',e=>{
  if(b.dataset.sb){const k='sb_'+b.dataset.sb;i[k]=!i[k];i.sbTouched=true;b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
  if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
 });
-app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return rebody()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
+app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q')){S.q=el.value.trim();const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return rebody()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
 app.addEventListener('change',e=>{const el=e.target;if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
 const start=(location.hash||'').slice(1);
-const go=()=>start==='emergency'||start==='calc'||start==='ref'||start==='new'?view(start):M(start)?open(start):home();
+const go=()=>start==='emergency'||start==='calc'||start==='ref'||start==='new'||start==='handouts'?view(start):M(start)?open(start):home();
 acked()?go():gate(go);
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 </script>

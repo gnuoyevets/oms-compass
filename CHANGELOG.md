@@ -2,6 +2,12 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.9.0 — Oct 23, 2026
+- Search box on the home screen across modules, SOS cards and Ref cards.
+- New modules: Peri-implantitis (EFP S3 2023, Herrera et al.), Biopsy & specimens (USC Ostrow; ADA oral cancer guideline), Local anesthetic complications (broken needle, methemoglobinemia, LAST pointer, facial palsy, hematoma, paresthesia; Kodsi 2012, emDocs, Kim & Moon 2013).
+- Post-op handouts drafted in English and Spanish (extractions, implants/grafts/sinus lift, full-arch, IV sedation), shareable by text. Gated: HANDOUTS_LIVE=false until Steven approves; preview at #handouts. Blanks to fill: full-arch diet and cleaning timing, office phone.
+- Feedback button built (mailto with module and version); hidden until FEEDBACK address is set.
+
 ## v2.8.0 — Oct 23, 2026
 - New Trauma module: Dentoalveolar trauma. Avulsion by dry time and apex stage, replant contraindications, alveolar fracture, extrusion/lateral luxation, intrusion by depth, root fracture, crown fracture with pulp exposure (Cvek), minor injuries; primary teeth never replanted. Base: IADT 2020 via AAPD 2025 flowsheet and published summaries. AAE Apr 2026 guidelines noted; full text not yet reviewed.
 
