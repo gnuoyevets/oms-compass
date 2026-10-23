@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.7.1 — Oct 23, 2026
+- Full-arch: new bruxism question. Yes adds a load-control note to the plan (splint, flat occlusion, short cantilevers, extra implant, night guard) and botulinum toxin A as an optional pre-surgical adjunct. Evidence: J Oral Rehabil 2023 meta-analysis (OR 2.19 for failure in bruxers); Mijiritsky 2016 retrospective series (n=26). Timing "~1–2 weeks before" tagged verify.
+
 ## v2.7.0 — Oct 23, 2026
 - TMD: botulinum toxin step for muscle pain still significant after adequate conservative care. Plan card lists consent points, literature dose ranges (no standard dose), contraindications and repeat-dose cautions. Sources: Ferrillo et al., Toxins 2026; RCS England (not first line); NHS Humber & North Yorkshire policy 2025.
 

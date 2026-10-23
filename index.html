@@ -257,6 +257,8 @@ aha26:{n:'AHA/ASA · 2026 guideline, early management of acute ischemic stroke',
 merckhtn:{n:'Merck Manual · Hypertensive emergencies',v:'Reviewed Feb 2025; updated Apr 2026',u:'https://www.merckmanuals.com/en-ca/professional/cardiovascular-disorders/hypertension/hypertensive-emergencies'},
 adrenal:{n:'Tennessee EMS · Adrenal insufficiency protocol',v:'Hydrocortisone 100 mg IM/IV; NS 20 mL/kg',u:'https://tennessee.gov/content/dam/tn/health/documents/EMS_Adrenal_Insufficiency_Protocol_Guideline.pdf'},
 coreem:{n:'emDocs / CoreEM · Adrenal crisis',v:'May 2017 · hydrocortisone 100 mg; dexamethasone 4 mg IV',u:'https://www.emdocs.net/core-em-adrenal-crisis/'},
+brux:{n:'Bruxism and dental implants · systematic review & meta-analysis (Malmö)',v:'J Oral Rehabil 2023 · OR 2.19 for failure',u:'https://dentalresourceasia.com/dental-implants-at-risk-bruxism-linked-to-higher-failure-rates/'},
+mijir:{n:'Mijiritsky et al. · BoNT-A before immediately loaded full-arch implants in bruxers',v:'J Craniofac Surg 2016;27:668 · retrospective, n=26',u:'https://research.uniupo.it/en/publications/botulinum-toxin-type-a-as-preoperative-treatment-for-immediately-/'},
 bont:{n:'Ferrillo et al. · Botulinum toxin for TMD: current evidence (narrative review)',v:'Toxins 2026;18:419 · Sep 29, 2026',u:'https://www.mdpi.com/2072-6651/18/10/419'},
 bontnhs:{n:'NHS Humber & North Yorkshire · Botulinum toxin to masticatory muscles (policy)',v:'2025 · not commissioned; relapse ~3 months',u:'https://humberandnorthyorkshire.icb.nhs.uk/wp-content/uploads/2025/07/145-Botulinum-Toxin-A-injection-to-Masticatory-Muscles.docx'},
 dant:{n:'Dantrium Intravenous · prescribing information',v:'20 mg vial + 60 mL sterile water; max 10 mg/kg',u:'https://www.rxlist.com/dantrium-drug.htm'},
@@ -578,13 +580,15 @@ const MODS=[
  look:[['CBCT',['Septa in about a third of sinuses: perforation about 40% vs 12% (Yang 2024)','PSAA about 7 mm above the floor; >2 mm diameter raises bleeding risk','Membrane <0.5 mm tears easily; >3 mm may signal pathology (Periospot, unreferenced)']],['Perforation plan',['<5 mm: fold or suture; 5–10 mm: collagen membrane; >10 mm: laminar plate + collagen, consider staging','Perforation alone did not lower survival: 97.7% vs 98.9% (Diaz-Olivares 2021)']],['Graft & aftercare',['Survival similar across materials; DBBM holds volume best (Del Fabbro 2004)','Sinus precautions: no nose-blowing, sneeze open-mouthed, no straws, flying or diving short-term','Positional vertigo after osteotome malleting usually settles within about a month (Testori 2023)']]]},
 
 {id:'arch',g:'Implants',title:'Full-arch',d:'Immediate vs delayed loading · v6 checklist',
- start:'a',refs:['iti13','iti18','schwarz','fa6','board'],
+ start:'a',refs:['iti13','iti18','schwarz','fa6','board','brux','mijir','bont'],
  red:'Plan and consent a delayed-loading fallback before any immediate-load surgery.',
  caveat:'No validated torque/ISQ cutoff; set a case-specific threshold before surgery (v6). Maxilla: 2026 Global Consensus sets 4 implants as the minimum and prefers 5–6 when anatomy allows; your v6 accepts 4 with good AP spread and a rigid splint.',
  nodes:{
  a:{q:'Fixed or removable endpoint agreed with the restorative team and lab?',h:['Transition line hidden at full smile; restorative space after planned reduction','Lip support, phonetics, hygiene access'],yes:'b',no:'o1'},
  o1:{out:'Settle the prosthetic endpoint first.',tone:'action'},
- b:{q:'Augmentation or sinus elevation needed?',yes:'o2',no:'c'},
+ b:{q:'Augmentation or sinus elevation needed?',yes:'o2',no:'bx'},
+ bx:{q:'Bruxism or heavy parafunction?',h:['History or partner report of grinding/clenching; morning jaw fatigue','Wear facets, fractured restorations, masseter hypertrophy'],yes:'nBx',no:'c'},
+ nBx:{note:1,t:'Bruxism load control',x:'Bruxism roughly doubles implant failure odds (OR 2.2; J Oral Rehabil 2023). First: rigid cross-arch splint, flat provisional occlusion with no cantilever contact, short cantilevers, an extra implant if bone allows, night guard on the definitive prosthesis. Optional adjunct: botulinum toxin A to the masseter ± temporalis before surgery so muscle force is down during early osseointegration (onset ~1–2 weeks; verify timing). Evidence is one retrospective series of 26 full-arch bruxers (0 vs 2 implant failures; Mijiritsky 2016). Off-label; consent as in the TMD module, including possible bone loss with repeated doses.',src:'brux',next:'c'},
  o2:{out:'Delayed loading likely; confirm with the restorative team.',src:'iti13',go:'sinus',go2:'graft'},
  c:{q:'At surgery: each implant stable, with adequate distribution and AP spread?',yes:'o3',no:'o4'},
  o3:{out:'Immediate loading with a splinted provisional.',src:'iti13',ex:'Verify passive fit, cantilever limits and provisional occlusion.'},
@@ -987,8 +991,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.7.0';
+const VER='2.7.1';
 const CHANGES=[
+{v:'2.7.1',d:'Oct 23, 2026',i:['Full-arch: bruxism step. Load-control checklist, plus botulinum toxin as an optional pre-surgical adjunct (low evidence).']},
 {v:'2.7.0',d:'Oct 23, 2026',i:['TMD: botulinum toxin step for muscle pain that persists after adequate conservative care, with consent points, dose ranges from the literature and contraindications.']},
 {v:'2.6.1',d:'Oct 23, 2026',i:['Adrenal crisis: dexamethasone (Decadron) 4 mg IV as the alternative to Solu-Cortef.','Draft artifact deleted; GitHub is the only source.']},
 {v:'2.6.0',d:'Oct 23, 2026',i:[
