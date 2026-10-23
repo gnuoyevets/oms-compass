@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.12.2 + Handouts app v1.5 — Oct 23, 2026
+- Bayside review link changed from the Google Maps profile to the direct review form: https://g.page/r/CVPfUjdMh6k6EBM/review
+
 ## v2.12.1 + Handouts app v1.4 — Oct 23, 2026
 - Bayside version (handouts/?site=bayside and the Compass Bayside switch) now shows and dials the Bayside office: (508) 422-5007. Dr. Young version unchanged at (401) 273-7802.
 
