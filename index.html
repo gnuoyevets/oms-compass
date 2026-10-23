@@ -1093,8 +1093,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.11.0';
+const VER='2.11.1';
 const CHANGES=[
+{v:'2.11.1',d:'Oct 23, 2026',i:['Handouts: Google review request (Steven H. Young, DDS, OMS, LLC) added to the end of every shared handout and to the patient handouts page, in all four languages.']},
 {v:'2.11.0',d:'Oct 23, 2026',i:['Handouts: added Kriolu (Cape Verdean, Santiago variant) and Mandarin (Simplified Chinese) to all four handouts — translations pending native-speaker review.','Handouts: no smoking or vaping — extraction ≥72 h (ideally 1 week); implant/graft and full-arch ≥2 weeks, quitting best (full-arch had no smoking line before). Dr. Young protocol.','Extraction handout: soft foods 2 weeks; no hard, crunchy or seedy food 3 weeks (was 3 and 5 days). Dr. Young protocol.']},
 {v:'2.10.3',d:'Oct 23, 2026',i:['Botulinum toxin: TMD and full-arch now use Dr. Young protocol — Botox 100 U/2.5 mL, masseter only, 4 points per side, 25 U per side if toxin-naive, titrate to 40 U; every 3–4 months; 2–3 weeks before full-arch surgery (timing tagged verify). Sources: Chen 2023 meta-analysis, Gkioka 2024 review.']},
 {v:'2.10.2',d:'Oct 23, 2026',i:['Handouts: no salt-water rinses when Augma Shield was used for grafting (extraction and implant/graft handouts, English and Spanish).']},
@@ -1131,7 +1132,8 @@ function gate(go){
 const HANDOUTS_LIVE=true;
 const PHONE='(401) 273-7802';
 const HO_LANGS=[['en','English'],['es','Español'],['kea','Kriolu'],['zh','中文']];
-const HO_UI={en:{ph:'Phone',sh:'Share',cp:'Copied'},es:{ph:'Teléfono',sh:'Compartir',cp:'Copiado'},kea:{ph:'Telefoni',sh:'Partilha',cp:'Kopiadu'},zh:{ph:'电话',sh:'分享',cp:'已复制'}};
+const REVIEW='https://g.page/r/CWM8GLnZutc8EBE/review';
+const HO_UI={en:{rv:'Steven H. Young, DDS, OMS, LLC would love your feedback. Post a review to our profile.',ph:'Phone',sh:'Share',cp:'Copied'},es:{rv:'A Steven H. Young, DDS, OMS, LLC le encantaría conocer su opinión. Publique una reseña en nuestro perfil.',ph:'Teléfono',sh:'Compartir',cp:'Copiado'},kea:{rv:'Steven H. Young, DDS, OMS, LLC ta gosta txeu di obi bu opinion. Poi un komentáriu na nos perfil.',ph:'Telefoni',sh:'Partilha',cp:'Kopiadu'},zh:{rv:'Steven H. Young, DDS, OMS, LLC 期待您的反馈。欢迎在我们的主页上发表评价。',ph:'电话',sh:'分享',cp:'已复制'}};
 const HO=[
 {id:'ext',src:['mcgill'],t:{en:'After tooth removal',es:'Después de una extracción dental',kea:"Dipôs di tira denti",zh:"拔牙后须知"},i:{
 en:['Bite firmly on the gauze for 30 minutes. Some oozing for 1–2 days is normal.','Heavy bleeding: fold clean gauze, place it on the site and bite firmly for 1 hour. Still bleeding? Call us.','Ice the cheek 20 minutes on, 20 minutes off, for the first 2 days. Swelling is worst on day 2–3.','Keep your head raised on pillows for 2 nights.','First 24 hours: no rinsing, spitting or straws. They can pull out the blood clot.','Do not smoke or vape for at least 72 hours, ideally 1 week. Smoking slows healing and raises the risk of a painful dry socket.','From day 2: rinse gently with warm salt water (½ teaspoon in 1 cup) after meals. If we grafted the socket with Augma Shield, skip the salt water and use only the rinse we prescribed.','Soft foods for 2 weeks. No hard, crunchy or seedy food (nuts, chips, popcorn, seeds) for 3 weeks. Drink plenty of fluids.','Take pain medicine as directed. Start before the numbness wears off. Finish any antibiotic.','No alcohol for 24 hours, or while taking opioid pain medicine.','Call us: bleeding that will not stop with pressure; pain or swelling getting worse after day 3; fever over 100.4°F (38°C); bad taste or pus; numb lip, chin or tongue the next day.','Trouble breathing or swallowing: call 911.'],
@@ -1154,7 +1156,7 @@ es:['Un adulto responsable debe llevarlo a casa y quedarse con usted el resto de
 kea:["Un adultu rasponsável ten ki leba-bu kasa i fika ku bu resta di dia (pelo menus 4 ora).","Ti amanhan di palmanhan: ka bu kondus, ka bu uza mákina, ka bu kuzinha na fogon, nen ka bu toma disizon importanti o sina dokumentu.","Ka bu bebe álkool pa 24 ora. Ka bu kondus enkuantu bu sta ta toma rémédiu pa dor opioidi.","Oji ka bu toma konta di mininu pikinoti sozinhu.","Kumesa ku golinhu di líkidu klaru, dipôs kumida leve. Si bu sta ku nóziu, bebe golinhu pikinoti; ginger ale pode djuda.","Diskansa ku kabesa altu. Oji bu pode xinti ku sonu o skesedu.","Un manxa roxu pikinoti na lugar di soru é normal. Txoma-nu si bu tene un risku burmedju ki ta dói o inxason na brasu.","Txoma 911 si: difikuldadi di rispira, ka ta kunsigi korda, o dor na pextu."],
 zh:["必须由一名负责任的成年人送您回家，并在当天余下时间陪伴您（至少4小时）。","到明天早上之前：不要开车、操作机器、用炉灶做饭，也不要做重要决定或签署文件。","24小时内不要饮酒。服用阿片类止痛药期间不要开车。","今天不要独自照顾幼儿。","先小口喝清澈的液体，再吃清淡的食物。如有恶心，请小口慢喝；姜汁汽水可能有帮助。","休息时垫高头部。今天您可能会感到困倦或健忘。","静脉输液处有小块淤青是正常的。如手臂出现发红、疼痛的条纹或肿胀，请致电我们。","请拨打911：呼吸困难、叫不醒，或胸痛。"]}}];
 const HO_FOR={extraction:'ext',ao:'ext',implant:'imp',graft:'imp',sinus:'imp',arch:'arch',sed:'sed'};
-function hoText(h,l){return `${h.t[l]}\n\n${h.i[l].map(x=>'• '+x.replace('[office phone]',PHONE)).join('\n')}\n\n${HO_UI[l].ph}: ${PHONE}`}
+function hoText(h,l){return `${h.t[l]}\n\n${h.i[l].map(x=>'• '+x.replace('[office phone]',PHONE)).join('\n')}\n\n${HO_UI[l].ph}: ${PHONE}\n\n${HO_UI[l].rv}\n${REVIEW}`}
 function hoHTML(){const l=S.lang||'en';
  return `${HANDOUTS_LIVE?'':'<div class="red"><b>DRAFT — pending Dr. Young’s review.</b> Not linked in the app yet. Approve to make them visible in the app.</div>'}
  <div class="toggles" style="margin-bottom:10px">${HO_LANGS.map(([c,n])=>`<button class="tg${l===c?' on':''}" data-lang="${c}" lang="${c}" aria-pressed="${l===c}">${n}</button>`).join('')}</div>

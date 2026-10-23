@@ -32,16 +32,19 @@ li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--re
 .back{border:1px solid var(--line);background:var(--surface);color:var(--accent);border-radius:10px;min-height:44px;padding:0 14px;font:600 16px inherit;font-family:inherit;cursor:pointer;margin-bottom:12px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .btn{min-height:50px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 16px inherit;font-family:inherit;cursor:pointer}
+.rev{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:16px}
+.rev p{margin:0 0 10px}
+.rev a{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:12px;border:1px solid var(--accent);color:var(--accent);font-weight:700;text-decoration:none}
 .note{font-size:14px;color:var(--muted);margin-top:22px}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-@media print{body{background:#fff;color:#000;font-size:13pt}.lang,.back,.row,.noprint{display:none!important}.call{background:none;color:#000;justify-content:flex-start;margin:8px 0;padding:0;min-height:0}li.warn{background:none;color:#000;border:1px solid #000}}
+@media print{.rev{border:1px solid #000}.rev a{border:0;justify-content:flex-start;min-height:0;color:#000}.rev a::after{content:' — ' attr(href);font-weight:400}body{background:#fff;color:#000;font-size:13pt}.lang,.back,.row,.noprint{display:none!important}.call{background:none;color:#000;justify-content:flex-start;margin:8px 0;padding:0;min-height:0}li.warn{background:none;color:#000;border:1px solid #000}}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
 <script>
 /* Patient handouts — same text as OMS Compass (Post-op tab): EN/ES/Kriolu/中文. Edit both together. */
-const PHONE='(401) 273-7802',TEL='+14012737802';
+const PHONE='(401) 273-7802',TEL='+14012737802',REVIEW='https://g.page/r/CWM8GLnZutc8EBE/review';
 const HO=[
 {id:'ext',t:{en:'After tooth removal',es:'Después de una extracción dental',kea:"Dipôs di tira denti",zh:"拔牙后须知"},i:{
 en:['Bite firmly on the gauze for 30 minutes. Some oozing for 1–2 days is normal.','Heavy bleeding: fold clean gauze, place it on the site and bite firmly for 1 hour. Still bleeding? Call us.','Ice the cheek 20 minutes on, 20 minutes off, for the first 2 days. Swelling is worst on day 2–3.','Keep your head raised on pillows for 2 nights.','First 24 hours: no rinsing, spitting or straws. They can pull out the blood clot.','Do not smoke or vape for at least 72 hours, ideally 1 week. Smoking slows healing and raises the risk of a painful dry socket.','From day 2: rinse gently with warm salt water (½ teaspoon in 1 cup) after meals. If we grafted the socket with Augma Shield, skip the salt water and use only the rinse we prescribed.','Soft foods for 2 weeks. No hard, crunchy or seedy food (nuts, chips, popcorn, seeds) for 3 weeks. Drink plenty of fluids.','Take pain medicine as directed. Start before the numbness wears off. Finish any antibiotic.','No alcohol for 24 hours, or while taking opioid pain medicine.','Call us: bleeding that will not stop with pressure; pain or swelling getting worse after day 3; fever over 100.4°F (38°C); bad taste or pus; numb lip, chin or tongue the next day.','Trouble breathing or swallowing: call 911.'],
@@ -64,10 +67,10 @@ es:['Un adulto responsable debe llevarlo a casa y quedarse con usted el resto de
 kea:["Un adultu rasponsável ten ki leba-bu kasa i fika ku bu resta di dia (pelo menus 4 ora).","Ti amanhan di palmanhan: ka bu kondus, ka bu uza mákina, ka bu kuzinha na fogon, nen ka bu toma disizon importanti o sina dokumentu.","Ka bu bebe álkool pa 24 ora. Ka bu kondus enkuantu bu sta ta toma rémédiu pa dor opioidi.","Oji ka bu toma konta di mininu pikinoti sozinhu.","Kumesa ku golinhu di líkidu klaru, dipôs kumida leve. Si bu sta ku nóziu, bebe golinhu pikinoti; ginger ale pode djuda.","Diskansa ku kabesa altu. Oji bu pode xinti ku sonu o skesedu.","Un manxa roxu pikinoti na lugar di soru é normal. Txoma-nu si bu tene un risku burmedju ki ta dói o inxason na brasu.","Txoma 911 si: difikuldadi di rispira, ka ta kunsigi korda, o dor na pextu."],
 zh:["必须由一名负责任的成年人送您回家，并在当天余下时间陪伴您（至少4小时）。","到明天早上之前：不要开车、操作机器、用炉灶做饭，也不要做重要决定或签署文件。","24小时内不要饮酒。服用阿片类止痛药期间不要开车。","今天不要独自照顾幼儿。","先小口喝清澈的液体，再吃清淡的食物。如有恶心，请小口慢喝；姜汁汽水可能有帮助。","休息时垫高头部。今天您可能会感到困倦或健忘。","静脉输液处有小块淤青是正常的。如手臂出现发红、疼痛的条纹或肿胀，请致电我们。","请拨打911：呼吸困难、叫不醒，或胸痛。"]}}];
 const LANGS=[['en','English'],['es','Español'],['kea','Kriolu'],['zh','中文']];
-const UI={en:{title:'After your surgery',pick:'Choose your procedure',call:'Call the office',back:'‹ All instructions',share:'Share',print:'Print',copied:'Link copied',note:'General instructions. If your surgeon told you something different, follow your surgeon. Emergencies: call 911.'},
-es:{title:'Después de su cirugía',pick:'Elija su procedimiento',call:'Llamar a la oficina',back:'‹ Todas las instrucciones',share:'Compartir',print:'Imprimir',copied:'Enlace copiado',note:'Instrucciones generales. Si su cirujano le indicó algo diferente, siga sus indicaciones. Emergencias: llame al 911.'},
-kea:{title:'Dipôs di bu sirurjia',pick:'Skodje bu prusedimentu',call:'Txoma ofisina',back:'‹ Tudu instruson',share:'Partilha',print:'Inprimi',copied:'Link kopiadu',note:'Instruson jeral. Si bu sirurjion fla-bu otu kuza, sigi bu sirurjion. Emerjénsia: txoma 911.'},
-zh:{title:'术后须知',pick:'请选择您的手术',call:'致电诊所',back:'‹ 所有须知',share:'分享',print:'打印',copied:'链接已复制',note:'一般性说明。如果您的医生另有指示，请遵从医生的指示。紧急情况：请拨打911。'}};
+const UI={en:{title:'After your surgery',pick:'Choose your procedure',call:'Call the office',back:'‹ All instructions',share:'Share',print:'Print',copied:'Link copied',rev:'Steven H. Young, DDS, OMS, LLC would love your feedback. Post a review to our profile.',revBtn:'Leave a Google review',note:'General instructions. If your surgeon told you something different, follow your surgeon. Emergencies: call 911.'},
+es:{title:'Después de su cirugía',pick:'Elija su procedimiento',call:'Llamar a la oficina',back:'‹ Todas las instrucciones',share:'Compartir',print:'Imprimir',copied:'Enlace copiado',rev:'A Steven H. Young, DDS, OMS, LLC le encantaría conocer su opinión. Publique una reseña en nuestro perfil.',revBtn:'Dejar una reseña en Google',note:'Instrucciones generales. Si su cirujano le indicó algo diferente, siga sus indicaciones. Emergencias: llame al 911.'},
+kea:{title:'Dipôs di bu sirurjia',pick:'Skodje bu prusedimentu',call:'Txoma ofisina',back:'‹ Tudu instruson',share:'Partilha',print:'Inprimi',copied:'Link kopiadu',rev:'Steven H. Young, DDS, OMS, LLC ta gosta txeu di obi bu opinion. Poi un komentáriu na nos perfil.',revBtn:'Dexa un komentáriu na Google',note:'Instruson jeral. Si bu sirurjion fla-bu otu kuza, sigi bu sirurjion. Emerjénsia: txoma 911.'},
+zh:{title:'术后须知',pick:'请选择您的手术',call:'致电诊所',back:'‹ 所有须知',share:'分享',print:'打印',copied:'链接已复制',rev:'Steven H. Young, DDS, OMS, LLC 期待您的反馈。欢迎在我们的主页上发表评价。',revBtn:'在 Google 上发表评价',note:'一般性说明。如果您的医生另有指示，请遵从医生的指示。紧急情况：请拨打911。'}};
 const app=document.getElementById('app');
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let lang=(()=>{const n=(navigator.language||'en').toLowerCase();return n.startsWith('es')?'es':n.startsWith('zh')?'zh':(n.startsWith('kea')||n==='pt-cv')?'kea':'en'})();
@@ -77,9 +80,10 @@ const isWarn=t=>/911|^Call us|^Llámenos|^Llame|^Txoma|^出现以下情况请致
 function render(){const id=parse(),u=UI[lang];document.documentElement.lang=lang;
  const top=`<header><h1>${u.title}</h1><div class="lang" role="group" aria-label="Language">${LANGS.map(([c,n])=>`<button data-l="${c}" lang="${c}" aria-pressed="${lang===c}">${n}</button>`).join('')}</div></header>`;
  const call=`<a class="call" href="tel:${TEL}">📞 ${u.call} · ${PHONE}</a>`;
- if(!id){document.title=u.title;app.innerHTML=`${top}<p style="margin:0 0 12px;color:var(--muted)">${u.pick}</p><div class="list">${HO.map(h=>`<a class="card" href="#${h.id}-${lang}">${esc(h.t[lang])}<span>›</span></a>`).join('')}</div>${call}<p class="note">${u.note}</p>`;return}
+ const rev=`<div class="rev"><p>${esc(u.rev)}</p><a href="${REVIEW}" target="_blank" rel="noopener">★ ${esc(u.revBtn)} ↗</a></div>`;
+ if(!id){document.title=u.title;app.innerHTML=`${top}<p style="margin:0 0 12px;color:var(--muted)">${u.pick}</p><div class="list">${HO.map(h=>`<a class="card" href="#${h.id}-${lang}">${esc(h.t[lang])}<span>›</span></a>`).join('')}</div>${call}${rev}<p class="note">${u.note}</p>`;return}
  const h=HO.find(x=>x.id===id);document.title=h.t[lang];
- app.innerHTML=`${top}<button class="back" data-home>${u.back}</button><h2>${esc(h.t[lang])}</h2><ol>${h.i[lang].map(t=>`<li${isWarn(t)?' class="warn"':''}>${esc(t)}</li>`).join('')}</ol>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div><p class="note">${u.note}</p>`;
+ app.innerHTML=`${top}<button class="back" data-home>${u.back}</button><h2>${esc(h.t[lang])}</h2><ol>${h.i[lang].map(t=>`<li${isWarn(t)?' class="warn"':''}>${esc(t)}</li>`).join('')}</ol>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div>${rev}<p class="note">${u.note}</p>`;
  window.scrollTo(0,0)}
 app.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;
  if(b.dataset.l){const id=parse();lang=b.dataset.l;setHash(id);render();return}

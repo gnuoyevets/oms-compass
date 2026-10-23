@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.11.1 + Handouts app v1.2 — Oct 23, 2026
+- Google review request ("Steven H. Young, DDS, OMS, LLC would love your feedback…", g.page review link) added in EN/ES/Kriolu/中文: on the handouts page home screen and below each handout, and appended to handout text shared from the Compass Post-op tab. Printed handouts show the link URL. Kriolu/中文 wording pending native-speaker review.
+
 ## v2.11.0 + Handouts app v1.1 — Oct 23, 2026
 - Handouts (Compass Post-op tab and /handouts/): added Kriolu (Cape Verdean Creole, Santiago variant) and Mandarin (Simplified Chinese) for all four handouts. Machine-drafted by Claude; pending native-speaker review. Handouts app auto-detects Chinese phones (zh) and pt-CV/kea; direct links e.g. #ext-kea, #ext-zh.
 - No smoking or vaping: extraction ≥72 h, ideally 1 week (dry socket); implant/graft/sinus and full-arch ≥2 weeks, quitting best. Full-arch previously had no smoking line. Steven's protocol.
