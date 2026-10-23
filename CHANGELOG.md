@@ -2,6 +2,10 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.6.1 — Oct 23, 2026
+- Adrenal crisis: dexamethasone (Decadron) 4 mg IV as the alternative when Solu-Cortef is unavailable or the diagnosis is unknown. Source: emDocs/CoreEM 2017.
+- "OMS Compass Draft" artifact deleted.
+
 ## v2.6.0 — Oct 23, 2026
 - SOS: six new cards. Angioedema, bronchospasm/asthma, dropped object/aspiration, adrenal crisis, stroke, hypertensive crisis.
 - Anaphylaxis: EpiPen for the first dose; repeat doses drawn from the 1 mg/mL ampule (0.01 mg/kg, max 0.5 mg).

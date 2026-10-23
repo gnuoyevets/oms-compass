@@ -256,6 +256,7 @@ aaem:{n:'AAEM · ED management of ACE-inhibitor angioedema',v:'Board-approved No
 aha26:{n:'AHA/ASA · 2026 guideline, early management of acute ischemic stroke',v:'Stroke, Jan 26, 2026',u:'https://professional.heart.org/en/guidelines-statements/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-strokestr0000000000000513'},
 merckhtn:{n:'Merck Manual · Hypertensive emergencies',v:'Reviewed Feb 2025; updated Apr 2026',u:'https://www.merckmanuals.com/en-ca/professional/cardiovascular-disorders/hypertension/hypertensive-emergencies'},
 adrenal:{n:'Tennessee EMS · Adrenal insufficiency protocol',v:'Hydrocortisone 100 mg IM/IV; NS 20 mL/kg',u:'https://tennessee.gov/content/dam/tn/health/documents/EMS_Adrenal_Insufficiency_Protocol_Guideline.pdf'},
+coreem:{n:'emDocs / CoreEM · Adrenal crisis',v:'May 2017 · hydrocortisone 100 mg; dexamethasone 4 mg IV',u:'https://www.emdocs.net/core-em-adrenal-crisis/'},
 dant:{n:'Dantrium Intravenous · prescribing information',v:'20 mg vial + 60 mL sterile water; max 10 mg/kg',u:'https://www.rxlist.com/dantrium-drug.htm'},
 epipen:{n:'EpiPen · prescribing information',v:'0.3 mg ≥30 kg; Jr 0.15 mg 15–30 kg',u:'https://drugs.com/pro/epipen.html'},
 };
@@ -804,10 +805,11 @@ const EMS=[
  `Unresponsive, no IV: glucagon ${F('1 mg IM')} or ${F('3 mg nasal')} (ready-to-use forms preferred).`,
  `IV in place: dextrose 50% ${F('20–50 mL (10–25 g) IV')}, slowly, into a large vein.`,
  `Nothing by mouth while obtunded. No response in 10–15 min: 911.`]},
-{id:'adrenal',t:'Adrenal crisis',s:'Chronic steroids or adrenal insufficiency, with hypotension, weakness, vomiting or confusion',src:['adrenal'],steps:()=>[
+{id:'adrenal',t:'Adrenal crisis',s:'Chronic steroids or adrenal insufficiency, with hypotension, weakness, vomiting or confusion',src:['adrenal','coreem'],steps:()=>[
  `Suspect it in any patient on chronic steroids, or with adrenal insufficiency, who becomes hypotensive or obtunded.`,
  `Call 911. Supine, legs up. 100% O₂.`,
  `Hydrocortisone (Solu-Cortef) ${F('100 mg IV or IM')} now. Do not wait for labs.`,
+ `No Solu-Cortef, or adrenal insufficiency not yet diagnosed: dexamethasone (Decadron) ${F('4 mg IV')}. It has no mineralocorticoid effect; hospital switches to hydrocortisone.`,
  `Normal saline ${D(20,null,'mL',0)} IV bolus (20 mL/kg). Repeat if still hypotensive.`,
  `Check glucose; treat low (Hypoglycemia card).`,
  `Patient carries an emergency injection kit: use it. Prevention: Chronic steroids module.`]},
@@ -981,8 +983,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.6.0';
+const VER='2.6.1';
 const CHANGES=[
+{v:'2.6.1',d:'Oct 23, 2026',i:['Adrenal crisis: dexamethasone (Decadron) 4 mg IV as the alternative to Solu-Cortef.','Draft artifact deleted; GitHub is the only source.']},
 {v:'2.6.0',d:'Oct 23, 2026',i:[
  'SOS: six new cards. Angioedema, bronchospasm/asthma, dropped object/aspiration, adrenal crisis, stroke, hypertensive crisis.',
  'Anaphylaxis: EpiPen for the first dose; repeat doses drawn from the 1 mg/mL ampule.',
