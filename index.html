@@ -276,6 +276,8 @@ kodsi:{n:'Kodsi · Nerve damage associated with IAN block',v:'J Can Dent Assoc 2
 mcgill:{n:'McGill OMFS · Patient instructions (extractions; bone graft/sinus lift)',v:'Patient information pages',u:'https://www.mcgill.ca/omfs/patient-info/teeth-extractions'},
 hsdm:{n:'Harvard School of Dental Medicine · Pre- and post-sedation instructions',v:'Patient sheet',u:'https://www.hsdm.harvard.edu/resource/preandpostsedationpostopinstructions-qrpdf'},
 bont:{n:'Ferrillo et al. · Botulinum toxin for TMD: current evidence (narrative review)',v:'Toxins 2026;18:419 · Sep 29, 2026',u:'https://www.mdpi.com/2072-6651/18/10/419'},
+chen23:{n:'Chen et al. · Botulinum toxin for bruxism: systematic review & meta-analysis of RCTs',v:'Aesthetic Plast Surg 2023;47:775 · doi:10.1007/s00266-023-03256-8',u:'https://pubmed.ncbi.nlm.nih.gov/36694050/'},
+gkioka24:{n:'Gkioka et al. · Botulinum toxin A for TMD: systematic review (47 studies)',v:'Balkan J Dent Med 2024;28:172 · 10–75 U per muscle',u:'https://doi.org/10.5937/bjdm2403172g'},
 bontnhs:{n:'NHS Humber & North Yorkshire · Botulinum toxin to masticatory muscles (policy)',v:'2025 · not commissioned; relapse ~3 months',u:'https://humberandnorthyorkshire.icb.nhs.uk/wp-content/uploads/2025/07/145-Botulinum-Toxin-A-injection-to-Masticatory-Muscles.docx'},
 dant:{n:'Dantrium Intravenous · prescribing information',v:'20 mg vial + 60 mL sterile water; max 10 mg/kg',u:'https://www.rxlist.com/dantrium-drug.htm'},
 epipen:{n:'EpiPen · prescribing information',v:'0.3 mg ≥30 kg; Jr 0.15 mg 15–30 kg',u:'https://drugs.com/pro/epipen.html'},
@@ -633,7 +635,7 @@ const MODS=[
  o1:{out:'Settle the prosthetic endpoint first.',tone:'action'},
  b:{q:'Augmentation or sinus elevation needed?',yes:'o2',no:'bx'},
  bx:{q:'Bruxism or heavy parafunction?',h:['History or partner report of grinding/clenching; morning jaw fatigue','Wear facets, fractured restorations, masseter hypertrophy'],yes:'nBx',no:'c'},
- nBx:{note:1,t:'Bruxism load control',x:'Bruxism roughly doubles implant failure odds (OR 2.2; J Oral Rehabil 2023). First: rigid cross-arch splint, flat provisional occlusion with no cantilever contact, short cantilevers, an extra implant if bone allows, night guard on the definitive prosthesis. Optional adjunct: botulinum toxin A to the masseter ± temporalis before surgery so muscle force is down during early osseointegration (onset ~1–2 weeks; verify timing). Evidence is one retrospective series of 26 full-arch bruxers (0 vs 2 implant failures; Mijiritsky 2016). Off-label; consent as in the TMD module, including possible bone loss with repeated doses.',src:'brux',next:'c'},
+ nBx:{note:1,t:'Bruxism load control',x:'Bruxism roughly doubles implant failure odds (OR 2.2; J Oral Rehabil 2023). First: rigid cross-arch splint, flat provisional occlusion with no cantilever contact, short cantilevers, an extra implant if bone allows, night guard on the definitive prosthesis. Optional adjunct (Dr. Young protocol): botulinum toxin A to the masseters 2–3 weeks before surgery, so the effect peaks (~5–8 weeks; Chen 2023) through early osseointegration [verify: no full-arch trial tests this timing]. Dose as in the TMD module: Botox 100 U/2.5 mL, masseter only, 4 points per side, 25 U per side if toxin-naive, up to 40 U. Evidence for the adjunct is one retrospective series of 26 full-arch bruxers (0 vs 2 implant failures; Mijiritsky 2016). Off-label; consent as in the TMD module, including possible bone loss with repeated doses — avoid open-ended redosing.',src:'brux',next:'c'},
  o2:{out:'Delayed loading likely; confirm with the restorative team.',src:'iti13',go:'sinus',go2:'graft'},
  c:{q:'At surgery: each implant stable, with adequate distribution and AP spread?',yes:'o3',no:'o4'},
  o3:{out:'Immediate loading with a splinted provisional.',src:'iti13',ex:'Verify passive fit, cantilever limits and provisional occlusion.'},
@@ -794,7 +796,7 @@ const MODS=[
  nPsy:{note:1,t:'Mental-health referral',x:'Suicidal ideation: same-day assessment. PHQ-4 ≥9: urgent medical or mental-health referral. Continue TMD care in parallel.',src:'rcs',next:'d'},
  d:{q:'Severe joint limitation?',auto:r=>r.joint?true:undefined,ah:r=>r.joint?'Meets a severe-limitation trigger':'',h:['Closed lock affecting eating','Opening <25 mm under age 25','Joint pain with CPI >50, diet restriction and opening <30 mm'],yes:'o3',no:'bx'},
  bx:{q:'Muscle pain (myalgia) still significant after adequate, adherent conservative care?',h:['Familiar pain on masseter/temporalis palpation; worse with clenching or chewing','Self-management, physiotherapy and CBT (if indicated) already tried','First visit or joint-dominant pain: answer No'],yes:'oBx',no:'e'},
- oBx:{out:'Consider botulinum toxin A to the masseter ± temporalis, as an add-on to continued rehabilitation.',tone:'action',src:'bont',ex:'Off-label in the US. Consent: benefit is mainly at ~1 month and inconsistent at 3–6 months; chewing weakness, smile asymmetry, dysphagia; possible condylar and mandibular bone loss with repeated doses (long-term safety not established). No standard dose: literature ranges 60–100 U onabotulinumtoxinA total bilaterally, ~25 U per temporalis; units are not interchangeable between brands. Multiple small injections per muscle; skip the lateral pterygoid without guidance. Avoid with neuromuscular disease, dysphagia, site infection, aminoglycosides; individualize in pregnancy or breastfeeding. Reassess before any repeat: relapse by ~3 months is common and repeats raise adverse effects.'},
+ oBx:{out:'Consider botulinum toxin A to the masseters, as an add-on to continued rehabilitation.',tone:'action',src:'bont',src2:'chen23',ex:'Dr. Young protocol: Botox 100 U in 2.5 mL saline (4 U per 0.1 mL). Masseter only, 4 points per side, posterior-inferior. Toxin-naive: 25 U per side (~6 U, 0.15 mL per point). Inadequate response at the 4–6 week recheck: titrate to 40 U per side (10 U, 0.25 mL per point). No temporalis or lateral pterygoid. Repeat every 3–4 months, only after reassessment. Literature: 10–75 U per muscle across 47 studies (Gkioka 2024); pain relief rises with dose, onset under 4 weeks, peak 5–8 weeks, up to 24 weeks (Chen 2023). Off-label in the US; units are not interchangeable between brands. Consent: chewing weakness, smile asymmetry (keep depots posterior, away from the risorius [verify]), dysphagia, contour change; possible condylar and mandibular bone loss with repeated doses (long-term safety not established), so use the lowest effective dose. Avoid with neuromuscular disease (e.g., myasthenia gravis), dysphagia, site infection, aminoglycosides; individualize in pregnancy or breastfeeding.'},
  o3:{out:'Expedited joint assessment (OMS/TMJ).',tone:'urgent',src:'rcs',ex:'Surgery is not always indicated; discectomy is strongly advised against for chronic TMD pain (BMJ 2023).'},
  e:{q:'GCPS grade III–IV, PHQ-4 3–8, or pain ≥3 months with other chronic pain?',auto:r=>{const hi=(r.grade==='III'||r.grade==='IV')||(r.phq!=null&&r.phq>=3);return hi?true:undefined},ah:r=>r.grade?`GCPS grade ${r.grade} · CPI ${r.cpi}${r.phq!=null?` · PHQ-4 ${r.phq}`:''}`:'',yes:'o4',no:'o5'},
  o4:{out:'Self-management plus physiotherapy and CBT referral.',tone:'action',src:'bmj',ex:'Strong recommendations for chronic TMD pain: CBT, therapist-assisted mobilisation, manual trigger-point therapy, supervised jaw/postural exercise. Avoid irreversible splints, discectomy, NSAID–opioid combinations. Mapping by score level is author-created.'},
@@ -1091,8 +1093,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.10.2';
+const VER='2.10.3';
 const CHANGES=[
+{v:'2.10.3',d:'Oct 23, 2026',i:['Botulinum toxin: TMD and full-arch now use Dr. Young protocol — Botox 100 U/2.5 mL, masseter only, 4 points per side, 25 U per side if toxin-naive, titrate to 40 U; every 3–4 months; 2–3 weeks before full-arch surgery (timing tagged verify). Sources: Chen 2023 meta-analysis, Gkioka 2024 review.']},
 {v:'2.10.2',d:'Oct 23, 2026',i:['Handouts: no salt-water rinses when Augma Shield was used for grafting (extraction and implant/graft handouts, English and Spanish).']},
 {v:'2.10.1',d:'Oct 23, 2026',i:['Patient handouts moved to a fifth tab, “Post-op”, next to Ref.']},
 {v:'2.10.0',d:'Oct 23, 2026',i:['Post-op handouts live (English/Español): extractions, implants/grafts/sinus lift, full-arch, IV sedation. Open from the home screen or the “Patient handout” button on matching plans; share by text.']},
@@ -1169,6 +1172,7 @@ function hitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);
 /* ===== Render ===== */
 const app=document.getElementById('app');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const escV=v=>esc(v).replace(/ ?\[verify(?:: ([^\]]+))?\]/g,(m,why)=>(why?` (${why})`:'')+UNV);
 const M=id=>MODS.find(m=>m.id===id);
 function home(){
  S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const groups=[...new Set(MODS.map(m=>m.g))].sort((x,y)=>ORDER.indexOf(x)-ORDER.indexOf(y));
@@ -1212,9 +1216,9 @@ function flowHTML(m){
  if(w.cur){const n=w.cur.n,ah=n.ah?n.ah(r):'';
   parts.push(`<div class="cur"><div class="lab">Next question</div><div class="q">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}<div class="yn"><button class="y" data-a="${w.cur.id}" data-v="1">Yes</button><button data-a="${w.cur.id}" data-v="0">No</button></div></div>`)}
  if(w.out){const o=w.out,items=[];
-  if(o.ex)items.push(`<li>${esc(o.ex)}</li>`);
-  notes.forEach(s=>items.push(`<li><b>${esc(s.n.t)}:</b> ${esc(s.n.x)}${s.n.src?` <span class="small">(${esc(SRC[s.n.src].n.split(' · ')[0])})</span>`:''}</li>`));
-  const srcs=[o.src,...notes.map(s=>s.n.src)].filter((v,i,a)=>v&&a.indexOf(v)===i);
+  if(o.ex)items.push(`<li>${escV(o.ex)}</li>`);
+  notes.forEach(s=>items.push(`<li><b>${esc(s.n.t)}:</b> ${escV(s.n.x)}${s.n.src?` <span class="small">(${esc(SRC[s.n.src].n.split(' · ')[0])})</span>`:''}</li>`));
+  const srcs=[o.src,o.src2,...notes.map(s=>s.n.src)].filter((v,i,a)=>v&&a.indexOf(v)===i);
   const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
   parts.push(`<div class="plan ${o.tone||''}"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':'Plan'}</div><div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.join('')}</ol>`:''}${go?`<div>${go}</div>`:''}${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<button class="go" data-copy>Copy plan for the note</button>${HANDOUTS_LIVE&&HO_FOR[m.id]?` <button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button>`:''}<textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div>`)}
  return parts.join('');
