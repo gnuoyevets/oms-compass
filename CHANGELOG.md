@@ -2,6 +2,10 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.12.0 + Handouts app v1.3 — Oct 23, 2026
+- Review request: "LLC" removed — now "Steven H. Young, DDS, OMS".
+- Bayside version: gnuoyevets.github.io/oms-compass/handouts/?site=bayside names Bayside Oral & Facial Surgery and links its Google Maps profile (Seekonk). Default (no ?site) stays Steven H. Young, DDS, OMS. Compass Post-op tab has a Dr. Young / Bayside switch for shared text. Office phone is the same on both for now.
+
 ## v2.11.1 + Handouts app v1.2 — Oct 23, 2026
 - Google review request ("Steven H. Young, DDS, OMS, LLC would love your feedback…", g.page review link) added in EN/ES/Kriolu/中文: on the handouts page home screen and below each handout, and appended to handout text shared from the Compass Post-op tab. Printed handouts show the link URL. Kriolu/中文 wording pending native-speaker review.
 
