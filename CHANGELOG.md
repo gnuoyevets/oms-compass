@@ -2,6 +2,13 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.13.0 + Handouts app v1.6 — Oct 23, 2026
+- New handout: Before IV sedation (4 languages). No solid food/milk/gum 8 h; clear liquids until 2 h (ASA 2023 fasting update); ask which usual meds to take; disclose weekly GLP-1 injections (2024 multisociety guidance) and blood thinners; no smoking 12 h; no cannabis 3 days; escort stays and drives; loose sleeves, flat shoes; remove contacts/jewelry/dentures, no nail polish; call if sick. Note: Bayside website still says no water for 8 h — align office instructions.
+- Extraction handout: added tea-bag pressure, ice 36 h then moist heat, sit 1 min before standing, high-protein/no skipped meals, salt water 4–6×/day after meals and bedtime, nausea steps, normal findings, dissolving stitches/socket fills ~1 month, dry socket signs, antibiotic reaction.
+- OTC pain regimen (extraction, implant, full-arch): ibuprofen 400 mg q6h with food 2–3 days + Tylenol 500–1,000 mg q6h, together OK, Tylenol max 3,000 mg/day, contraindications, no duplicate acetaminophen, opioid only if insufficient. Doses unverified against full ADA 2024 guideline text.
+- Implant handout: ice 36 h then heat; no rinse day of surgery, then Peridex BID + salt water after meals; no chewing on implant side 3–4 weeks (soft diet 3–4 weeks if bilateral); denture out as much as possible, no eating with it until adjusted.
+- Source: Bayside Oral & Facial Surgery surgical instructions page, reviewed and approved row by row by Steven.
+
 ## Fix — Oct 23, 2026
 - Offline cache: opening /handouts/ on a phone with Compass installed no longer overwrites Compass's offline copy (and offline Compass no longer opens the handouts page). Compass page always revalidates with the server when online.
 - Handouts page description lists all four languages.
