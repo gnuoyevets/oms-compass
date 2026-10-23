@@ -44,9 +44,9 @@ li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--re
 <div class="wrap" id="app"></div>
 <script>
 /* Patient handouts — same text as OMS Compass (Post-op tab): EN/ES/Kriolu/中文. Edit both together. */
-const PHONE='(401) 273-7802',TEL='+14012737802';
-const SITES={young:{n:'Steven H. Young, DDS, OMS',u:'https://g.page/r/CWM8GLnZutc8EBE/review'},bayside:{n:'Bayside Oral & Facial Surgery',u:'https://maps.google.com?q=Bayside%20Oral%20%26%20Facial%20Surgery,%201265%20Fall%20River%20Ave,%20Seekonk,%20MA%2002771&ftid=0x89e45b230d315eab:0x3aa9874c3752df53'}};
-const SITE=SITES[new URLSearchParams(location.search).get('site')]||SITES.young;
+
+const SITES={young:{ph:'(401) 273-7802',tel:'+14012737802',n:'Steven H. Young, DDS, OMS',u:'https://g.page/r/CWM8GLnZutc8EBE/review'},bayside:{ph:'(508) 422-5007',tel:'+15084225007',n:'Bayside Oral & Facial Surgery',u:'https://maps.google.com?q=Bayside%20Oral%20%26%20Facial%20Surgery,%201265%20Fall%20River%20Ave,%20Seekonk,%20MA%2002771&ftid=0x89e45b230d315eab:0x3aa9874c3752df53'}};
+const SITE=SITES[new URLSearchParams(location.search).get('site')]||SITES.young,PHONE=SITE.ph,TEL=SITE.tel;
 const HO=[
 {id:'ext',t:{en:'After tooth removal',es:'Después de una extracción dental',kea:"Dipôs di tira denti",zh:"拔牙后须知"},i:{
 en:['Bite firmly on the gauze for 30 minutes. Some oozing for 1–2 days is normal.','Heavy bleeding: fold clean gauze, place it on the site and bite firmly for 1 hour. Still bleeding? Call us.','Ice the cheek 20 minutes on, 20 minutes off, for the first 2 days. Swelling is worst on day 2–3.','Keep your head raised on pillows for 2 nights.','First 24 hours: no rinsing, spitting or straws. They can pull out the blood clot.','Do not smoke or vape for at least 72 hours, ideally 1 week. Smoking slows healing and raises the risk of a painful dry socket.','From day 2: rinse gently with warm salt water (½ teaspoon in 1 cup) after meals. If we grafted the socket with Augma Shield, skip the salt water and use only the rinse we prescribed.','Soft foods for 2 weeks. No hard, crunchy or seedy food (nuts, chips, popcorn, seeds) for 3 weeks. Drink plenty of fluids.','Take pain medicine as directed. Start before the numbness wears off. Finish any antibiotic.','No alcohol for 24 hours, or while taking opioid pain medicine.','Call us: bleeding that will not stop with pressure; pain or swelling getting worse after day 3; fever over 100.4°F (38°C); bad taste or pus; numb lip, chin or tongue the next day.','Trouble breathing or swallowing: call 911.'],

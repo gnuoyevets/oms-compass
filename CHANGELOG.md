@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.12.1 + Handouts app v1.4 — Oct 23, 2026
+- Bayside version (handouts/?site=bayside and the Compass Bayside switch) now shows and dials the Bayside office: (508) 422-5007. Dr. Young version unchanged at (401) 273-7802.
+
 ## v2.12.0 + Handouts app v1.3 — Oct 23, 2026
 - Review request: "LLC" removed — now "Steven H. Young, DDS, OMS".
 - Bayside version: gnuoyevets.github.io/oms-compass/handouts/?site=bayside names Bayside Oral & Facial Surgery and links its Google Maps profile (Seekonk). Default (no ?site) stays Steven H. Young, DDS, OMS. Compass Post-op tab has a Dr. Young / Bayside switch for shared text. Office phone is the same on both for now.
