@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.7.0 — Oct 23, 2026
+- TMD: botulinum toxin step for muscle pain still significant after adequate conservative care. Plan card lists consent points, literature dose ranges (no standard dose), contraindications and repeat-dose cautions. Sources: Ferrillo et al., Toxins 2026; RCS England (not first line); NHS Humber & North Yorkshire policy 2025.
+
 ## v2.6.1 — Oct 23, 2026
 - Adrenal crisis: dexamethasone (Decadron) 4 mg IV as the alternative when Solu-Cortef is unavailable or the diagnosis is unknown. Source: emDocs/CoreEM 2017.
 - "OMS Compass Draft" artifact deleted.

@@ -257,6 +257,8 @@ aha26:{n:'AHA/ASA · 2026 guideline, early management of acute ischemic stroke',
 merckhtn:{n:'Merck Manual · Hypertensive emergencies',v:'Reviewed Feb 2025; updated Apr 2026',u:'https://www.merckmanuals.com/en-ca/professional/cardiovascular-disorders/hypertension/hypertensive-emergencies'},
 adrenal:{n:'Tennessee EMS · Adrenal insufficiency protocol',v:'Hydrocortisone 100 mg IM/IV; NS 20 mL/kg',u:'https://tennessee.gov/content/dam/tn/health/documents/EMS_Adrenal_Insufficiency_Protocol_Guideline.pdf'},
 coreem:{n:'emDocs / CoreEM · Adrenal crisis',v:'May 2017 · hydrocortisone 100 mg; dexamethasone 4 mg IV',u:'https://www.emdocs.net/core-em-adrenal-crisis/'},
+bont:{n:'Ferrillo et al. · Botulinum toxin for TMD: current evidence (narrative review)',v:'Toxins 2026;18:419 · Sep 29, 2026',u:'https://www.mdpi.com/2072-6651/18/10/419'},
+bontnhs:{n:'NHS Humber & North Yorkshire · Botulinum toxin to masticatory muscles (policy)',v:'2025 · not commissioned; relapse ~3 months',u:'https://humberandnorthyorkshire.icb.nhs.uk/wp-content/uploads/2025/07/145-Botulinum-Toxin-A-injection-to-Masticatory-Muscles.docx'},
 dant:{n:'Dantrium Intravenous · prescribing information',v:'20 mg vial + 60 mL sterile water; max 10 mg/kg',u:'https://www.rxlist.com/dantrium-drug.htm'},
 epipen:{n:'EpiPen · prescribing information',v:'0.3 mg ≥30 kg; Jr 0.15 mg 15–30 kg',u:'https://drugs.com/pro/epipen.html'},
 };
@@ -676,9 +678,9 @@ const MODS=[
  look:[['Imaging',['Unilocular vs multilocular; corticated vs ill-defined','Expansion, perforation, resorption, displacement']]]},
 
 {id:'tmd',g:'Pathology & pain',title:'TMD & orofacial pain',d:'Self-care, refer to PT/CBT, or urgent workup',
- inputs:['tmd'],start:'a',refs:['dctmd','dcscore','rcs','bmj','gramp'],
+ inputs:['tmd'],start:'a',refs:['dctmd','dcscore','rcs','bmj','gramp','bont','bontnhs'],
  red:'<b>Not TMD until proven:</b> prior cancer with new facial pain, face/neck mass, jaw claudication, weight loss, fever with swelling or trismus, neuro signs, pain on coughing/straining, acute trismus, ulcer or hoarseness ≥3 weeks, new occlusal change, new jaw pain on antiresorptives (RCS).',
- caveat:'Questionnaires screen; they do not diagnose. BMJ 2023 conditionally advises against reversible splints; RCS allows them as an adjunct for muscle pain.',
+ caveat:'Questionnaires screen; they do not diagnose. BMJ 2023 conditionally advises against reversible splints; RCS allows them as an adjunct for muscle pain. Botulinum toxin: not first line (RCS); BMJ 2023 did not assess it.',
  nodes:{
  a:{q:'Any red flag (red box)?',yes:'o1',no:'b'},
  o1:{out:'Investigate before treating as TMD: urgent workup or referral.',tone:'urgent',src:'rcs'},
@@ -686,7 +688,9 @@ const MODS=[
  o2:{out:'Not TMD by DC/TMD criteria. Look for dental, ear, headache, neuropathic or other causes.',src:'dctmd'},
  c:{q:'Suicidal ideation, or PHQ-4 ≥9?',auto:r=>(r.si||(r.phq!=null&&r.phq>=9))?true:undefined,ah:r=>r.phq!=null?`PHQ-4 ${r.phq} (${r.phqBand})${r.si?' · suicidal ideation':''}`:(r.si?'Suicidal ideation noted':''),h:['Ask directly; PHQ-4 alone does not screen for suicidality'],yes:'nPsy',no:'d'},
  nPsy:{note:1,t:'Mental-health referral',x:'Suicidal ideation: same-day assessment. PHQ-4 ≥9: urgent medical or mental-health referral. Continue TMD care in parallel.',src:'rcs',next:'d'},
- d:{q:'Severe joint limitation?',auto:r=>r.joint?true:undefined,ah:r=>r.joint?'Meets a severe-limitation trigger':'',h:['Closed lock affecting eating','Opening <25 mm under age 25','Joint pain with CPI >50, diet restriction and opening <30 mm'],yes:'o3',no:'e'},
+ d:{q:'Severe joint limitation?',auto:r=>r.joint?true:undefined,ah:r=>r.joint?'Meets a severe-limitation trigger':'',h:['Closed lock affecting eating','Opening <25 mm under age 25','Joint pain with CPI >50, diet restriction and opening <30 mm'],yes:'o3',no:'bx'},
+ bx:{q:'Muscle pain (myalgia) still significant after adequate, adherent conservative care?',h:['Familiar pain on masseter/temporalis palpation; worse with clenching or chewing','Self-management, physiotherapy and CBT (if indicated) already tried','First visit or joint-dominant pain: answer No'],yes:'oBx',no:'e'},
+ oBx:{out:'Consider botulinum toxin A to the masseter ± temporalis, as an add-on to continued rehabilitation.',tone:'action',src:'bont',ex:'Off-label in the US. Consent: benefit is mainly at ~1 month and inconsistent at 3–6 months; chewing weakness, smile asymmetry, dysphagia; possible condylar and mandibular bone loss with repeated doses (long-term safety not established). No standard dose: literature ranges 60–100 U onabotulinumtoxinA total bilaterally, ~25 U per temporalis; units are not interchangeable between brands. Multiple small injections per muscle; skip the lateral pterygoid without guidance. Avoid with neuromuscular disease, dysphagia, site infection, aminoglycosides; individualize in pregnancy or breastfeeding. Reassess before any repeat: relapse by ~3 months is common and repeats raise adverse effects.'},
  o3:{out:'Expedited joint assessment (OMS/TMJ).',tone:'urgent',src:'rcs',ex:'Surgery is not always indicated; discectomy is strongly advised against for chronic TMD pain (BMJ 2023).'},
  e:{q:'GCPS grade III–IV, PHQ-4 3–8, or pain ≥3 months with other chronic pain?',auto:r=>{const hi=(r.grade==='III'||r.grade==='IV')||(r.phq!=null&&r.phq>=3);return hi?true:undefined},ah:r=>r.grade?`GCPS grade ${r.grade} · CPI ${r.cpi}${r.phq!=null?` · PHQ-4 ${r.phq}`:''}`:'',yes:'o4',no:'o5'},
  o4:{out:'Self-management plus physiotherapy and CBT referral.',tone:'action',src:'bmj',ex:'Strong recommendations for chronic TMD pain: CBT, therapist-assisted mobilisation, manual trigger-point therapy, supervised jaw/postural exercise. Avoid irreversible splints, discectomy, NSAID–opioid combinations. Mapping by score level is author-created.'},
@@ -983,8 +987,9 @@ function handoffHTML(){return`<a class="handoff" data-triage href="https://claud
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='2.6.1';
+const VER='2.7.0';
 const CHANGES=[
+{v:'2.7.0',d:'Oct 23, 2026',i:['TMD: botulinum toxin step for muscle pain that persists after adequate conservative care, with consent points, dose ranges from the literature and contraindications.']},
 {v:'2.6.1',d:'Oct 23, 2026',i:['Adrenal crisis: dexamethasone (Decadron) 4 mg IV as the alternative to Solu-Cortef.','Draft artifact deleted; GitHub is the only source.']},
 {v:'2.6.0',d:'Oct 23, 2026',i:[
  'SOS: six new cards. Angioedema, bronchospasm/asthma, dropped object/aspiration, adrenal crisis, stroke, hypertensive crisis.',
