@@ -150,6 +150,13 @@ details.em[open]>summary::after{content:'−'}
 .handoff b{display:block;font:700 15px var(--display)}
 .handoff span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
 .handoff i{font-style:normal;color:var(--accent);font-size:18px}
+.top .small{white-space:nowrap}
+.vbtn{border:0;background:none;padding:0;font:inherit;font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:2px;min-height:24px}
+.gate{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:8px}
+.gate h2{font-size:19px;margin-bottom:8px}
+.gate ul{margin:0 0 16px;padding-left:20px;font-size:14.5px;line-height:1.55}
+.gate li{margin:6px 0}
+.gobtn{width:100%;min-height:52px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16px}
 @media (min-width:560px){.top h1{font-size:28px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -241,7 +248,16 @@ dctmd:{n:'DC/TMD diagnostic criteria (Schiffman et al.)',v:'2014',u:'https://ubw
 dcscore:{n:'DC/TMD self-report scoring manual (GCPS, PHQ-4)',v:'2014-06-06',u:'https://dentistry.uiowa.edu/sites/dentistry.uiowa.edu/files/2026-05/DC-TMD-Self-report-Instrument-Scoring-Manual_2014_06_06.pdf'},
 rcs:{n:'RCS England · Painful TMD in adults',v:'v1.1, Aug 2025 · UK',u:'https://www.rcseng.ac.uk/-/media/FDS/Comprehensive-guideline-Management-of-painful-Temporomandibular-disorder-in-adults.pdf'},
 bmj:{n:'BMJ · Chronic TMD pain guideline (Busse et al.)',v:'BMJ 2023;383:e076227',u:'https://www.bmj.com/content/383/bmj-2023-076227'},
-gramp:{n:'NHS Grampian · TMD protocol',v:'Aligned with RCS · UK',u:'https://www.hi-netgrampian.scot.nhs.uk/wp-content/uploads/2026/08/Temporomandibular-Disorders.pdf'}
+gramp:{n:'NHS Grampian · TMD protocol',v:'Aligned with RCS · UK',u:'https://www.hi-netgrampian.scot.nhs.uk/wp-content/uploads/2026/08/Temporomandibular-Disorders.pdf'},
+asthma:{n:'Australian Asthma Handbook · Acute asthma in adults, primary care',v:'Salbutamol 4–12 puffs q20 min; IM adrenaline if needed',u:'https://www.asthmahandbook.org.au/acute-asthma/adults-and-adolescents/managing-acute-asthma-in-adults-and-adolescents-in-primary-care'},
+choke:{n:'2025 AHA guidelines · conscious adult choking (EMS1 summary)',v:'Alternate 5 back blows and 5 abdominal thrusts',u:'https://ems1.com/cpr/2025-aha-cpr-guidelines-changes-to-mechanical-cpr-choking-single-chain-of-survival'},
+fba:{n:'Dionysopoulos · Accidental ingestion and aspiration of foreign objects in dental practice',v:'Stomatol Dis Sci 2017;1:87',u:'https://www.oaepublish.com/articles/2573-0002.2016.07'},
+aaem:{n:'AAEM · ED management of ACE-inhibitor angioedema',v:'Board-approved Nov 12, 2020',u:'https://www.aaem.org/statements/ed-patients-angioedema-secondary/'},
+aha26:{n:'AHA/ASA · 2026 guideline, early management of acute ischemic stroke',v:'Stroke, Jan 26, 2026',u:'https://professional.heart.org/en/guidelines-statements/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-strokestr0000000000000513'},
+merckhtn:{n:'Merck Manual · Hypertensive emergencies',v:'Reviewed Feb 2025; updated Apr 2026',u:'https://www.merckmanuals.com/en-ca/professional/cardiovascular-disorders/hypertension/hypertensive-emergencies'},
+adrenal:{n:'Tennessee EMS · Adrenal insufficiency protocol',v:'Hydrocortisone 100 mg IM/IV; NS 20 mL/kg',u:'https://tennessee.gov/content/dam/tn/health/documents/EMS_Adrenal_Insufficiency_Protocol_Guideline.pdf'},
+dant:{n:'Dantrium Intravenous · prescribing information',v:'20 mg vial + 60 mL sterile water; max 10 mg/kg',u:'https://www.rxlist.com/dantrium-drug.htm'},
+epipen:{n:'EpiPen · prescribing information',v:'0.3 mg ≥30 kg; Jr 0.15 mg 15–30 kg',u:'https://drugs.com/pro/epipen.html'},
 };
 
 /* ===== Modules. Node: {q,h?,yes,no,auto?} | {note,t,src?,next} | {out,tone?,src?,go?} ===== */
@@ -724,14 +740,22 @@ const EMS=[
  `Epinephrine ${F('1 mg IV/IO q3–5 min')}. Non-shockable: give as soon as possible. Shockable: after the second shock.`,
  `Refractory VF/pVT: amiodarone ${F('300 mg')}, then ${F('150 mg')}; or lidocaine ${DR(1,1.5,null,'mg')}, then ${DR(0.5,0.75,null,'mg')}.`,
  `Treat causes: hypoxia, hypovolemia, acidosis, K⁺, hypothermia, tension pneumothorax, tamponade, toxins (incl. local anesthetic → LAST card), thrombosis.`]},
-{id:'anaph',t:'Anaphylaxis',s:'Hives/flushing plus airway, breathing or BP compromise',src:['anaph','anaph2','aha25s'],steps:()=>[
+{id:'anaph',t:'Anaphylaxis',s:'Hives/flushing plus airway, breathing or BP compromise',src:['anaph','anaph2','epipen','aha25s'],steps:()=>[
  `Stop the suspected drug or latex. Call 911.`,
- `Epinephrine IM, mid-outer thigh, 1 mg/mL: ${D(0.01,0.5,'mg',2)} (${S.wt?Math.round(Math.min(0.01*S.wt,0.5)*100)/100+' mL':'0.01 mL/kg'}). Repeat every 5–15 min if no response.`,
+ `First dose, fastest: ${S.wt&&S.wt<30?F('EpiPen Jr 0.15 mg'):S.wt?F('EpiPen 0.3 mg'):F('EpiPen 0.3 mg')+' (≥30 kg; Jr 0.15 mg if 15–30 kg)'} IM, mid-outer thigh, through clothing. Hold ${F('3 s')}.`,
+ `Repeat doses from the 1 mg/mL ampule: ${D(0.01,0.5,'mg',2)} = ${S.wt?Math.round(Math.min(0.01*S.wt,0.5)*100)/100+' mL':'0.01 mL/kg, max 0.5 mL'} IM, same site. Every 5–15 min if no response.`,
  `Supine, legs up (sit up if airway swelling). 100% O₂. Large-bore IV; isotonic fluid bolus for hypotension.`,
  `Still refractory after 2 IM doses: epinephrine infusion ${F('5–20 mcg/min')} IV (1 mg in 1 L = 1 mcg/mL).`,
  `On a β-blocker and refractory: glucagon ${F('1–5 mg IV')} (adult).`,
  `Antihistamine, steroid, albuterol are second-line. They never replace epinephrine.`,
  `Arrest: Cardiac arrest card. Standard IM dose may be inadequate in arrest; give IV epinephrine.`]},
+{id:'angio',t:'Angioedema',s:'Swelling of lips, tongue, floor of mouth or larynx',src:['aaem','anaph'],steps:()=>[
+ `Airway first. Sit up. 100% O₂. Call 911 early; swelling can progress fast.`,
+ `Hives, itching, wheeze or low BP, or any doubt: treat as anaphylaxis. Epinephrine IM now (Anaphylaxis card).`,
+ `No hives and on an ACE inhibitor: likely bradykinin-mediated. Epinephrine, antihistamine and steroid have little evidence here; definitive care is in hospital.`,
+ `Voice change, stridor, drooling or tongue swelling: prepare for a difficult airway. Do not delay transfer.`,
+ `Known hereditary angioedema: give the patient's own on-demand drug if carried${UNV}.`,
+ `Stop the whole ACE-inhibitor class. Tell the prescriber.`]},
 {id:'lspasm',t:'Laryngospasm',s:'Stridor or silent obstruction, paradoxical chest movement under sedation',src:['lspasm','lsprop','litfl'],steps:()=>[
  `Stop stimulation. Pack the site; suction the pharynx.`,
  `100% O₂ with tight-mask CPAP. Vigorous jaw thrust plus Larson maneuver (pressure behind the ramus at the styloid notch).`,
@@ -739,6 +763,21 @@ const EMS=[
  `Still obstructed or SpO₂ falling: succinylcholine ${DR(0.1,0.5,null,'mg')} IV, then mask ventilate. Severe or intubating: ${DR(1,2,null,'mg')} IV. No IV: ${DR(3,4,null,'mg')} IM.`,
  `Atropine ready for bradycardia after succinylcholine. Intubation or LMA if ventilation fails.`,
  `Watch for negative-pressure pulmonary edema in recovery.`]},
+{id:'bronch',t:'Bronchospasm / asthma',s:'Wheeze, prolonged expiration, rising work of breathing; a silent chest is late',src:['asthma'],steps:()=>[
+ `Stop the procedure. Sit upright. Remove packs; suction.`,
+ `Albuterol MDI with spacer ${F('4–12 puffs')}, one puff at a time. Severe: ${F('12 puffs')}. Repeat every ${F('20 min')} for the first hour.`,
+ `O₂ if SpO₂ &lt;92%; target ${F('93–95%')}.`,
+ `No relief in 5 min, can't speak in full sentences, or SpO₂ ≤94%: repeat albuterol and call 911.`,
+ `Hives, low BP or a drug trigger: this is anaphylaxis. Epinephrine first (Anaphylaxis card).`,
+ `Can't inhale, unresponsive or peri-arrest: epinephrine ${D(0.01,0.5,'mg',2)} IM (EpiPen 0.3 mg is fine).`]},
+{id:'fba',t:'Dropped object / aspiration',s:'Crown, implant part, driver or tooth lost into the oropharynx',src:['fba','choke','aha25'],steps:()=>[
+ `Stop. Look. Visible: retrieve with suction or Magill forceps${UNV}.`,
+ `Breathing and talking: raise the upper body 20–30° and ask the patient to cough.`,
+ `Choking (can't speak, cough or breathe): alternate ${F('5 back blows')} and ${F('5 abdominal thrusts')} until it comes out or the patient becomes unresponsive.`,
+ `Unresponsive: start CPR (Cardiac arrest card). Look in the mouth before breaths; remove only what you see.`,
+ `Not retrieved, even with no symptoms: same-day chest and abdominal films (frontal + lateral) to tell inhaled from swallowed.`,
+ `Inhaled: urgent bronchoscopy referral. Radiolucent object: CT or diagnostic bronchoscopy.`,
+ `Swallowed: physician follow-up until it passes (usually 2–5 days). Sharp object: involve GI early${UNV}. Document the event and the discussion.`]},
 {id:'resp',t:'Oversedation / apnea',s:'Falling ETCO₂ waveform or SpO₂, no response to voice',src:['aha25s','nalox','fluma'],steps:()=>[
  `Stop sedatives. Stimulate. Jaw thrust, chin lift; nasal or oral airway.`,
  `100% O₂. Bag-mask ventilate if breathing is inadequate.`,
@@ -765,21 +804,43 @@ const EMS=[
  `Unresponsive, no IV: glucagon ${F('1 mg IM')} or ${F('3 mg nasal')} (ready-to-use forms preferred).`,
  `IV in place: dextrose 50% ${F('20–50 mL (10–25 g) IV')}, slowly, into a large vein.`,
  `Nothing by mouth while obtunded. No response in 10–15 min: 911.`]},
+{id:'adrenal',t:'Adrenal crisis',s:'Chronic steroids or adrenal insufficiency, with hypotension, weakness, vomiting or confusion',src:['adrenal'],steps:()=>[
+ `Suspect it in any patient on chronic steroids, or with adrenal insufficiency, who becomes hypotensive or obtunded.`,
+ `Call 911. Supine, legs up. 100% O₂.`,
+ `Hydrocortisone (Solu-Cortef) ${F('100 mg IV or IM')} now. Do not wait for labs.`,
+ `Normal saline ${D(20,null,'mL',0)} IV bolus (20 mL/kg). Repeat if still hypotensive.`,
+ `Check glucose; treat low (Hypoglycemia card).`,
+ `Patient carries an emergency injection kit: use it. Prevention: Chronic steroids module.`]},
 {id:'chest',t:'Chest pain / ACS',s:'Pressure, radiation to arm or jaw, diaphoresis',src:['merck','ntg'],steps:()=>[
  `Stop the procedure. 911. Sit up. Monitor; AED nearby.`,
  `Aspirin ${F('160–325 mg')} chewed (not enteric-coated), unless true allergy.`,
  `Nitroglycerin ${F('0.4 mg SL')} every 5 min, max 3 in 15 min. Not with hypotension or shock, PDE-5 inhibitors (sildenafil, tadalafil, vardenafil, avanafil), or riociguat.`,
  `O₂ only if SpO₂ is low or the patient is breathless.`,
  `Arrest: Cardiac arrest card.`]},
+{id:'stroke',t:'Stroke',s:'Face droop, arm weakness, speech change, vision loss, imbalance',src:['aha26','merckhtn'],steps:()=>[
+ `BE-FAST: Balance, Eyes, Face, Arm, Speech, Time. Any positive: call 911 now.`,
+ `Write down the time last known well. It decides thrombolysis (≤4.5 h; selected cases to 9 h) and thrombectomy (to 24 h).`,
+ `Check glucose. Hypoglycemia mimics stroke (Hypoglycemia card).`,
+ `O₂ only if SpO₂ &lt;94%. Recovery position if drowsy; suction and protect the airway.`,
+ `Nothing by mouth. No aspirin before imaging. Do not lower BP in the office.`,
+ `Send the medication list with EMS, especially anticoagulants and the last dose time.`]},
+{id:'htncrisis',t:'Hypertensive crisis',s:'BP ≥180/120 at chairside',src:['merckhtn'],steps:()=>[
+ `Stop. Treat pain and anxiety, the most common causes. Recheck in 5 min with the right cuff size.`,
+ `Chest pain, dyspnea, neuro deficit, confusion, severe headache or vision change: hypertensive emergency. Call 911.`,
+ `Stroke signs: Stroke card. Chest pain: Chest pain card.`,
+ `No symptoms: hypertensive urgency. Defer elective surgery; contact the physician the same day (Hypertension module).`,
+ `Do not give sublingual or oral nifedipine. Do not try to normalize BP in the office.`,
+ `For reference: in hospital, MAP is lowered only 20–25% over the first 1–2 h.`]},
 {id:'brady',t:'Bradycardia / vagal syncope',s:'HR <50 with symptoms, pallor, fainting',src:['brady'],steps:()=>[
  `Supine, legs up. O₂. Stop stimulation. Most vasovagal episodes resolve in under a minute.`,
  `Symptomatic bradycardia: atropine ${F('1 mg IV')} every 3–5 min to ${F('3 mg')} total.`,
  `No response: transcutaneous pacing, or epinephrine ${F('2–10 mcg/min')} or dopamine ${F('5–20 mcg/kg/min')} infusion; 911.`,
  `No recovery within 60 s: consider seizure, hypoglycemia, arrhythmia, stroke.`]},
-{id:'mh',t:'Malignant hyperthermia',s:'Rising ETCO₂, rigidity, tachycardia after succinylcholine',src:['mh'],steps:()=>[
+{id:'mh',t:'Malignant hyperthermia',s:'Rising ETCO₂, rigidity, tachycardia after succinylcholine',src:['mh','dant'],steps:()=>[
  `Call for help. 911. MH hotline ${F('1-800-644-9737')}. Stop succinylcholine and any volatile agent.`,
  `Dantrolene ${D(2.5,null,'mg',0)} IV rapidly. Repeat until ETCO₂ and rigidity settle; average total ≈ 5 mg/kg. Over 10 mg/kg without effect: rethink the diagnosis.`,
- `Ryanodex: 250 mg vial in 5 mL water. Older dantrolene: 20 mg vial in 60 mL water (≈9 vials for 70 kg).`,
+ `Dantrium (20 mg vial): ${S.wt?F(Math.ceil(2.5*S.wt/20)+' vials')+' for the first dose':F('1 vial per 8 kg')+' for the first dose'}. Each vial: ${F('60 mL sterile water')}, no preservative; not D5W or saline. Shake until clear. Assign one person to mix.`,
+ `Each vial carries ${F('3 g mannitol')}. Use within 6 h; protect from light.`,
  `100% O₂ at high flow. Cool with cold IV fluids and ice; stop cooling below 38 °C.`,
  `Treat hyperkalemia and arrhythmias. Transfer to ICU.`]}
 ];
@@ -787,7 +848,7 @@ function emHTML(){
  return `<div class="wtbar"><label class="fld" for="in-wt">Weight, kg<input id="in-wt" data-wt inputmode="decimal" placeholder="kg" value="${esc(S.wt??'')}"></label><div class="note">Adults. Doses update from this weight. Tap a card.</div></div>
  <div class="call">Any emergency: call for help, stop the procedure, 100% O₂, monitors on. Call 911 early.</div>
  ${EMS.map(e=>`<details class="em" id="em-${e.id}"${S.emOpen===e.id?' open':''}><summary><div>${esc(e.t)}<span>${esc(e.s)}</span></div></summary><ol>${e.steps().map(x=>`<li>${x}</li>`).join('')}</ol><div class="meta">${e.src.map(srcLink).join('')}</div></details>`).join('')}
- <p class="caveat">Rebuilt from 2025 AHA guidelines and cited sources. Every dose is checked against a guideline or FDA label (Oct 22, 2026). Confirm against your crash-cart concentrations.</p>`;
+ <p class="caveat">Rebuilt from 2025 AHA guidelines and cited sources. Every dose is checked against a guideline or FDA label (Oct 23, 2026); items tagged verify are not. Confirm against your crash-cart concentrations.</p>`;
 }
 const REF=[
 {t:'Immediate implant placement',k:'implant esthetic socket buccal',src:['mynotes','board'],i:[
@@ -905,26 +966,50 @@ function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v=
 function view(v){
  if(v==='decide')return home();
  S.mod=null;S.view=v;
- app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.5.0</span></div>${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():calcHTML()}</div>`;
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · <button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button></span></div>${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():v==='new'?newHTML():calcHTML()}</div>`;
  window.scrollTo(0,0);try{history.replaceState(null,'','#'+v)}catch(e){}
 }
 function rebody(){const b=document.getElementById('vbody');if(!b)return;
  const open=[...b.querySelectorAll('details[open]')].map(d=>d.id||d.querySelector('summary').textContent);
  const a=document.activeElement,wasWt=a&&(a.hasAttribute('data-wt')||a.hasAttribute('data-refq')),sel=a&&a.hasAttribute('data-refq')?'[data-refq]':'[data-wt]',pos=wasWt?a.selectionStart:null;
- b.innerHTML=S.view==='emergency'?emHTML():S.view==='ref'?refHTML():calcHTML();
+ b.innerHTML=S.view==='emergency'?emHTML():S.view==='ref'?refHTML():S.view==='new'?newHTML():calcHTML();
  b.querySelectorAll('details').forEach(d=>{const k=d.id||d.querySelector('summary').textContent;if(open.includes(k))d.open=true});
  if(wasWt){const n=b.querySelector(sel);n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}
 
 const TRIAGE_PROMPT='Run my pre-op triage on the attached photo (H&P, med list, or radiograph). Assume local anesthesia unless I note sedation. Use age/sex and clinical facts only; ignore any identifiers.';
 function handoffHTML(){return`<a class="handoff" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener"><div><b>📷 Photo triage in Claude</b><span>Opens Claude with the prompt ready (also copied). Attach the photo there. Crop out name, DOB and MRN first.</span></div><i>↗</i></a>`}
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
+
+/* ===== Version, change log, disclaimer ===== */
+const VER='2.6.0';
+const CHANGES=[
+{v:'2.6.0',d:'Oct 23, 2026',i:[
+ 'SOS: six new cards. Angioedema, bronchospasm/asthma, dropped object/aspiration, adrenal crisis, stroke, hypertensive crisis.',
+ 'Anaphylaxis: EpiPen for the first dose; repeat doses drawn from the 1 mg/mL ampule.',
+ 'Malignant hyperthermia: Dantrium vial count from weight, plus mixing steps. Ryanodex line removed (not stocked).',
+ 'Disclaimer screen on first open.',
+ 'This What’s new page.']},
+{v:'2.5.0',d:'Oct 22, 2026',i:['Sedation protocol added to Calc.','Earlier changes were not logged.']}];
+function newHTML(){return CHANGES.map(c=>`<details class="box"${c.v===VER?' open':''}><summary>v${esc(c.v)} <em>${esc(c.d)}</em></summary><div class="inner look"><ul>${c.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>`).join('')+`<p class="caveat">Full history: CHANGELOG.md in the GitHub repo.</p>`}
+const ACK='omsCompassAck';
+function acked(){try{return localStorage.getItem(ACK)==='1'}catch(e){return false}}
+function gate(go){
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v${VER}</span></div>
+ <div class="gate"><h2>Before you use Compass</h2><ul>
+ <li>A clinician-review draft for decision support by dental and OMS clinicians.</li>
+ <li>Not an institutional protocol or the standard of care. It does not replace your judgment, your institution’s policies or current guidelines.</li>
+ <li>Check every dose against the drug label and your crash-cart concentrations.</li>
+ <li>Enter no patient identifiers. Nothing you type is saved.</li></ul>
+ <button class="gobtn" data-ack>I understand</button></div>`;
+ app.querySelector('[data-ack]').addEventListener('click',e=>{e.stopPropagation();try{localStorage.setItem(ACK,'1')}catch(x){}go()},{once:true});
+}
 /* ===== Render ===== */
 const app=document.getElementById('app');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const M=id=>MODS.find(m=>m.id===id);
 function home(){
  S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const groups=[...new Set(MODS.map(m=>m.g))].sort((x,y)=>ORDER.indexOf(x)-ORDER.indexOf(y));
- app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · v2.5.0 · Oct 22, 2026</span></div>`+tabsHTML('decide')+
+ app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · <button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button></span></div>`+tabsHTML('decide')+
  groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+
  `<p class="foot">Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`;
  window.scrollTo(0,0);
@@ -1017,7 +1102,8 @@ app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-refq
 app.addEventListener('change',e=>{const el=e.target;if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
 const start=(location.hash||'').slice(1);
-start==='emergency'||start==='calc'||start==='ref'?view(start):M(start)?open(start):home();
+const go=()=>start==='emergency'||start==='calc'||start==='ref'||start==='new'?view(start):M(start)?open(start):home();
+acked()?go():gate(go);
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 </script>
 

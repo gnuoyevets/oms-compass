@@ -1,11 +1,12 @@
 # OMS Compass — home-screen app
 
-Offline web app version of OMS Compass. Source: "OMS Compass" artifact, Oct 22, 2026.
+Offline web app version of OMS Compass. This repo is the canonical copy; the "OMS Compass" artifact mirrors it. Changes: see CHANGELOG.md.
 
 ## Files
 - `index.html` — the app
 - `manifest.webmanifest` — name, icon, full-screen mode
 - `sw.js` — offline cache
+- `CHANGELOG.md` — dated change log
 - `*.png` — app icons
 
 ## Publish (GitHub Pages, free)
