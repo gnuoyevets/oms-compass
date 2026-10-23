@@ -1,6 +1,6 @@
 // OMS Compass offline cache.
 // To publish an update: edit index.html, bump VERSION, push. Phones pick it up on next open.
-const VERSION = 'compass-2026-10-23p';
+const VERSION = 'compass-2026-10-23q';
 const CORE = ['./', './index.html', './manifest.webmanifest',
   './apple-touch-icon.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
@@ -20,8 +20,11 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
 
   // App page: network first (fresh content when online), cache fallback offline.
+  // Only the Compass page itself; /handouts/ is a separate page and must not overwrite it.
+  const isApp = url.pathname.endsWith('/oms-compass/') || url.pathname.endsWith('/oms-compass/index.html');
+  if (req.mode === 'navigate' && !isApp) return; // other pages: plain network, browser cache rules
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req)
+    e.respondWith(fetch(req, {cache: 'no-cache'})
       .then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put('./index.html', copy)); return r; })
       .catch(() => caches.match('./index.html')));
     return;

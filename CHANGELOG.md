@@ -2,6 +2,10 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## Fix — Oct 23, 2026
+- Offline cache: opening /handouts/ on a phone with Compass installed no longer overwrites Compass's offline copy (and offline Compass no longer opens the handouts page). Compass page always revalidates with the server when online.
+- Handouts page description lists all four languages.
+
 ## v2.12.2 + Handouts app v1.5 — Oct 23, 2026
 - Bayside review link changed from the Google Maps profile to the direct review form: https://g.page/r/CVPfUjdMh6k6EBM/review
 
