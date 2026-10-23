@@ -2,6 +2,10 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v2.9.1 — Oct 23, 2026
+- Feedback link live on every screen (mailto zeniths-raised-7a@icloud.com, pre-filled with module and version).
+- Handouts: full-arch liquids 2 weeks, fork-tender food ~3 months, water flosser lowest setting from ~day 7 (from Steven's Drive post-op sheet); office phone (401) 273-7802. Still gated pending final approval.
+
 ## v2.9.0 — Oct 23, 2026
 - Search box on the home screen across modules, SOS cards and Ref cards.
 - New modules: Peri-implantitis (EFP S3 2023, Herrera et al.), Biopsy & specimens (USC Ostrow; ADA oral cancer guideline), Local anesthetic complications (broken needle, methemoglobinemia, LAST pointer, facial palsy, hematoma, paresthesia; Kodsi 2012, emDocs, Kim & Moon 2013).
