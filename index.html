@@ -228,6 +228,39 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .abtn.np{color:var(--red-ink);border-color:var(--red-line);background:var(--red-bg)}
 .abtn.np.arm,.icon-btn.newpt{background:var(--red-ink);color:var(--bg);border-color:var(--red-ink)}
 .icon-btn.newpt{background:var(--red-bg);color:var(--red-ink);border-color:var(--red-line)}
+.seg button{min-height:44px}
+/* v3.1: medical gate, on-call switch, drawer tabs, intraop checklist */
+.mgate{border-radius:12px;padding:10px 14px;margin-bottom:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.mgate.g-ok{border-color:var(--ok-ink);background:var(--ok-bg);color:var(--ok-ink)}
+.mgate.g-mod{border-color:var(--warn-ink);background:var(--warn-bg);color:var(--warn-ink)}
+.mgate.g-def{border-color:var(--red-ink);background:var(--red-bg);color:var(--red-ink)}
+.mgate .gt{display:flex;align-items:center;gap:8px;font:800 15px/1.35 var(--display)}
+.mgate .gt .dot{flex:none;width:12px;height:12px;border-radius:50%;background:currentColor}
+.mgate ul{margin:6px 0 0;padding-left:20px;font-size:13.5px;line-height:1.45}
+.mgate .gb{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.mgate .go{margin-top:0;min-height:40px}
+.oncall{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-height:56px;margin:4px 0 8px}
+.oncall b{display:block;font:700 15px var(--display)}
+.oncall span{display:block;font-size:12.5px;color:var(--muted)}
+.oncall .sw{width:50px;height:30px;border-radius:15px;background:var(--line);position:relative;transition:background .15s}
+.oncall .sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.oncall[aria-checked="true"]{border-color:var(--red-line);background:var(--red-bg)}
+.oncall[aria-checked="true"] .sw{background:var(--red-ink)}
+.oncall[aria-checked="true"] .sw::after{left:23px}
+.lab.group.oc{color:var(--red-ink)}
+.abar.three{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+.atabs{margin-bottom:10px}
+.io{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.io h3{display:flex;justify-content:space-between;gap:8px;font-size:15px;padding:11px 14px;margin:0;background:var(--soft)}
+.io h3 small{font:600 12px var(--sans);color:var(--muted)}
+.io h3 small.done{color:var(--ok-ink)}
+.ioi{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 14px;min-height:52px;font-size:14.5px;line-height:1.4;color:var(--ink)}
+.ioi:first-of-type{border-top:0}
+.ioi .bx{width:26px;height:26px;border-radius:7px;border:2px solid var(--muted);display:grid;place-items:center;font-weight:800;font-size:15px;color:transparent}
+.ioi[aria-checked="true"]{color:var(--muted)}
+.ioi[aria-checked="true"] .bx{background:var(--ok-ink);border-color:var(--ok-ink);color:var(--bg)}
+.iogo{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px 52px}
+.iogo .go{margin-top:0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -236,6 +269,7 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 <script>
 /* ===== Sources (checked Oct 21, 2026) ===== */
 const SRC={
+who:{n:'WHO · Surgical Safety Checklist (Guidelines for Safe Surgery)',v:'2009 · adapted for office OMS by the author',u:'https://www.who.int/publications/i/item/9789241598590'},
 sdcepFull:{n:'SDCEP · Management of dental patients taking anticoagulants or antiplatelet drugs (full guidance)',v:'2nd ed., 2022 · UK',chk:'2026-10-23',u:'https://www.sdcep.org.uk/media/ypnl2cpz/sdcep-management-of-dental-patients-taking-anticoagulants-or-antiplatelet-drugs-2nd-edition.pdf'},
 sdcepDoac:{n:'SDCEP companion · DOACs, higher bleeding-risk procedures',v:'2022 · UK',chk:'2026-10-23',u:'https://companion.sdcep.org.uk/management-of-dental-patients-taking-anticoagulants-or-antiplatelet-drugs/treatment-recommendations/direct-oral-anticoagulants-doacs/higher-risk-of-bleeding-complications'},
 sglt2:{n:'FDA labeling change · SGLT2 inhibitors before scheduled surgery',v:'Mar 2020 (via Drug Topics)',chk:'2026-10-23',u:'https://drugtopics.com/view/fda-approves-safety-labeling-changes-sglt2-inhibitors'},
@@ -1198,8 +1232,9 @@ function triBannerHTML(id){const t=S.tri;if(!t||!TRI_MODS.includes(id))return'';
  return`<div class="tribar"><div><b>📷 Photo triage loaded</b><span>${ctx?esc(ctx)+' · ':''}${ks.length} step${ks.length===1?'':'s'} suggested. ${pending?'Confirm or change each step below.':'Suggestions on this path confirmed.'} Steps triage couldn’t read are left for you.</span></div><button class="vbtn" data-triclear>Clear</button></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.0.0';
+const VER='3.1.0';
 const CHANGES=[
+{v:'3.1.0',d:'Oct 23, 2026',i:['Medical gate: a colour-coded block at the top of procedure modules summarizes Pre-op clearance answers (red = defer elective, amber = address first or unknown, green = no exclusion hit — never a clearance). Taps through to Pre-op clearance and the Assessment.','Hospital on-call switch on Home (remembered on this device): on shows ER/trauma, fractures, dentoalveolar trauma and infection first; off hides facial trauma triage and mandible fracture from the list. Search still finds everything.','Intraop checklist: second tab in the Assessment drawer, plus an Intraop button in the bottom bar. Time-out, sedation, pause points and sign-out, with jumps to Bleeding, Displaced root, Sinus opening, Nerve, Calc and SOS. Memory only; New patient clears it.','Yes / No / ? step buttons are now 44 px tall.']},
 {v:'3.0.0',d:'Oct 23, 2026',i:['Findings: search a drug (brand or generic), lab or prior treatment to see what changes, a provisional action, what it depends on, targeted questions, and sources. 12 findings: DOACs, warfarin, antiplatelets, antiresorptives/antiangiogenics, GLP-1 RA, SGLT2, chronic steroids, H&N radiation/chemo, INR, platelets, HbA1c, kidney disease.','Search fix: “Eliquis” and other brands now reach antithrombotic guidance; typos tolerated; a miss now says “No Compass entry — not the same as no surgical implications.”','Unknown answer on every yes/no step. Unknown halts the path at “verify first”; it is never read as No.','Screen outcomes reworded so short screens no longer read as clearance (e.g., “No office-sedation exclusion found by this screen”), with what the screen did not cover.','Basis label on every plan: Guideline / label, Evidence-informed, Author’s practice, Unverified draft (descriptive, not evidence grades); source check dates shown.','Assessment: add findings, shared context (age, weight, procedure, anesthesia, urgency), overall most-restrictive action, unresolved items, curated conflicts, de-identified copy. Memory only; New patient clears everything.','Photo triage: link import removed (no clinical data in URLs). Paste the CT1 code instead.','Post-op analgesia: anticoagulant/antiplatelet added to “NSAID contraindicated?” (SDCEP advises acetaminophen). Copied notes no longer include the date.']},
 {v:'2.14.0',d:'Oct 23, 2026',i:['Photo triage → Pre-op clearance: the triage report’s “Open in Compass” link (or its pasted CT1 code) pre-fills Pre-op clearance and Office sedation (ASA class, STOP-Bang, airway). Each pre-filled step is a suggestion tagged verify; the path stops until you tap Yes or No, so no plan appears from triage alone. Copied plan notes mark steps confirmed or changed from triage. The code carries only yes/no flags and scores, no identifiers.']},
 {v:'2.13.1',d:'Oct 23, 2026',i:['Handouts streamlined (~22% fewer words, all four languages): related lines merged (bleeding, swelling, cleaning, pain, normal findings), extraction 18→13 items, pre-sedation 10→7, IV sedation 8→7. No instructions removed. Compass Post-op tab and patient handouts page (Dr. Young and Bayside) verified identical.']},
@@ -1652,7 +1687,7 @@ function redraw(){const a=document.activeElement,id=a&&a.id,pos=a&&a.selectionSt
   const mn=document.getElementById('fmini');if(mn)mn.innerHTML=miniHTML(fPlan(f));
   const w2=document.getElementById('fwhy');if(w2&&wo)w2.open=true}
  else if(S.view==='asmt'){const ctx=document.getElementById('actx'),typing=a&&a.matches&&a.matches('input')&&ctx&&ctx.contains(a);
-  if(typing)document.getElementById('arest').innerHTML=asmtRestHTML();else{const d=document.getElementById('vbody');if(d)d.innerHTML=asmtHTML()}}
+  if(typing)document.getElementById('arest').innerHTML=asmtRestHTML();else{const d=document.getElementById('vbody');if(d)d.innerHTML=asmtBody()}}
  if(id){const n=document.getElementById(id);if(n&&n!==document.activeElement){n.focus();try{if(pos!=null)n.setSelectionRange(pos,pos)}catch(e){}}}
  updBar()}
 
@@ -1699,21 +1734,22 @@ function asmtText(){const m=asmtModel(),L=[`Pre-op assessment — OMS Compass v$
  if(m.conf.length)L.push(`Precautions/conflicts: ${m.conf.map(c=>c.t).join(' | ')}`);
  return L.join('\n')}
 function asmtView(){S.mod=null;S.view='asmt';S.fid=null;
- app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="Back">‹</button><h2>Assessment</h2><button class="icon-btn newpt" data-newpt>New patient</button></div><div id="vbody">${asmtHTML()}</div>`;window.scrollTo(0,0);updBar()}
+ app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="Back">‹</button><h2>${S.atab==='io'?'Intraop checklist':'Assessment'}</h2><button class="icon-btn newpt" data-newpt>New patient</button></div><div id="vbody">${asmtBody()}</div>`;window.scrollTo(0,0);updBar()}
 
 /* New patient: clear every patient-specific value; keep language/site/disclaimer preferences. */
 function newPatient(){
- ['pf','ans','inp','rcri'].forEach(k=>{S[k]={}});S.asmt=[];
+ ['pf','ans','inp','rcri','io'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
  ['tri','triErr','wt','asa','q','refq','fid','fhit','emOpen','hoOpen','mod'].forEach(k=>{delete S[k]});
  home()}
-function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean))}
+function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
 function updBar(){let b=document.getElementById('abar');if(!b){b=document.createElement('div');b.id='abar';b.className='abar';document.body.appendChild(b)}
- const n=(S.asmt||[]).length,on=hasPatient()&&S.view!=='gate';b.hidden=!on;document.body.classList.toggle('hasbar',on);
- b.innerHTML=`<button class="abtn" data-asmt${S.view==='asmt'?' aria-current="page"':''}>Assessment${n?` · <b>${n}</b>`:''}</button><button class="abtn np${npArm?' arm':''}" data-newpt>${npArm?'Tap again to clear':'New patient'}</button>`}
+ const n=(S.asmt||[]).length,io=Object.values(S.io||{}).filter(Boolean).length,on=(hasPatient()||S.view==='mod'||S.view==='asmt')&&S.view!=='gate';b.hidden=!on;document.body.classList.toggle('hasbar',on);b.classList.add('three');
+ const cur=t=>S.view==='asmt'&&(S.atab||'find')===t?' aria-current="page"':'';
+ b.innerHTML=`<button class="abtn" data-asmt${cur('find')}>Assessment${n?` · <b>${n}</b>`:''}</button><button class="abtn" data-ioopen${cur('io')}>Intraop${io?` · <b>${io}</b>`:''}</button><button class="abtn np${npArm?' arm':''}" data-newpt>${npArm?'Tap again':'New patient'}</button>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-newpt]');if(!b)return;e.stopPropagation();
  if(npArm){npArm=0;newPatient();updBar();return}npArm=1;updBar();const all=document.querySelectorAll('[data-newpt]');all.forEach(x=>{if(!x.closest('.abar'))x.textContent='Tap again to clear'});setTimeout(()=>{if(npArm){npArm=0;updBar();document.querySelectorAll('.bar [data-newpt]').forEach(x=>x.textContent='New patient')}},3500)},true);
-document.addEventListener('click',e=>{const b=e.target.closest('.abar [data-asmt]');if(b){e.stopPropagation();asmtView()}},true);
+document.addEventListener('click',e=>{const b=e.target.closest('.abar [data-asmt],.abar [data-ioopen]');if(b){e.stopPropagation();S.atab=b.hasAttribute('data-ioopen')?'io':'find';asmtView()}},true);
 /* Keep the bottom bar off the keyboard: hide it while a field has focus. */
 document.addEventListener('toggle',e=>{if(e.target.id==='actxd')S.ctxOpen=e.target.open},true);
 document.addEventListener('focusin',e=>{if(e.target.matches('input,select,textarea'))document.body.classList.add('kb')});
@@ -1724,11 +1760,68 @@ const app=document.getElementById('app');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const escV=v=>esc(v).replace(/ ?\[verify(?:: ([^\]]+))?\]/g,(m,why)=>(why?` (${why})`:'')+UNV);
 const M=id=>MODS.find(m=>m.id===id);
+/* ===== v3.1: medical gate, hospital on-call, intraop checklist ===== */
+/* Gate: top-of-module summary of the Pre-op clearance answers. Never a clearance. */
+const GATED=['sed','extraction','canine','implant','graft','sinus','arch','periimpl','biopsy','infection','mandfx','dentotrauma','displaced','oac'];
+const GATE_HITS={a:['def','Unstable or unoptimized medical condition'],b:['mod','Endocarditis prophylaxis indicated'],c:['mod','Antithrombotic — plan local hemostasis'],d:['mod','Antiresorptive or jaw radiation — MRONJ/ORN risk'],d2:['mod','SGLT2 inhibitor or GLP-1 RA — check timing'],f:['mod','STOP-Bang ≥3 — airway plan needed'],g:['mod','Difficult-airway signs — airway plan needed']};
+function gateModel(){const w=walk(M('preop')),hits=[],unk=[];let any=0;
+ w.steps.forEach(s=>{if(s.note||s.val===undefined)return;any=1;if(s.val==='u')unk.push(s.n.q);else if(s.val&&GATE_HITS[s.id])hits.push(GATE_HITS[s.id])});
+ const red=hits.some(h=>h[0]==='def');
+ const tone=red?'def':!any?'none':hits.length||unk.length||!w.out?'mod':'ok';
+ const t=red?'STOP · defer elective surgery':!any?'Pre-op screen not run':unk.length?'Verify first · unknown on pre-op screen':!w.out?'Pre-op screen incomplete':hits.length?'Proceed only with these addressed':'No exclusion hit on pre-op screen';
+ return{tone,t,hits,unk,done:!!w.out}}
+function gateHTML(id){if(!GATED.includes(id))return'';const g=gateModel();
+ const items=[...g.hits.map(h=>h[1]),...g.unk.map(q=>`Unknown: ${q}`)];
+ const am=(S.asmt||[]).length?asmtModel():null;
+ return`<div class="mgate g-${g.tone}" role="status"><div class="lab" style="color:inherit;opacity:.85">Medical gate</div><div class="gt"><span class="dot" aria-hidden="true"></span>${esc(g.t)}</div>${items.length?`<ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${g.tone==='ok'?'<div class="small" style="color:inherit">Screen result · not a clearance.</div>':''}<div class="gb"><button class="go" data-open="preop">${g.tone==='none'?'Run pre-op screen ›':'Pre-op clearance ›'}</button>${am&&am.worst?`<button class="go" data-goasmt>Assessment: ${esc(DISP[am.od][0])} ›</button>`:''}</div></div>`}
+
+/* Hospital on-call: a remembered preference (not patient data). */
+const OC_KEY='omsCompassOnCall',ONCALL=['trauma','mandfx','dentotrauma','infection'];
+function onCall(){try{return localStorage.getItem(OC_KEY)==='1'}catch(e){return!!S.oc}}
+function setOnCall(v){S.oc=v;try{localStorage.setItem(OC_KEY,v?'1':'0')}catch(e){}}
+function homeGroup(m,on){if(on&&ONCALL.includes(m.id))return'Hospital on-call';
+ if(!on&&(m.id==='trauma'||m.id==='mandfx'))return null;
+ if(m.id==='dentotrauma')return'Dentoalveolar & acute';return m.g}
+function oncallHTML(on){return`<button class="oncall" role="switch" aria-checked="${on}" data-oncall><div><b>Hospital on-call</b><span>${on?'On · ER, facial trauma, fractures, spreading infection shown first':'Off · shows ER, trauma and infection modules'}</span></div><i class="sw" aria-hidden="true"></i></button>`}
+
+/* Intraoperative cognitive checklist (memory only; New patient clears it). */
+const IO=[
+ ['Time-out · before incision',[
+  ['id','Patient, procedure, side and tooth numbers confirmed aloud against consent and imaging'],
+  ['cons','Consent signed, including alternatives and no treatment'],
+  ['alg','Allergies restated: local anesthetic, latex, chlorhexidine, antibiotics'],
+  ['gate','Medical gate items done: IE prophylaxis given, antithrombotic plan, SGLT2/GLP-1 timing',[['preop','Pre-op clearance']]],
+  ['img','Imaging up; nerve and sinus proximity reviewed'],
+  ['kit','Implants, grafts, instruments and lot labels in the room'],
+  ['em','Suction, O₂ and emergency kit checked; team roles known',[['@emergency','SOS']]]]],
+ ['If sedated',[
+  ['mon','Monitors on and baseline recorded: SpO₂, BP, ECG, capnography'],
+  ['iv','IV patent; reversal agents and airway equipment at hand'],
+  ['npo','NPO, escort and GLP-1 status confirmed',[['sed','Office sedation']]]]],
+ ['During · pause points',[
+  ['la','Running local anesthetic total checked against weight-based maximum',[['@calc','Calc']]],
+  ['pack','Throat pack or gauze screen in place'],
+  ['vit','Sedation vitals recorded at set intervals'],
+  ['stop','Stop and re-plan if bleeding is uncontrolled, a root is displaced, the sinus is opened, a nerve is exposed, or vitals change',[['bleed','Bleeding'],['displaced','Displaced root'],['oac','Sinus opening'],['nerve','Nerve'],['@emergency','SOS']]]]],
+ ['Sign-out · before the patient leaves the chair',[
+  ['cnt','Throat pack and gauze removed and counted'],
+  ['frag','All teeth, roots and fragments accounted for'],
+  ['spec','Specimen labeled; requisition complete',[['biopsy','Biopsy']]],
+  ['lot','Implant and graft lot numbers recorded'],
+  ['hem','Hemostasis confirmed'],
+  ['po','Instructions, prescriptions and after-hours number given'],
+  ['dc','If sedated: discharge criteria met and escort present']]]];
+function ioHTML(){const c=S.io||{};
+ return IO.map(([h,items])=>{const n=items.filter(([k])=>c[k]).length;
+  return`<div class="io"><h3>${esc(h)}<small class="${n===items.length?'done':''}">${n}/${items.length}</small></h3>${items.map(([k,t,links])=>`<button class="ioi" role="checkbox" aria-checked="${!!c[k]}" data-io="${k}"><span class="bx" aria-hidden="true">✓</span><span>${esc(t)}</span></button>${links&&!c[k]?`<div class="iogo">${links.map(([to,l])=>to[0]==='@'?`<button class="go" data-view="${to.slice(1)}">${esc(l)} ›</button>`:`<button class="go" data-open="${to}">${esc(l)} ›</button>`).join('')}</div>`:''}`).join('')}</div>`}).join('')+
+ `<button class="go" data-ioclear>Clear checklist</button><p class="caveat">Cognitive aid for the team; the circulating assistant can read it aloud. Adapted from the WHO Surgical Safety Checklist (2009) — author’s draft, clinician review. Held in memory only; New patient clears it. ${srcLink('who')}</p>`}
+function atabsHTML(){const t=S.atab||'find';return`<div class="tabs atabs" role="tablist"><button role="tab" aria-selected="${t==='find'}" class="${t==='find'?'on':''}" data-atab="find">Findings</button><button role="tab" aria-selected="${t==='io'}" class="${t==='io'?'on':''}" data-atab="io">Intraop checklist</button></div>`}
+function asmtBody(){return atabsHTML()+(S.atab==='io'?`<div id="iobody">${ioHTML()}</div>`:asmtHTML())}
 function home(){
- S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const groups=[...new Set(MODS.map(m=>m.g))].sort((x,y)=>ORDER.indexOf(x)-ORDER.indexOf(y));
+ S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const on=onCall(),GO=['Hospital on-call',...ORDER],gm=MODS.map(m=>[m,homeGroup(m,on)]).filter(x=>x[1]);const groups=[...new Set(gm.map(x=>x[1]))].sort((x,y)=>GO.indexOf(x)-GO.indexOf(y));
  app.innerHTML=`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small"><b style="color:var(--warn-ink)">DRAFT</b> · <button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button></span></div>`+tabsHTML('decide')+
  `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab, history or topic — e.g. Eliquis, INR, sinus" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="groups"${S.q?' hidden':''}>`+
- groups.map(g=>`<div class="lab group">${esc(g)}</div><div class="mods">${MODS.filter(m=>m.g===g).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
+ oncallHTML(on)+groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
  `<p class="foot">Search shows a finding’s implications first. Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);S.fid=null;updBar();
 }
@@ -1787,6 +1880,7 @@ function refresh(){const m=M(S.mod);document.getElementById('flow').innerHTML=fl
 function open(id){
  const m=M(id);if(!m)return home();S.mod=id;
  app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="All decisions">‹</button><h2>${esc(m.title)}</h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button><button class="icon-btn" data-reset>Reset</button></div>
+ ${gateHTML(id)}
  ${m.red?`<div class="red">${m.red}</div>`:''}
  ${id==='preop'?handoffHTML():''}
  ${inputsHTML(m)}
@@ -1810,6 +1904,11 @@ app.addEventListener('click',e=>{
  if(b.dataset.view)return view(b.dataset.view);
  if(b.dataset.asa){S.asa=b.dataset.asa==='3'?'3':'12';return rebody()}
  if(b.dataset.rc!=null){const rc=S.rcri=S.rcri||{};rc[b.dataset.rc]=!rc[b.dataset.rc];return rebody()}
+ if(b.hasAttribute('data-oncall')){setOnCall(!onCall());return home()}
+ if(b.hasAttribute('data-goasmt')){S.atab='find';return asmtView()}
+ if(b.dataset.atab){S.atab=b.dataset.atab;return asmtView()}
+ if(b.dataset.io){const c=S.io=S.io||{};c[b.dataset.io]=!c[b.dataset.io];const y=window.scrollY;document.getElementById('iobody').innerHTML=ioHTML();window.scrollTo(0,y);return updBar()}
+ if(b.hasAttribute('data-ioclear')){S.io={};document.getElementById('iobody').innerHTML=ioHTML();return updBar()}
  if(b.dataset.open)return open(b.dataset.open);
  if(b.dataset.find)return openFind(b.dataset.find,b.dataset.hit);
  if(b.dataset.pf){const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;return redraw()}

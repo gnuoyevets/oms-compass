@@ -2,6 +2,14 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.1.0 — Oct 23, 2026
+- **Medical gate.** Colour-coded block at the top of procedure modules (sedation, extractions, canine, implants, grafting, sinus, full-arch, peri-implantitis, biopsy, infection, mandible fracture, dentoalveolar trauma, displaced root, oroantral) summarizing Pre-op clearance answers. Red = unstable condition, defer elective. Amber = item to address (IE prophylaxis, antithrombotic, MRONJ/ORN, SGLT2/GLP-1, airway) or any Unknown or incomplete screen. Green only when the screen is complete with no hit, labelled "not a clearance". Links to Pre-op clearance and, when findings exist, the Assessment.
+- **Hospital on-call switch** on Home, remembered on the device (preference only, no patient data). On: Facial trauma triage, Mandible fracture, Dentoalveolar trauma and Odontogenic infection listed first under "Hospital on-call". Off: the first two are hidden from the list; dentoalveolar trauma moves to Dentoalveolar & acute. All 30+ modules kept; search reaches everything.
+- **Intraop checklist** as a second tab of the Assessment drawer, plus an Intraop button in the bottom bar (bar now also shows inside any module). Time-out, if sedated, pause points (with jumps to Bleeding, Displaced root, Oroantral, Nerve, Calc, SOS) and sign-out. Adapted from the WHO Surgical Safety Checklist (2009); author's draft. Memory only; New patient clears it.
+- Yes / No / ? step buttons raised to 44 px.
+- Decisions kept from review: Yes / No / Unknown buttons instead of swipe (Unknown stays; swipes misfire with gloves); no "proceed = cleared" wording.
+- Tests: 132 checks (25 new for gate tones, on-call grouping and persistence, checklist state, storage privacy, tap targets).
+
 ## v3.0.0 — Oct 23, 2026
 - **Findings layer.** Search a medication (brand or generic), lab, or prior treatment → what changes, provisional action, what it depends on, targeted questions, next steps, escalation triggers, and an expandable Why (linked module text, sources with publication and check dates). 12 findings: DOACs, warfarin, antiplatelets, antiresorptives/antiangiogenics, GLP-1 RA, SGLT2 inhibitors, chronic steroids, head & neck radiation/chemotherapy, INR, platelets, HbA1c, kidney disease/dialysis. Findings reuse existing module nodes and sources (one source of truth).
 - **Search fix.** Root cause of "Eliquis → No match": literal substring search over module text that never named brands. Now: synonym tables, prefix match, typo tolerance (transposition-aware). A miss says "No Compass entry — not the same as no surgical implications."
