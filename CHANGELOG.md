@@ -2,6 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## Handouts app v1.0 — Oct 23, 2026
+- New standalone patient page at /handouts/ (gnuoyevets.github.io/oms-compass/handouts/). Same four approved handouts as the Compass Post-op tab, EN/ES (auto-detects Spanish phones), one link per handout (e.g. #ext-es) for texting or QR codes, tap-to-call office, Share and Print. No clinician content or sources shown. Text is copied from Compass; edit both together.
+
 ## v2.10.3 — Oct 23, 2026
 - Botulinum toxin, TMD and Full-arch: replaced literature ranges with Steven's protocol. Botox 100 U in 2.5 mL (4 U/0.1 mL); masseter only, 4 posterior-inferior points per side; 25 U per side if toxin-naive, titrate to 40 U per side at the 4–6 week recheck; no temporalis or lateral pterygoid; every 3–4 months after reassessment; full-arch dose 2–3 weeks before surgery. Literature context: 10–75 U per muscle (Gkioka 2024, Balkan J Dent Med); dose-response, peak 5–8 weeks, up to 24 weeks (Chen 2023, Aesthetic Plast Surg, doi:10.1007/s00266-023-03256-8). Verify tags remain on full-arch timing and on the risorius-spread rationale for posterior depots.
 - Plan text can now show inline amber verify tags.

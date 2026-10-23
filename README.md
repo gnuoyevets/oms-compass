@@ -7,6 +7,7 @@ Offline web app version of OMS Compass. This repo is the canonical copy; the "OM
 - `manifest.webmanifest` — name, icon, full-screen mode
 - `sw.js` — offline cache
 - `CHANGELOG.md` — dated change log
+- `handouts/index.html` — standalone patient handouts (EN/ES); text mirrors the Compass Post-op tab
 - `*.png` — app icons
 
 ## Publish (GitHub Pages, free)
