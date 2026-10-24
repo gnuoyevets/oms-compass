@@ -1,7 +1,7 @@
 # Reconciled chairside plans — review notes
 
 Review date: October 24, 2026. Base: main at de713a8. Branch: feat/reconciled-chairside-plans.
-This branch is a clinician-review draft, not approved for deployment.
+Approved by Steven for deployment as v3.4.0 on October 24, 2026, keeping the INR recency rule (tagged verify) and the broad NSAID suppression as is.
 
 ## Changes
 

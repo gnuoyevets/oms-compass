@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.4.0-review — Oct 24, 2026 (review branch; not approved for deployment)
+## v3.4.0 — Oct 24, 2026 (approved by Steven after independent review; INR recency and NSAID suppression kept as is)
 
 - Reconcile combined findings into one grouped plan; disclose suppressed conflicting instructions and unresolved alternatives.
 - Keep missing/unknown INR and age-dependent precautions provisional; flag pre-op screen contradictions.

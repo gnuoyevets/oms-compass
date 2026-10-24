@@ -29,7 +29,7 @@ Note: a public repo makes the site public. It contains no patient data.
 2. In `sw.js`, change `VERSION` (e.g., `compass-2026-11-01a`).
 3. Upload both. Phones refresh on the next open while online.
 
-## Review branch validation
+## Validation
 
 Run `node tests/reconciliation.cjs` for dependency-free reconciliation and state-isolation checks.
 See `RECONCILIATION-REVIEW.md` for scope, source checks and limitations.

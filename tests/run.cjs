@@ -501,12 +501,12 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   const oc=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await oc.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
   const op=await oc.newPage();op.on('pageerror',e=>{fail++;fails.push('offline pageerror: '+e.message)});
   await op.goto(base);await op.evaluate(()=>navigator.serviceWorker.ready);await op.reload();await op.waitForFunction(()=>!!navigator.serviceWorker.controller);
-  const v1=await op.evaluate(()=>caches.keys());ok(v1.length===1&&/v3\.4\.0-review/.test(v1[0]),'Service worker installs one versioned cache ('+v1+')');
-  await oc.setOffline(true);await op.reload();ok(await op.locator('#in-q').count()===1&&await op.evaluate(()=>VER)==='3.4.0-review','Offline reload serves the cached app');
+  const v1=await op.evaluate(()=>caches.keys());ok(v1.length===1&&v1[0].endsWith('v'+(await op.evaluate(()=>VER))),'Service worker installs one versioned cache ('+v1+')');
+  await oc.setOffline(true);await op.reload();ok(await op.locator('#in-q').count()===1&&await op.evaluate(()=>VER)===await page.evaluate(()=>VER),'Offline reload serves the cached app');
   await op.evaluate(()=>{openFind('doac');S.pf.proc='high'});ok(await op.evaluate(()=>!!fPlan(FX.doac).act),'Offline: findings compute');
   await oc.setOffline(false);
   fs.writeFileSync(path.join(app,'sw.js'),fs.readFileSync(path.join(app,'sw.js'),'utf8').replace(/const VERSION = '[^']+'/,"const VERSION = 'compass-test-update'"));
-  fs.writeFileSync(path.join(app,'index.html'),fs.readFileSync(path.join(app,'index.html'),'utf8').replace("const VER='3.4.0-review'","const VER='9.9.9-test'"));
+  fs.writeFileSync(path.join(app,'index.html'),fs.readFileSync(path.join(app,'index.html'),'utf8').replace(/const VER='[^']+'/,"const VER='9.9.9-test'"));
   await op.reload();let upd=[];for(let i=0;i<30;i++){upd=await op.evaluate(()=>caches.keys()).catch(()=>[]);if(upd.length===1&&upd[0]==='compass-test-update')break;await op.waitForTimeout(500)}
   ok(JSON.stringify(upd)==='["compass-test-update"]','Update: new cache activates, old cache deleted ('+upd+')');
   await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: online open serves the new version');
