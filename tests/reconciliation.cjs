@@ -28,7 +28,13 @@ test('suppression does not invent replacement dose',`const m=asmtModel();m.miss.
 for(const risk of ['doac','warfarin','antiplatelet','bleeddx','tx'])test('bupe risk overlap '+risk,`const m=setup(['bupe','${risk}'],{age:'60',proc:'low'});m.suppressed.some(x=>/ibuprofen/.test(x.text))&&m.prov`);
 test('adult bupe without listed exclusion preserved',`const m=setup(['bupe'],{age:'60'});m.suppressed.length===0&&m.P[0].p.steps.some(t=>/scheduled ibuprofen/.test(t))`);
 test('pediatric bupivacaine advice excluded',`const m=setup(['bupe'],{age:'9'});m.suppressed.some(x=>/age restriction/.test(x.reason))&&!m.P[0].p.steps.some(t=>/bupivacaine/.test(t))`);
-test('unknown age does not permit age-restricted advice',`const m=setup(['bupe'],{});m.prov&&m.suppressed.some(x=>/Age is unknown/.test(x.reason))&&rankQuestions(['bupe']).some(r=>r.q.k==='age')`);
+test('unknown age withholds age-restricted advice without assuming adult',`const m=setup(['bupe'],{});m.suppressed.some(x=>/Age not entered/.test(x.reason)&&/bupivacaine/.test(x.text))&&!m.P[0].p.steps.some(t=>/bupivacaine/.test(t))&&rankQuestions(['bupe']).some(r=>r.q.k==='age')`);
+test('unknown age alone does not escalate disposition or invent a conflict',`const m=setup(['bupe'],{});!m.conf.some(c=>/Age/.test(c.t))&&!m.miss.some(t=>/Age/.test(t))`);
+test('bleeding disorder exam: articaine withheld, intraligamentary alternative kept, not escalated',`const m=setup(['bleeddx'],{proc:'none',bdType:'ha'});const s=m.P[0].p.steps;m.od==='proceed'&&s.some(t=>/intraligamentary/.test(t))&&!s.some(t=>/articaine/.test(t))&&m.suppressed.some(x=>/articaine/.test(x.text))`);
+test('bleeding disorder exam with age 30 shows articaine option',`const m=setup(['bleeddx'],{proc:'none',bdType:'ha',age:'30'});m.P[0].p.steps.some(t=>/articaine/.test(t))&&m.suppressed.length===0`);
+test('NSAID suppression keeps acetaminophen and bupivacaine steps',`const s=setup(['bupe','renal'],{age:'60',proc:'low',dial:'no',esrd:'n'}).P[0].p.steps;s.some(t=>/scheduled acetaminophen/.test(t))&&s.some(t=>/bupivacaine/.test(t))&&!s.some(t=>/ibuprofen/.test(t))`);
+test('age field stays rendered after a first digit is typed',`newPatient();S.pf.age='6';fQs(FX.bupe).some(q=>q.k==='age')&&fQs(FX.bleeddx).some(q=>q.k==='age')`);
+test('optional age is never the next decisive question',`setup(['bupe'],{});!/Age, years/.test(nextQuestionHTML(asmtModel()))`);
 test('articaine age restriction also composes',`const m=setup(['bleeddx'],{age:'3',proc:'none',bdType:'ha'});m.suppressed.some(x=>/articaine/.test(x.text))`);
 test('negative anticoagulant screen conflicts',`setup(['doac'],{proc:'low',doacAg:'api',ap:'n'});S.ans.preop={c:false};const m=asmtModel();m.od==='investigate'&&m.prov&&m.conf.some(x=>/screen/.test(x.t))`);
 test('screen conflict resolves on actual correction',`S.ans.preop.c=true;!asmtModel().conf.some(x=>/screen says none/.test(x.t))`);

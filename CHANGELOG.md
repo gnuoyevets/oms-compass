@@ -10,6 +10,7 @@ Newest first. Every change is reviewed by Steven before publishing. The app show
 - Add in-memory change explanations and a de-identified, copy-only consultation draft.
 - Preserve Author/Colleague protocols, existing modules, calculations, handouts and offline support.
 - Add deterministic software checks; see RECONCILIATION-REVIEW.md for clinical scope and limitations.
+- Independent review fixes: age-restricted LA advice withholds only the restricted drug (hemophilia intraligamentary alternative and buprenorphine acetaminophen kept); missing age no longer escalates; age field keeps focus; no duplicate IDs; Author protocol visible in the reconciled plan; Context panel no longer collapses on New patient; INR recency window off anticoagulants tagged verify. Browser suite 314/314 including new offline/update, accessibility and phone-width checks.
 
 ## v3.3.3 — Oct 24, 2026 (approved by Steven after the Oct 24 audit)
 - **Dose fixes.** Adult laryngospasm IM succinylcholine capped at 150 mg total (Anectine label). LAST lipid emulsion split at 70 kg per ASRA (>70 kg: 100 mL bolus over 2–3 min, then 250 mL over 15–20 min; ≤70 kg: 1.5 mL/kg, then 0.25 mL/kg/min). Seizure IM midazolam under 13 kg: 0.2 mg/kg, max 10 mg (tagged verify). Under-18 local anesthetic maximums now use AAPD absolute caps (lidocaine and mepivacaine 300 mg, articaine 500 mg, bupivacaine 90 mg) instead of adult caps.

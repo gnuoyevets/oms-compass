@@ -1433,7 +1433,7 @@ function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</
 /* ===== Version, change log, disclaimer ===== */
 const VER='3.4.0-review';
 const CHANGES=[
-{v:'3.4.0-review',d:'Oct 24, 2026',i:['Review branch: one reconciled assessment with conflicting instructions suppressed and unresolved alternatives visible.','Decisive unanswered questions, isolated approach comparisons with explicit Apply, in-memory change explanations, and copy-only consultation drafts.','Missing numeric INR stays provisional. New patient clears all clinical data, comparison state and change history. Software checks do not establish clinical validity.']},
+{v:'3.4.0-review',d:'Oct 24, 2026',i:['Review branch: one reconciled assessment with conflicting instructions suppressed and unresolved alternatives visible.','Decisive unanswered questions, isolated approach comparisons with explicit Apply, in-memory change explanations, and copy-only consultation drafts.','Missing numeric INR stays provisional. New patient clears all clinical data, comparison state and change history. Software checks do not establish clinical validity.','Review fixes: age-restricted local anesthetic advice withholds only that drug; missing age no longer escalates; Author protocol shown in the reconciled plan.']},
 {v:'3.3.3',d:'Oct 24, 2026',i:['Dose fixes: adult IM succinylcholine capped at 150 mg total (label); LAST lipid split at 70 kg (ASRA: >70 kg 100 mL bolus, then 250 mL over 15–20 min); IM midazolam for seizures under 13 kg is 0.2 mg/kg (verify); under-18 local anesthetic maximums use AAPD caps (lidocaine and mepivacaine 300 mg, articaine 500 mg).','New findings: inherited bleeding disorders (WFH), heart valve / IE / prosthetic joint (AHA 2021, ADA), pacemaker or ICD (APSF/ASA), buprenorphine (multisociety 2021), epinephrine interactions (TCAs, nonselective β-blockers, cocaine), organ transplant and immunosuppressants.','Home: on-call and Mode folded into one Settings row. SOS: jump chips to each card. Shorter search hint.']},
 {v:'3.3.2',d:'Oct 24, 2026',i:['Photo triage works in any Claude account: the hand-off now carries a complete prompt (report sections, de-identification, unknown ≠ normal, and the exact CT1 code format with every step defined), so colleagues do not need the pre-op triage skill. If the skill is installed, Claude still uses it.','Paste box accepts the whole report: Compass finds the CT1 line itself. CT1;none explains that nothing was readable.']},
 {v:'3.3.1',d:'Oct 24, 2026',i:['Pediatric SOS: a child (age <12, or <18 and <40 kg, or no age and <40 kg) gets PALS 2025 algorithms for cardiac arrest (2 → 4 J/kg, epinephrine 0.01 mg/kg, amiodarone 5 mg/kg, 15:2) and bradycardia (atropine 0.02 mg/kg, max 0.5 mg), plus pediatric oversedation, hypoglycemia, adrenal crisis, laryngospasm and bronchospasm doses. Chest pain, stroke and hypertensive crisis cards are suppressed with pediatric referral guidance.','LA calculator blocks drugs by label age: articaine under 4 y, dental bupivacaine under 12 y; asks for age when it is missing.','Diabetes: A1C no longer defers surgery on its own — it flags risk; day-of glucose, symptoms, procedure size and urgency decide. Compared unrounded (64 mmol/mol = 8.01%).','Chronic steroids: adrenal-risk assessment (ESE/Endocrine Society 2024): known AI → cover; ≥3–4 weeks above ~15–25 mg/day hydrocortisone-equivalent → oral cover for minor stress, parenteral for GA/major/unwell; unknown history = at risk.','Labs: explicit unit required (A1C, platelets), Unknown button on every number, unrounded comparisons, INR ≥10 (or ≥5 off warfarin) treated as possibly real with urgent same-day verification instead of “invalid”.','Assessment: decision-changing conflicts raise the overall action and stay listed as unresolved; each finding shows its steps and escalation on screen and in the copied note.','Practice mode: “Author” applies your protocols (INR <3.5, uninterrupted DOACs for dentoalveolar surgery) with applicability and the guideline difference shown; “Colleague” now applies SDCEP rules (INR <4, one-dose DOAC timing) and says what it does not replace.','Search: a brand that conflicts with an earlier choice (Xarelto after apixaban) is flagged, not silently ignored; ASA, Ecotrin, Bayer aspirin, acetylsalicylic acid find aspirin. “Add to assessment” sits under the recommendation.']},
@@ -1780,7 +1780,7 @@ const FIND=[
   if(c.inrRef==='y'){p.d='investigate';p.act='Unexplained raised INR: find the cause and discuss with the physician before surgery likely to bleed.';p.steps=['Consider liver disease, nutrition/vitamin K, lab error. [verify]'];p.tags.push('bleedrisk');return p}
   if(!has(c.inrRef)){p.d='investigate';p.prov=true;p.miss.push('Compare with the lab’s reference range');p.act='Compare with the lab’s reference range; no universal cutoff applies.';return p}
   if(v==null){p.d='investigate';p.prov=true;p.act='Enter the numeric INR before interpreting the result as within range.';p.miss.push('Numeric INR result');return p}
-  if(!has(c.inrAge)||c.inrAge==='old'){p.d='investigate';p.prov=true;p.act='Confirm a clinically current INR result before finalizing the interpretation.';p.miss.push('Current INR result date');return p}
+  if(!has(c.inrAge)||c.inrAge==='old'){p.d='investigate';p.prov=true;p.act='Confirm a clinically current INR result before finalizing the interpretation. [verify: no source located sets a recency window for INR off anticoagulants; 72 h mirrors the warfarin timing]';p.miss.push('Current INR result date');return p}
   p.act='Within the reference range off anticoagulants: no INR-based change.';return p}},
 
 {id:'plt',kind:'Lab',t:'Platelet count (thrombocytopenia)',cls:'Hematology lab',
@@ -1861,7 +1861,7 @@ const FIND=[
  plan(c){const p=mk();p.src=['wfhdent'];p.esc=['Post-op bleeding: call the hemophilia center the same day; extra factor may be needed. Airway threat → 911.'];
   if(!has(c.bdType)){p.miss.push('Which disorder');p.prov=true}
   if(!needCtx(p,c,'proc','sets whether factor cover is needed')){p.d='investigate';p.act='Contact the hemophilia treatment center before anything likely to bleed or any IAN block.';return p}
-  if(c.proc==='none'){p.act='No hemostatic cover for exams and buccal infiltration. An IAN block or lingual infiltration needs factor cover first.';p.steps=['Lower molars without a block: buccal articaine infiltration or intraligamentary injection.'];return p}
+  if(c.proc==='none'){p.act='No hemostatic cover for exams and buccal infiltration. An IAN block or lingual infiltration needs factor cover first.';p.steps=['Lower molars without a block: intraligamentary injection.','Lower molars without a block: buccal articaine infiltration.'];return p}
   if(c.proc==='major'){p.d='refer';p.act='Major surgery: hospital setting, planned with the hemophilia treatment center.';return p}
   p.d='refer';p.act='Plan with the hemophilia treatment center before surgery: factor replacement or desmopressin, as they direct.';
   p.steps=['IAN block or lingual infiltration only after factor cover; otherwise buccal infiltration or intraligamentary injection.','Tranexamic acid 1 g PO TID, often from the day before for 7 days total, per hematology; 10% TXA rinse or soaked gauze for oozing.','One or two extractions at the first visit. Local hemostasis and sutures; observe longer before discharge.','Analgesia: acetaminophen; no aspirin; NSAIDs only if hematology agrees.'];
@@ -1909,7 +1909,7 @@ const FIND=[
  link:[['pain',null],['sed',null]],
  plan(c){const p=mk();p.src=['kohan'];p.d='modify';
   p.act='Continue buprenorphine at the usual dose. Plan analgesia with the prescriber before surgery.';
-  p.steps=['Multimodal: scheduled ibuprofen + acetaminophen; long-acting local anesthetic (bupivacaine) at the end of the case.','Pain not controlled: a full-agonist opioid or a higher or divided buprenorphine dose, coordinated with the prescriber; monitor closely.','Any added opioid: fewest tablets and a written plan back to the maintenance dose.','Sedation: additive respiratory depression with benzodiazepines or propofol — capnography, titrate slowly. Reversal may need higher naloxone doses. [verify]'];
+  p.steps=['Multimodal: scheduled acetaminophen.','Multimodal: add scheduled ibuprofen.','Long-acting local anesthetic (bupivacaine) at the end of the case.','Pain not controlled: a full-agonist opioid or a higher or divided buprenorphine dose, coordinated with the prescriber; monitor closely.','Any added opioid: fewest tablets and a written plan back to the maintenance dose.','Sedation: additive respiratory depression with benzodiazepines or propofol — capnography, titrate slowly. Reversal may need higher naloxone doses. [verify]'];
   return p}},
 
 {id:'epix',kind:'Medication',t:'Epinephrine interactions (TCAs, nonselective β-blockers, cocaine)',cls:'Vasoconstrictor caution',
@@ -1959,7 +1959,9 @@ function authorHTML(k){const a=AUTHOR[k];return`<div class="fsec authp"><div cla
 function authorText(k){const a=AUTHOR[k];return`Author protocol applied: ${a.rule} (applies to: ${a.applies}). Guidance instead: ${a.guide}.`}
 
 /* Questions relevant now (finding + shared context), and pruning of stale answers */
-function fQs(f){return[...f.ctx.map(k=>({k,...CTXQ[k],ctx:1})),...(['bupe','bleeddx'].includes(f.id)&&!has(S.pf.age)?[{k:'age',q:'Age, years',type:'num',unit:'years',mode:'numeric'}]:[]),...f.qs].filter(q=>!q.when||q.when())}
+/* Age is optional here: it only unlocks label-restricted local anesthetic options. Always rendered so the field does not vanish mid-typing. */
+const AGEQ={k:'age',q:'Age, years (unlocks age-restricted local anesthetic options)',type:'num',unit:'years',mode:'numeric',optional:1,ctx:1};
+function fQs(f){return[...f.ctx.map(k=>({k,...CTXQ[k],ctx:1})),...(['bupe','bleeddx'].includes(f.id)?[AGEQ]:[]),...f.qs].filter(q=>!q.when||q.when())}
 function prune(){
  const act=[...new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])])].map(id=>FX[id]).filter(Boolean);
  for(let i=0;i<3;i++){let changed=false;
@@ -1970,7 +1972,7 @@ function baseFindingPlan(f){const p=f.plan({...S.pf});
  /* Strength matches inputs: any visible question unanswered or Unknown keeps the action provisional. */
  /* A lookup conflict on this finding keeps it unresolved and at least “verify first”. */
  Object.values(S.lkc||{}).filter(x=>x.fid===f.id).forEach(x=>{p.prov=true;if(DRANK[p.d]<DRANK.investigate)p.d='investigate';p.miss.push(`Confirm ${x.prevL} vs ${x.nextL} (lookup conflict)`)});
- const open=fQs(f).filter(q=>!has(S.pf[q.k]));if(open.length){p.prov=true;p.miss=[...new Set([...p.miss,...open.map(q=>q.q+(S.pf[q.k]==='u'?' — unknown':''))])]}
+ const open=fQs(f).filter(q=>!q.optional&&!has(S.pf[q.k]));if(open.length){p.prov=true;p.miss=[...new Set([...p.miss,...open.map(q=>q.q+(S.pf[q.k]==='u'?' — unknown':''))])]}
  if(p.prov&&p.d==='proceed'){p.d='investigate';p.act='Resolve the missing information before finalizing. Conditional result: '+p.act}
  if(/\[verify/.test([p.act,...p.steps,...p.esc].join(' ')))p.basis='un';
  return p}
@@ -2020,15 +2022,15 @@ function reconcilePlans(raw,A){
  const a=ageNum(),bupiRestricted=a==null||a<12,artRestricted=a==null||a<4;
  for(const row of P){
   const keep=(text,part)=>{
-   let why='',src=[];
-   if(nsaid&&/scheduled ibuprofen|ibuprofen \+|NSAID first.line/i.test(text)&&!/avoid|rather than|no aspirin|only if/i.test(text)){why=reason;src=A.includes('renal')?['nkfpain']:A.includes('bleeddx')?['wfhdent']:['sdcepFull']}
-   if(/bupivacaine/i.test(text)&&bupiRestricted){why=a==null?'Age is unknown; do not apply age-restricted bupivacaine advice.':'Existing local-anesthetic age restriction excludes dental bupivacaine below age 12.';src=['aapdla']}
-   if(/articaine/i.test(text)&&artRestricted){why=a==null?'Age is unknown; verify eligibility before applying articaine advice.':'Existing local-anesthetic age restriction excludes articaine below age 4.';src=['aapdla']}
+   let why='',src=[],raise=false;
+   if(nsaid&&/scheduled ibuprofen|ibuprofen \+|NSAID first.line/i.test(text)&&!/avoid|rather than|no aspirin|only if/i.test(text)){why=reason;src=A.includes('renal')?['nkfpain']:A.includes('bleeddx')?['wfhdent']:['sdcepFull'];raise=true}
+   /* Label age limits only withhold the restricted drug; the remaining steps stand, so no disposition change. */
+   if(/bupivacaine/i.test(text)&&bupiRestricted){why=a==null?'Age not entered; bupivacaine option withheld (label: not under age 12). Enter age to show it.':'Existing local-anesthetic age restriction excludes dental bupivacaine below age 12.';src=['aapdla']}
+   if(/articaine/i.test(text)&&artRestricted){why=a==null?'Age not entered; articaine option withheld (label: not under age 4). Enter age to show it.':'Existing local-anesthetic age restriction excludes articaine below age 4.';src=['aapdla']}
    if(!why)return true;
    suppressed.push({fid:row.f.id,text,part,reason:why,src});
    if(!row.p.src.includes(src[0]))row.p.src.push(...src);
-   const request='Confirm a patient-specific alternative to the suppressed advice: '+row.f.t;
-   miss.push(request);conf.push({t:why+' Agree an alternative before finalizing.',raise:'investigate',src:src[0]});
+   if(raise){miss.push('Confirm a patient-specific alternative to the suppressed advice: '+row.f.t);conf.push({t:why+' Agree an alternative before finalizing.',raise:'investigate',src:src[0]})}
    return false;
   };
   if(!keep(row.p.act,'action'))row.p.act='The source action conflicts with another entered precaution. Agree a patient-specific plan before proceeding.';
@@ -2052,7 +2054,7 @@ function planSections(P){const sections={};
  return sections;
 }
 function unifiedPlanHTML(m){const order=['Procedure / setting','Anesthesia / monitoring','Medication / analgesia','Follow-up / escalation'];
- return`<div class="fsec reconciled"><div class="lab">One reconciled plan</div>${m.prov?'<p class="small">Conditional until the named questions and conflicts are resolved.</p>':''}${order.map(k=>m.sections[k]?.length?`<h3>${esc(k)}</h3><ul>${m.sections[k].map(x=>`<li>${escV(x.text)} <span class="small">${x.findings.map(id=>esc(FX[id].t.split(' (')[0])).join(' · ')} ${basisChip(x.basis)}</span></li>`).join('')}</ul>`:'').join('')}</div>${m.suppressed.length?`<details class="box"><summary>Advice suppressed · ${m.suppressed.length}</summary><div class="inner"><p class="small">Suppression is not a replacement prescription. Resolve the requested alternative with the appropriate clinician.</p>${m.suppressed.map(x=>`<p><b>${esc(FX[x.fid].t)}</b><br>Suppressed: ${escV(x.text)}<br><b>Why:</b> ${esc(x.reason)} ${x.src.map(srcLink).join(' ')}</p>`).join('')}</div></details>`:''}`;
+ return`<div class="fsec reconciled"><div class="lab">One reconciled plan</div>${m.P.filter(x=>x.p.author).map(({p})=>`<div class="small"><b>Author’s protocol:</b> ${esc(AUTHOR[p.author].rule)} — guidance: ${esc(AUTHOR[p.author].guide)}</div>`).join('')}${m.prov?'<p class="small">Conditional until the named questions and conflicts are resolved.</p>':''}${order.map(k=>m.sections[k]?.length?`<h3>${esc(k)}</h3><ul>${m.sections[k].map(x=>`<li>${escV(x.text)} <span class="small">${x.findings.map(id=>esc(FX[id].t.split(' (')[0])).join(' · ')} ${basisChip(x.basis)}</span></li>`).join('')}</ul>`:'').join('')}</div>${m.suppressed.length?`<details class="box"><summary>Advice suppressed · ${m.suppressed.length}</summary><div class="inner"><p class="small">Suppression is not a replacement prescription. Where an alternative is requested, agree it with the appropriate clinician.</p>${m.suppressed.map(x=>`<p><b>${esc(FX[x.fid].t)}</b><br>Suppressed: ${escV(x.text)}<br><b>Why:</b> ${esc(x.reason)} ${x.src.map(srcLink).join(' ')}</p>`).join('')}</div></details>`:''}`;
 }
 
 /* Enumerate existing option branches. Numeric data is requested, never invented. */
@@ -2063,7 +2065,8 @@ function rankQuestions(ids){
    if(has(S.pf[q.k])&&(!q.unitSel||has(S.pf[q.unitSel])))continue;
    if(seen.has(q.k))continue;seen.add(q.k);
    const r={q,fid:id,score:1,reason:'Required context remains unresolved.',choices:[]};
-   if(q.type==='num'){r.score=3;r.reason='A reported numeric value and unit are required; no test value is assumed.'}
+   if(q.optional){r.score=0;r.reason='Optional: '+q.q.replace(/^[^(]*\(|\)$/g,'')+'.'}
+   else if(q.type==='num'){r.score=3;r.reason='A reported numeric value and unit are required; no test value is assumed.'}
    else{
     r.choices=q.opts.map(([value,label])=>{const m=modelFor(ids,{[q.k]:value});return{value,label,d:m.od,provisional:m.prov,key:outcomeKey(m)}});
     const dispos=new Set(r.choices.map(x=>x.d)),plans=new Set(r.choices.map(x=>x.key));
@@ -2076,8 +2079,8 @@ function rankQuestions(ids){
  }
  return out.sort((a,b)=>b.score-a.score);
 }
-function nextQuestionHTML(m){const r=rankQuestions(m.A)[0];if(!r)return'';
- return`<div class="fsec question-next"><div class="lab">Next decisive question</div><p>${esc(r.reason)}</p>${qHTML(r.q)}<button class="go" data-question="${r.q.k}" data-qfid="${r.fid}">Open finding and details ›</button></div>`;
+function nextQuestionHTML(m){const r=rankQuestions(m.A).find(x=>!x.q.optional);if(!r)return'';
+ return`<div class="fsec question-next"><div class="lab">Next decisive question</div><p>${esc(r.reason)}</p>${['proc','anes','urg'].includes(r.q.k)?`<p><b>${esc(r.q.q)}</b> — answer under Context above.</p>`:qHTML(r.q).replace(/ (id|for)="(question|pf)-/g,' $1="next-$2-')}<button class="go" data-question="${r.q.k}" data-qfid="${r.fid}">Open finding and details ›</button></div>`;
 }
 function changeConditionsHTML(ids){const rows=rankQuestions(ids).filter(r=>r.choices.length&&r.score>=4).slice(0,3);
  return`<details class="box"><summary>What would change this plan?</summary><div class="inner"><p class="small">Existing rule branches, not predictions. Unanswered facts remain Unknown. Other clinical considerations may be outside Compass.</p>${rows.length?rows.map(r=>`<h4>${esc(r.q.q)}</h4><ul>${r.choices.map(c=>`<li>${esc(c.label)} → ${esc(c.d?DISP[c.d][0]:'No finding action')}${c.provisional?' (still provisional)':''}</li>`).join('')}</ul>`).join(''):'<p>No different disposition or essential step was found among the currently visible option branches. Numeric results and hidden downstream questions may still change the plan.</p>'}</div></details>`;
@@ -2121,7 +2124,7 @@ function qHTML(q){return q.type==='num'?numRow(q):chipRow(q,S.pf[q.k])}
 function dispHTML(p,big){const [l,c]=DISP[p.d];return`<div class="disp d-${c}${big?' big':''}"><div class="lab">${p.prov?'Provisional action':'Recommended action'} ${basisChip(p.basis)}</div><div class="pt"><span class="dtag">${esc(l)}</span> ${escV(p.act)}</div></div>`}
 function fSig(f){return fQs(f).map(q=>q.k).join(',')}
 function fDynHTML(f){const p=fPlan(f);return`<div id="ftop">${fTopHTML(f,p)}</div><div id="fqs" data-sig="${fSig(f)}">${fQsHTML(f)}</div><div id="fnext">${fNextHTML(f,p)}</div>`}
-function fQsHTML(f){const ranked=rankQuestions([f.id]),order=new Map(ranked.map((r,i)=>[r.q.k,i]));const qs=fQs(f).sort((a,b)=>(order.get(a.k)??999)-(order.get(b.k)??999));return`<div class="fsec"><div class="lab">Refine the plan · decisive questions first</div>${ranked[0]?`<p class="small">Next: ${esc(ranked[0].reason)}</p>`:''}${qs.map(qHTML).join('')}</div>${changeConditionsHTML([f.id])}`}
+function fQsHTML(f){const ranked=rankQuestions([f.id]),order=new Map(ranked.map((r,i)=>[r.q.k,i]));const qs=fQs(f).sort((a,b)=>(order.get(a.k)??999)-(order.get(b.k)??999));return`<div class="fsec"><div class="lab">Refine the plan · decisive questions first</div>${ranked[0]&&!ranked[0].q.optional?`<p class="small">Next: ${esc(ranked[0].reason)}</p>`:''}${qs.map(qHTML).join('')}</div>${changeConditionsHTML([f.id])}`}
 function lkcHTML(f){const c=Object.values(S.lkc||{}).filter(x=>x.fid===f.id);return c.map(x=>`<div class="fsec lkc" role="alert"><div class="lab">Lookup conflict · unresolved</div><p style="margin:4px 0 8px">You looked up <b>${esc(x.hit)}</b> (${esc(x.nextL)}), but <b>${esc(x.prevL)}</b> is already selected. Confirm which the patient takes.</p><div class="chips"><button class="tg" data-lkuse="${x.k}">Use ${esc(x.nextL.split(' (')[0])}</button><button class="tg" data-lkkeep="${x.k}">Keep ${esc(x.prevL.split(' (')[0])}</button></div></div>`).join('')}
 function addBtnHTML(f){const inA=(S.asmt||[]).includes(f.id);return`<div class="fact top"><button class="gobtn" data-addf="${f.id}"${inA?' disabled':''}>${inA?'✓ In assessment':'＋ Add to assessment'}</button></div>`}
 function fTopHTML(f,p){const assume=[...p.assume,...p.miss.map(m=>'Missing: '+m)];
@@ -2241,7 +2244,7 @@ function asmtView(){S.mod=null;S.view='asmt';S.fid=null;
 
 /* New patient: clear every patient-specific value; keep language/site/disclaimer preferences. */
 function newPatient(){
- S.changes=[];delete S.compare;delete S.compareEligible;S.ctxOpen=false;document.body.classList.remove('kb');
+ S.changes=[];delete S.compare;delete S.compareEligible;document.body.classList.remove('kb');
  ['pf','ans','inp','rcri','io'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
  ['tri','triErr','wt','wtIn','lkc','asa','q','refq','fid','fhit','emOpen','hoOpen','mod'].forEach(k=>{delete S[k]});
  home()}
