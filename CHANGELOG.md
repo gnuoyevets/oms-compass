@@ -2,6 +2,15 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.4.0-review — Oct 24, 2026 (review branch; not approved for deployment)
+
+- Reconcile combined findings into one grouped plan; disclose suppressed conflicting instructions and unresolved alternatives.
+- Keep missing/unknown INR and age-dependent precautions provisional; flag pre-op screen contradictions.
+- Rank unanswered questions using existing branches; preview approach changes in isolated state with explicit Apply.
+- Add in-memory change explanations and a de-identified, copy-only consultation draft.
+- Preserve Author/Colleague protocols, existing modules, calculations, handouts and offline support.
+- Add deterministic software checks; see RECONCILIATION-REVIEW.md for clinical scope and limitations.
+
 ## v3.3.3 — Oct 24, 2026 (approved by Steven after the Oct 24 audit)
 - **Dose fixes.** Adult laryngospasm IM succinylcholine capped at 150 mg total (Anectine label). LAST lipid emulsion split at 70 kg per ASRA (>70 kg: 100 mL bolus over 2–3 min, then 250 mL over 15–20 min; ≤70 kg: 1.5 mL/kg, then 0.25 mL/kg/min). Seizure IM midazolam under 13 kg: 0.2 mg/kg, max 10 mg (tagged verify). Under-18 local anesthetic maximums now use AAPD absolute caps (lidocaine and mepivacaine 300 mg, articaine 500 mg, bupivacaine 90 mg) instead of adult caps.
 - **Six new findings.** Inherited bleeding disorders (WFH dental guideline: HTC planning, factor cover before IAN block or lingual infiltration, TXA, acetaminophen); heart valve / endocarditis risk / prosthetic joint (AHA 2021, ADA); pacemaker or ICD (APSF 2020 summary of ASA advisory); buprenorphine (Kohan 2021 multisociety panel: continue, multimodal analgesia); epinephrine interactions (TCAs, nonselective β-blockers, cocaine/methamphetamine; Malamed); organ transplant and immunosuppressants (Cobo-Vázquez 2024 review; interaction and timing lines tagged verify).
