@@ -209,6 +209,19 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  ok(t2===0,'Checklist controls ≥44 px tall');
  ok(await E(page,()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Checklist: no horizontal scroll');
 
+ console.log('11b. Photo triage works without the author’s skill');
+ const tp=await E(page,()=>({p:TRIAGE_PROMPT,ok:['preop','sed'].every(m=>TRI_STEPS[m].every(([k])=>M(m).nodes[k]&&M(m).nodes[k].q)),url:('https://claude.ai/new?q='+encodeURIComponent(TRIAGE_PROMPT)).length}));
+ ok(tp.ok,'Every step id in the prompt is a real question in Pre-op clearance / Office sedation');
+ ok(/If you have a pre-op triage skill, use it; otherwise/.test(tp.p)&&/CT1;preop:<answers>/.test(tp.p)&&/Never repeat a name/.test(tp.p)&&/never assume it is normal/.test(tp.p),'Prompt is self-contained: output format, de-identification, unknown ≠ normal');
+ ok(tp.url<8000,'Hand-off link stays under 8,000 characters ('+tp.url+')');
+ const rep='**Red flags:** apixaban; prosthetic aortic valve.\nASA III.\n\n```\nCT1;preop:a0,b1,c1,d0,d20,e1,f1,g0;sed:a0,b1,c1;asa:3;sb:4\n```\nAdvisory only — not a clearance.';
+ const pr=await E(page,r=>{const t=parseTri(r);return{err:t.err||'',asa:t.asa,sb:t.sb,b:t.mods&&t.mods.preop&&t.mods.preop.b,d2:t.mods&&t.mods.preop&&t.mods.preop.d2,sb3:t.mods&&t.mods.sed&&t.mods.sed.c}},rep);
+ ok(!pr.err&&pr.asa===3&&pr.sb===4&&pr.b===true&&pr.d2===false&&pr.sb3===true,'A whole pasted report (code in a code block) loads correctly');
+ ok(/nothing could be read/.test(await E(page,()=>parseTri('Report… CT1;none').err)),'CT1;none explains that nothing was readable');
+ await E(page,()=>{newPatient();open('preop')});await page.fill('#in-tri',rep);await page.click('[data-triload]');
+ ok(await E(page,()=>!!S.tri&&S.tri.asa===3),'Report pasted into the box loads through the UI');
+ await E(page,()=>newPatient());
+
  console.log('12. v3.3 quality gate');
  // Gate 1: pediatric safety
  await E(page,()=>{newPatient();view('calc')});

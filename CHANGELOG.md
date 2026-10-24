@@ -2,6 +2,11 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.3.2 — Oct 24, 2026 (branch `feat/universal-triage-prompt`, pending review)
+- **Photo triage without the skill.** The “Photo triage in Claude” hand-off (link and clipboard) now sends a self-contained prompt: report sections (red flags, ASA, optimization, advisory read — not a clearance), de-identification, unknown ≠ normal, and the exact `CT1;…` format with every Pre-op clearance and Office sedation step defined. If the reader’s account has a pre-op triage skill, Claude uses it; otherwise the prompt alone produces the code. Step ids are checked against the modules by tests, so the prompt cannot drift from the app.
+- **Paste the whole report.** The paste box is now multi-line and pulls the `CT1;…` line out of any surrounding text or code block. `CT1;none` explains nothing was readable.
+- Tests: 248 checks (6 new).
+
 ## v3.3.1 — Oct 24, 2026 (branch `fix/v3.3.1-audit`, pending Steven's review — not merged)
 Audit of reported v3.3.0 defects. Each was reproduced on main before editing (tests section 13).
 - **Pediatric SOS.** Child = age <12; or age <18 and weight <40 kg; or no age and weight <40 kg. Adult cardiac-arrest doses and shock energies are no longer shown to children. Pediatric algorithms: cardiac arrest (AHA PALS 2025: CPR ≥⅓ chest depth, 15:2 two-rescuer pre-puberty, 2 J/kg → 4 J/kg → ≥4 J/kg max 10 J/kg or adult dose, epinephrine 0.01 mg/kg max 1 mg q3–5 min, amiodarone 5 mg/kg max 300 mg up to 3 doses or lidocaine 1 mg/kg), bradycardia (PALS 2025: CPR if HR <60 with compromise, epinephrine 0.01 mg/kg, atropine 0.02 mg/kg min 0.1 mg max 0.5 mg), oversedation (naloxone 0.1 mg/kg if <20 kg/<5 y, else 2 mg; flumazenil 0.01 mg/kg max 0.2 mg, total ≤0.05 mg/kg or 1 mg), hypoglycemia (glucagon 0.5/1 mg by weight, nasal 3 mg ≥4 y, dextrose 0.5–1 g/kg as D10), adrenal crisis (hydrocortisone 25/50/100 mg by age band — verify), laryngospasm (succinylcholine 1–2 mg/kg IV / 4 mg/kg IM — verify), bronchospasm (puff count by age — verify). Chest pain, stroke and hypertensive crisis: adult card suppressed, pediatric referral guidance shown.
