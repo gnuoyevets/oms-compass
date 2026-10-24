@@ -207,6 +207,70 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  ok(t2===0,'Checklist controls ≥44 px tall');
  ok(await E(page,()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Checklist: no horizontal scroll');
 
+ console.log('12. v3.3 quality gate');
+ // Gate 1: pediatric safety
+ await E(page,()=>{newPatient();view('calc')});
+ await page.fill('#in-wt','70');ok(await page.locator('.ctab td:text("Precedex")').count()===1,'Adult: Precedex row shown on Calc');
+ await page.click('#in-age');await page.keyboard.type('10');
+ ok(await page.locator('#plock').count()===1&&/PEDIATRIC LOCKOUT \(<12 YO \/ <40 KG\)/.test(await page.locator('#plock').innerText()),'Age 10: lockout card shown');
+ const calcTxt=await page.locator('#vbody').innerText();
+ ok(!/Precedex|Ketamine|Midazolam|Propofol|Glycopyrrolate/.test(calcTxt.replace(/Adult non-pump IV sedation protocol[^.]*\./,'')),'Age 10: no adult sedation drug rows on Calc');
+ ok(await E(page,()=>document.activeElement&&document.activeElement.id==='in-age'),'Typing age keeps the field focused');
+ ok(/308 mg\s+9\b/.test(calcTxt)&&/AAPD/.test(calcTxt),'Age 10: LA maximum still calculated with AAPD pediatric mg/kg (lidocaine 308 mg = 9 carps at 70 kg)');
+ ok(/110 mL\/h/.test(await page.locator('#mfluid').textContent()),'Age 10: 4-2-1 fluids still calculated');
+ await page.click('[data-view="emergency"]');ok(await page.locator('#peds-sos').count()===1&&await page.locator('details.em').count()===await E(page,()=>EMS.length),'Age 10: SOS active with pediatric banner');
+ ok(/0\.5 mg/.test(await E(page,()=>EMS.find(e=>e.id==='anaph').steps().join(' '))),'SOS anaphylaxis repeat dose scales (0.01 mg/kg, max 0.5)');
+ await E(page,()=>open('sed'));ok(await page.locator('#plock').count()===1&&await page.locator('.cur').count()===0,'Age 10: Office sedation screen locked out');
+ const lk=await E(page,()=>{const r=[];newPatient();S.wt=35;r.push(pedsLock());S.pf.age='14';r.push(pedsLock());delete S.pf.age;S.wt=45;r.push(pedsLock());S.pf.age='11';r.push(pedsLock());newPatient();return r});
+ ok(JSON.stringify(lk)==='[true,false,false,true]','Lockout trigger: no age & <40 kg → on; age 14 → off; 45 kg → off; age 11 → on');
+ // Gate 2: lb → kg sync
+ await E(page,()=>{newPatient();view('calc')});await page.click('#in-lb');await page.keyboard.type('154');
+ const w2=await E(page,()=>S.wt);ok(w2===69.9,'154 lb → 69.9 kg (lb ÷ 2.20462, 1 decimal) got '+w2);
+ ok(await E(page,()=>document.getElementById('in-wt').value==='69.9'&&document.activeElement.id==='in-lb'),'Calc kg field fills while lb keeps focus');
+ ok(/69\.9 kg \(154 lb\)/.test(await page.locator('#wtx').innerText()),'Both units displayed');
+ await page.click('[data-view="emergency"]');ok(await E(page,()=>document.getElementById('in-wt').value==='69.9'),'SOS shows the same weight');
+ await E(page,()=>{S.ctxOpen=true;S.atab='find';asmtView()});ok(await E(page,()=>document.getElementById('in-wt2').value==='69.9'&&document.getElementById('in-lb2').value==='154'),'Assessment shows the same weight');
+ await page.fill('#pf-age','45');await E(page,()=>view('calc'));ok(await E(page,()=>document.getElementById('in-age').value==='45'),'Age typed in the Assessment appears on Calc');
+ await page.fill('#in-wt','80');ok(await E(page,()=>document.getElementById('in-lb').value==='176'),'kg → lb display (80 kg → 176 lb)');
+ // Gate 3: colleague mode
+ await E(page,()=>{newPatient();home()});await page.click('[data-pm="colleague"]');
+ ok(await E(page,()=>localStorage.getItem('oms_compass_practice_mode')==='colleague'),'Practice mode stored under oms_compass_practice_mode');
+ await E(page,()=>{S.hoOpen='ext';view('handouts')});
+ ok(await page.locator('[data-site]').count()===0&&/Oral & Maxillofacial Surgery — Patient Instructions/.test(await page.locator('#ho-neutral').textContent()),'Colleague: no Dr. Young/Bayside pills, neutral header');
+ const ht=await E(page,()=>hoText(HO[0],'en'));ok(!/Young|Bayside|401|508|g\.page/.test(ht)&&/^Oral & Maxillofacial Surgery — Patient Instructions/.test(ht),'Colleague: shared handout has no practice name, phone or review link');
+ await E(page,()=>view('calc'));ok(await page.locator('.audisc').count()>=1&&await E(page,()=>{const d=document.querySelector('.auhid');return d.hidden&&/Your sedation protocol/.test(d.textContent)}),'Colleague: Calc sedation protocol collapsed');
+ await page.click('.audisc');ok(await E(page,()=>!document.querySelector('.auhid').hidden),'Disclosure opens the author protocol');
+ await E(page,()=>{S.refq='socket shield';view('ref')});ok(await E(page,()=>{const d=document.querySelector('#vbody details.box .auhid');return!!d&&d.hidden}),'Colleague: author Ref card body collapsed');
+ await E(page,()=>{newPatient();S.ans.sed={a:false,b:true,c:false,d:true,e:false};open('sed')});
+ ok(await E(page,()=>{const h=[...document.querySelectorAll('.plan .auhid')];return h.length===1&&/Your card|Precedex/.test(h[0].textContent)&&!/Precedex/.test(document.querySelector('.plan').textContent.replace(h[0].textContent,''))}),'Colleague: author sedation note folded in the Decide plan');
+ await E(page,()=>{setPmode('author');newPatient();S.ans.sed={a:false,b:true,c:false,d:true,e:false};open('sed')});
+ ok(await page.locator('.plan .audisc').count()===0&&/Precedex/.test(await page.locator('.plan').innerText()),'Author mode: no disclosure, protocol visible');
+ await E(page,()=>view('handouts'));ok(await page.locator('[data-site]').count()===2,'Author mode: Dr. Young / Bayside pills back');
+ // Gate 4: EMR note
+ const note=await E(page,()=>{newPatient();S.asmt=['doac','renal'];Object.assign(S.pf,{age:'72',proc:'high',doacAg:'api',ap:'n'});S.wt=70;S.ans.preop={a:false,b:false,c:true};const t=asmtText();newPatient();return t});
+ const heads=['HISTORY:','FINDINGS & RISK:','ANESTHESIA & LIMITS:','PLAN & ALERTS:'],pos=heads.map(h=>note.indexOf('\n'+h));
+ ok(pos.every(p=>p>0)&&pos.every((p,i)=>!i||p>pos[i-1]),'Note has the four headers in order');
+ ok(/Lidocaine 2% \+ epi: 490 mg = 14\.4 carpules/.test(note)&&/Articaine 4% \+ epi: 490 mg = 7\.2 carpules/.test(note),'Note has calculated LA cartridge limits');
+ ok(/ALERT - NSAID \/ anticoagulant conflict: avoid NSAIDs/.test(note),'Note has the NSAID–anticoagulant alert');
+ ok(/Age: 72 y; Weight: 70 kg \(154 lb\)/.test(note)&&/Pre-op screen: /.test(note),'Note history has age, both weights and pre-op screen answers');
+ ok(/^[\x09\x0a\x20-\x7e]*$/.test(note),'Note is plain ASCII (pastes cleanly into Dentrix/Epic)');
+ ok(!/\d{1,2}\/\d{1,2}\/\d{2,4}/.test(note),'Note has no dates');
+ const kidNote=await E(page,()=>{newPatient();S.pf.age='9';S.wt=30;const t=asmtText();newPatient();return t});
+ ok(/PEDIATRIC LOCKOUT/.test(kidNote)&&/Lidocaine 2% \+ epi: 132 mg = 3\.8 carpules/.test(kidNote)&&/Articaine 4% \+ epi: 210 mg/.test(kidNote),'Pediatric note: lockout line and AAPD-scaled LA (lidocaine 4.4 mg/kg)');
+ await E(page,()=>{newPatient();S.pf.age='50';S.wt=70;S.atab='find';asmtView()});ok(await page.locator('[data-acopy]').count()===1,'Copy button available with context only (no findings)');
+ // Gate 5: no regression + privacy
+ await E(page,()=>{newPatient();S.pf.age='10';S.wt=30;S.wtIn={src:'lb',raw:'66'};home()});
+ await page.click('#abar [data-newpt]');await page.click('#abar [data-newpt]');
+ const st5=await E(page,()=>({wt:S.wt,wtIn:S.wtIn,age:S.pf.age,ls:Object.keys(localStorage).sort()}));
+ ok(!st5.wt&&!st5.wtIn&&!st5.age,'New patient clears age, kg and lb');
+ ok(st5.ls.every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode'].includes(k)),'Storage holds only device preferences '+st5.ls.join(','));
+ await E(page,()=>view('calc'));const small=await E(page,()=>[...document.querySelectorAll('.pmode .tg,.wtbar input,.audisc,.toggles .tg')].filter(b=>b.offsetParent).map(b=>b.getBoundingClientRect().height).filter(h=>h<44).length);
+ await E(page,()=>home());const small2=await E(page,()=>[...document.querySelectorAll('.pmode .tg')].filter(b=>b.offsetParent).map(b=>b.getBoundingClientRect().height).filter(h=>h<44).length);
+ ok(small===0&&small2===0,'New controls ≥44 px tall');
+ for(const v of ['calc','emergency','handouts','ref']){await E(page,v=>view(v),v);ok(await E(page,()=>document.documentElement.scrollWidth<=window.innerWidth+1),`${v}: no horizontal scroll`)}
+ ok(await E(page,()=>/DRAFT · v3\.3\.0/.test(document.querySelector('.top').textContent)),'Header shows DRAFT · v3.3.0');
+ ok(await E(page,()=>{const o=document.getElementById('offl');return!!o&&o.hidden}),'Offline badge present, hidden until a service worker controls the page');
+
  await browser.close();
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
 })();
