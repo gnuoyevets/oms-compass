@@ -376,6 +376,10 @@ txa:{n:'Therapeutic Guidelines: Oral & Dental · Tranexamic acid 5% mouthwash',v
 meyer:{n:'Goodson et al. · Classifications and Lists in OMFS — Meyer protocol, Seddon/Sunderland',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
 atls:{n:'ATLS 11th ed. update — hemorrhage-first primary survey (Mayo Clinic)',v:'Implemented Jan 2026',u:'https://www.mayoclinic.org/medical-professionals/trauma/news/atls-update-what-trauma-professionals-need-to-know/mac-20602992'},
 canth:{n:'emDocs · Retrobulbar hematoma and lateral canthotomy',v:'IOP >40; act within ~2 h',u:'https://www.emdocs.net/em3am-retrobulbar-hematoma/'},
+lacaafp:{n:'Forsch, Little & Williams · Laceration repair: a practical approach',v:'Am Fam Physician 2017;95(10):628–636',chk:'2026-10-25',u:'https://aafp.org/pubs/afp/issues/2017/0515/p628.pdf'},
+tetcdc:{n:'CDC · Clinical guidance for wound management to prevent tetanus',v:'Reviewed Sep 8, 2026',chk:'2026-10-25',u:'https://www.cdc.gov/tetanus/hcp/clinical-guidance/'},
+bitewk:{n:'WikEM · Mammalian bites (antibiotics, facial closure, rabies)',v:'Secondary summary; cites IDSA 2014 SSTI',chk:'2026-10-25',u:'https://www.wikem.org/wiki/Mammalian_bites'},
+fn72:{n:'Extratemporal facial nerve injury review (PubMed 11951222)',v:'Abstract only: repair within 72 h; graft at 9–12 months',chk:'2026-10-25',u:'https://pubmed.ncbi.nlm.nih.gov/11951222/'},
 fxabx:{n:'Harryman et al. · Prophylactic antibiotics in mandible fractures (TRIO Best Practice)',v:'Laryngoscope 2023',u:'https://www.enttoday.org/article/prophylactic-antibiotics-should-be-used-conservatively-in-setting-mandibular-fractures/'},
 lect:{n:'Your OMS Lecture Pearls (Drive) — infections, mandible fractures',v:'Jun 2026 · lecture notes',u:'https://drive.google.com/file/d/1KKI7X5dwrOVV1oFIWOo5q__TgCMON8UP/view'},
 board:{n:'Your OMS Clinical Protocols — Board Review (Readwise)',v:'Board-review notes; textbook-derived',u:'https://read.readwise.io/'},
@@ -683,6 +687,25 @@ const MODS=[
  oClosed:{out:'Closed reduction with MMF (arch bars or hybrid bars); plan nutrition first.',src:'lect',ex:'Best for non-displaced favorable, grossly comminuted, soft-tissue loss, or developing dentition. Trend: shorter MMF, elastics over wire.'}
  },
  look:[['Exam',['Compress both angles toward each other (mobility)','Floor-of-mouth ecchymosis, steps, malocclusion, loose teeth','CN V and VII documented before treatment']],['Atrophic edentulous (<10 mm)',['~20% complications; periosteal blood supply — minimize stripping','Load-bearing plate angle to angle; no screws near the fracture line','Antibiotic prophylaxis']]]},
+
+{id:'lac',g:'Trauma',title:'Facial laceration',d:'Explore vs close · bites · lip, lid, ear · tetanus',
+ start:'a',refs:['lacaafp','tetcdc','bitewk','fn72','atls'],
+ red:'<b>Test the facial nerve before local anesthetic.</b> Explore before closing: facial weakness, saliva in the wound, cheek wound on the tragus–mid-upper-lip line, medial lower lid, lid margin.',
+ caveat:'ER/on-call flow for soft-tissue facial wounds. Closure basics from AAFP 2017; tetanus from CDC (2026). Lines tagged [verify] are author-drafted or from secondary sources.',
+ nodes:{
+ a:{q:'Part of a bigger injury: life threat, facial fracture, globe injury, or head injury with LOC?',h:['Step-off, malocclusion, diplopia, enophthalmos, CSF leak','Wound over a fracture is an open fracture'],yes:'oBig',no:'b'},
+ oBig:{out:'Primary survey and fractures first; close the skin with (or after) definitive repair.',tone:'urgent',src:'atls',go:'trauma',go2:'mandfx',ex:'Temporize: irrigate, moist saline dressing, pressure for bleeding. Tetanus per Look-fors.'},
+ b:{q:'Deep-structure injury suspected?',h:['Facial weakness with a wound lateral to a vertical line through the lateral canthus','Cheek wound on the tragus–mid-upper-lip line, or clear fluid (saliva) in the wound → parotid duct','Medial lower lid near the punctum (canaliculus), lid margin, tarsal plate, or globe'],yes:'oDeep',no:'c'},
+ oDeep:{out:'Explore and repair the deep structure before skin closure (OR or the right service).',tone:'urgent',src:'fn72',src2:'lacaafp',ex:'Facial nerve: repair within 72 h, while distal branches still respond to a nerve stimulator; tension-free epineurial repair under magnification; graft if a gap (graft can wait 9–12 months). Weakness medial to the lateral-canthus line usually recovers without repair [verify]. Parotid duct: cannulate Stensen’s papilla and inject saline or methylene blue; leak in the wound = duct injury → repair over a stent; gland-only injury → layered closure and pressure dressing [verify]. Canaliculus, lid margin, tarsal plate, globe, or deeper than subcutaneous on the lid: ophthalmology/oculoplastics.'},
+ c:{q:'Bite wound (dog, cat, human)?',yes:'nBite',no:'d'},
+ nBite:{note:1,t:'Bite',x:'Irrigate copiously and debride devitalized tissue. Facial dog bites: close primarily (good blood supply, cosmesis); cat bites off the face often do better left open. Antibiotics for higher-risk wounds (cat or human bite, deep puncture, edema, immunocompromise, near bone or cartilage) and for primarily closed bites: amoxicillin-clavulanate 875/125 mg PO BID, about 3–7 days [verify]; penicillin allergy: clindamycin (+ ciprofloxacin or TMP-SMX for broader cover) or doxycycline. Rabies: bat, raccoon, skunk, fox, monkey, or stray/unobservable animal → PEP with the health department; owned dog or cat → 10-day observation. Report the bite per local rules [verify].',src:'lacaafp',next:'d'},
+ d:{q:'Grossly contaminated, infected, or over ~24 h old?',h:['AAFP: head wounds may be closed up to 24 h after injury; no fixed golden period'],yes:'oDirty',no:'e'},
+ oDirty:{out:'Clean and debride; close if clean after irrigation, otherwise pack and close in 3–5 days.',tone:'action',src:'lacaafp',ex:'Face usually still tolerates primary closure after debridement given its blood supply [verify]. Infected: open, drain, culture, antibiotics; delayed closure. Remove gravel/asphalt now (traumatic tattoo is hard to fix later). Tetanus: dirty/major wound column.'},
+ e:{q:'Special site: lip through the vermilion, ear cartilage, eyelid skin, nose through-and-through, or tissue loss?',yes:'oSite',no:'oSimple'},
+ oSite:{out:'Site-specific layered repair (see details).',tone:'action',src:'lacaafp',ex:'Lip: mark the vermilion border before injecting; first skin suture aligns the border; 3-0/4-0 absorbable to orbicularis and mucosa; 6-0/7-0 nylon skin. Through-and-through: mucosa, muscle, then skin. Ear: cover all cartilage; one bite of 6-0 polypropylene through skin and perichondrium; bolster/head wrap against hematoma. Eyelid skin only: 6-0 nylon (lid margin/tarsus → ophthalmology). Nose through-and-through: mucosa, cartilage, skin [verify]. Tissue loss/avulsion: conserve tissue, minimal debridement; local flap or plastics for large defects [verify].'},
+ oSimple:{out:'Irrigate, anesthetize, and close in layers; sutures out at 3–5 days.',src:'lacaafp',ex:'Tap water or saline, 50–100 mL per cm of wound. Lidocaine with epinephrine is fine on the face (1:200,000 safe on nose and ear). Deep absorbable, then 5-0 or 6-0 nylon skin. Tissue adhesive: clean, linear, low-tension, <12 h, not on mucocutaneous junctions or hair. No routine systemic antibiotics for clean non-bite wounds; topical antibiotic ointment. Sun protection on the scar [verify].'}
+ },
+ look:[['Before local anesthetic',['Facial nerve: raise brows, close eyes tight, smile, show teeth, pucker','CN V sensation; vision, pupils and eye movements if periorbital','Parotid: probe or cannulate Stensen’s duct for cheek wounds']],['Tetanus (CDC)',['Clean/minor: vaccine if series unknown/incomplete or last dose ≥10 y; no TIG','Dirty/major: vaccine if unknown/incomplete or last dose ≥5 y; TIG 250 IU IM if unknown/incomplete series, HIV, or severe immunodeficiency','No antibiotics for tetanus prevention']],['Document',['Length, depth, site, photos','Glass or tooth fragments: radiograph lips and soft tissue']]]},
 
 {id:'dentotrauma',g:'Trauma',title:'Dentoalveolar trauma',d:'Avulsion · luxation · root, crown and alveolar fractures',
  start:'a',refs:['aapdav','iadtfx','oep','aae26'],
@@ -1431,8 +1454,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.4.0';
+const VER='3.5.0';
 const CHANGES=[
+{v:'3.5.0',d:'Oct 25, 2026',i:['New module: Facial laceration (Hospital on-call). Bigger injury first; explore facial nerve, parotid duct, canaliculus and lid before closing; bites (antibiotics, rabies, facial closure); contaminated or late wounds; lip, ear, eyelid and nose repairs; simple layered closure. Tetanus per CDC 2026. Author-drafted lines tagged verify.']},
 {v:'3.4.0',d:'Oct 24, 2026',i:['Approved by Steven after independent review. One reconciled assessment with conflicting instructions suppressed and unresolved alternatives visible.','Decisive unanswered questions, isolated approach comparisons with explicit Apply, in-memory change explanations, and copy-only consultation drafts.','Missing numeric INR stays provisional. New patient clears all clinical data, comparison state and change history. Software checks do not establish clinical validity.','Review fixes: age-restricted local anesthetic advice withholds only that drug; missing age no longer escalates; Author protocol shown in the reconciled plan.']},
 {v:'3.3.3',d:'Oct 24, 2026',i:['Dose fixes: adult IM succinylcholine capped at 150 mg total (label); LAST lipid split at 70 kg (ASRA: >70 kg 100 mL bolus, then 250 mL over 15–20 min); IM midazolam for seizures under 13 kg is 0.2 mg/kg (verify); under-18 local anesthetic maximums use AAPD caps (lidocaine and mepivacaine 300 mg, articaine 500 mg).','New findings: inherited bleeding disorders (WFH), heart valve / IE / prosthetic joint (AHA 2021, ADA), pacemaker or ICD (APSF/ASA), buprenorphine (multisociety 2021), epinephrine interactions (TCAs, nonselective β-blockers, cocaine), organ transplant and immunosuppressants.','Home: on-call and Mode folded into one Settings row. SOS: jump chips to each card. Shorter search hint.']},
 {v:'3.3.2',d:'Oct 24, 2026',i:['Photo triage works in any Claude account: the hand-off now carries a complete prompt (report sections, de-identification, unknown ≠ normal, and the exact CT1 code format with every step defined), so colleagues do not need the pre-op triage skill. If the skill is installed, Claude still uses it.','Paste box accepts the whole report: Compass finds the CT1 line itself. CT1;none explains that nothing was readable.']},
@@ -1545,7 +1569,7 @@ function hitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);co
 /* ===== Basis labels (descriptive, not evidence grades) ===== */
 const BASIS={gl:'Guideline / label',ev:'Evidence-informed',au:'Author’s practice',un:'Unverified draft'};
 const BASIS_RANK={gl:0,ev:1,au:2,un:3};
-const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','palsca','palsbr','flumaped','glucaped','bupilabel','giai','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2','sux','wfhdent','kohan'];
+const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','palsca','palsbr','flumaped','glucaped','bupilabel','giai','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2','sux','wfhdent','kohan','tetcdc'];
 const SRC_AU=['mysed','fa6','mynotes','lect','board'];
 const SRC_UN=['binder'];
 function basisOf(keys,text){
@@ -2283,13 +2307,13 @@ function gateHTML(id){if(!GATED.includes(id))return'';const g=gateModel();
  return`<div class="mgate g-${g.tone}" role="status"><div class="lab" style="color:inherit;opacity:.85">Medical gate</div><div class="gt"><span class="dot" aria-hidden="true"></span>${esc(g.t)}</div>${items.length?`<ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${g.tone==='ok'?'<div class="small" style="color:inherit">Screen result · not a clearance.</div>':''}<div class="gb"><button class="go" data-open="preop">${g.tone==='none'?'Run pre-op screen ›':'Pre-op clearance ›'}</button>${am&&am.worst?`<button class="go" data-goasmt>Assessment: ${esc(DISP[am.od][0])} ›</button>`:''}</div></div>`}
 
 /* Hospital on-call: a remembered preference (not patient data). */
-const OC_KEY='omsCompassOnCall',ONCALL=['trauma','mandfx','dentotrauma','infection','dns'];
+const OC_KEY='omsCompassOnCall',ONCALL=['trauma','lac','mandfx','dentotrauma','infection','dns'];
 function onCall(){try{return localStorage.getItem(OC_KEY)==='1'}catch(e){return!!S.oc}}
 function setOnCall(v){S.oc=v;try{localStorage.setItem(OC_KEY,v?'1':'0')}catch(e){}}
 function homeGroup(m,on){if(on&&ONCALL.includes(m.id))return'Hospital on-call';
- if(!on&&(m.id==='trauma'||m.id==='mandfx'))return null;
+ if(!on&&(m.id==='trauma'||m.id==='mandfx'||m.id==='lac'))return null;
  if(m.id==='dentotrauma')return'Dentoalveolar & acute';return m.g}
-function oncallHTML(on){return`<button class="oncall" role="switch" aria-checked="${on}" data-oncall><div><b>Hospital on-call</b><span>${on?'On · ER, facial trauma, fractures, spreading infection shown first':'Off · shows ER, trauma and infection modules'}</span></div><i class="sw" aria-hidden="true"></i></button>`}
+function oncallHTML(on){return`<button class="oncall" role="switch" aria-checked="${on}" data-oncall><div><b>Hospital on-call</b><span>${on?'On · ER, facial trauma, lacerations, fractures, spreading infection shown first':'Off · shows ER, trauma and infection modules'}</span></div><i class="sw" aria-hidden="true"></i></button>`}
 
 /* Intraoperative cognitive checklist (memory only; New patient clears it). */
 const IO=[

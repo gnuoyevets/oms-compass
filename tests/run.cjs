@@ -148,9 +148,10 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  page=await fresh(ctx);
  const r8=await E(page,()=>{const bad=[];for(const m of MODS){try{open(m.id);if(!document.getElementById('flow').innerHTML)bad.push(m.id)}catch(e){bad.push(m.id+':'+e.message)}}
   for(const v of ['emergency','calc','ref','handouts','new']){try{view(v);if(!document.getElementById('vbody').innerHTML.length)bad.push(v)}catch(e){bad.push(v+':'+e.message)}}return{n:MODS.length,bad}});
- ok(r8.bad.length===0&&r8.n===35,`All ${r8.n} modules and 5 tabs render (bad: ${r8.bad})`);
+ ok(r8.bad.length===0&&r8.n===36,`All ${r8.n} modules and 5 tabs render (bad: ${r8.bad})`);
  await E(page,()=>home());await page.fill('#in-q','Dantrium');ok(await page.locator('#hits [data-em]').count()>0,'Search still reaches SOS (Dantrium)');
  await page.fill('#in-q','avulsion');ok(await page.locator('#hits [data-open="dentotrauma"]').count()>0,'Search still reaches modules (avulsion)');
+ await page.fill('#in-q','laceration');ok(await page.locator('#hits [data-open="lac"]').count()>0,'Search reaches facial laceration');
  await page.fill('#in-q','tooth removal');ok(await page.locator('#hits [data-ho]').count()>0,'Search still reaches handouts');
 
  console.log('9. Basis, assumptions and review status shown');
@@ -186,10 +187,12 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(/not a clearance/.test(await page.locator('.mgate').innerText()),'Green gate says "not a clearance"');
  await E(page,()=>{newPatient();setOnCall(false);home()});
  ok(await page.locator('#groups [data-open="trauma"]').count()===0&&await page.locator('#groups [data-open="mandfx"]').count()===0,'On-call off hides trauma triage and mandible fracture');
+ ok(await page.locator('#groups [data-open="lac"]').count()===0,'On-call off hides facial laceration');
  ok(await page.locator('#groups [data-open="dentotrauma"]').count()===1&&await page.locator('#groups [data-open="infection"]').count()===1,'On-call off keeps dentoalveolar trauma and infection');
  await openSet(page);await page.click('[data-oncall]');
  ok(await page.locator('[data-oncall][aria-checked="true"]').count()===1,'On-call switch turns on');
  ok(await E(page,()=>document.querySelector('#groups .lab.group').textContent==='Hospital on-call'),'On-call group listed first');
+ ok(await E(page,()=>{const g=[...document.querySelectorAll('#groups .lab.group')].find(x=>x.textContent==='Hospital on-call');return !!g&&!!g.nextElementSibling.querySelector('[data-open="lac"]')}),'On-call on: facial laceration listed under Hospital on-call');
  ok(await page.locator('#groups [data-open]').count()===await E(page,()=>MODS.length),'On-call on: every module listed exactly once');
  ok(await E(page,()=>localStorage.getItem('omsCompassOnCall')==='1'),'On-call preference remembered');
  await E(page,()=>{delete S.oc;home()});/* re-read from storage (file:// reloads in headless Chromium can drop unflushed storage) */

@@ -2,6 +2,11 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.5.0 — Oct 25, 2026 (branch `feat/facial-laceration`, pending Steven's review)
+
+- **New module: Facial laceration** (Trauma; listed under Hospital on-call, hidden when on-call is off like trauma triage and mandible fracture; search always finds it). Bigger injury first → deep structures (facial nerve, parotid duct, canaliculus, lid margin/globe) → bites (antibiotics, rabies, facial closure) → contaminated/late wounds → lip, ear, eyelid, nose → simple layered closure. Tetanus look-fors per CDC (reviewed Sep 8, 2026). Sources: AAFP 2017 laceration repair, CDC tetanus, facial nerve review (abstract), WikEM bites summary. Author-drafted or secondary-source lines tagged verify.
+- Tests: 317 browser checks (3 new); reconciliation suite updated to 36 modules.
+
 ## v3.4.0 — Oct 24, 2026 (approved by Steven after independent review; INR recency and NSAID suppression kept as is)
 
 - Reconcile combined findings into one grouped plan; disclose suppressed conflicting instructions and unresolved alternatives.
