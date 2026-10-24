@@ -270,11 +270,22 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .plock{border:2px solid var(--red-ink);background:var(--red-bg);color:var(--red-ink);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:14px;line-height:1.5}
 .plock .pb{display:inline-block;font:800 12px/1.3 var(--display);letter-spacing:.5px;background:var(--red-ink);color:var(--bg);border-radius:6px;padding:3px 8px;margin-bottom:6px}
 .pamber{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;line-height:1.5}
+.pmdesc{margin:-4px 0 10px;line-height:1.4}
 .pmode{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center;margin:0 0 10px}
 .pmode .pl{font-size:12.5px;color:var(--muted);font-weight:600}
 .pmode .tg{text-align:center;padding:6px 8px;font-size:12.5px;line-height:1.25}
 .audisc{margin-top:8px;border:1px dashed currentColor;background:none;color:inherit;border-radius:8px;padding:8px 12px;min-height:44px;font-size:13px;font-weight:600;opacity:.9}
 .auhid[hidden]{display:none}
+.authp{background:var(--chip);border-color:var(--chip);color:var(--chip-ink)}
+.lkc{background:var(--red-bg);border-color:var(--red-line);color:var(--red-ink)}
+.fact.top{margin:0 0 10px}
+.go{min-height:44px}
+.numrow select.nounit{border-color:var(--red-ink);color:var(--red-ink)}
+.asteps{margin:-2px 0 10px 4px;padding:6px 10px;border-left:3px solid var(--line);font-size:13px;line-height:1.45}
+.asteps ul{margin:0 0 4px;padding-left:18px}
+.lablock td{color:var(--red-ink)}
+.pref{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:10px;padding:10px 12px;margin:0 12px 12px;font-size:13.5px;line-height:1.5}
+.pedtag{font:700 10px var(--sans);letter-spacing:.4px;text-transform:uppercase;color:var(--warn-ink);background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:4px;padding:0 5px;margin-left:4px;vertical-align:2px}
 .offl{font-size:11px;font-weight:700;color:var(--ok-ink);margin-right:6px}
 .offl i{font-style:normal}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -300,6 +311,13 @@ glp1k:{n:'Kindel et al. · Multi-society clinical practice guidance for the safe
 aapdla:{n:'AAPD · Use of local anesthesia for pediatric dental patients (maximum-dose table)',v:'Latest revision 2023',chk:'2026-10-24',u:'https://www.aapd.org/media/Policies_Guidelines/G_LocalAnesthesia.pdf'},
 aapdsed:{n:'AAP / AAPD · Monitoring and management of pediatric patients before, during and after sedation (Coté & Wilson)',v:'Pediatrics 2019;143:e20191000',u:'https://doi.org/10.1542/peds.2019-1000'},
 parcare:{n:'AAOMS · Parameters of Care (ParCare)',v:'2023 ed. · JOMS 81(11) Suppl',u:'https://members.aaoms.org/PRODUCTFILES/77216029/PARCAR07_TOC.pdf'},
+palsca:{n:'AHA · Pediatric cardiac arrest algorithm (PALS)',v:'2025 CPR & ECC guidelines',chk:'2026-10-24',u:'https://cpr.heart.org/-/media/CPR-Files/CPR-Guidelines-Files/2025-Algorithms/Algorithm-PALS-CA-250123.pdf?sc_lang=en'},
+palsbr:{n:'AHA · Pediatric bradycardia with a pulse algorithm (PALS)',v:'2025 CPR & ECC guidelines',chk:'2026-10-24',u:'https://cpr.heart.org/-/media/CPR-Files/CPR-Guidelines-Files/2025-Accessible/Algorithm-PALS-Bradycardia-LngDscrp-250729-Ed.pdf?sc_lang=en'},
+msdres:{n:'MSD Manual · Medications commonly used for resuscitation (pediatric column)',v:'Professional edition',chk:'2026-10-24',u:'https://www.msdmanuals.com/professional/multimedia/table/medications-commonly-used-for-resuscitation'},
+flumaped:{n:'Flumazenil · pediatric dosing (label, via Drugs.com)',v:'Ages 1–17: 0.01 mg/kg (max 0.2 mg); total ≤0.05 mg/kg or 1 mg',chk:'2026-10-24',u:'https://www.drugs.com/dosage/flumazenil.html'},
+glucaped:{n:'Glucagon · pediatric dosing (labels, via Drugs.com)',v:'0.5 mg <20–25 kg, 1 mg above; nasal 3 mg ≥4 y',chk:'2026-10-24',u:'https://www.drugs.com/dosage/glucagon.html'},
+hcped:{n:'ALiEM PEM Pearls · Hydrocortisone stress dosing in children',v:'50 mg/m²; 25 / 50 / 100 mg by age band',chk:'2026-10-24',u:'https://www.aliem.com/pem-pearls-hydrocortisone-stress-dosing-adrenal-insufficiency-children/'},
+bupilabel:{n:'Bupivacaine + epinephrine dental cartridge (Vivacaine) · label',v:'Not recommended in dentistry under 12 years',chk:'2026-10-24',u:'https://www.drugs.com/pro/vivacaine.html'},
 aha25:{n:'AHA · Adult cardiac arrest algorithm',v:'2025 CPR & ECC guidelines',u:'https://cpr.heart.org/-/media/CPR-Files/CPR-Guidelines-Files/2025-Accessible/Algorithm-ACLS-CA-LngDscrp-250725-Ed.pdf'},
 aha25s:{n:'AHA · Special circumstances of resuscitation (Part 10)',v:'2025 CPR & ECC guidelines',u:'https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-and-pediatric-special-circumstances-of-resuscitation'},
 anaph:{n:'Anaphylaxis practice parameter update (Shaker et al.)',v:'J Allergy Clin Immunol 2020 · via CCJM 2022',u:'https://www.ccjm.org/content/ccjom/89/2/106.full.pdf'},
@@ -323,7 +341,8 @@ asaps:{n:'ASA Physical Status Classification',v:'Approved 2014; examples updated
 fast:{n:'ASA preoperative fasting guideline (2023 modular update of 2017)',v:'Anesthesiology 2023 · summary',u:'https://www.consultant360.com/exclusive/updated-guidelines-address-preoperative-fasting-elective-procedures'},
 asamon:{n:'ASA Standards for Basic Anesthetic Monitoring',v:'Capnography for moderate/deep sedation',u:'https://beckersasc.com/anesthesia/asas-standards-revision-focusing-on-ventilation-methods-set-to-take-effect.html'},
 mysed:{n:'Your Chairside Sedation Card — No-Pump (ASA I–III)',v:'Oct 7, 2026 · personal protocol; doses not label-verified',u:'https://docs.google.com/document/d/1_me16BdLXlR7RPbVQZq1Ar4XKjt43jNKUcixff7S948/edit'},
-dm26:{n:'Perioperative diabetes care in 2026 (NYSORA, ADA-aligned)',v:'A1C >8% → consider postponing',u:'https://nysora.com/?p=66496'},
+dm26:{n:'Perioperative diabetes care in 2026 (NYSORA, ADA-aligned)',v:'Secondary summary; A1C target <8% for elective surgery when feasible',u:'https://nysora.com/?p=66496'},
+ada16:{n:'ADA · 16. Diabetes care in the hospital, Standards of Care in Diabetes—2026',v:'Diabetes Care 2026;49(Suppl 1):S339 · full text not retrieved Oct 24, 2026',u:'https://diabetesjournals.org/care/article/49/Supplement_1/S339/163925/16-Diabetes-Care-in-the-Hospital-Standards-of-Care'},
 filippi:{n:'Filippi, Saccardin & Kühl · Advanced Oral Surgery (textbook)',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
 andersson:{n:'Andersson, Kahnberg & Pogrel · Oral and Maxillofacial Surgery (textbook)',v:'Dialysis timing · Readwise',u:'https://read.readwise.io/'},
 dialysis:{n:'Dentalcare CE628 · Dental management of dialysis patients',v:'P&G CE course',u:'https://www.dentalcare.com/en-us/ce-courses/ce628/dialysis'},
@@ -332,6 +351,8 @@ preg:{n:'ADA · Pregnancy (oral health topic; cites ACOG 569 and 775)',v:'Update
 nsaidpreg:{n:'FDA · Avoid NSAIDs at ≥20 weeks of pregnancy',v:'Oct 15, 2020',u:'https://www.fda.gov/drugs/drug-safety-and-availability/fda-recommends-avoiding-use-nsaids-pregnancy-20-weeks-or-later-because-they-can-result-low-amniotic'},
 orn:{n:'ISOO-MASCC-ASCO · Osteoradionecrosis prevention and management',v:'2024 guideline · summary table',u:'https://society.asco.org/sites/new-www.asco.org/files/content-files/practice-and-guidelines/documents/2024-ORN-Summary-Table.pdf'},
 steroid:{n:'Steroid cover for dental procedures (NHS Highland guidance, Oct 2025)',v:'via iatrox summary',u:'https://www.iatrox.com/q/69f2f444e09ff9bd00caa4ac/steroid-management'},
+giai:{n:'ESE / Endocrine Society · Glucocorticoid-induced adrenal insufficiency (Beuschlein et al.)',v:'J Clin Endocrinol Metab 2024 · R2.1, R3.1A/B, R3.2',chk:'2026-10-24',u:'https://www.endocrine.org/clinical-practice-guidelines/glucocorticoid-induced-adrenal-insufficiency'},
+spsdent:{n:'NHS SPS · Steroid supplementation for primary adrenal insufficiency in dental procedures',v:'UK Specialist Pharmacy Service',chk:'2026-10-24',u:'https://sps.nhs.uk/articles/what-steroid-supplementation-is-required-for-a-patient-with-primary-adrenal-insufficiency-undergoing-a-dental-procedure/'},
 ada24:{n:'ADA · Acute dental pain guideline, adults & adolescents ≥12',v:'JADA Feb 2024',u:'https://cce.upmc.com/system/files/course/2026-06/Acute%20Dental%20Pain%20Guideline_Emergency%20Medicine_2025.pdf'},
 aoprev:{n:'Cochrane · Local interventions for dry socket (Daly et al.) — prevention',v:'2012 · via Dental Elf',u:'https://www.nationalelfservice.net/publication-types/systematic-review/moderate-evidence-that-chlorhexidine-rinse-or-gel-provides-a-benefit-in-preventing-dry-socket/'},
 aotx:{n:'Cochrane · Local interventions for dry socket — treatment',v:'Sep 26, 2022 update',u:'https://www.cochrane.org/CD006968/ORAL_local-interventions-management-alveolar-osteitis-dry-socket'},
@@ -422,7 +443,7 @@ const MODS=[
  b:{q:'High-risk cardiac condition for endocarditis?',h:['Prosthetic valve (incl. TAVR) or valve-repair material','Prior infective endocarditis','Heart transplant with valve regurgitation','Unrepaired cyanotic CHD, or repaired CHD with residual shunt/regurgitation at a prosthetic site','Prosthetic joints alone: prophylaxis not routinely recommended (ADA)'],yes:'nIE',no:'c'},
  nIE:{note:1,t:'Endocarditis prophylaxis',x:'30–60 min pre-op, one dose: amoxicillin 2 g PO (child 50 mg/kg). Penicillin allergy without anaphylaxis, angioedema or urticaria: cephalexin 2 g (child 50 mg/kg). Otherwise azithromycin or clarithromycin 500 mg (child 15 mg/kg), or doxycycline 100 mg (<45 kg: 2.2 mg/kg). Clindamycin is no longer recommended (C. difficile risk). Missed dose: give up to 2 h after. Prosthetic joints alone: no routine prophylaxis (ADA).',src:'aha',next:'c'},
  c:{q:'Taking an anticoagulant or antiplatelet?',yes:'nBleed',no:'d'},
- nBleed:{note:1,t:'Antithrombotic plan',x:'Low-bleed dental work (1–3 extractions, I&D): continue warfarin, DOACs and antiplatelets (CHEST 2022). Intermediate (>3 extractions, implants, grafts, biopsy): usually continue; local hemostasis. High (orthognathic, reconstruction, open trauma): plan with the prescriber (Allyn 2024). Heparin bridging is generally harmful; reserve for mechanical mitral valve, recent LV thrombus, or AF with recent stroke (2024 AHA/ACC). Warfarin: INR within 24 h (72 h if stable); proceed if <3.5 (author’s threshold; SDCEP allows <4). DOACs: no interruption for extractions, alveoloplasty or routine implants (author’s practice; SDCEP retimes one dose for higher-risk work). Never stop dual antiplatelets after a stent without cardiology. Operate early. '+HEMO,src:'chest',next:'d'},
+ nBleed:{note:1,t:'Antithrombotic plan',get x(){return 'Low-bleed dental work (1–3 extractions, I&D): continue warfarin, DOACs and antiplatelets (CHEST 2022). Intermediate (>3 extractions, implants, grafts, biopsy): usually continue; local hemostasis. High (orthognathic, reconstruction, open trauma): plan with the prescriber (Allyn 2024). Heparin bridging is generally harmful; reserve for mechanical mitral valve, recent LV thrombus, or AF with recent stroke (2024 AHA/ACC). Warfarin: INR within 24 h (72 h if stable); '+(colleague()?'proceed if <4 (SDCEP). DOACs (SDCEP, UK): for higher-risk work, skip the morning dose of a twice-daily agent or delay a morning once-daily dose until 4 h after hemostasis.':'proceed if <3.5 (author’s protocol; SDCEP allows <4). DOACs: no interruption for extractions, alveoloplasty or routine implants (author’s protocol; SDCEP retimes one dose for higher-risk work).')+' Never stop dual antiplatelets after a stent without cardiology. Operate early. '+HEMO},src:'chest',next:'d'},
  d:{q:'Antiresorptive/antiangiogenic drug, or head-and-neck radiation to the site?',h:['Bisphosphonate, denosumab, bevacizumab, TKIs','Oncologic dosing carries far higher risk than osteoporosis dosing'],yes:'nBone',no:'d2'},
  d2:{q:'Taking an SGLT2 inhibitor or GLP-1 receptor agonist?',h:['SGLT2: -gliflozin (empagliflozin, dapagliflozin…)','GLP-1 RA: semaglutide, tirzepatide, liraglutide, dulaglutide'],yes:'nMeds',no:'e'},
  nMeds:{note:1,t:'SGLT2 / GLP-1',x:'SGLT2 inhibitor: hold 3–4 days before surgery (ketoacidosis risk; 2024 AHA/ACC). GLP-1 RA: most patients continue. If sedating, defer elective cases during dose escalation or with active GI symptoms; highest-risk patients take clear liquids only for 24 h; plan for aspiration risk (multisociety 2024).',src:'glp1',next:'e'},
@@ -457,17 +478,16 @@ const MODS=[
  },
  look:[['Before booking',['ASA class against current definitions','Last meal and drink, GLP-1/SGLT2 use','Escort and ride home','IV access sites; fistula arm off-limits']]]},
 
-{id:'dm',g:'Anesthesia & medical',title:'Diabetes',d:'A1C gate · day-of meds · glucose on arrival',
- start:'a',refs:['dm26','allyn','glp1','adahypo','filippi'],
+{id:'dm',g:'Anesthesia & medical',title:'Diabetes',d:'A1C context · day-of meds · glucose on arrival',
+ start:'nA1c',refs:['ada16','dm26','allyn','glp1','adahypo','filippi'],
  caveat:'Medication changes are the prescriber’s call; this follows Allyn 2024 (JOMS) and ADA-aligned 2026 guidance.',
  nodes:{
- a:{q:'Elective case with A1C >8% (within 3 months)?',yes:'oA1c',no:'b'},
- oA1c:{out:'Consider postponing elective surgery and optimize with the physician.',tone:'action',src:'dm26',ex:'Do not delay urgent care (infection, pain) for A1C.'},
+ nA1c:{note:1,t:'A1C is context, not a gate',x:'A recent A1C ≥8% marks higher infection and healing risk: tell the patient, involve the physician when elective timing allows, and plan glucose checks. A1C alone does not cancel surgery; the day-of glucose, symptoms, procedure size and urgency decide. Never delay urgent care for A1C. [verify: ADA 2026 Section 16 wording not retrieved]',src:'dm26',next:'b'},
  b:{q:'On insulin, a sulfonylurea or an SGLT2 inhibitor?',yes:'nMed',no:'c'},
  nMed:{note:1,t:'Day-of medications',x:'Evening before: long-acting insulin ~75% of usual. Morning of surgery: 50% of long/intermediate insulin; hold oral agents. SGLT2 inhibitor: stop 3–4 days before. Book early morning.',src:'allyn',next:'c'},
  c:{q:'Arrival glucose outside 80–180 mg/dL?',yes:'oGlu',no:'oOk'},
  oGlu:{out:'Correct before proceeding. <70: treat (Emergency → Hypoglycemia). Markedly high: discuss with the physician; reschedule elective care.',tone:'action',src:'allyn'},
- oOk:{out:'No diabetes-related reason to defer found. Recheck glucose after sedation; resume meds with eating.',scr:'Assumes A1C is from the last 3 months and arrival glucose was measured.',src:'allyn',ex:'Poorly controlled diabetes or major surgery: consider antibiotics to support healing (Filippi).'}
+ oOk:{out:'No diabetes-related reason to defer found by this screen. Recheck glucose after sedation; resume meds with eating.',scr:'Assumes arrival glucose was measured today. A1C informs risk discussion only.',src:'allyn',ex:'Poorly controlled diabetes or major surgery: consider antibiotics to support healing (Filippi).'}
  }},
 
 {id:'htn',g:'Anesthesia & medical',title:'Hypertension',d:'Proceed, defer, or refer at chairside BP',
@@ -526,13 +546,19 @@ const MODS=[
  oGo:{out:'No radiation- or chemotherapy-specific exclusion found by this screen. Standard care plus any risk steps listed here.',scr:'Antiresorptive exposure (MRONJ) — see Pre-op clearance.',src:'orn'}
  }},
 
-{id:'steroid',g:'Anesthesia & medical',title:'Chronic steroids',d:'Stress dosing or not',
- start:'a',refs:['steroid'],
- caveat:'UK-based guidance; confirm with endocrinology for primary adrenal insufficiency.',
+{id:'steroid',g:'Anesthesia & medical',title:'Chronic steroids',d:'Adrenal-risk assessment · stress dosing',
+ start:'a',refs:['giai','spsdent','steroid'],
+ caveat:'Never withhold the usual steroid dose. Stress-dose amounts are set by the prescriber or endocrinology; this flow decides who needs cover and by which route.',
  nodes:{
- a:{q:'GA, major surgery, prolonged procedure, or patient unwell?',yes:'oCover',no:'oNo'},
- oCover:{out:'Steroid cover per the prescriber or endocrinology (e.g., IV hydrocortisone at induction).',tone:'action',src:'steroid'},
- oNo:{out:'Continue the usual steroid dose; no extra cover for a routine case under local.',scr:'Assumes local anesthesia, a routine case and a well patient — confirm all three.',src:'steroid',ex:'Never withhold the usual steroid. Seek advice if the case becomes prolonged or the patient becomes unwell.'}
+ a:{q:'Known adrenal insufficiency (Addison’s, pituitary disease, or on hydrocortisone replacement)?',yes:'oAI',no:'b'},
+ oAI:{out:'Adrenal insufficiency: give steroid cover. Agree the dose with endocrinology or the prescriber.',tone:'action',src:'spsdent',src2:'giai',ex:'Primary AI (UK SPS): extra glucocorticoid dose before the visit; for oral surgery, cover before and for 24 h after. Parenteral cover for GA, regional anesthesia or major surgery. The patient brings their emergency hydrocortisone kit. Collapse: SOS → Adrenal crisis.'},
+ b:{q:'Adrenal-suppression risk from steroid use?',h:['Oral glucocorticoid ≥3–4 weeks above ~15–25 mg/day hydrocortisone-equivalent (≈ prednisone 4–6 mg/day), now or recently stopped','Also consider: high-dose inhaled or topical steroids, intra-articular injection in the past 2 months, a strong CYP3A4 inhibitor (e.g., ritonavir) with a steroid','Courses under 3–4 weeks: low concern (ESE/Endocrine Society 2024)'],yes:'c',no:'oNo'},
+ oNo:{out:'Low adrenal-suppression risk by dose and duration: continue the usual dose; no extra cover.',scr:'Relies on a complete steroid history (all routes, recent courses). Unknown history is not low risk.',src:'giai',ex:'Seek advice if the patient becomes unwell or the case becomes major.'},
+ c:{q:'HPA-axis recovery documented since (e.g., morning cortisol >10 µg/dL / 300 nmol/L)?',yes:'oRec',no:'d'},
+ oRec:{out:'Documented recovery: continue the usual dose; no stress cover needed.',src:'giai',ex:'Treat new instability as possible adrenal crisis regardless.'},
+ d:{q:'GA, regional anesthesia, major or prolonged surgery, unable to take oral intake, vomiting/diarrhea or unstable?',h:['IV sedation is not named in the 2024 guideline; treat a long or deep sedation case as moderate stress [verify]'],yes:'oPar',no:'oOral'},
+ oPar:{out:'At risk, moderate–major stress: parenteral stress-dose glucocorticoid (e.g., IV hydrocortisone at induction), per the prescriber or anesthesia.',tone:'action',src:'giai',ex:'Continue the usual dose. Not tested for adrenal insufficiency = give cover (R3.1). Hypotension, vomiting or collapse: SOS → Adrenal crisis.'},
+ oOral:{out:'At risk, minor stress under local: oral stress-dose cover; dose per the prescriber.',tone:'action',src:'giai',ex:'Continue the usual dose. Untested patients exposed to stress get cover (ESE/Endocrine Society 2024, R3.1A). Escalate to parenteral cover if the patient vomits or becomes unstable.'}
  }},
 
 {id:'pain',g:'Post-op & complications',title:'Post-op analgesia',d:'NSAID first · when an opioid is allowed',
@@ -1111,11 +1137,65 @@ const EMS=[
  `100% O₂ at high flow. Cool with cold IV fluids and ice; stop cooling below 38 °C.`,
  `Treat hyperkalemia and arrhythmias. Transfer to ICU.`]}
 ];
-function emHTML(){const kid=pedsLock();
- return `${ptBar(kid?'Child: weight-based doses scale to this weight.':'Adults. Doses update from this weight. Tap a card.')}
- ${kid?`<div class="pamber" id="peds-sos"><b>Pediatric patient (${esc(lockWhy())}).</b> Doses written per kg below scale to ${S.wt?esc(wtLine()):'the weight once entered'}. Fixed adult doses (atropine 1 mg, amiodarone 300 mg, aspirin, nitroglycerin, naloxone, flumazenil, glucagon, dextrose 50%) are not pediatric doses — use PALS or a length-based tape.</div>`:''}
+/* Pediatric SOS. A child gets either a pediatric algorithm (weight-based, capped at adult doses) or, for adult-only
+   cards, explicit referral guidance — never the adult fixed doses. Child = age <12, or age <18 and weight <40 kg,
+   or no age and weight <40 kg. */
+function sosKid(){const a=ageNum();if(a!=null)return a<12||(a<18&&!!S.wt&&S.wt<40);return!!(S.wt&&S.wt<40)}
+const PEDS={
+ arrest:{src:['palsca'],steps:()=>[
+  `Call for help and 911. CPR ${F('100–120/min')}, depth ${F('≥⅓ of chest depth')}, full recoil; switch compressors every 2 min.`,
+  `No advanced airway: ${F('15:2')} with 2 rescuers before puberty; ${F('30:2')} with 1 rescuer. Advanced airway: ${F('1 breath every 2–3 s')} with continuous compressions.`,
+  `Shockable (VF/pVT): first shock ${D(2,null,'J',0)} (2 J/kg), second ${D(4,null,'J',0)} (4 J/kg), then ≥4 J/kg, max 10 J/kg or the adult dose. AED: pediatric pads or attenuator if available${UNV}.`,
+  `Epinephrine ${D(0.01,1,'mg',2)} IV/IO (0.01 mg/kg = ${S.wt?Math.round(Math.min(0.1*S.wt,10)*10)/10+' mL':'0.1 mL/kg'} of 0.1 mg/mL; max 1 mg) every 3–5 min.`,
+  `Refractory VF/pVT: amiodarone ${D(5,300,'mg',0)} IV/IO (5 mg/kg, max 300 mg), may repeat up to 3 doses (max 150 mg for later doses); or lidocaine ${D(1,null,'mg',0)} (1 mg/kg).`,
+  `Treat causes: hypoxia (most common in children), hypovolemia, acidosis, K⁺, hypoglycemia, hypothermia, tension pneumothorax, tamponade, toxins (incl. local anesthetic → LAST card), thrombosis.`]},
+ brady:{src:['palsbr'],steps:()=>[
+  `Support airway and breathing; 100% O₂. Most pediatric bradycardia is hypoxic.`,
+  `HR <60/min with poor perfusion despite oxygenation and ventilation: start CPR (Cardiac arrest card).`,
+  `Epinephrine ${D(0.01,1,'mg',2)} IV/IO (0.01 mg/kg, max 1 mg) every 3–5 min.`,
+  `Increased vagal tone or primary AV block: atropine ${S.wt?F(Math.round(Math.min(Math.max(0.02*S.wt,0.1),0.5)*100)/100+' mg'):F('0.02 mg/kg')} IV/IO (0.02 mg/kg; min 0.1 mg, max 0.5 mg per dose), may repeat once.`,
+  `Call 911; consider pacing in hospital.`]},
+ resp:{src:['msdres','flumaped'],steps:()=>[
+  `Stop sedatives. Stimulate. Jaw thrust, chin lift; airway adjunct sized to the child.`,
+  `100% O₂. Bag-mask ventilate if breathing is inadequate.`,
+  `Opioid, apneic or arrested: naloxone ${S.wt?F(S.wt<20?Math.round(0.1*S.wt*100)/100+' mg':'2 mg'):F('0.1 mg/kg if <20 kg or <5 y; 2 mg if ≥20 kg or ≥5 y')} IV/IO/IM. Breathing but slow: titrate smaller doses to effect${UNV}.`,
+  `Benzodiazepine: flumazenil ${D(0.01,0.2,'mg',2)} IV over 15 s (0.01 mg/kg, max 0.2 mg); repeat every 60 s; total max ${S.wt?F(Math.round(Math.min(0.05*S.wt,1)*100)/100+' mg'):F('0.05 mg/kg or 1 mg')}, whichever is lower.`,
+  `Monitor ≥2 h after reversal; re-sedation can outlast the antagonist. No response or arrest: Cardiac arrest card.`]},
+ hypo:{src:['msdres','glucaped'],steps:()=>[
+  `Check glucose. Low with symptoms: treat.`,
+  `Awake and swallowing: fast carbohydrate by mouth (gel, juice)${UNV}. Recheck in 15 min.`,
+  `Unresponsive, no IV: glucagon ${S.wt?F(S.wt<25?'0.5 mg IM':'1 mg IM'):F('0.5 mg IM if <25 kg; 1 mg if ≥25 kg')} (GlucaGen cut-off; Glucagon Emergency Kit uses 20 kg), or nasal glucagon ${F('3 mg')} if ≥4 years.`,
+  `IV in place: dextrose ${DR(0.5,1,null,'g',1)} (0.5–1 g/kg) as D10 = ${DR(5,10,null,'mL',0)} IV. Not D50 in young children.`,
+  `Nothing by mouth while obtunded. Call 911.`]},
+ adrenal:{src:['hcped','adrenal'],steps:()=>[
+  `Suspect it in any child on chronic steroids, or with adrenal insufficiency, who becomes hypotensive, vomiting or obtunded. Call 911.`,
+  `Hydrocortisone IV or IM now (50 mg/m²): ${(()=>{const a=ageNum();return a==null?F('25 mg under 3 y · 50 mg 3–12 y · 100 mg ≥12 y'):F(a<3?'25 mg':a<12?'50 mg':'100 mg')})()}${UNV}. Do not wait for labs.`,
+  `Normal saline ${D(20,null,'mL',0)} IV bolus (20 mL/kg). Repeat if still hypotensive.`,
+  `Check glucose; treat low (Hypoglycemia card).`,
+  `Use the child’s own emergency injection kit if carried.`]},
+ lspasm:{src:['lspasm','msdres'],steps:()=>[
+  `Stop stimulation. Suction the pharynx.`,
+  `100% O₂ with tight-mask CPAP; jaw thrust plus Larson maneuver.`,
+  `Still obstructed: propofol ${D(0.5,null,'mg',0)} IV (0.5 mg/kg).`,
+  `Still obstructed or SpO₂ falling: succinylcholine ${DR(1,2,150,'mg')} IV (1–2 mg/kg); no IV: ${D(4,150,'mg',0)} IM (4 mg/kg)${UNV}. Children brady with succinylcholine: atropine ${S.wt?F(Math.round(Math.min(Math.max(0.02*S.wt,0.1),0.5)*100)/100+' mg'):F('0.02 mg/kg')} ready.`,
+  `Mask ventilate; intubation or LMA if ventilation fails. Call 911.`]},
+ bronch:{src:['asthma'],steps:()=>[
+  `Stop the procedure. Sit upright. Remove packs; suction.`,
+  `Albuterol MDI with spacer, one puff at a time; puff count by age (pediatric asthma guidance)${UNV}. Repeat every 20 min for the first hour.`,
+  `O₂ to SpO₂ 94–98%${UNV}. No quick relief: call 911.`,
+  `Hives, low BP or a drug trigger: anaphylaxis. Epinephrine IM ${D(0.01,0.5,'mg',2)} (0.01 mg/kg) first (Anaphylaxis card).`]},
+ chest:'Adult chest-pain protocol does not apply to children. Do not give aspirin (Reye syndrome) or nitroglycerin. Monitor, 100% O₂ if SpO₂ is low, call 911; an arrhythmia goes to the Bradycardia or Cardiac arrest card.',
+ stroke:'Adult stroke treatment windows do not apply to children. Call 911 and ask for a pediatric stroke-capable center. Record the time last known well and check glucose. Nothing by mouth; no aspirin.',
+ htncrisis:'Adult BP cutoffs (180/120) do not apply: pediatric thresholds depend on age, sex and height. Symptoms (headache, vision change, seizure, confusion): call 911. No symptoms: defer elective care and refer to the pediatrician the same day. No office antihypertensives.'};
+function pedCard(e){const p=PEDS[e.id];
+ if(typeof p==='string')return`<div class="pref"><b>Pediatric: adult card suppressed.</b> ${esc(p)}</div>`;
+ if(p)return`<ol>${p.steps().map(x=>`<li>${x}</li>`).join('')}</ol><div class="meta">${p.src.map(srcLink).join('')}</div>`;
+ return`<ol>${e.steps().map(x=>`<li>${x}</li>`).join('')}</ol><div class="meta">${e.src.map(srcLink).join('')}</div>`}
+function emHTML(){const kid=sosKid();
+ return `${ptBar(kid?'Child: pediatric algorithms below, scaled to this weight.':'Adults. Doses update from this weight. Tap a card.')}
+ ${kid?`<div class="pamber" id="peds-sos"><b>Pediatric SOS (${esc(lockWhy())}).</b> Cardiac arrest, bradycardia, oversedation, hypoglycemia, adrenal crisis, laryngospasm and bronchospasm show pediatric algorithms; chest pain, stroke and hypertensive crisis show referral guidance only. Other cards are already weight-based. ${S.wt?'Doses scale to '+esc(wtLine())+'.':'<b>Enter weight</b> — doses show per kg until then.'} Confirm with PALS or a length-based tape.</div>`:''}
  <div class="call">Any emergency: call for help, stop the procedure, 100% O₂, monitors on. Call 911 early.</div>
- ${EMS.map(e=>`<details class="em" id="em-${e.id}"${S.emOpen===e.id?' open':''}><summary><div>${esc(e.t)}<span>${esc(e.s)}</span></div></summary><ol>${e.steps().map(x=>`<li>${x}</li>`).join('')}</ol><div class="meta">${e.src.map(srcLink).join('')}</div></details>`).join('')}
+ ${EMS.map(e=>`<details class="em" id="em-${e.id}"${S.emOpen===e.id?' open':''}><summary><div>${esc(e.t)}${kid&&PEDS[e.id]?' <small class="pedtag">'+(typeof PEDS[e.id]==='string'?'adult only':'pediatric')+'</small>':''}<span>${esc(e.s)}</span></div></summary>${kid?pedCard(e):`<ol>${e.steps().map(x=>`<li>${x}</li>`).join('')}</ol><div class="meta">${e.src.map(srcLink).join('')}</div>`}</details>`).join('')}
  <p class="caveat">Rebuilt from 2025 AHA guidelines and cited sources. Every dose is checked against a guideline or FDA label (Oct 23, 2026); items tagged verify are not. Confirm against your crash-cart concentrations.</p>`;
 }
 const REF=[
@@ -1217,13 +1297,13 @@ function sedHTML(){
 }
 function calcHTML(){
  const w=S.wt,kid=pedsLock(),lk=laKid();
- const la=w?laRows(w,lk).map(r=>`<tr><td>${r.n}${lk?`<br><span class="small">${r.nolist?'not in AAPD table · label':r.pk+' mg/kg AAPD'}</span>`:''}</td><td><b>${r.mg} mg</b>${r.capped?' (cap)':''}</td><td><b>${r.carp}</b></td></tr>`).join(''):LA.map(([n,mgml,pk,cap])=>`<tr><td>${n}</td><td>${lk&&LA_PEDS[n]!=null?LA_PEDS[n]:pk} mg/kg${cap?` · max ${cap} mg`:''}</td><td>–</td></tr>`).join('');
+ const la=w?laRows(w,lk).map(r=>r.blocked?`<tr class="lablock"><td>${r.n}</td><td colspan="2"><b>Not recommended under ${r.minAge} y</b> (label) ${srcLink(r.limSrc)}</td></tr>`:`<tr><td>${r.n}${lk?`<br><span class="small">${r.nolist?'not in AAPD table · label':r.pk+' mg/kg AAPD'}</span>`:''}${r.ageQ?`<br><span class="small" style="color:var(--red-ink)">Enter age — not under ${r.minAge} y</span>`:''}</td><td><b>${r.mg} mg</b>${r.capped?' (cap)':''}</td><td><b>${r.carp}</b></td></tr>`).join(''):LA.map(([n,mgml,pk,cap])=>`<tr><td>${n}</td><td>${lk&&LA_PEDS[n]!=null?LA_PEDS[n]:pk} mg/kg${cap?` · max ${cap} mg`:''}</td><td>–</td></tr>`).join('');
  const rc=S.rcri||{},rn=Object.values(rc).filter(Boolean).length,rr=['0.4%','0.9%','6.6%','≥11%'][Math.min(rn,3)];
  const mf=fluids(w);
  return `${ptBar('Shared with SOS and the Assessment.')}
  ${kid?lockHTML():auWrap(sedHTML())}
  <details class="box" open><summary>Local anesthetic maximum <em>${lk?'pediatric · AAPD':'1.7 mL cartridges'}</em></summary><div class="inner"><table class="ctab"><tr><th>Agent</th><th>Max dose</th><th>Carps</th></tr>${la}</table>
- <p class="caveat" style="margin:10px 0 0">Combining agents: doses add; stay under the lower ceiling. Cardiac patients: the classic 0.04 mg epinephrine cap (≈2 carps 1:100k) lacks research support; a systematic review found up to 4 carps 1:100k well tolerated with monitoring. Recent MI, decompensated heart failure or significant arrhythmia: physician consult first. ${srcLink('epicat')} Reduce for elderly, liver disease, and children.${lk?` <b>Under 18:</b> AAPD pediatric maximums used (lidocaine and mepivacaine 4.4 mg/kg, articaine 7, bupivacaine 1.3); prilocaine is not in the AAPD table, label value shown. Articaine is not recommended under age 4. ${srcLink('aapdla')}`:''} ${srcLink('malamed')}</p></div></details>
+ <p class="caveat" style="margin:10px 0 0">Combining agents: doses add; stay under the lower ceiling. Cardiac patients: the classic 0.04 mg epinephrine cap (≈2 carps 1:100k) lacks research support; a systematic review found up to 4 carps 1:100k well tolerated with monitoring. Recent MI, decompensated heart failure or significant arrhythmia: physician consult first. ${srcLink('epicat')} Reduce for elderly, liver disease, and children.${lk?` <b>Under 18:</b> AAPD pediatric maximums used (lidocaine and mepivacaine 4.4 mg/kg, articaine 7, bupivacaine 1.3); prilocaine is not in the AAPD table, label value shown. Articaine is not recommended under age 4; dental bupivacaine not under age 12 (labels) — those rows are blocked when age is entered. ${srcLink('aapdla')}`:''} ${srcLink('malamed')}</p></div></details>
  <details class="box"><summary>Revised Cardiac Risk Index <em>${rn}/6</em></summary><div class="inner"><div class="chk">${RCRI.map((t,k)=>`<button class="tg${rc[k]?' on':''}" data-rc="${k}" aria-pressed="${!!rc[k]}" style="text-align:left">${esc(t)}</button>`).join('')}</div>
  <div class="calc">RCRI ${rn} · major cardiac event ≈ ${rr} (Lee 1999)</div><p class="caveat" style="margin:10px 0 0">Most OMS cases are low-risk surgery. Testing only when poor functional capacity and elevated risk would change management (2024 AHA/ACC). ${srcLink('lee')} ${srcLink('acc')}</p></div></details>
  <details class="box"><summary>Maintenance fluids <em>4-2-1</em></summary><div class="inner"><div class="calc" id="mfluid">${mf!=null?`${mf} mL/h`:'Enter weight'}</div><p class="caveat" style="margin:10px 0 0">Holliday–Segar: 4 mL/kg/h for the first 10 kg, 2 for the next 10, 1 per kg after. NPO deficit ≈ rate × hours fasting.</p></div></details>`;
@@ -1295,7 +1375,11 @@ function lockWhy(){const a=ageNum();return a!=null?`age ${a} y`:`age not entered
 function lockHTML(){return`<div class="plock" role="alert" id="plock"><span class="pb">PEDIATRIC LOCKOUT (&lt;12 YO / &lt;40 KG)</span><div>Adult non-pump IV sedation protocol is suppressed for patients under 12 years old (or &lt;40 kg). Follow AAP/AAPD weight-based pediatric sedation guidelines and PALS airway/equipment sizing.</div><div class="small" style="color:inherit;margin-top:6px">Triggered by ${esc(lockWhy())}. Local anesthetic maximums, maintenance fluids and SOS cards stay on and scale to ${S.wt?esc(wtLine()):'the entered weight'}. ${srcLink('aapdsed')}</div></div>`}
 const LA_PEDS={'Lidocaine 2% + epi':4.4,'Mepivacaine 3% plain':4.4,'Articaine 4% + epi':7,'Bupivacaine 0.5% + epi':1.3};
 function laKid(){const a=ageNum();return a!=null?a<18:pedsLock()}
-function laRows(w,kid){return LA.map(([n,mgml,pk0,cap])=>{const pk=kid&&LA_PEDS[n]!=null?LA_PEDS[n]:pk0;let mg=pk*w;const capped=cap!=null&&mg>cap;if(capped)mg=cap;return{n,pk,cap,mg:Math.round(mg),capped,carp:Math.floor(mg/(mgml*1.7)*10)/10,nolist:kid&&LA_PEDS[n]==null}})}
+/* Label age limits: articaine not recommended under 4 y; dental bupivacaine not recommended under 12 y. */
+const LA_MINAGE={'Articaine 4% + epi':[4,'aapdla'],'Bupivacaine 0.5% + epi':[12,'bupilabel']};
+function laRows(w,kid){const a=ageNum();return LA.map(([n,mgml,pk0,cap])=>{const pk=kid&&LA_PEDS[n]!=null?LA_PEDS[n]:pk0;let mg=pk*w;const capped=cap!=null&&mg>cap;if(capped)mg=cap;
+ const lim=LA_MINAGE[n],blocked=!!(lim&&a!=null&&a<lim[0]),ageQ=!!(lim&&a==null&&kid);
+ return{n,pk,cap,mg:Math.round(mg),capped,carp:Math.floor(mg/(mgml*1.7)*10)/10,nolist:kid&&LA_PEDS[n]==null,blocked,ageQ,minAge:lim?lim[0]:null,limSrc:lim?lim[1]:null}})}
 function fluids(w){return w?Math.round(w<=10?w*4:w<=20?40+(w-10)*2:60+(w-20)):null}
 
 /* Practice mode: a device preference (not patient data). Author = Bayside/Dr. Young presets; Colleague = neutral. */
@@ -1303,7 +1387,7 @@ const PM_KEY='oms_compass_practice_mode';
 function pmode(){try{const v=localStorage.getItem(PM_KEY);if(v)return v==='colleague'?'colleague':'author'}catch(e){}return S.pm==='colleague'?'colleague':'author'}
 function setPmode(v){S.pm=v==='colleague'?'colleague':'author';try{localStorage.setItem(PM_KEY,S.pm)}catch(e){}}
 const colleague=()=>pmode()==='colleague';
-function pmodeHTML(){const m=pmode();return`<div class="pmode" role="group" aria-label="Practice mode"><span class="pl">Mode</span>${[['author','Author (Bayside)'],['colleague','Colleague (Standard)']].map(([v,l])=>`<button class="tg${m===v?' on':''}" data-pm="${v}" aria-pressed="${m===v}">${l}</button>`).join('')}</div>`}
+function pmodeHTML(){const m=pmode();return`<div class="pmode" role="group" aria-label="Practice mode"><span class="pl">Mode</span>${[['author','Author'],['colleague','Colleague (Standard)']].map(([v,l])=>`<button class="tg${m===v?' on':''}" data-pm="${v}" aria-pressed="${m===v}">${l}</button>`).join('')}</div><p class="small pmdesc" id="pmdesc">${m==='colleague'?'<b>Colleague:</b> guideline rules where a guideline exists (warfarin INR &lt;4 and DOAC dose timing per SDCEP 2022). Author-only content with no guideline equivalent (no-pump sedation card, personal Ref notes) is folded and labeled, not replaced. Handouts are neutral.':'<b>Author:</b> applies the author’s protocols — warfarin INR &lt;3.5 and uninterrupted DOACs for dentoalveolar surgery, the no-pump sedation card — each labeled with where it differs from guidance.'}</p>`}
 /* Colleague mode: author's-practice content sits behind a disclosure; guideline/evidence content stays visible. */
 let AUN=0;
 function auWrap(inner){if(!colleague())return inner;const id='au'+(++AUN);return`<button class="audisc" data-audisc="${id}" aria-expanded="false" aria-controls="${id}">+ Show Author’s Clinical Protocol</button><div class="auhid" id="${id}" hidden>${inner}</div>`}
@@ -1314,8 +1398,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.3.0';
+const VER='3.3.1';
 const CHANGES=[
+{v:'3.3.1',d:'Oct 24, 2026',i:['Pediatric SOS: a child (age <12, or <18 and <40 kg, or no age and <40 kg) gets PALS 2025 algorithms for cardiac arrest (2 → 4 J/kg, epinephrine 0.01 mg/kg, amiodarone 5 mg/kg, 15:2) and bradycardia (atropine 0.02 mg/kg, max 0.5 mg), plus pediatric oversedation, hypoglycemia, adrenal crisis, laryngospasm and bronchospasm doses. Chest pain, stroke and hypertensive crisis cards are suppressed with pediatric referral guidance.','LA calculator blocks drugs by label age: articaine under 4 y, dental bupivacaine under 12 y; asks for age when it is missing.','Diabetes: A1C no longer defers surgery on its own — it flags risk; day-of glucose, symptoms, procedure size and urgency decide. Compared unrounded (64 mmol/mol = 8.01%).','Chronic steroids: adrenal-risk assessment (ESE/Endocrine Society 2024): known AI → cover; ≥3–4 weeks above ~15–25 mg/day hydrocortisone-equivalent → oral cover for minor stress, parenteral for GA/major/unwell; unknown history = at risk.','Labs: explicit unit required (A1C, platelets), Unknown button on every number, unrounded comparisons, INR ≥10 (or ≥5 off warfarin) treated as possibly real with urgent same-day verification instead of “invalid”.','Assessment: decision-changing conflicts raise the overall action and stay listed as unresolved; each finding shows its steps and escalation on screen and in the copied note.','Practice mode: “Author” applies your protocols (INR <3.5, uninterrupted DOACs for dentoalveolar surgery) with applicability and the guideline difference shown; “Colleague” now applies SDCEP rules (INR <4, one-dose DOAC timing) and says what it does not replace.','Search: a brand that conflicts with an earlier choice (Xarelto after apixaban) is flagged, not silently ignored; ASA, Ecotrin, Bayer aspirin, acetylsalicylic acid find aspirin. “Add to assessment” sits under the recommendation.']},
 {v:'3.3.0',d:'Oct 24, 2026',i:['Age and weight at the top of Calc and SOS, shared with the Assessment. Enter weight in kg or lb (kg = lb ÷ 2.20462, 1 decimal); both shown, e.g. 69.9 kg (154 lb).','Pediatric lockout: age <12 (or no age and weight <40 kg) hides the adult no-pump IV sedation table and the Office sedation screen. LA maximums, 4-2-1 fluids and SOS cards stay on and scale to weight; SOS flags fixed adult doses. Under 18, LA maximums use the AAPD pediatric table (lidocaine and mepivacaine 4.4 mg/kg).','Practice mode on Home (remembered on this device): Author (Bayside) or Colleague (Standard). Colleague hides the Dr. Young/Bayside handout presets (neutral header, no phone or review link) and folds author’s-practice content behind “+ Show Author’s Clinical Protocol”.','Copy de-identified note now pastes as four blocks — History · Findings & risk · Anesthesia & limits · Plan & alerts — with LA cartridge limits and an NSAID–anticoagulant alert. Plain text for Dentrix, Epic and PCHC.','Content: IE prophylaxis pediatric doses; GLP-1 split into day-of GI symptoms (defer) vs higher-risk features (24 h clear liquids or local ± N₂O, no routine 1-week hold — Kindel 2024); antithrombotic local hemostatic bundle with TXA; warfarin INR <3.5 and DOACs uninterrupted for dentoalveolar surgery (author’s practice, labeled); MRONJ incidence by regimen, denosumab timing (verify), CTX not indicated; three-tier outpatient odontogenic antibiotics.','“● Offline Ready” in the header once the app is cached for offline use.']},
 {v:'3.2.0',d:'Oct 23, 2026',i:['New module: Deep neck space infection (hospital consult). Airway first, CT neck ± chest, empiric IV antibiotics by host, necrotizing/mediastinal spread, drain vs medical trial; Lemierre, mediastinitis and cavernous sinus thrombosis look-fors. Listed under Hospital on-call.','Odontogenic infection: emergency outcome now links to the new module; IV clindamycin is paired with levofloxacin (clindamycin alone not recommended, >30% resistance — Long et al. 2021).']},
 {v:'3.1.0',d:'Oct 23, 2026',i:['Medical gate: a colour-coded block at the top of procedure modules summarizes Pre-op clearance answers (red = defer elective, amber = address first or unknown, green = no exclusion hit — never a clearance). Taps through to Pre-op clearance and the Assessment.','Hospital on-call switch on Home (remembered on this device): on shows ER/trauma, fractures, dentoalveolar trauma and infection first; off hides facial trauma triage and mandible fracture from the list. Search still finds everything.','Intraop checklist: second tab in the Assessment drawer, plus an Intraop button in the bottom bar. Time-out, sedation, pause points and sign-out, with jumps to Bleeding, Displaced root, Sinus opening, Nerve, Calc and SOS. Memory only; New patient clears it.','Yes / No / ? step buttons are now 44 px tall.']},
@@ -1424,7 +1509,7 @@ function hitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);co
 /* ===== Basis labels (descriptive, not evidence grades) ===== */
 const BASIS={gl:'Guideline / label',ev:'Evidence-informed',au:'Author’s practice',un:'Unverified draft'};
 const BASIS_RANK={gl:0,ev:1,au:2,un:3};
-const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2'];
+const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','palsca','palsbr','flumaped','glucaped','bupilabel','giai','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2'];
 const SRC_AU=['mysed','fa6','mynotes','lect','board'];
 const SRC_UN=['binder'];
 function basisOf(keys,text){
@@ -1463,6 +1548,7 @@ const FIND=[
  what:['More oozing after surgery; local hemostasis matters more than stopping the drug.','Stopping a DOAC raises thrombotic risk. Continue it for dentoalveolar surgery (author’s practice; SDCEP retimes one dose for higher-risk work).','Analgesia: acetaminophen rather than NSAIDs.'],
  ctx:['proc'],
  qs:[{k:'doacAg',q:'Which DOAC?',opts:[['api','Apixaban (Eliquis) · twice daily'],['dab','Dabigatran (Pradaxa) · twice daily'],['riv','Rivaroxaban (Xarelto) · once daily'],['edo','Edoxaban (Savaysa) · once daily']]},
+  {k:'doacTime',q:'Once-daily dose taken…',opts:[['am','Morning'],['pm','Evening']],when:()=>colleague()&&['riv','edo'].includes(S.pf.doacAg)&&S.pf.proc==='high'},
   {k:'ap',q:'Also on an antiplatelet (including OTC aspirin)?',opts:YN,when:()=>BLEEDP.includes(S.pf.proc)}],
  link:[['preop','nBleed'],['bleed',null]],
  plan(c){const p=mk();p.src=['sdcepFull'];p.esc=[BLEED_ESC];
@@ -1470,9 +1556,18 @@ const FIND=[
   if(c.proc==='none'){p.act='No change. Treatment unlikely to cause bleeding.';return p}
   p.steps.push('Treat early in the day; limit the first treatment area.',HEMO,'Analgesia: acetaminophen rather than NSAIDs (SDCEP).');
   if(c.proc==='low'){p.act='Continue without interruption.'}
-  else if(c.proc==='high'){p.d='modify';p.basis='au';p.src=['chest','sdcepFull','sdcepDoac'];
-   p.act='Continue the DOAC without interruption (author’s practice for extractions, alveoloplasty and routine implants). Rely on the local hemostatic bundle.';
-   p.steps.push('Basis: CHEST 2022 continues DOACs for minor dental work; extending “no interruption” to surgical extractions and implants is the author’s practice. SDCEP (UK) instead retimes one dose for higher-risk procedures.','Stage multiple extractions where possible.')}
+  else if(c.proc==='high'&&!colleague()){p.d='modify';p.basis='au';p.author='doac';p.src=['chest','sdcepFull','sdcepDoac'];
+   p.act='Continue the DOAC without interruption (author’s protocol). Rely on the local hemostatic bundle.';
+   p.steps.push('Stage multiple extractions where possible.')}
+  else if(c.proc==='high'){p.d='modify';p.src=['sdcepDoac','sdcepFull'];
+   const ag=c.doacAg,bid=['api','dab'].includes(ag),qd=['riv','edo'].includes(ag);
+   const BID='Twice-daily agent: skip the morning dose; take the evening dose at the usual time, no earlier than 4 h after hemostasis.',
+    AM='Once-daily, taken in the morning: delay that dose until 4 h after hemostasis; next dose as usual.',
+    PM='Once-daily, taken in the evening: no change; that day’s dose at the usual time, no earlier than 4 h after hemostasis.';
+   if(bid)p.act=BID;else if(qd&&c.doacTime==='am')p.act=AM;else if(qd&&c.doacTime==='pm')p.act=PM;
+   else{p.prov=true;p.act='Retime one dose (SDCEP); the change depends on the agent and dosing time.';
+    if(!has(ag))p.miss.push('Which DOAC (twice- vs once-daily)');else p.miss.push('Morning vs evening dosing');p.steps.unshift(BID,AM,PM)}
+   p.steps.push('One-dose timing change, not a stop. Confirm with the patient; ask the prescriber if unsure.','Stage multiple extractions where possible.')}
   else{p.d='refer';p.src=['chest','allyn'];p.basis='gl';p.act='Plan any interruption with the prescriber; timing depends on agent and renal function.';p.miss.push('Renal function (CrCl), if interruption is planned');p.steps=['Heparin bridging is generally harmful; reserve it for specific high-risk cases (2024 AHA/ACC).']}
   if(c.ap==='y'){p.d=DRANK[p.d]<2?'investigate':p.d;p.tags.push('combo');p.steps.unshift('Anticoagulant + antiplatelet: higher bleeding risk. Consult the prescriber about the combination before procedures likely to bleed (SDCEP §9).');if(!p.src.includes('sdcepFull'))p.src.push('sdcepFull')}
   else if(!has(c.ap)&&BLEEDP.includes(c.proc)){p.miss.push('Antiplatelet co-therapy, including OTC aspirin');p.prov=true}
@@ -1482,7 +1577,7 @@ const FIND=[
  syn:['warfarin','coumadin','jantoven','vka','vitamin k antagonist'],
  what:['Bleeding risk tracks the INR; dental surgery proceeds without interruption when a recent INR is below 3.5.','INR <3.5 is the author’s threshold, stricter than SDCEP’s <4 — not a general lab cutoff.','Analgesia: acetaminophen rather than NSAIDs.'],
  ctx:['proc'],
- qs:[{k:'inr',q:'Most recent INR',type:'num',unit:'INR (no unit)',min:0.8,max:15,mode:'decimal',when:()=>S.pf.proc!=='none'},
+ qs:[{k:'inr',q:'Most recent INR',type:'num',unit:'INR (ratio, no unit)',mode:'decimal',when:()=>S.pf.proc!=='none'},
   {k:'inrAge',q:'INR measured…',opts:[['d1','Within 24 h'],['d3','25–72 h ago'],['old','More than 72 h ago']],when:()=>S.pf.proc!=='none'},
   {k:'stable',q:'Stable? No weekly INR checks and no INR >4 in the last 2 months',opts:YN,when:()=>S.pf.inrAge==='d3'&&S.pf.proc!=='none'},
   {k:'ap',q:'Also on an antiplatelet (including OTC aspirin)?',opts:YN,when:()=>BLEEDP.includes(S.pf.proc)}],
@@ -1490,15 +1585,19 @@ const FIND=[
  plan(c){const p=mk();p.src=['sdcepFull'];p.esc=[BLEED_ESC];
   if(!needCtx(p,c,'proc','decides whether an INR is needed')){p.d='investigate';p.act='Continue warfarin. Get a recent INR before any procedure likely to bleed.';return p}
   if(c.proc==='none'){p.act='No change. Treatment unlikely to cause bleeding.';return p}
-  const v=pfNum('inr');
-  if(c.inr!==undefined&&c.inr!==''&&(v==null||v<0.8||v>15)){p.d='investigate';p.prov=true;p.act='INR value looks invalid. Re-enter it (plausible range 0.8–15).';p.miss.push('Valid INR value');return p}
+  const v=pfNum('inr'),MX=inrMax(),au=!colleague();
+  if(c.inr==='u'){p.d='investigate';p.prov=true;p.act='INR unknown: not assumed in range. Get an INR within 24 h of surgery (72 h if stable).';p.miss.push('INR value (unknown)');return p}
+  if(c.inr!==undefined&&c.inr!==''&&(v==null||v<0.5)){p.d='investigate';p.prov=true;p.act='INR entry is not a usable number (below 0.5 or not numeric). Re-enter it.';p.miss.push('Valid INR value');return p}
   if(v==null){p.d='investigate';p.prov=true;p.act='Get an INR, ideally within 24 h of surgery (up to 72 h if stable).';p.miss.push('INR value and date');return p}
-  if(v>=INR_MAX){p.d='defer';p.basis='au';p.act=`INR ${v} (≥${INR_MAX}): delay invasive treatment until INR is below ${INR_MAX}. Inform the anticoagulation clinic or prescriber.`;p.steps=['Author’s threshold is 3.5; SDCEP allows dental treatment below 4.','Urgent need: refer to a hospital or secondary-care setting.'];return p}
+  if(v>=10){p.d='refer';p.prov=true;p.tags.push('bleedrisk');p.act=`INR ${v}: treat as possibly real — verify urgently today. No surgery. Contact the anticoagulation clinic or prescriber now; ask about bleeding.`;p.steps=['Repeat or confirm the result with the lab the same day (a typo or sample error is possible, but do not assume one).','Active bleeding, head injury or very high INR with symptoms: emergency department. [verify: reversal thresholds per CHEST VKA guidance]'];p.miss.push('Urgent verification of INR '+v);return p}
+  if(v>=MX){p.d='defer';p.basis=au?'au':'gl';if(au)p.author='inr';p.act=`INR ${v} (≥${MX}): delay invasive treatment until INR is below ${MX}. Inform the anticoagulation clinic or prescriber.`;p.steps=[au?'Author’s threshold 3.5; SDCEP allows dental treatment below 4.':'SDCEP threshold (Colleague mode).','Urgent need: refer to a hospital or secondary-care setting.'];if(v>=5)p.steps.unshift('INR ≥5: contact the prescriber today (dose review). [verify]');return p}
+
   const fresh=c.inrAge==='d1'||(c.inrAge==='d3'&&c.stable==='y');
   if(!fresh){p.d='investigate';p.prov=!has(c.inrAge)||(c.inrAge==='d3'&&!has(c.stable));
-   p.act=`INR ${v} is below ${INR_MAX}, but ${!has(c.inrAge)?'its date is not entered':c.inrAge==='old'?'it is more than 72 h old':'it is 25–72 h old in a patient not confirmed stable'}. Repeat within 24 h.`;
+   p.act=`INR ${v} is below ${MX}, but ${!has(c.inrAge)?'its date is not entered':c.inrAge==='old'?'it is more than 72 h old':'it is 25–72 h old in a patient not confirmed stable'}. Repeat within 24 h.`;
    if(!has(c.inrAge))p.miss.push('Date of the INR');if(c.inrAge==='d3'&&!has(c.stable))p.miss.push('INR stability (weekly checks? INR >4 in 2 months?)');return p}
   p.steps.push('Treat early in the day; limit the first treatment area.',HEMO,'Analgesia: acetaminophen rather than NSAIDs (SDCEP).');
+  if(au&&v>=3&&v<4)p.author='inr';
   if(c.proc==='low')p.act=`INR ${v}, recent: continue warfarin without interruption.`;
   else if(c.proc==='high'){p.d='modify';p.act=`INR ${v}, recent: continue warfarin. Higher-risk procedure — stage it and pack and suture.`}
   else{p.d='refer';p.src=['acc','chest','sdcepFull'];p.act='Major surgery: plan with the prescriber. Bridging only for mechanical mitral valve, recent LV thrombus, or AF with recent stroke (2024 AHA/ACC).'}
@@ -1507,8 +1606,8 @@ const FIND=[
   return p}},
 
 {id:'antiplatelet',kind:'Medication',t:'Antiplatelets (aspirin, clopidogrel, prasugrel, ticagrelor)',cls:'Antiplatelet',
- syn:['aspirin','baby aspirin','clopidogrel','plavix','prasugrel','effient','ticagrelor','brilinta','dipyridamole','aggrenox','persantine','antiplatelet','dapt','dual antiplatelet'],
- preset:{aspirin:{apReg:'asp'},'baby aspirin':{apReg:'asp'}},
+ syn:['aspirin','baby aspirin','asa','asa 81','acetylsalicylic acid','ecotrin','bayer aspirin','bufferin','low dose aspirin','81 mg aspirin','clopidogrel','plavix','prasugrel','effient','ticagrelor','brilinta','dipyridamole','aggrenox','persantine','antiplatelet','dapt','dual antiplatelet'],
+ preset:{aspirin:{apReg:'asp'},'baby aspirin':{apReg:'asp'},asa:{apReg:'asp'},'asa 81':{apReg:'asp'},'acetylsalicylic acid':{apReg:'asp'},ecotrin:{apReg:'asp'},'bayer aspirin':{apReg:'asp'},bufferin:{apReg:'asp'},'low dose aspirin':{apReg:'asp'},'81 mg aspirin':{apReg:'asp'}},
  what:['Continue antiplatelets for dental surgery; bleeding is managed locally (SDCEP).','Single non-aspirin agents and dual therapy can bleed for up to an hour.','After a coronary stent, never stop dual antiplatelet therapy without cardiology.'],
  ctx:['proc'],
  qs:[{k:'apReg',q:'Regimen',opts:[['asp','Aspirin alone'],['one','One other antiplatelet'],['dual','Dual antiplatelet (DAPT)']]},
@@ -1582,16 +1681,26 @@ const FIND=[
 
 {id:'steroid',kind:'Medication',t:'Chronic corticosteroids',cls:'Glucocorticoid',
  syn:['prednisone','prednisolone','methylprednisolone','medrol','dexamethasone','hydrocortisone','cortef','chronic steroid','chronic steroids','steroid','steroids','glucocorticoid','corticosteroid','adrenal insufficiency'],
- what:['Never withhold the usual steroid dose.','Extra cover only for GA, major or prolonged surgery, or an unwell patient.','Corticosteroids also add MRONJ risk with antiresorptives.'],
+ what:['Never withhold the usual steroid dose.','Cover depends on adrenal-suppression risk (dose × duration, other routes) and on how big the stress is — not on the procedure alone.','Unknown steroid history is treated as at risk. Corticosteroids also add MRONJ risk with antiresorptives.'],
  ctx:['anes','proc'],
- qs:[{k:'stUnwell',q:'Unwell today (fever, infection, vomiting)?',opts:YN},
-  {k:'stLong',q:'Prolonged procedure expected?',opts:YN}],
+ qs:[{k:'stAI',q:'Known adrenal insufficiency (on replacement hydrocortisone)?',opts:YN},
+  {k:'stRisk',q:'Glucocorticoid ≥3–4 weeks above ~15–25 mg/day hydrocortisone-equivalent (≈ prednisone 4–6 mg), now or recently — or high-dose inhaled/topical, joint injection in 2 months, CYP3A4 inhibitor?',opts:YN,when:()=>S.pf.stAI!=='y'},
+  {k:'stRec',q:'HPA-axis recovery documented since?',opts:YN,when:()=>S.pf.stAI!=='y'&&S.pf.stRisk==='y'},
+  {k:'stUnwell',q:'Vomiting, diarrhea, unable to take oral intake, or unstable today?',opts:YN}],
  link:[['steroid',null]],
- plan(c){const p=mk();p.src=['steroid'];p.basis='ev';p.esc=['Hypotension, vomiting, confusion or collapse → SOS: Adrenal crisis.'];
-  if(c.anes==='ga'||c.proc==='major'||c.stLong==='y'||c.stUnwell==='y'){p.d='modify';p.act='Steroid cover per the prescriber or endocrinology (e.g., IV hydrocortisone at induction).';return p}
-  const miss=[];if(!has(c.anes))miss.push('Anesthesia');if(!has(c.proc))miss.push('Planned procedure');if(!has(c.stUnwell))miss.push('Unwell today?');if(!has(c.stLong))miss.push('Prolonged procedure?');
-  if(miss.length){p.prov=true;p.miss.push(...miss);p.d='modify';p.act='Continue the usual dose. Extra cover depends on anesthesia, length and how well the patient is.';return p}
-  p.act='Continue the usual dose; no extra cover for a routine case.';p.steps=['Seek advice if the case becomes prolonged or the patient becomes unwell.'];return p}},
+ plan(c){const p=mk();p.src=['giai'];p.basis='gl';p.esc=['Hypotension, vomiting, confusion or collapse → SOS: Adrenal crisis.'];
+  const big=c.anes==='ga'||c.proc==='major'||c.stUnwell==='y',route=big?'parenteral (e.g., IV hydrocortisone at induction)':'oral';
+  if(c.stAI==='y'){p.d='modify';p.src=['spsdent','giai'];p.act=`Adrenal insufficiency: ${route} steroid cover; dose per endocrinology or the prescriber.`;p.steps=['Oral surgery: cover before and for 24 h after (UK SPS).','Patient brings the emergency hydrocortisone kit.'];return p}
+  const atRisk=c.stRisk==='y'&&c.stRec!=='y';
+  if(c.stRisk==='n'&&c.stAI==='n'){p.act='Low adrenal-suppression risk by dose and duration: usual dose, no extra cover.';p.steps=['Seek advice if the patient becomes unwell.'];return p}
+  if(c.stRisk==='y'&&c.stRec==='y'&&c.stAI==='n'){p.act='HPA-axis recovery documented: usual dose, no stress cover.';return p}
+  if(atRisk||!has(c.stRisk)||!has(c.stAI)){p.d='modify';
+   if(!has(c.stAI))p.miss.push('Known adrenal insufficiency?');if(!has(c.stRisk))p.miss.push('Steroid dose, duration and route (unknown = at risk)');if(c.stRisk==='y'&&!has(c.stRec))p.miss.push('HPA-axis recovery documented?');
+   if(!has(c.anes)||!has(c.proc))p.miss.push('Anesthesia and procedure (set oral vs parenteral cover)');if(!has(c.stUnwell))p.miss.push('Unwell today?');
+   p.prov=p.miss.length>0;
+   p.act=`${atRisk?'At risk':'Risk not established — treat as at risk'}: ${route} stress-dose cover; dose per the prescriber. Continue the usual dose.`;
+   p.steps=['Untested patients exposed to stress get cover (ESE/Endocrine Society 2024, R3.1).','Escalate to parenteral cover if vomiting or unstable.'];return p}
+  return p}},
 
 {id:'rad',kind:'Prior treatment',t:'Head & neck radiation · chemotherapy',cls:'Prior radiotherapy',
  syn:['radiation','radiotherapy','xrt','imrt','irradiated','head and neck cancer','osteoradionecrosis','orn','chemotherapy','chemo'],
@@ -1617,7 +1726,7 @@ const FIND=[
  syn:['inr','pt/inr','pt inr','prothrombin time','international normalized ratio','coags','coagulation'],
  what:['On warfarin: proceed below 3.5 if recent (author’s threshold; SDCEP allows <4).','Off anticoagulants: a raised INR is unexplained until proven otherwise (liver disease, nutrition, lab error).','INR does not measure DOAC effect. [verify]'],
  ctx:['proc'],
- qs:[{k:'inr',q:'INR value',type:'num',unit:'INR (no unit)',min:0.8,max:15,mode:'decimal'},
+ qs:[{k:'inr',q:'INR value',type:'num',unit:'INR (ratio, no unit)',mode:'decimal'},
   {k:'inrAge',q:'Measured…',opts:[['d1','Within 24 h'],['d3','25–72 h ago'],['old','More than 72 h ago']]},
   {k:'inrOn',q:'Anticoagulant?',opts:[['war','Warfarin'],['doac','DOAC'],['none','None']]},
   {k:'stable',q:'Stable? No weekly INR checks and no INR >4 in the last 2 months',opts:YN,when:()=>S.pf.inrOn==='war'&&S.pf.inrAge==='d3'},
@@ -1628,7 +1737,9 @@ const FIND=[
   const p=mk();p.basis='un';p.src=['liver'];
   if(c.inrOn==='doac'){p.d='modify';p.act='INR doesn’t guide DOAC management. Use the DOAC finding. [verify]';p.tags.push('see-doac');return p}
   if(!has(c.inrOn)){p.d='investigate';p.prov=true;p.miss.push('Anticoagulant status');p.act='Interpretation depends on anticoagulant use.';return p}
-  const v=pfNum('inr');if(c.inr!==undefined&&c.inr!==''&&(v==null||v<0.8||v>15)){p.d='investigate';p.act='INR value looks invalid (0.8–15).';p.miss.push('Valid INR value');p.prov=true;return p}
+  if(c.inr==='u'){p.d='investigate';p.prov=true;p.miss.push('INR value (unknown)');p.act='INR unknown: not assumed normal.';return p}
+  const v=pfNum('inr');if(c.inr!==undefined&&c.inr!==''&&(v==null||v<0.5)){p.d='investigate';p.act='INR entry is not a usable number. Re-enter it.';p.miss.push('Valid INR value');p.prov=true;return p}
+  if(v!=null&&v>=5){p.d='refer';p.prov=true;p.tags.push('bleedrisk');p.act=`INR ${v} off warfarin: treat as possibly real — verify urgently today and contact the physician. No surgery.`;p.miss.push('Urgent verification of INR '+v);return p}
   if(c.inrRef==='y'){p.d='investigate';p.act='Unexplained raised INR: find the cause and discuss with the physician before surgery likely to bleed.';p.steps=['Consider liver disease, nutrition/vitamin K, lab error. [verify]'];p.tags.push('bleedrisk');return p}
   if(!has(c.inrRef)){p.d='investigate';p.prov=true;p.miss.push('Compare with the lab’s reference range');p.act='Compare with the lab’s reference range; no universal cutoff applies.';return p}
   p.act='Within the reference range off anticoagulants: no INR-based change.';return p}},
@@ -1643,43 +1754,49 @@ const FIND=[
   {k:'pltCause',q:'Cause',opts:[['itp','ITP'],['liver','Liver disease'],['marrow','Chemotherapy / marrow'],['oth','Other or not known']]}],
  link:[['liver',null],['onc',null]],
  plan(c){const p=mk();p.src=['vandijk','sdcepFull'];p.basis='ev';
-  let v=pfNum('plt');const u=S.pf.pltU||'k';
+  if(S.pf.plt==='u'){p.d='investigate';p.prov=true;p.miss.push('Platelet count (unknown)');p.act='Platelet count unknown: not assumed normal. Get a current CBC if bleeding risk matters for this procedure.';return p}
+  let v=pfNum('plt');const u=S.pf.pltU;
+  if(v!=null&&!has(u)){p.d='investigate';p.prov=true;p.miss.push('Platelet unit');p.act='Choose the unit (×10³/µL or per µL) before the count is interpreted.';return p}
   if(v!=null&&u==='raw')v=v/1000;
   if(S.pf.plt!==undefined&&S.pf.plt!==''&&(v==null||v<0||v>2000)){p.d='investigate';p.prov=true;p.act=u==='k'&&pfNum('plt')>2000?'That looks like a raw count — switch the unit to “per µL”.':'Platelet value looks invalid.';p.miss.push('Valid platelet count and unit');return p}
   if(v==null){p.d='investigate';p.prov=true;p.miss.push('Platelet count');p.act='Enter the count; the threshold depends on the procedure.';return p}
-  const vv=Math.round(v);
+  /* Compare the unrounded value; display one decimal. 30.4 is above 30. */
+  const vv=Math.round(v*10)/10;
   if(!needCtx(p,c,'proc','sets the threshold')){p.d='investigate';p.act=`Platelets ${vv} ×10⁹/L. Threshold depends on the procedure.`;return p}
   const thr=c.proc==='low'?30:c.proc==='high'?50:null;
   if(c.proc==='major'){p.d='refer';p.act=`Platelets ${vv} ×10⁹/L, major surgery: plan with hematology / the hospital team.`;return p}
   if(c.proc==='none'){p.act=`Platelets ${vv} ×10⁹/L: no threshold for minimal-risk care.`;return p}
-  if(vv<=thr){p.d='refer';p.act=`Platelets ${vv} ×10⁹/L — at or below ${thr} for this procedure. Hematology input before surgery.`}
+  if(v<=thr){p.d='refer';p.act=`Platelets ${vv} ×10⁹/L — at or below ${thr} for this procedure. Hematology input before surgery.`}
   else{p.d='modify';p.act=`Platelets ${vv} ×10⁹/L — above ${thr} for this procedure. Proceed with local hemostatic measures.`}
   if(c.pltCause&&c.pltCause!=='itp'){p.steps.push('These cutoffs come from ITP. With liver disease, chemotherapy or marrow disease, platelet function may also be impaired — involve the physician or hematology.');if(p.d==='modify')p.d='investigate'}
   if(!has(c.pltCause)){p.miss.push('Cause of thrombocytopenia');p.prov=true}
   if(c.pltTrend==='fall'){p.d=DRANK[p.d]<2?'investigate':p.d;p.steps.unshift('Falling count: recheck before surgery.')}else if(!has(c.pltTrend)){p.miss.push('Trend');p.prov=true}
   if(c.pltAge==='old'){p.d=DRANK[p.d]<2?'investigate':p.d;p.steps.unshift('Older result: recheck before surgery.')}else if(!has(c.pltAge)){p.miss.push('Result date');p.prov=true}
-  if(vv<150)p.tags.push('bleedrisk');
+  if(v<150)p.tags.push('bleedrisk');
   return p}},
 
 {id:'a1c',kind:'Lab',t:'HbA1c',cls:'Diabetes control',
  syn:['a1c','hba1c','hb a1c','hemoglobin a1c','haemoglobin a1c','glycated hemoglobin','glycosylated'],
- what:['Elective case with A1C >8% (within 3 months): consider postponing and optimizing.','Never delay urgent care (infection, pain) for A1C.','Day-of glucose and drug timing are separate checks (Diabetes module).'],
+ what:['A1C ≥8% flags higher infection and healing risk — optimize when timing allows, but A1C alone does not cancel surgery.','Never delay urgent care (infection, pain) for A1C.','Day-of glucose and drug timing are separate checks (Diabetes module).'],
  ctx:['urg'],
  qs:[{k:'a1c',q:'HbA1c',type:'num',unitSel:'a1cU',units:[['pct','% (NGSP)'],['mmol','mmol/mol (IFCC)']],mode:'decimal'},
   {k:'a1cAge',q:'Measured…',opts:[['r3','Within 3 months'],['old','More than 3 months ago']]}],
  link:[['dm',null]],
- plan(c){const p=mk();p.src=['dm26'];p.basis='ev';
-  let v=pfNum('a1c');const u=S.pf.a1cU||'pct';let pct=v;
-  if(v!=null&&u==='mmol')pct=Math.round((0.09148*v+2.152)*10)/10;
+ plan(c){const p=mk();p.src=['dm26','ada16'];p.basis='ev';
+  if(S.pf.a1c==='u'){p.d='investigate';p.prov=true;p.miss.push('HbA1c (unknown)');p.act='HbA1c unknown: not assumed normal. Check day-of glucose; get a current A1C if diabetes control is uncertain.';return p}
+  const v=pfNum('a1c'),u=S.pf.a1cU;
+  if(v!=null&&!has(u)){p.d='investigate';p.prov=true;p.miss.push('HbA1c unit (% or mmol/mol)');p.act='Choose the unit before the value is interpreted.';return p}
+  /* Unrounded: 64 mmol/mol is 8.006%, which is ≥8. */
+  const pct=v==null?null:u==='mmol'?0.09148*v+2.152:v;
   if(S.pf.a1c!==undefined&&S.pf.a1c!==''&&(v==null||(u==='pct'&&(v<3||v>20))||(u==='mmol'&&(v<9||v>195)))){p.d='investigate';p.prov=true;p.act=u==='pct'&&v>20?'Looks like mmol/mol — switch the unit.':'HbA1c value looks invalid.';p.miss.push('Valid HbA1c and unit');return p}
-  if(v==null){p.d='investigate';p.prov=true;p.miss.push('HbA1c value');p.act='Enter the value to compare with the 8% threshold.';return p}
-  const shown=u==='mmol'?`${v} mmol/mol (≈${pct}%)`:`${v}%`;
-  if(c.a1cAge==='old'){p.d='investigate';p.act=`HbA1c ${shown} is more than 3 months old; the threshold applies to a recent value.`;return p}
+  if(v==null){p.d='investigate';p.prov=true;p.miss.push('HbA1c value');p.act='Enter the value and unit, or mark Unknown.';return p}
+  const shown=u==='mmol'?`${v} mmol/mol (≈${Math.round(pct*100)/100}%)`:`${v}%`;
+  if(c.a1cAge==='old'){p.d='investigate';p.act=`HbA1c ${shown} is more than 3 months old; recheck or rely on day-of glucose.`;return p}
   if(!has(c.a1cAge)){p.miss.push('Date of the HbA1c');p.prov=true}
-  if(pct>8){if(c.urg==='urg'){p.d='modify';p.act=`HbA1c ${shown}: urgent care — do not delay. Check glucose on arrival.`;return p}
-   if(!has(c.urg)){p.miss.push('Urgency');p.prov=true}
-   p.d='defer';p.act=`HbA1c ${shown} (>8%): consider postponing elective surgery and optimizing with the physician.`;p.steps=['Urgent problems: treat now.'];return p}
-  p.act=`HbA1c ${shown}: no A1C-based reason to defer.`;p.steps=['Check glucose on arrival; plan insulin, sulfonylurea and SGLT2 timing (Diabetes module).'];return p}},
+  p.steps=['Check glucose on arrival; that value, symptoms, procedure size and urgency decide whether to proceed (Diabetes module).','Plan insulin, sulfonylurea and SGLT2 timing.'];
+  if(pct>=8){p.d='modify';p.act=`HbA1c ${shown} (≥8%): higher infection and healing risk. Not a stand-alone reason to cancel. ${c.urg==='urg'?'Urgent care — do not delay.':'Elective: discuss optimization with the physician when timing allows; document the risk discussion.'} [verify: ADA 2026 Section 16 wording not retrieved]`;
+   if(!has(c.urg)){p.miss.push('Urgency');p.prov=true}return p}
+  p.act=`HbA1c ${shown}: below 8%; no A1C-related change.`;return p}},
 
 {id:'renal',kind:'Medical history',t:'Kidney disease & dialysis (eGFR, creatinine)',cls:'CKD / ESRD',
  syn:['ckd','kidney disease','chronic kidney disease','renal','renal failure','egfr','gfr','creatinine','dialysis','hemodialysis','haemodialysis','esrd'],
@@ -1698,7 +1815,14 @@ const FIND=[
 ];
 const FX=Object.fromEntries(FIND.map(f=>[f.id,f]));
 const ANTITHROMB=['doac','warfarin','antiplatelet'];
-const INR_MAX=3.5; /* author's threshold (Oct 24, 2026); SDCEP 2022 allows <4 */
+/* Author protocols vs guidance. Author mode applies the author's rule and says where it differs;
+   Colleague mode applies the guideline rule (where one exists). */
+const AUTHOR={
+ inr:{rule:'Warfarin: proceed only if INR <3.5 (recent)',applies:'Office dentoalveolar surgery — extractions, alveoloplasty, routine implants',guide:'SDCEP 2022: proceed if INR <4, measured within 24 h (72 h if stable)',src:'sdcepFull'},
+ doac:{rule:'DOACs: continue without interruption',applies:'Higher-bleeding-risk dentoalveolar surgery — surgical/multiple extractions, alveoloplasty, routine implants. Not major surgery.',guide:'CHEST 2022 continues DOACs for minor dental work; SDCEP 2022 retimes one dose for higher-risk procedures (skip the morning dose of a twice-daily agent; delay a morning once-daily dose until 4 h after hemostasis)',src:'sdcepDoac'}};
+const inrMax=()=>colleague()?4:3.5;
+function authorHTML(k){const a=AUTHOR[k];return`<div class="fsec authp"><div class="lab">Author’s protocol · differs from guidance</div><ul><li><b>Rule:</b> ${esc(a.rule)}</li><li><b>Applies to:</b> ${esc(a.applies)}</li><li><b>Guidance instead:</b> ${esc(a.guide)} ${srcLink(a.src)}</li></ul><div class="small">Switch Home → Mode → Colleague to apply the guideline rule.</div></div>`}
+function authorText(k){const a=AUTHOR[k];return`Author protocol applied: ${a.rule} (applies to: ${a.applies}). Guidance instead: ${a.guide}.`}
 
 /* Questions relevant now (finding + shared context), and pruning of stale answers */
 function fQs(f){return[...f.ctx.map(k=>({k,...CTXQ[k],ctx:1})),...f.qs].filter(q=>!q.when||q.when())}
@@ -1710,6 +1834,8 @@ function prune(){
   if(!changed)break}}
 function fPlan(f){const p=f.plan({...S.pf});
  /* Strength matches inputs: any visible question unanswered or Unknown keeps the action provisional. */
+ /* A lookup conflict on this finding keeps it unresolved and at least “verify first”. */
+ Object.values(S.lkc||{}).filter(x=>x.fid===f.id).forEach(x=>{p.prov=true;if(DRANK[p.d]<DRANK.investigate)p.d='investigate';p.miss.push(`Confirm ${x.prevL} vs ${x.nextL} (lookup conflict)`)});
  const open=fQs(f).filter(q=>!has(S.pf[q.k]));if(open.length){p.prov=true;if(!p.miss.length)p.miss.push(`Answer the ${open.length===1?'question':open.length+' questions'} below to finalize`)}
  return p}
 
@@ -1735,15 +1861,17 @@ const NOMATCH=q=>`<div class="nomatch"><b>No Compass entry for “${esc(q)}”.<
 /* Finding view */
 function chipRow(q,val){const opts=[...q.opts,['u','Unknown']];
  return`<div class="fq"><div class="fql">${esc(q.q)}${q.ctx?' <small>shared</small>':''}</div>${q.help?`<div class="fqh">${esc(q.help)}</div>`:''}<div class="chips">${opts.map(([v,l])=>`<button class="tg${val===v?' on':''}${v==='u'?' unkb':''}" data-pf="${q.k}" data-pv="${v}" aria-pressed="${val===v}">${esc(l)}</button>`).join('')}</div></div>`}
-function numRow(q){const val=S.pf[q.k]??'';const u=q.unitSel?S.pf[q.unitSel]||q.units[0][0]:null;
- return`<div class="fq"><label class="fql" for="pf-${q.k}">${esc(q.q)}</label><div class="numrow"><input id="pf-${q.k}" data-pfn="${q.k}" inputmode="${q.mode||'decimal'}" enterkeyhint="done" autocomplete="off" value="${esc(val)}" placeholder="value">${q.unitSel?`<select id="pf-${q.unitSel}" data-pfu="${q.unitSel}" aria-label="Unit">${q.units.map(([v,l])=>`<option value="${v}"${u===v?' selected':''}>${esc(l)}</option>`).join('')}</select>`:`<span class="unitlab">${esc(q.unit)}</span>`}</div></div>`}
+function numRow(q){const raw=S.pf[q.k],unk=raw==='u',val=unk?'':raw??'';const u=q.unitSel?S.pf[q.unitSel]:null;
+ return`<div class="fq"><label class="fql" for="pf-${q.k}">${esc(q.q)}</label><div class="numrow"><input id="pf-${q.k}" data-pfn="${q.k}" inputmode="${q.mode||'decimal'}" enterkeyhint="done" autocomplete="off" value="${esc(val)}" placeholder="${unk?'unknown':'value'}">${q.unitSel?`<select id="pf-${q.unitSel}" data-pfu="${q.unitSel}" aria-label="Unit" class="${u?'':'nounit'}"><option value=""${u?'':' selected'}>unit…</option>${q.units.map(([v,l])=>`<option value="${v}"${u===v?' selected':''}>${esc(l)}</option>`).join('')}</select>`:`<span class="unitlab">${esc(q.unit)}</span>`}</div><div class="chips" style="margin-top:6px"><button class="tg unkb${unk?' on':''}" data-pf="${q.k}" data-pv="u" aria-pressed="${unk}">Unknown</button></div></div>`}
 function qHTML(q){return q.type==='num'?numRow(q):chipRow(q,S.pf[q.k])}
 function dispHTML(p,big){const [l,c]=DISP[p.d];return`<div class="disp d-${c}${big?' big':''}"><div class="lab">${p.prov?'Provisional action':'Recommended action'} ${basisChip(p.basis)}</div><div class="pt"><span class="dtag">${esc(l)}</span> ${escV(p.act)}</div></div>`}
 function fSig(f){return fQs(f).map(q=>q.k).join(',')}
 function fDynHTML(f){const p=fPlan(f);return`<div id="ftop">${fTopHTML(f,p)}</div><div id="fqs" data-sig="${fSig(f)}">${fQsHTML(f)}</div><div id="fnext">${fNextHTML(f,p)}</div>`}
 function fQsHTML(f){return`<div class="fsec"><div class="lab">Refine the plan</div>${fQs(f).map(qHTML).join('')}</div>`}
+function lkcHTML(f){const c=Object.values(S.lkc||{}).filter(x=>x.fid===f.id);return c.map(x=>`<div class="fsec lkc" role="alert"><div class="lab">Lookup conflict · unresolved</div><p style="margin:4px 0 8px">You looked up <b>${esc(x.hit)}</b> (${esc(x.nextL)}), but <b>${esc(x.prevL)}</b> is already selected. Confirm which the patient takes.</p><div class="chips"><button class="tg" data-lkuse="${x.k}">Use ${esc(x.nextL.split(' (')[0])}</button><button class="tg" data-lkkeep="${x.k}">Keep ${esc(x.prevL.split(' (')[0])}</button></div></div>`).join('')}
+function addBtnHTML(f){const inA=(S.asmt||[]).includes(f.id);return`<div class="fact top"><button class="gobtn" data-addf="${f.id}"${inA?' disabled':''}>${inA?'✓ In assessment':'＋ Add to assessment'}</button></div>`}
 function fTopHTML(f,p){const assume=[...p.assume,...p.miss.map(m=>'Missing: '+m)];
- return dispHTML(p,1)+
+ return lkcHTML(f)+dispHTML(p,1)+addBtnHTML(f)+(p.author?authorHTML(p.author):'')+
   `<div class="fsec"><div class="lab">What changes</div><ul>${f.what.map(x=>`<li>${escV(x)}</li>`).join('')}</ul></div>`+
   (assume.length?`<div class="fsec warn"><div class="lab">Depends on · not yet known</div><ul>${assume.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small">Unknown is never read as normal or negative.</div></div>`:'')}
 function fNextHTML(f,p){return(p.steps.length||p.esc.length?`<div class="fsec"><div class="lab">Next steps</div>${p.steps.length?`<ol>${p.steps.map(x=>`<li>${escV(x)}</li>`).join('')}</ol>`:''}${p.esc.length?`<div class="lab" style="margin-top:8px">Escalate if</div><ul>${p.esc.map(x=>`<li>${escV(x)}</li>`).join('')}</ul>`:''}</div>`:'')+
@@ -1752,13 +1880,13 @@ function fNextHTML(f,p){return(p.steps.length||p.esc.length?`<div class="fsec"><
   <h4>Sources for this action</h4>${p.src.filter(k=>SRC[k]).map(k=>{const s=SRC[k];return`<div class="src"><a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a><span>Published: ${esc(s.v)} · Checked: ${esc(s.chk||'not recorded')}</span></div>`}).join('')}
   <p class="small">Basis labels describe where a recommendation comes from — they are not evidence grades. Finding cards drafted Oct 23, 2026 by Claude from the sources above; independent clinician review not recorded. UK guidance (SDCEP) is used where US guidance lacks dental detail.</p></div></details>`}
 function miniHTML(p){return`<span class="dtag sm d-${DISP[p.d][1]}">${esc(DISP[p.d][0])}${p.prov?' · provisional':''}</span>`}
-function findHTML(f){const inA=(S.asmt||[]).includes(f.id);
+function findHTML(f){
  return`<div class="bar"><button class="icon-btn back" data-home aria-label="Back to search">‹</button><h2>${esc(f.t)}<span id="fmini">${miniHTML(fPlan(f))}</span></h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button></div>
  <div class="fcls">${esc(f.kind)} · ${esc(f.cls)}${S.fhit?` · matched “${esc(S.fhit)}”`:''}</div>
- <div id="fdyn">${fDynHTML(f)}</div>
- <div class="fact"><button class="gobtn" data-addf="${f.id}"${inA?' disabled':''}>${inA?'✓ In assessment':'＋ Add to assessment'}</button></div>${fbHTML(f.t)}`}
+ <div id="fdyn">${fDynHTML(f)}</div>${fbHTML(f.t)}`}
 function openFind(id,hit){const f=FX[id];if(!f)return home();S.mod=null;S.view='find';S.fid=id;S.fhit=hit||'';
- const pre=f.preset&&hit&&f.preset[String(hit).toLowerCase()];if(pre)Object.entries(pre).forEach(([k,v])=>{if(S.pf[k]===undefined)S.pf[k]=v});
+ const pre=f.preset&&hit&&f.preset[String(hit).toLowerCase()];if(pre)Object.entries(pre).forEach(([k,v])=>{if(S.pf[k]===undefined||S.pf[k]==='u')S.pf[k]=v;
+  else if(S.pf[k]!==v){const q=f.qs.find(x=>x.k===k),L=x=>q?((q.opts.find(o=>o[0]===x)||[])[1]||x):x;S.lkc=S.lkc||{};S.lkc[k]={fid:id,k,prev:S.pf[k],next:v,hit:String(hit),prevL:L(S.pf[k]),nextL:L(v)}}});
  prune();app.innerHTML=findHTML(f);window.scrollTo(0,0);try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}updBar()}
 function redraw(){const a=document.activeElement,id=a&&a.id,pos=a&&a.selectionStart;prune();
  if(S.view==='find'){const f=FX[S.fid],w=document.getElementById('fwhy'),wo=w&&w.open,qs=document.getElementById('fqs');
@@ -1774,23 +1902,25 @@ function redraw(){const a=document.activeElement,id=a&&a.id,pos=a&&a.selectionSt
 
 /* Temporary assessment (memory only) */
 const RULES=[
+ {when:()=>Object.keys(S.lkc||{}).length>0,raise:'investigate',t:()=>Object.values(S.lkc).map(x=>`Lookup conflict: “${x.hit}” suggests ${x.nextL}, but ${x.prevL} is selected — confirm which the patient takes.`).join(' ')},
  {when:A=>A.includes('antiplatelet')&&(A.includes('doac')||A.includes('warfarin'))&&S.pf.ap==='n',raise:'investigate',t:'An antiplatelet is listed, but the anticoagulant card says “no antiplatelet” — reconcile the medication list.'},
  {when:A=>A.includes('antiplatelet')&&(A.includes('doac')||A.includes('warfarin'))&&BLEEDP.includes(S.pf.proc),raise:'investigate',t:'Anticoagulant + antiplatelet: higher bleeding risk than either alone. Consult the prescriber about the combination before procedures likely to bleed.',src:'sdcepFull'},
  {when:A=>A.includes('doac')&&A.includes('warfarin'),raise:'investigate',t:'Both a DOAC and warfarin are listed — confirm the medication list (data check).'},
- {when:(A,P)=>A.some(x=>ANTITHROMB.includes(x))&&(A.includes('renal')||P.some(p=>p.tags.includes('bleedrisk'))),bleed:1,t:'Antithrombotic plus another bleeding risk (renal impairment, low platelets or unexplained raised INR). SDCEP lists these as compounding risks — consult the prescriber/physician.',src:'sdcepFull'},
+ {when:(A,P)=>A.some(x=>ANTITHROMB.includes(x))&&(A.includes('renal')||P.some(p=>p.tags.includes('bleedrisk'))),raise:'investigate',t:'Antithrombotic plus another bleeding risk (renal impairment, low platelets or unexplained raised INR). SDCEP lists these as compounding risks — consult the prescriber/physician.',src:'sdcepFull'},
  {when:A=>A.some(x=>ANTITHROMB.includes(x))||A.includes('renal'),t:A=>`Analgesia: avoid NSAIDs (${[A.some(x=>ANTITHROMB.includes(x))?'antithrombotic — SDCEP advises acetaminophen':'',A.includes('renal')?'kidney disease':''].filter(Boolean).join('; ')}). The Post-op analgesia module’s NSAID first line does not apply.`,src:'sdcepFull'},
  {when:A=>A.includes('antires')&&(A.includes('steroid')||S.pf.arSteroid==='y'),t:'Corticosteroids are associated with increased MRONJ risk (AAOMS 2022). Include in consent for bone surgery.',src:'aaoms'},
- {when:A=>A.includes('antires')&&A.includes('rad'),t:'Antiresorptive plus jaw radiation: exposed bone in an irradiated field falls outside the MRONJ definition. Get the site dose; manage as possible ORN with radiation oncology.',src:'aaoms'},
- {when:A=>A.includes('glp1')&&A.includes('sglt2')&&['sed','ga'].includes(S.pf.anes),t:'GLP-1 RA usually continues; SGLT2 inhibitor is held ≥3–4 days. Coordinate one plan with the prescriber.',src:'glp1'},
+ {when:A=>A.includes('antires')&&A.includes('rad'),raise:'investigate',t:'Antiresorptive plus jaw radiation: exposed bone in an irradiated field falls outside the MRONJ definition. Get the site dose; manage as possible ORN with radiation oncology.',src:'aaoms'},
+ {when:A=>A.includes('glp1')&&A.includes('sglt2')&&['sed','ga'].includes(S.pf.anes),raise:'modify',t:'GLP-1 RA usually continues; SGLT2 inhibitor is held ≥3–4 days. Coordinate one plan with the prescriber.',src:'glp1'},
  {when:A=>A.includes('warfarin')&&A.includes('inr')&&S.pf.inrOn&&S.pf.inrOn!=='war',raise:'investigate',t:'Warfarin is listed, but the INR card says the patient is not on warfarin — reconcile.'}];
 function asmtModel(){prune();const A=S.asmt||[];const P=A.map(id=>({f:FX[id],p:fPlan(FX[id])}));
  const worst=P.reduce((w,x)=>!w||DRANK[x.p.d]>DRANK[w.p.d]?x:w,null);
  const miss=[...new Set(P.flatMap(x=>x.p.miss.map(m=>m)))];
- const hit=RULES.filter(r=>r.when(A,P.map(x=>x.p)));const conf=hit.map(r=>({t:typeof r.t==='function'?r.t(A):r.t,src:r.src}));
- /* Overall = most restrictive item, raised to "verify first" when a listed conflict needs reconciling. */
- let od=worst?worst.p.d:null,why=worst?worst.f.t.split(' (')[0]:'';const rz=hit.filter(r=>r.raise);
- if(od&&rz.length&&DRANK['investigate']>DRANK[od]){od='investigate';why='a listed conflict'}
- return{A,P,worst,od,why,miss,conf,prov:P.some(x=>x.p.prov)}}
+ const hit=RULES.filter(r=>r.when(A,P.map(x=>x.p)));const conf=hit.map(r=>({t:typeof r.t==='function'?r.t(A):r.t,src:r.src,raise:r.raise}));
+ /* Decision-changing conflicts raise the overall disposition and stay listed as unresolved until the inputs change. */
+ let od=worst?worst.p.d:null,why=worst?worst.f.t.split(' (')[0]:'';
+ conf.filter(c=>c.raise).forEach(c=>{if(od&&DRANK[c.raise]>DRANK[od]){od=c.raise;why='a listed conflict'}miss.push('Resolve conflict: '+c.t)});
+ const unres=conf.some(c=>c.raise);
+ return{A,P,worst,od,why,miss,conf,prov:unres||P.some(x=>x.p.prov)}}
 function ctxSummary(){const c=S.pf;return[`Age: ${c.age?esc(c.age)+' y':'not entered'}`,`Weight: ${S.wt?S.wt+' kg':'not entered'}`,...['proc','anes','urg'].map(k=>`${CTXQ[k].q}: ${has(c[k])?CTXL[k][c[k]]:c[k]==='u'?'unknown':'not entered'}`)]}
 function ctxShort(){const c=S.pf,v=(k,l)=>`${l} ${has(c[k])?CTXL[k][c[k]].split(' (')[0]:c[k]==='u'?'unknown':'—'}`;return[`Age ${c.age||'—'}`,`Wt ${S.wt?S.wt+' kg':'—'}`,v('proc','Proc:'),v('anes','Anes:'),v('urg','Urgency:')].join(' · ')}
 function asmtHTML(){return`<div id="actx">${asmtCtxHTML()}</div><div id="arest">${asmtRestHTML()}</div>`}
@@ -1800,7 +1930,7 @@ function asmtCtxHTML(){const ctxQ=['proc','anes','urg'].map(k=>chipRow({k,...CTX
 function asmtRestHTML(){const m=asmtModel();return`${m.A.length?`${m.worst?dispHTML({...m.worst.p,d:m.od,act:`Overall = most restrictive (${esc(m.why)}).`,prov:m.prov,basis:m.P.reduce((b,x)=>BASIS_RANK[x.p.basis]>BASIS_RANK[b]?x.p.basis:b,'gl')}):''}
   ${m.miss.length?`<div class="fsec warn"><div class="lab">Before finalizing · unresolved</div><ul>${m.miss.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
   <div class="fsec"><div class="lab">Conflicts · overlapping precautions</div>${m.conf.length?`<ul>${m.conf.map(c=>`<li>${esc(c.t)}${c.src?` ${srcLink(c.src)}`:''}</li>`).join('')}</ul>`:'<p class="small" style="margin:4px 0">None of the checked pairs apply.</p>'}<p class="small" style="margin:6px 0 0">Only listed pairs are checked. No listed conflict is not proof there is none.</p></div>
-  <div class="fsec"><div class="lab">Findings</div>${m.P.map(({f,p})=>`<div class="arow"><button class="alink" data-find="${f.id}"><b>${esc(f.t)}</b><span><span class="dtag sm d-${DISP[p.d][1]}">${esc(DISP[p.d][0])}</span>${p.prov?' provisional · ':' '}${escV(p.act)}</span></button><button class="icon-btn" data-rmf="${f.id}" aria-label="Remove ${esc(f.t)}">✕</button></div>`).join('')}</div>
+  <div class="fsec"><div class="lab">Findings</div>${m.P.map(({f,p})=>`<div class="arow"><button class="alink" data-find="${f.id}"><b>${esc(f.t)}</b><span><span class="dtag sm d-${DISP[p.d][1]}">${esc(DISP[p.d][0])}</span>${p.prov?' provisional · ':' '}${escV(p.act)}</span></button><button class="icon-btn" data-rmf="${f.id}" aria-label="Remove ${esc(f.t)}">✕</button></div>${p.steps.length||p.esc.length||p.author?`<div class="asteps">${p.author?`<div class="small"><b>Author’s protocol:</b> ${esc(AUTHOR[p.author].rule)} — guidance: ${esc(AUTHOR[p.author].guide)}</div>`:''}${p.steps.length?`<ul>${p.steps.map(x=>`<li>${escV(x)}</li>`).join('')}</ul>`:''}${p.esc.length?`<div class="small"><b>Follow-up / escalate if:</b> ${p.esc.map(x=>escV(x)).join(' ')}</div>`:''}</div>`:''}`).join('')}</div>
 `
  :`<p class="caveat">No findings yet. Search a medication, lab or prior treatment and tap “Add to assessment”.</p>`}
  ${m.A.length||S.wt||ageNum()!=null||gateModel().tone!=='none'?`<button class="gobtn" data-acopy>Copy de-identified note</button><p class="small" style="margin:4px 0 0">Four blocks: History · Findings &amp; risk · Anesthesia &amp; limits · Plan &amp; alerts.</p><textarea id="copybox" class="copybox" hidden aria-label="Assessment text"></textarea>`:''}
@@ -1810,16 +1940,18 @@ function asmtRestHTML(){const m=asmtModel();return`${m.A.length?`${m.worst?dispH
 const ASCII={'—':'-','–':'-','·':'-','’':"'",'‘':"'",'“':'"','”':'"','≥':'>=','≤':'<=','×':'x','→':'->','⁹':'^9','±':'+/-','≈':'~','°':' deg','µ':'mc','…':'...','₂':'2','⁺':'+','½':'1/2','✓':'ok','•':'-'};
 const asciiT=t=>String(t).replace(/[—–·’‘“”≥≤×→⁹±≈°µ…₂⁺½✓•]/g,c=>ASCII[c]).replace(/[^\x09\x0a\x20-\x7e]/g,'');
 function asmtText(){const m=asmtModel(),c=S.pf,H=[],F=[],A=[],P=[];
- const ansL=(q,v)=>`${q.q.replace(/\?$/,'')}: ${q.type==='num'?v+(q.unitSel?' '+(q.units.find(u=>u[0]===(S.pf[q.unitSel]||q.units[0][0]))||[])[1]:''):(q.opts.find(o=>o[0]===v)||[])[1]}`;
+ const ansL=(q,v)=>`${q.q.replace(/\?$/,'')}: ${q.type==='num'?(v==='u'?'UNKNOWN':v+(q.unitSel?' '+((q.units.find(u=>u[0]===S.pf[q.unitSel])||[])[1]||'(unit not set)'):'')):(q.opts.find(o=>o[0]===v)||[])[1]}`;
  /* 1 HISTORY */
  H.push(`Age: ${ageNum()!=null?ageNum()+' y':'not entered'}; Weight: ${S.wt?wtLine():'not entered'}`);
  H.push(['proc','anes','urg'].map(k=>`${CTXQ[k].q}: ${has(c[k])?CTXL[k][c[k]]:c[k]==='u'?'unknown':'not entered'}`).join('; '));
  const pw=walk(M('preop')),ps=pw.steps.filter(x=>!x.note&&x.val!==undefined);
  if(ps.length)H.push('Pre-op screen: '+ps.map(x=>`${x.n.q.replace(/\?$/,'')} - ${x.val==='u'?'UNKNOWN':x.val?'yes':'no'}`).join('; '));
- m.P.forEach(({f})=>{const qs=fQs(f).filter(q=>!q.ctx),ent=qs.filter(q=>has(S.pf[q.k])).map(q=>ansL(q,S.pf[q.k])),unk=qs.filter(q=>S.pf[q.k]==='u').map(q=>q.q);
+ m.P.forEach(({f})=>{const qs=fQs(f).filter(q=>!q.ctx),ent=qs.filter(q=>has(S.pf[q.k])).map(q=>ansL(q,S.pf[q.k])),unk=qs.filter(q=>S.pf[q.k]==='u'&&q.type!=='num').map(q=>q.q);
   H.push(`${f.t}${ent.length?': '+ent.join('; '):''}${unk.length?` (unknown: ${unk.join('; ')})`:''}`)});
  if(!m.P.length)H.push('Medications/labs/history: none added to the assessment');
  /* 2 FINDINGS & RISK */
+ F.push(`Practice mode: ${colleague()?'Colleague - guideline thresholds where guidance exists':'Author - author protocols applied where marked'}`);
+ m.P.filter(({p})=>p.author).forEach(({p})=>F.push(authorText(p.author)));
  m.P.forEach(({f,p})=>F.push(`${f.t}: ${DISP[p.d][0].toUpperCase()}${p.prov?' (provisional)':''} - ${p.act.replace(/ \[verify[^\]]*\]/g,' [unverified]')} [${BASIS[p.basis]}${p.src.length?'; '+p.src.filter(k=>SRC[k]).map(k=>SRC[k].n.split(' · ')[0]).join(', '):''}]`));
  if(m.worst)F.push(`Overall: ${DISP[m.od][0].toUpperCase()} (most restrictive: ${m.why})${m.prov?' - provisional':''}`);
  const g=gateModel();if(g.tone!=='none')F.push(`Medical gate (pre-op screen): ${g.t}${g.hits.length?' - '+g.hits.map(h=>h[1]).join('; '):''}`);
@@ -1829,7 +1961,7 @@ function asmtText(){const m=asmtModel(),c=S.pf,H=[],F=[],A=[],P=[];
  /* 3 ANESTHESIA & LIMITS */
  const kid=pedsLock();
  if(kid)A.push(`PEDIATRIC LOCKOUT (<12 YO / <40 KG): adult non-pump IV sedation protocol not used (${lockWhy()}). Follow AAP/AAPD pediatric sedation guidelines and PALS sizing.`);
- if(S.wt){const lk=laKid();A.push(`Local anesthetic maximum at ${S.wt} kg (1.7 mL cartridges${lk?'; AAPD pediatric mg/kg':''}):`);laRows(S.wt,lk).forEach(r=>A.push(`  ${r.n}: ${r.mg} mg${r.capped?' (absolute cap)':''} = ${r.carp} carpules${r.nolist?' (not in AAPD table; label dose)':''}`));A.push('  Combined agents: doses add; stay under the lower ceiling.');
+ if(S.wt){const lk=laKid();A.push(`Local anesthetic maximum at ${S.wt} kg (1.7 mL cartridges${lk?'; AAPD pediatric mg/kg':''}):`);laRows(S.wt,lk).forEach(r=>A.push(r.blocked?`  ${r.n}: NOT RECOMMENDED under ${r.minAge} y (label)`:`  ${r.n}: ${r.mg} mg${r.capped?' (absolute cap)':''} = ${r.carp} carpules${r.nolist?' (not in AAPD table; label dose)':''}${r.ageQ?` (age not entered - not under ${r.minAge} y)`:''}`));A.push('  Combined agents: doses add; stay under the lower ceiling.');
   if(c.anes==='sed'||c.anes==='ga')A.push(`Maintenance fluids (4-2-1): ${fluids(S.wt)} mL/h`)}
  else A.push('Local anesthetic maximum: weight not entered - not calculated');
  if(has(c.anes))A.push(`Anesthesia planned: ${CTXL.anes[c.anes]}${c.anes==='sed'&&kid?' - adult protocol locked out':''}`);
@@ -1837,7 +1969,8 @@ function asmtText(){const m=asmtModel(),c=S.pf,H=[],F=[],A=[],P=[];
  nsaid.forEach(x=>P.push('ALERT - NSAID / anticoagulant conflict: '+x.t.replace(/^Analgesia: /,'')));
  const steps=[...new Set(m.P.flatMap(({p})=>p.steps))];steps.forEach(x=>P.push(x.replace(/ \[verify[^\]]*\]/g,' [unverified]')));
  const escs=[...new Set(m.P.flatMap(({p})=>p.esc))];escs.forEach(x=>P.push('Escalate if: '+x));
- if(m.miss.length)P.push(`Before finalizing: ${m.miss.join('; ')}`);
+ m.miss.filter(x=>/^Resolve conflict/.test(x)).forEach(x=>P.push('UNRESOLVED - '+x));
+ const om=m.miss.filter(x=>!/^Resolve conflict/.test(x));if(om.length)P.push(`Before finalizing: ${om.join('; ')}`);
  P.push('Decision support only; clinician judgment applies. Verify doses against the label.');
  const B=(h,a)=>[h+':',...a.map(x=>x.startsWith('  ')?x:'- '+x)].join('\n');
  return asciiT([`OMS Compass v${VER} - pre-op note (de-identified)`,B('HISTORY',H),B('FINDINGS & RISK',F),B('ANESTHESIA & LIMITS',A),B('PLAN & ALERTS',P)].join('\n\n'))}
@@ -1847,9 +1980,9 @@ function asmtView(){S.mod=null;S.view='asmt';S.fid=null;
 /* New patient: clear every patient-specific value; keep language/site/disclaimer preferences. */
 function newPatient(){
  ['pf','ans','inp','rcri','io'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
- ['tri','triErr','wt','wtIn','asa','q','refq','fid','fhit','emOpen','hoOpen','mod'].forEach(k=>{delete S[k]});
+ ['tri','triErr','wt','wtIn','lkc','asa','q','refq','fid','fhit','emOpen','hoOpen','mod'].forEach(k=>{delete S[k]});
  home()}
-function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
+function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
 function updBar(){let b=document.getElementById('abar');if(!b){b=document.createElement('div');b.id='abar';b.className='abar';document.body.appendChild(b)}
  const n=(S.asmt||[]).length,io=Object.values(S.io||{}).filter(Boolean).length,on=(hasPatient()||S.view==='mod'||S.view==='asmt')&&S.view!=='gate';b.hidden=!on;document.body.classList.toggle('hasbar',on);b.classList.add('three');
@@ -2012,6 +2145,7 @@ function showCopy(t){const x=document.getElementById('copybox');if(!x)return;x.h
 app.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
  if(b.dataset.audisc)return auToggle(b);
+ if(b.dataset.lkuse||b.dataset.lkkeep){const k=b.dataset.lkuse||b.dataset.lkkeep,x=(S.lkc||{})[k];if(x){if(b.dataset.lkuse)S.pf[k]=x.next;delete S.lkc[k]}return redraw()}
  if(b.dataset.pm){setPmode(b.dataset.pm);return home()}
  if(b.dataset.view)return view(b.dataset.view);
  if(b.dataset.asa){S.asa=b.dataset.asa==='3'?'3':'12';return rebody()}
@@ -2023,7 +2157,7 @@ app.addEventListener('click',e=>{
  if(b.hasAttribute('data-ioclear')){S.io={};document.getElementById('iobody').innerHTML=ioHTML();return updBar()}
  if(b.dataset.open)return open(b.dataset.open);
  if(b.dataset.find)return openFind(b.dataset.find,b.dataset.hit);
- if(b.dataset.pf){const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;return redraw()}
+ if(b.dataset.pf){const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;if(S.lkc)delete S.lkc[k];return redraw()}
  if(b.dataset.addf){if(!S.asmt.includes(b.dataset.addf))S.asmt.push(b.dataset.addf);b.textContent='✓ In assessment';b.disabled=true;return updBar()}
  if(b.dataset.rmf){S.asmt=S.asmt.filter(x=>x!==b.dataset.rmf);return redraw()}
  if(b.hasAttribute('data-acopy')){const t=asmtText();try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}
@@ -2047,7 +2181,7 @@ app.addEventListener('click',e=>{
 });
 app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q')){S.q=el.value.trim();const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){S.wtIn={src:'kg',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return S.view==='asmt'?redraw():rebody()}if(el.hasAttribute('data-lb')){S.wtIn={src:'lb',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<880?Math.round(v/LB*10)/10:null;return S.view==='asmt'?redraw():rebody()}if(el.dataset.pfn==='age'&&(S.view==='calc'||S.view==='emergency')){const v=el.value.trim();if(v==='')delete S.pf.age;else S.pf.age=v;return rebody()}if(el.dataset.pfn){const v=el.value.trim();if(v==='')delete S.pf[el.dataset.pfn];else S.pf[el.dataset.pfn]=v;return redraw()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
 app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='in-tri'){e.preventDefault();loadTri(e.target.value);open('preop')}});
-app.addEventListener('change',e=>{const el=e.target;if(el.dataset.pfu){S.pf[el.dataset.pfu]=el.value;return redraw()}if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
+app.addEventListener('change',e=>{const el=e.target;if(el.dataset.pfu){if(el.value)S.pf[el.dataset.pfu]=el.value;else delete S.pf[el.dataset.pfu];return redraw()}if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
 let start=(location.hash||'').slice(1);
 /* Privacy: triage data no longer travels in URLs. An old link is wiped from the address bar unread. */
