@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.3.0 — Oct 24, 2026 (branch `v3.3.0`, pending Steven's review)
+## v3.3.0 — Oct 24, 2026
 - **Age + weight bar** on Calc and SOS (age · kg · lb), synced with the Assessment Context drawer. kg = lb ÷ 2.20462, rounded to 1 decimal (154 lb → 69.9 kg); both units shown.
 - **Pediatric lockout.** Age <12, or no age and weight <40 kg: Calc hides the adult no-pump IV sedation table and shows the PEDIATRIC LOCKOUT card (AAP/AAPD 2019, PALS sizing); the Office sedation module is locked too. LA maximums, 4-2-1 fluids and SOS stay on. SOS shows a pediatric banner listing fixed adult doses that do not apply. Under 18, LA maximums switch to the AAPD pediatric table (lidocaine/mepivacaine 4.4 mg/kg, articaine 7, bupivacaine 1.3; prilocaine not listed — label value kept and flagged; articaine not under age 4).
 - **Practice mode** on Home next to Hospital on-call, stored as `oms_compass_practice_mode` (default `author`). Colleague: no Dr. Young/Bayside pills; handouts carry a neutral header and no phone or review link; author's-practice content (Calc sedation protocol, author Ref cards, author notes and plans in Decide) folds behind "+ Show Author's Clinical Protocol".
@@ -10,12 +10,13 @@ Newest first. Every change is reviewed by Steven before publishing. The app show
 - **Content (Task 4):**
   - IE prophylaxis: pediatric doses added (amoxicillin/cephalexin 50 mg/kg, azithro/clarithro 15 mg/kg, doxycycline 2.2 mg/kg <45 kg); clindamycin removed (C. difficile); prosthetic joints alone — no routine prophylaxis. AHA 2021.
   - GLP-1 RA (Office sedation + finding): day-of GI symptoms → defer elective sedation; higher-risk features (escalation, high dose, weekly, gastroparesis) without symptoms → 24 h clear liquids or local ± N₂O; no routine 1-week hold. Source added: Kindel et al., Surg Obes Relat Dis 2024.
-  - Antithrombotics: shared local hemostatic bundle (oxidized cellulose/collagen plug, figure-of-8 sutures, 30 min pressure, TXA 4.8–5% rinse/gauze; 500 mg tab in 10 mL ≈ 5%). INR threshold and DOAC morning-dose detail unchanged (SDCEP) — see review notes.
+  - Antithrombotics: shared local hemostatic bundle (oxidized cellulose/collagen plug, figure-of-8 sutures, 30 min pressure, TXA 4.8–5% rinse/gauze; 500 mg tab in 10 mL ≈ 5%). Warfarin: proceed only if INR <3.5 (author's threshold; SDCEP allows <4). DOACs: no interruption for extractions, alveoloplasty or routine implants (author's practice; CHEST 2022 covers minor dental work; SDCEP one-dose retiming noted as reference). Both labeled Author's practice in the app.
   - MRONJ: incidence by regimen (bisphosphonate ~0.02–0.05%, denosumab ~0.3%, oncologic ~1%+), ≥4 y and steroids raise risk, denosumab timing 3–4 mo after last dose / resume 6–8 wk (tagged verify), CTX not indicated, bisphosphonate holidays unproven.
-  - Odontogenic infection: three-tier outpatient empiric box; non-ADA items labeled as such; warning against oral clindamycin alone.
+  - Odontogenic infection: three-tier outpatient empiric box. Checked against the ADA 2019 chairside guide on Oct 24, 2026: amoxicillin, penicillin VK, cephalexin, azithromycin and clindamycin are ADA regimens; cefuroxime, amoxicillin-clavulanate 875/125 BID, up-front metronidazole, azithromycin + metronidazole and moxifloxacin are not, and are labeled so. Warning against oral clindamycin alone.
 - **Offline Ready** badge in the header once the service worker controls the page. `sw.js` VERSION → `compass-2026-10-24-v3.3.0`.
 - Small controls (`.tg` toggles) raised to 44 px.
-- Tests: 175 checks (43 new for the v3.3 quality gate).
+- Tests: 176 checks.
+- Reviewed by Steven, Oct 24, 2026: AAPD pediatric LA table and SOS pediatric banner approved; warfarin INR <3.5 and uninterrupted DOACs chosen; denosumab timing per literature (6–8 weeks, still tagged verify); AAOMS incidence figures approved; Kindel 2024 cited in Surg Obes Relat Dis; non-ADA antibiotics labeled. Approved for merge.
 
 ## v3.2.0 — Oct 23, 2026
 - New module: **Deep neck space infection** (hospital consult flow). Airway first → can lie supine for CT → workup (CT neck ± chest, labs, cultures) → empiric IV antibiotics by host → necrotizing/septic/mediastinal → abscess or multispace → single low-risk space medical trial. Look-fors: spread routes, Lemierre, mediastinitis, cavernous sinus thrombosis, non-improvement, discharge.
