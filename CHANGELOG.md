@@ -2,6 +2,12 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.3.3 — Oct 24, 2026 (approved by Steven after the Oct 24 audit)
+- **Dose fixes.** Adult laryngospasm IM succinylcholine capped at 150 mg total (Anectine label). LAST lipid emulsion split at 70 kg per ASRA (>70 kg: 100 mL bolus over 2–3 min, then 250 mL over 15–20 min; ≤70 kg: 1.5 mL/kg, then 0.25 mL/kg/min). Seizure IM midazolam under 13 kg: 0.2 mg/kg, max 10 mg (tagged verify). Under-18 local anesthetic maximums now use AAPD absolute caps (lidocaine and mepivacaine 300 mg, articaine 500 mg, bupivacaine 90 mg) instead of adult caps.
+- **Six new findings.** Inherited bleeding disorders (WFH dental guideline: HTC planning, factor cover before IAN block or lingual infiltration, TXA, acetaminophen); heart valve / endocarditis risk / prosthetic joint (AHA 2021, ADA); pacemaker or ICD (APSF 2020 summary of ASA advisory); buprenorphine (Kohan 2021 multisociety panel: continue, multimodal analgesia); epinephrine interactions (TCAs, nonselective β-blockers, cocaine/methamphetamine; Malamed); organ transplant and immunosuppressants (Cobo-Vázquez 2024 review; interaction and timing lines tagged verify).
+- **Faster home and SOS.** Hospital on-call and Mode moved into one collapsed Settings row that shows current state. SOS has jump chips to every card. Shorter search placeholder.
+- Tests: updated for the Settings row; new checks for the dose fixes, findings and search.
+
 ## v3.3.2 — Oct 24, 2026 (branch `feat/universal-triage-prompt`, pending review)
 - **Photo triage without the skill.** The “Photo triage in Claude” hand-off (link and clipboard) now sends a self-contained prompt: report sections (red flags, ASA, optimization, advisory read — not a clearance), de-identification, unknown ≠ normal, and the exact `CT1;…` format with every Pre-op clearance and Office sedation step defined. If the reader’s account has a pre-op triage skill, Claude uses it; otherwise the prompt alone produces the code. Step ids are checked against the modules by tests, so the prompt cannot drift from the app.
 - **Paste the whole report.** The paste box is now multi-line and pulls the `CT1;…` line out of any surrounding text or code block. `CT1;none` explains nothing was readable.

@@ -10,6 +10,7 @@ async function fresh(ctx){const page=await ctx.newPage();
  await page.route(/^https?:\/\//,r=>r.abort());
  await page.goto(FILE);await page.waitForSelector('#in-q');return page}
 const E=(page,fn,arg)=>page.evaluate(fn,arg);
+const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getElementById('settings');return !!(d&&d.open)})))await page.click('#settings summary')};
 
 (async()=>{
  const browser=await chromium.launch();
@@ -186,14 +187,14 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  await E(page,()=>{newPatient();setOnCall(false);home()});
  ok(await page.locator('#groups [data-open="trauma"]').count()===0&&await page.locator('#groups [data-open="mandfx"]').count()===0,'On-call off hides trauma triage and mandible fracture');
  ok(await page.locator('#groups [data-open="dentotrauma"]').count()===1&&await page.locator('#groups [data-open="infection"]').count()===1,'On-call off keeps dentoalveolar trauma and infection');
- await page.click('[data-oncall]');
+ await openSet(page);await page.click('[data-oncall]');
  ok(await page.locator('[data-oncall][aria-checked="true"]').count()===1,'On-call switch turns on');
  ok(await E(page,()=>document.querySelector('#groups .lab.group').textContent==='Hospital on-call'),'On-call group listed first');
  ok(await page.locator('#groups [data-open]').count()===await E(page,()=>MODS.length),'On-call on: every module listed exactly once');
  ok(await E(page,()=>localStorage.getItem('omsCompassOnCall')==='1'),'On-call preference remembered');
  await E(page,()=>{delete S.oc;home()});/* re-read from storage (file:// reloads in headless Chromium can drop unflushed storage) */
  ok(await page.locator('[data-oncall][aria-checked="true"]').count()===1,'On-call preference re-read from storage');
- await page.click('[data-oncall]');
+ await openSet(page);await page.click('[data-oncall]');
  await E(page,()=>open('extraction'));
  ok(await page.locator('#abar:not([hidden]) [data-ioopen]').count()===1,'Intraop button in bottom bar inside a module');
  await page.click('#abar [data-ioopen]');
@@ -231,7 +232,7 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  const calcTxt=await page.locator('#vbody').innerText();
  ok(!/Precedex|Ketamine|Midazolam|Propofol|Glycopyrrolate/.test(calcTxt.replace(/Adult non-pump IV sedation protocol[^.]*\./,'')),'Age 10: no adult sedation drug rows on Calc');
  ok(await E(page,()=>document.activeElement&&document.activeElement.id==='in-age'),'Typing age keeps the field focused');
- ok(/308 mg\s+9\b/.test(calcTxt)&&/AAPD/.test(calcTxt),'Age 10: LA maximum still calculated with AAPD pediatric mg/kg (lidocaine 308 mg = 9 carps at 70 kg)');
+ ok(/300 mg \(cap\)\s+8\.8\b/.test(calcTxt)&&/AAPD/.test(calcTxt),'Age 10: LA maximum uses AAPD mg/kg and the AAPD 300 mg cap (lidocaine 300 mg = 8.8 carps at 70 kg)');
  ok(/110 mL\/h/.test(await page.locator('#mfluid').textContent()),'Age 10: 4-2-1 fluids still calculated');
  await page.click('[data-view="emergency"]');ok(await page.locator('#peds-sos').count()===1&&await page.locator('details.em').count()===await E(page,()=>EMS.length),'Age 10: SOS active with pediatric banner');
  ok(/0\.5 mg/.test(await E(page,()=>EMS.find(e=>e.id==='anaph').steps().join(' '))),'SOS anaphylaxis repeat dose scales (0.01 mg/kg, max 0.5)');
@@ -248,7 +249,7 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  await page.fill('#pf-age','45');await E(page,()=>view('calc'));ok(await E(page,()=>document.getElementById('in-age').value==='45'),'Age typed in the Assessment appears on Calc');
  await page.fill('#in-wt','80');ok(await E(page,()=>document.getElementById('in-lb').value==='176'),'kg → lb display (80 kg → 176 lb)');
  // Gate 3: colleague mode
- await E(page,()=>{newPatient();home()});await page.click('[data-pm="colleague"]');
+ await E(page,()=>{newPatient();home()});await openSet(page);await page.click('[data-pm="colleague"]');
  ok(await E(page,()=>localStorage.getItem('oms_compass_practice_mode')==='colleague'),'Practice mode stored under oms_compass_practice_mode');
  await E(page,()=>{S.hoOpen='ext';view('handouts')});
  ok(await page.locator('[data-site]').count()===0&&/Oral & Maxillofacial Surgery — Patient Instructions/.test(await page.locator('#ho-neutral').textContent()),'Colleague: no Dr. Young/Bayside pills, neutral header');
@@ -369,7 +370,7 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  ok(/Practice mode: Colleague/.test(pm.noteC)&&/Practice mode: Author/.test(pm.noteA)&&/Author protocol applied: DOACs/.test(pm.noteA)&&/Guidance instead/.test(pm.noteA),'Note records the mode and any author protocol with the guideline difference');
  await E(page,()=>{newPatient();S.pf.proc='high';S.pf.doacAg='api';S.pf.ap='n';openFind('doac','Eliquis')});
  ok(/Author’s protocol · differs from guidance/i.test(await page.locator('#ftop').innerText())&&/Applies to/.test(await page.locator('#ftop').innerText()),'Finding shows applicability and difference from guidance');
- await E(page,()=>home());ok(await page.locator('[data-pm="author"]').innerText()==='Author','Mode label reads “Author”');
+ await E(page,()=>home());await openSet(page);ok(await page.locator('[data-pm="author"]').innerText()==='Author','Mode label reads “Author”');
  ok(/guideline rules where a guideline exists/i.test(await E(page,()=>{setPmode('colleague');home();const t=document.getElementById('pmdesc').textContent;setPmode('author');return t})),'Colleague description states what changes');
  // R9 search
  await E(page,()=>{newPatient();S.pf.doacAg='api';openFind('doac','Xarelto')});
@@ -393,6 +394,49 @@ const E=(page,fn,arg)=>page.evaluate(fn,arg);
  ok(await E(page,()=>[...document.querySelectorAll('#fdyn button,#fdyn select,#fdyn input')].filter(b=>b.offsetParent).map(b=>b.getBoundingClientRect().height).filter(h=>h<44).length===0),'Finding controls ≥44 px (incl. Unknown, unit select, Add button)');
  await E(page,()=>newPatient());
 
+ console.log('14. v3.3.3 audit fixes — doses, findings, home and SOS');
+ page=await fresh(ctx);
+ const d=await E(page,()=>{const t=x=>x.replace(/<[^>]+>/g,'');const r={};newPatient();
+  S.wt=80;r.sux=t(EMS.find(e=>e.id==='lspasm').steps()[3]);
+  r.lip80=t(EMS.find(e=>e.id==='last').steps().slice(2,4).join(' '));
+  S.wt=60;r.lip60=t(EMS.find(e=>e.id==='last').steps().slice(2,4).join(' '));
+  S.wt=10;S.pf.age='14';r.mz10=t(EMS.find(e=>e.id==='seizure').steps()[2]);
+  S.wt=30;r.mz30=t(EMS.find(e=>e.id==='seizure').steps()[2]);
+  S.wt=80;S.pf.age='16';r.la16=Object.fromEntries(laRows(80,laKid()).map(x=>[x.n,x.mg]));
+  S.pf.age='40';r.la40=Object.fromEntries(laRows(80,laKid()).map(x=>[x.n,x.mg]));
+  S.wt=null;S.pf={};r.lipNo=t(EMS.find(e=>e.id==='last').steps()[2]);return r});
+ ok(/240–150|150 mg \(max\)|150 mg/.test(d.sux)&&!/320/.test(d.sux),'Adult IM succinylcholine capped at 150 mg (got '+d.sux+')');
+ ok(/100 mL/.test(d.lip80)&&/250 mL over 15–20 min/.test(d.lip80)&&!/120 mL/.test(d.lip80),'LAST >70 kg: 100 mL bolus, 250 mL infusion');
+ ok(/90 mL/.test(d.lip60)&&/15 mL\/min/.test(d.lip60),'LAST 60 kg: 1.5 mL/kg and 0.25 mL/kg/min');
+ ok(/>70 kg/.test(d.lipNo),'LAST without weight shows both rules');
+ ok(/2 mg/.test(d.mz10)&&!/5 mg/.test(d.mz10),'IM midazolam 10 kg = 0.2 mg/kg (got '+d.mz10+')');
+ ok(/5 mg IM/.test(d.mz30),'IM midazolam 30 kg = 5 mg');
+ ok(d.la16['Lidocaine 2% + epi']===300&&d.la16['Mepivacaine 3% plain']===300&&d.la16['Articaine 4% + epi']===500,'Under 18: AAPD caps 300/300/500 mg');
+ ok(d.la40['Lidocaine 2% + epi']===500&&d.la40['Mepivacaine 3% plain']===400,'Adult caps unchanged');
+ const fpairs=[['hemophilia','bleeddx'],['von Willebrand','bleeddx'],['TAVR','ie'],['prosthetic joint','ie'],['pacemaker','cied'],['ICD','cied'],['Suboxone','bupe'],['Sublocade','bupe'],['amitriptyline','epix'],['propranolol','epix'],['cocaine','epix'],['tacrolimus','tx'],['kidney transplant','tx']];
+ for(const [q,id] of fpairs)ok((await E(page,q=>findHits(q).map(h=>h.f.id),q)).includes(id),`“${q}” finds ${id}`);
+ for(const q of ['metoprolol','implant','sinus','sedation','extraction','canine'])ok(!(await E(page,q=>findHits(q).map(h=>h.f.id),q)).some(x=>['bleeddx','ie','cied','bupe','epix','tx'].includes(x)),`“${q}” does not hit a new finding`);
+ const fp=await E(page,()=>{const o={};const P=(id,pf)=>{newPatient();Object.assign(S.pf,pf);return fPlan(FX[id])};
+  o.bdHigh=P('bleeddx',{proc:'high',bdType:'ha'}).d;o.bdNone=P('bleeddx',{proc:'none',bdType:'vwd'}).d;
+  o.ieHi=P('ie',{proc:'low',ieHi:'y'}).act;o.ieNo=P('ie',{proc:'high',ieHi:'n'}).d;o.ieU=P('ie',{proc:'high',ieHi:'u'}).d;
+  o.cdMono=P('cied',{cdType:'icd',cdDep:'n',cdMono:'y'}).d;o.cdNo=P('cied',{cdType:'pm',cdDep:'n',cdMono:'n'}).d;
+  o.bupe=P('bupe',{}).act;o.coc=P('epix',{epAg:'stim',ep24:'y'}).d;o.tca=P('epix',{epAg:'tca'}).d;o.epU=P('epix',{}).d;
+  o.txR=P('tx',{txRecent:'y',txSteroid:'n'}).d;o.txU=P('tx',{}).prov;newPatient();return o});
+ ok(fp.bdHigh==='refer'&&fp.bdNone==='proceed','Bleeding disorder: surgery → HTC; exam → proceed');
+ ok(/amoxicillin 2 g/.test(fp.ieHi)&&fp.ieNo==='proceed'&&fp.ieU==='investigate','IE: high-risk gets prophylaxis; not high-risk none; Unknown not cleared');
+ ok(fp.cdMono==='investigate'&&fp.cdNo==='proceed','CIED: monopolar → device clinic; none → proceed');
+ ok(/Continue buprenorphine/.test(fp.bupe),'Buprenorphine: continue');
+ ok(fp.coc==='defer'&&fp.tca==='modify'&&fp.epU==='investigate','Epinephrine interactions: cocaine <24 h defers; TCA modifies; unknown investigates');
+ ok(fp.txR==='defer'&&fp.txU===true,'Transplant: recent defers; unanswered stays provisional');
+ await E(page,()=>{newPatient();home()});
+ ok(await page.locator('#settings').count()===1&&!(await E(page,()=>document.getElementById('settings').open)),'Home: settings collapsed by default');
+ ok(/On-call off · Author mode/.test(await page.locator('#settings summary').innerText()),'Settings summary shows current state');
+ const firstMod=await E(page,()=>document.querySelector('#groups .mod').getBoundingClientRect().top);ok(firstMod<700,'First module visible without scrolling (top '+Math.round(firstMod)+')');
+ await E(page,()=>view('emergency'));ok(await page.locator('.jump [data-em]').count()===16,'SOS: one jump chip per card');
+ await page.click('.jump [data-em="mh"]');ok(await E(page,()=>document.getElementById('em-mh').open),'SOS: jump chip opens its card');
+
+
  await browser.close();
+ 
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
 })();

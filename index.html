@@ -271,6 +271,10 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .plock .pb{display:inline-block;font:800 12px/1.3 var(--display);letter-spacing:.5px;background:var(--red-ink);color:var(--bg);border-radius:6px;padding:3px 8px;margin-bottom:6px}
 .pamber{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;line-height:1.5}
 .pmdesc{margin:-4px 0 10px;line-height:1.4}
+.sets>summary em.setsum{margin-left:8px;font-weight:600;color:var(--muted)}
+.sets .oncall{margin-bottom:10px}
+.jump{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.jump .tg{min-height:36px}
 .pmode{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center;margin:0 0 10px}
 .pmode .pl{font-size:12.5px;color:var(--muted);font-weight:600}
 .pmode .tg{text-align:center;padding:6px 8px;font-size:12.5px;line-height:1.25}
@@ -296,6 +300,12 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 <script>
 /* ===== Sources (checked Oct 21, 2026) ===== */
 const SRC={
+sux:{n:'Succinylcholine chloride (Anectine) prescribing information',v:'IM 3–4 mg/kg; total IM dose ≤150 mg',chk:'2026-10-24',u:'https://www.drugs.com/dosage/anectine.html'},
+lipid70:{n:'ASRA lipid emulsion dosing for LAST (>70 kg vs ≤70 kg), summarized',v:'Oral Health Group review',chk:'2026-10-24',u:'https://www.oralhealthgroup.com/features/lipid-emulsion-treatment-for-local-anesthetic-systemic-toxicity/'},
+wfhdent:{n:'WFH · Guidelines for dental treatment of patients with inherited bleeding disorders (Brewer & Correa)',v:'Treatment of Hemophilia Monograph 40 · 2006',chk:'2026-10-24',u:'https://www1.wfh.org/publications/files/pdf-1190.pdf'},
+apsfcied:{n:'APSF · Perioperative management of CIEDs (Neelankavil, Thompson & Mahajan; summarizes ASA 2020 advisory)',v:'APSF Newsletter 2020;35(3)',chk:'2026-10-24',u:'https://www.apsf.org/article/change-of-pace-an-update-on-the-perioperative-management-of-cardiovascular-implantable-electronic-devices-cieds/'},
+kohan:{n:'Kohan et al. · Buprenorphine management in the perioperative period (multisociety expert panel)',v:'Reg Anesth Pain Med 2021;46:840–859',chk:'2026-10-24',u:'https://doi.org/10.1136/rapm-2021-103007'},
+cobo:{n:'Cobo-Vázquez et al. · Solid organ transplant patients undergoing oral surgery: literature review',v:'J Stomatol 2024;77:205–209',chk:'2026-10-24',u:'https://doi.org/10.5114/jos.2024.143590'},
 ludwig:{n:'Long, Bridwell, Gottlieb & Koyfman · Diagnosis and management of Ludwig’s angina: an evidence-based review',v:'Am J Emerg Med 2021;41:1–5',chk:'2026-10-23',u:'https://doi.org/10.1016/j.ajem.2020.12.030'},
 dnmrad:{n:'UNC Radiology teaching file · Ludwig’s angina with descending necrotizing mediastinitis (Endo classification; Estrera criteria)',v:'2021 · teaching summary, not a guideline',chk:'2026-10-23',u:'https://msrads.web.unc.edu/wp-content/uploads/sites/15695/2021/09/ZhangTFLudwigsDNM.pdf'},
 who:{n:'WHO · Surgical Safety Checklist (Guidelines for Safe Surgery)',v:'2009 · adapted for office OMS by the author',u:'https://www.who.int/publications/i/item/9789241598590'},
@@ -1048,11 +1058,11 @@ const EMS=[
  `Voice change, stridor, drooling or tongue swelling: prepare for a difficult airway. Do not delay transfer.`,
  `Known hereditary angioedema: give the patient's own on-demand drug if carried${UNV}.`,
  `Stop the whole ACE-inhibitor class. Tell the prescriber.`]},
-{id:'lspasm',t:'Laryngospasm',s:'Stridor or silent obstruction, paradoxical chest movement under sedation',src:['lspasm','lsprop','litfl'],steps:()=>[
+{id:'lspasm',t:'Laryngospasm',s:'Stridor or silent obstruction, paradoxical chest movement under sedation',src:['lspasm','lsprop','litfl','sux'],steps:()=>[
  `Stop stimulation. Pack the site; suction the pharynx.`,
  `100% O₂ with tight-mask CPAP. Vigorous jaw thrust plus Larson maneuver (pressure behind the ramus at the styloid notch).`,
  `Still obstructed: deepen with propofol ${D(0.5,null,'mg',0)} IV (range 0.25–0.8 mg/kg; limited evidence).`,
- `Still obstructed or SpO₂ falling: succinylcholine ${DR(0.1,0.5,null,'mg')} IV, then mask ventilate. Severe or intubating: ${DR(1,2,null,'mg')} IV. No IV: ${DR(3,4,null,'mg')} IM.`,
+ `Still obstructed or SpO₂ falling: succinylcholine ${DR(0.1,0.5,null,'mg')} IV, then mask ventilate. Severe or intubating: ${DR(1,2,null,'mg')} IV. No IV: ${DR(3,4,150,'mg')} IM (label: total IM dose ≤150 mg).`,
  `Atropine ready for bradycardia after succinylcholine. Intubation or LMA if ventilation fails.`,
  `Watch for negative-pressure pulmonary edema in recovery.`]},
 {id:'bronch',t:'Bronchospasm / asthma',s:'Wheeze, prolonged expiration, rising work of breathing; a silent chest is late',src:['asthma'],steps:()=>[
@@ -1077,17 +1087,17 @@ const EMS=[
  `Benzodiazepine given: flumazenil ${F('0.2 mg IV')} over 15 s; repeat ${F('0.2 mg')} every 60 s to ${F('1 mg')} total. Resedation: repeat q20 min, max ${F('3 mg/h')}. Seizure risk with chronic benzodiazepine use.`,
  `Monitor ≥2 h after reversal; re-sedation can outlast the antagonist.`,
  `No response or arrest: Cardiac arrest card.`]},
-{id:'last',t:'Local anesthetic toxicity (LAST)',s:'Perioral tingling, tinnitus, agitation → seizure, arrhythmia, collapse',src:['last','apsf'],steps:()=>[
+{id:'last',t:'Local anesthetic toxicity (LAST)',s:'Perioral tingling, tinnitus, agitation → seizure, arrhythmia, collapse',src:['last','lipid70','apsf'],steps:()=>[
  `Stop injecting. Call for help and the lipid kit. 100% O₂; secure the airway.`,
  `Seizure: benzodiazepine (see Seizure card). Avoid propofol if BP is unstable.`,
- `Lipid emulsion 20%: bolus ${D(1.5,null,'mL',0)} IV over 1–3 min (lean body weight).`,
- `Then infusion ${D(0.25,null,'mL/min')}; double to ${D(0.5,null,'mL/min')} if BP stays low. Repeat bolus once or twice for persistent collapse.`,
+ `Lipid emulsion 20%: bolus ${!S.wt?F('100 mL if >70 kg; 1.5 mL/kg if ≤70 kg'):S.wt>70?F('100 mL'):D(1.5,null,'mL',0)} IV over 2–3 min.`,
+ `Then infusion ${!S.wt?F('250 mL over 15–20 min if >70 kg; 0.25 mL/kg/min if ≤70 kg'):S.wt>70?F('250 mL over 15–20 min'):D(0.25,null,'mL/min')}. BP stays low: repeat the bolus once or twice and double the infusion rate.`,
  `Cap ≈ ${D(12,null,'mL',0)} (10–12 mL/kg) in the first 30 min.`,
  `Arrest: CPR with small epinephrine doses under ${D(1,null,'mcg',0)} (&lt;1 mcg/kg) per dose. Avoid vasopressin, β-blockers, calcium-channel blockers, lidocaine.`]},
 {id:'seizure',t:'Seizure',s:'Convulsion >5 min or repeated without recovery',src:['aes','binder'],steps:()=>[
  `Protect from injury; do not restrain. Clear the field; suction. 100% O₂. Call 911.`,
  `Check glucose. Low: Hypoglycemia card.`,
- `No IV: midazolam ${F(S.wt&&S.wt<=40?'5 mg IM':'10 mg IM')}${S.wt?'':' (>40 kg; 5 mg if 13–40 kg)'}.`,
+ `No IV: midazolam ${!S.wt?F('10 mg IM')+' (>40 kg; 5 mg if 13–40 kg; 0.2 mg/kg if <13 kg)':S.wt<13?D(0.2,10,'mg',1)+' IM (0.2 mg/kg)'+UNV:F(S.wt<=40?'5 mg IM':'10 mg IM')}.`,
  `IV: lorazepam ${D(0.1,4,'mg')}, or diazepam ${DR(0.15,0.2,10,'mg')}. One full dose; repeat once.`,
  `Recovery position afterwards. Local anesthetic just given: think LAST.`]},
 {id:'hypo',t:'Hypoglycemia',s:'Diabetic, sweaty, confused or unresponsive',src:['adahypo','d50'],steps:()=>[
@@ -1195,6 +1205,7 @@ function emHTML(){const kid=sosKid();
  return `${ptBar(kid?'Child: pediatric algorithms below, scaled to this weight.':'Adults. Doses update from this weight. Tap a card.')}
  ${kid?`<div class="pamber" id="peds-sos"><b>Pediatric SOS (${esc(lockWhy())}).</b> Cardiac arrest, bradycardia, oversedation, hypoglycemia, adrenal crisis, laryngospasm and bronchospasm show pediatric algorithms; chest pain, stroke and hypertensive crisis show referral guidance only. Other cards are already weight-based. ${S.wt?'Doses scale to '+esc(wtLine())+'.':'<b>Enter weight</b> — doses show per kg until then.'} Confirm with PALS or a length-based tape.</div>`:''}
  <div class="call">Any emergency: call for help, stop the procedure, 100% O₂, monitors on. Call 911 early.</div>
+ <div class="jump" role="group" aria-label="Jump to card">${EMS.map(e=>`<button class="tg" data-em="${e.id}">${esc(e.id==='last'?'LAST':e.t.split(/ [\/(]/)[0])}</button>`).join('')}</div>
  ${EMS.map(e=>`<details class="em" id="em-${e.id}"${S.emOpen===e.id?' open':''}><summary><div>${esc(e.t)}${kid&&PEDS[e.id]?' <small class="pedtag">'+(typeof PEDS[e.id]==='string'?'adult only':'pediatric')+'</small>':''}<span>${esc(e.s)}</span></div></summary>${kid?pedCard(e):`<ol>${e.steps().map(x=>`<li>${x}</li>`).join('')}</ol><div class="meta">${e.src.map(srcLink).join('')}</div>`}</details>`).join('')}
  <p class="caveat">Rebuilt from 2025 AHA guidelines and cited sources. Every dose is checked against a guideline or FDA label (Oct 23, 2026); items tagged verify are not. Confirm against your crash-cart concentrations.</p>`;
 }
@@ -1297,13 +1308,13 @@ function sedHTML(){
 }
 function calcHTML(){
  const w=S.wt,kid=pedsLock(),lk=laKid();
- const la=w?laRows(w,lk).map(r=>r.blocked?`<tr class="lablock"><td>${r.n}</td><td colspan="2"><b>Not recommended under ${r.minAge} y</b> (label) ${srcLink(r.limSrc)}</td></tr>`:`<tr><td>${r.n}${lk?`<br><span class="small">${r.nolist?'not in AAPD table · label':r.pk+' mg/kg AAPD'}</span>`:''}${r.ageQ?`<br><span class="small" style="color:var(--red-ink)">Enter age — not under ${r.minAge} y</span>`:''}</td><td><b>${r.mg} mg</b>${r.capped?' (cap)':''}</td><td><b>${r.carp}</b></td></tr>`).join(''):LA.map(([n,mgml,pk,cap])=>`<tr><td>${n}</td><td>${lk&&LA_PEDS[n]!=null?LA_PEDS[n]:pk} mg/kg${cap?` · max ${cap} mg`:''}</td><td>–</td></tr>`).join('');
+ const la=w?laRows(w,lk).map(r=>r.blocked?`<tr class="lablock"><td>${r.n}</td><td colspan="2"><b>Not recommended under ${r.minAge} y</b> (label) ${srcLink(r.limSrc)}</td></tr>`:`<tr><td>${r.n}${lk?`<br><span class="small">${r.nolist?'not in AAPD table · label':r.pk+' mg/kg AAPD'}</span>`:''}${r.ageQ?`<br><span class="small" style="color:var(--red-ink)">Enter age — not under ${r.minAge} y</span>`:''}</td><td><b>${r.mg} mg</b>${r.capped?' (cap)':''}</td><td><b>${r.carp}</b></td></tr>`).join(''):LA.map(([n,mgml,pk,cap0])=>{const cap=lk&&LA_PEDS_CAP[n]!=null?LA_PEDS_CAP[n]:cap0;return`<tr><td>${n}</td><td>${lk&&LA_PEDS[n]!=null?LA_PEDS[n]:pk} mg/kg${cap?` · max ${cap} mg`:''}</td><td>–</td></tr>`}).join('');
  const rc=S.rcri||{},rn=Object.values(rc).filter(Boolean).length,rr=['0.4%','0.9%','6.6%','≥11%'][Math.min(rn,3)];
  const mf=fluids(w);
  return `${ptBar('Shared with SOS and the Assessment.')}
  ${kid?lockHTML():auWrap(sedHTML())}
  <details class="box" open><summary>Local anesthetic maximum <em>${lk?'pediatric · AAPD':'1.7 mL cartridges'}</em></summary><div class="inner"><table class="ctab"><tr><th>Agent</th><th>Max dose</th><th>Carps</th></tr>${la}</table>
- <p class="caveat" style="margin:10px 0 0">Combining agents: doses add; stay under the lower ceiling. Cardiac patients: the classic 0.04 mg epinephrine cap (≈2 carps 1:100k) lacks research support; a systematic review found up to 4 carps 1:100k well tolerated with monitoring. Recent MI, decompensated heart failure or significant arrhythmia: physician consult first. ${srcLink('epicat')} Reduce for elderly, liver disease, and children.${lk?` <b>Under 18:</b> AAPD pediatric maximums used (lidocaine and mepivacaine 4.4 mg/kg, articaine 7, bupivacaine 1.3); prilocaine is not in the AAPD table, label value shown. Articaine is not recommended under age 4; dental bupivacaine not under age 12 (labels) — those rows are blocked when age is entered. ${srcLink('aapdla')}`:''} ${srcLink('malamed')}</p></div></details>
+ <p class="caveat" style="margin:10px 0 0">Combining agents: doses add; stay under the lower ceiling. Cardiac patients: the classic 0.04 mg epinephrine cap (≈2 carps 1:100k) lacks research support; a systematic review found up to 4 carps 1:100k well tolerated with monitoring. Recent MI, decompensated heart failure or significant arrhythmia: physician consult first. ${srcLink('epicat')} Reduce for elderly, liver disease, and children.${lk?` <b>Under 18:</b> AAPD pediatric maximums used (lidocaine and mepivacaine 4.4 mg/kg, max 300 mg; articaine 7 mg/kg, max 500 mg; bupivacaine 1.3 mg/kg, max 90 mg); prilocaine is not in the AAPD table, label value shown. Articaine is not recommended under age 4; dental bupivacaine not under age 12 (labels) — those rows are blocked when age is entered. ${srcLink('aapdla')}`:''} ${srcLink('malamed')}</p></div></details>
  <details class="box"><summary>Revised Cardiac Risk Index <em>${rn}/6</em></summary><div class="inner"><div class="chk">${RCRI.map((t,k)=>`<button class="tg${rc[k]?' on':''}" data-rc="${k}" aria-pressed="${!!rc[k]}" style="text-align:left">${esc(t)}</button>`).join('')}</div>
  <div class="calc">RCRI ${rn} · major cardiac event ≈ ${rr} (Lee 1999)</div><p class="caveat" style="margin:10px 0 0">Most OMS cases are low-risk surgery. Testing only when poor functional capacity and elevated risk would change management (2024 AHA/ACC). ${srcLink('lee')} ${srcLink('acc')}</p></div></details>
  <details class="box"><summary>Maintenance fluids <em>4-2-1</em></summary><div class="inner"><div class="calc" id="mfluid">${mf!=null?`${mf} mL/h`:'Enter weight'}</div><p class="caveat" style="margin:10px 0 0">Holliday–Segar: 4 mL/kg/h for the first 10 kg, 2 for the next 10, 1 per kg after. NPO deficit ≈ rate × hours fasting.</p></div></details>`;
@@ -1340,6 +1351,7 @@ const TRIAGE_PROMPT=['Pre-op triage for an oral and maxillofacial surgery patien
  'Example: CT1;preop:a0,b1,c1,d0,d20,e0;asa:2'].join('\n');
 function handoffHTML(){return`<a class="handoff" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener"><div><b>📷 Photo triage in Claude</b><span>Opens Claude with a complete prompt (also copied) — works in any Claude account, no skill needed. Attach the photo there; crop out name, DOB and MRN first. Then paste the CT1 code, or the whole report, below.</span></div><i>↗</i></a>
  <details class="box" id="tri-paste"${S.triErr||!S.tri?' open':''}><summary>Paste triage code <em>kept in memory only</em></summary><div class="inner"><div class="srch" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px"><textarea id="in-tri" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CT1;preop:a0,b0,… or the whole report" aria-label="Triage code or report" style="width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);min-height:44px;resize:vertical"></textarea><button class="icon-btn" data-triload>Load</button></div>${S.triErr?`<div class="red" style="margin:8px 0 0">${esc(S.triErr)}</div>`:''}</div></details>`}
+document.addEventListener('toggle',e=>{if(e.target&&e.target.id==='settings')S.setOpen=e.target.open},true);
 document.addEventListener('click',e=>{if(e.target.closest('a[data-triage]')){try{navigator.clipboard.writeText(TRIAGE_PROMPT)}catch(x){}}});
 
 /* ===== Photo triage import =====
@@ -1388,10 +1400,12 @@ function ptBar(note){return`<div class="wtbar pt">${ptFields('')}<div class="not
 function lockWhy(){const a=ageNum();return a!=null?`age ${a} y`:`age not entered, weight ${S.wt} kg`}
 function lockHTML(){return`<div class="plock" role="alert" id="plock"><span class="pb">PEDIATRIC LOCKOUT (&lt;12 YO / &lt;40 KG)</span><div>Adult non-pump IV sedation protocol is suppressed for patients under 12 years old (or &lt;40 kg). Follow AAP/AAPD weight-based pediatric sedation guidelines and PALS airway/equipment sizing.</div><div class="small" style="color:inherit;margin-top:6px">Triggered by ${esc(lockWhy())}. Local anesthetic maximums, maintenance fluids and SOS cards stay on and scale to ${S.wt?esc(wtLine()):'the entered weight'}. ${srcLink('aapdsed')}</div></div>`}
 const LA_PEDS={'Lidocaine 2% + epi':4.4,'Mepivacaine 3% plain':4.4,'Articaine 4% + epi':7,'Bupivacaine 0.5% + epi':1.3};
+/* AAPD absolute maximums for patients under 18 (applied instead of the adult caps). */
+const LA_PEDS_CAP={'Lidocaine 2% + epi':300,'Mepivacaine 3% plain':300,'Articaine 4% + epi':500,'Bupivacaine 0.5% + epi':90};
 function laKid(){const a=ageNum();return a!=null?a<18:pedsLock()}
 /* Label age limits: articaine not recommended under 4 y; dental bupivacaine not recommended under 12 y. */
 const LA_MINAGE={'Articaine 4% + epi':[4,'aapdla'],'Bupivacaine 0.5% + epi':[12,'bupilabel']};
-function laRows(w,kid){const a=ageNum();return LA.map(([n,mgml,pk0,cap])=>{const pk=kid&&LA_PEDS[n]!=null?LA_PEDS[n]:pk0;let mg=pk*w;const capped=cap!=null&&mg>cap;if(capped)mg=cap;
+function laRows(w,kid){const a=ageNum();return LA.map(([n,mgml,pk0,cap0])=>{const pk=kid&&LA_PEDS[n]!=null?LA_PEDS[n]:pk0,cap=kid&&LA_PEDS_CAP[n]!=null?LA_PEDS_CAP[n]:cap0;let mg=pk*w;const capped=cap!=null&&mg>cap;if(capped)mg=cap;
  const lim=LA_MINAGE[n],blocked=!!(lim&&a!=null&&a<lim[0]),ageQ=!!(lim&&a==null&&kid);
  return{n,pk,cap,mg:Math.round(mg),capped,carp:Math.floor(mg/(mgml*1.7)*10)/10,nolist:kid&&LA_PEDS[n]==null,blocked,ageQ,minAge:lim?lim[0]:null,limSrc:lim?lim[1]:null}})}
 function fluids(w){return w?Math.round(w<=10?w*4:w<=20?40+(w-10)*2:60+(w-20)):null}
@@ -1412,8 +1426,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.3.2';
+const VER='3.3.3';
 const CHANGES=[
+{v:'3.3.3',d:'Oct 24, 2026',i:['Dose fixes: adult IM succinylcholine capped at 150 mg total (label); LAST lipid split at 70 kg (ASRA: >70 kg 100 mL bolus, then 250 mL over 15–20 min); IM midazolam for seizures under 13 kg is 0.2 mg/kg (verify); under-18 local anesthetic maximums use AAPD caps (lidocaine and mepivacaine 300 mg, articaine 500 mg).','New findings: inherited bleeding disorders (WFH), heart valve / IE / prosthetic joint (AHA 2021, ADA), pacemaker or ICD (APSF/ASA), buprenorphine (multisociety 2021), epinephrine interactions (TCAs, nonselective β-blockers, cocaine), organ transplant and immunosuppressants.','Home: on-call and Mode folded into one Settings row. SOS: jump chips to each card. Shorter search hint.']},
 {v:'3.3.2',d:'Oct 24, 2026',i:['Photo triage works in any Claude account: the hand-off now carries a complete prompt (report sections, de-identification, unknown ≠ normal, and the exact CT1 code format with every step defined), so colleagues do not need the pre-op triage skill. If the skill is installed, Claude still uses it.','Paste box accepts the whole report: Compass finds the CT1 line itself. CT1;none explains that nothing was readable.']},
 {v:'3.3.1',d:'Oct 24, 2026',i:['Pediatric SOS: a child (age <12, or <18 and <40 kg, or no age and <40 kg) gets PALS 2025 algorithms for cardiac arrest (2 → 4 J/kg, epinephrine 0.01 mg/kg, amiodarone 5 mg/kg, 15:2) and bradycardia (atropine 0.02 mg/kg, max 0.5 mg), plus pediatric oversedation, hypoglycemia, adrenal crisis, laryngospasm and bronchospasm doses. Chest pain, stroke and hypertensive crisis cards are suppressed with pediatric referral guidance.','LA calculator blocks drugs by label age: articaine under 4 y, dental bupivacaine under 12 y; asks for age when it is missing.','Diabetes: A1C no longer defers surgery on its own — it flags risk; day-of glucose, symptoms, procedure size and urgency decide. Compared unrounded (64 mmol/mol = 8.01%).','Chronic steroids: adrenal-risk assessment (ESE/Endocrine Society 2024): known AI → cover; ≥3–4 weeks above ~15–25 mg/day hydrocortisone-equivalent → oral cover for minor stress, parenteral for GA/major/unwell; unknown history = at risk.','Labs: explicit unit required (A1C, platelets), Unknown button on every number, unrounded comparisons, INR ≥10 (or ≥5 off warfarin) treated as possibly real with urgent same-day verification instead of “invalid”.','Assessment: decision-changing conflicts raise the overall action and stay listed as unresolved; each finding shows its steps and escalation on screen and in the copied note.','Practice mode: “Author” applies your protocols (INR <3.5, uninterrupted DOACs for dentoalveolar surgery) with applicability and the guideline difference shown; “Colleague” now applies SDCEP rules (INR <4, one-dose DOAC timing) and says what it does not replace.','Search: a brand that conflicts with an earlier choice (Xarelto after apixaban) is flagged, not silently ignored; ASA, Ecotrin, Bayer aspirin, acetylsalicylic acid find aspirin. “Add to assessment” sits under the recommendation.']},
 {v:'3.3.0',d:'Oct 24, 2026',i:['Age and weight at the top of Calc and SOS, shared with the Assessment. Enter weight in kg or lb (kg = lb ÷ 2.20462, 1 decimal); both shown, e.g. 69.9 kg (154 lb).','Pediatric lockout: age <12 (or no age and weight <40 kg) hides the adult no-pump IV sedation table and the Office sedation screen. LA maximums, 4-2-1 fluids and SOS cards stay on and scale to weight; SOS flags fixed adult doses. Under 18, LA maximums use the AAPD pediatric table (lidocaine and mepivacaine 4.4 mg/kg).','Practice mode on Home (remembered on this device): Author (Bayside) or Colleague (Standard). Colleague hides the Dr. Young/Bayside handout presets (neutral header, no phone or review link) and folds author’s-practice content behind “+ Show Author’s Clinical Protocol”.','Copy de-identified note now pastes as four blocks — History · Findings & risk · Anesthesia & limits · Plan & alerts — with LA cartridge limits and an NSAID–anticoagulant alert. Plain text for Dentrix, Epic and PCHC.','Content: IE prophylaxis pediatric doses; GLP-1 split into day-of GI symptoms (defer) vs higher-risk features (24 h clear liquids or local ± N₂O, no routine 1-week hold — Kindel 2024); antithrombotic local hemostatic bundle with TXA; warfarin INR <3.5 and DOACs uninterrupted for dentoalveolar surgery (author’s practice, labeled); MRONJ incidence by regimen, denosumab timing (verify), CTX not indicated; three-tier outpatient odontogenic antibiotics.','“● Offline Ready” in the header once the app is cached for offline use.']},
@@ -1524,7 +1539,7 @@ function hitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);co
 /* ===== Basis labels (descriptive, not evidence grades) ===== */
 const BASIS={gl:'Guideline / label',ev:'Evidence-informed',au:'Author’s practice',un:'Unverified draft'};
 const BASIS_RANK={gl:0,ev:1,au:2,un:3};
-const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','palsca','palsbr','flumaped','glucaped','bupilabel','giai','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2'];
+const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','palsca','palsbr','flumaped','glucaped','bupilabel','giai','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2','sux','wfhdent','kohan'];
 const SRC_AU=['mysed','fa6','mynotes','lect','board'];
 const SRC_UN=['binder'];
 function basisOf(keys,text){
@@ -1826,7 +1841,102 @@ const FIND=[
   if(c.dial==='pd'){p.d='investigate';p.basis='un';p.act='Peritoneal dialysis is not covered here — discuss with nephrology.';return p}
   if(c.esrd==='y'){p.d='refer';p.src=['asaps'];p.basis='gl';p.act='ESRD not on dialysis (ASA IV): physician/nephrology input before anything elective; hospital setting for surgery.';return p}
   if(!has(c.esrd)){p.prov=true;p.miss.push('ESRD without dialysis?')}
-  p.d='modify';p.act='Renal dosing and NSAID avoidance.';p.steps=['Confirm current eGFR and potassium if sedating.'];return p}}
+  p.d='modify';p.act='Renal dosing and NSAID avoidance.';p.steps=['Confirm current eGFR and potassium if sedating.'];return p}},
+
+{id:'bleeddx',kind:'Medical history',t:'Inherited bleeding disorder (hemophilia, von Willebrand)',cls:'Hemophilia A/B · von Willebrand disease',
+ syn:['hemophilia','haemophilia','hemophilia a','hemophilia b','christmas disease','factor viii deficiency','factor ix deficiency','von willebrand','von willebrand disease','vwd','inherited bleeding disorder'],
+ what:['Any procedure likely to bleed is planned with the hemophilia treatment center, which arranges factor or desmopressin cover.','IAN block and lingual infiltration need factor cover first (pterygoid or floor-of-mouth hematoma can threaten the airway). Buccal infiltration and intraligamentary injection do not.','Analgesia: acetaminophen. No aspirin; NSAIDs only after discussing with hematology.'],
+ ctx:['proc'],
+ qs:[{k:'bdType',q:'Disorder',opts:[['ha','Hemophilia A'],['hb','Hemophilia B'],['vwd','von Willebrand disease'],['oth','Other or not known']]}],
+ link:[['bleed',null],['preop','nBleed']],
+ plan(c){const p=mk();p.src=['wfhdent'];p.esc=['Post-op bleeding: call the hemophilia center the same day; extra factor may be needed. Airway threat → 911.'];
+  if(!has(c.bdType)){p.miss.push('Which disorder');p.prov=true}
+  if(!needCtx(p,c,'proc','sets whether factor cover is needed')){p.d='investigate';p.act='Contact the hemophilia treatment center before anything likely to bleed or any IAN block.';return p}
+  if(c.proc==='none'){p.act='No hemostatic cover for exams and buccal infiltration. An IAN block or lingual infiltration needs factor cover first.';p.steps=['Lower molars without a block: buccal articaine infiltration or intraligamentary injection.'];return p}
+  if(c.proc==='major'){p.d='refer';p.act='Major surgery: hospital setting, planned with the hemophilia treatment center.';return p}
+  p.d='refer';p.act='Plan with the hemophilia treatment center before surgery: factor replacement or desmopressin, as they direct.';
+  p.steps=['IAN block or lingual infiltration only after factor cover; otherwise buccal infiltration or intraligamentary injection.','Tranexamic acid 1 g PO TID, often from the day before for 7 days total, per hematology; 10% TXA rinse or soaked gauze for oozing.','One or two extractions at the first visit. Local hemostasis and sutures; observe longer before discharge.','Analgesia: acetaminophen; no aspirin; NSAIDs only if hematology agrees.'];
+  if(c.bdType==='vwd')p.steps.push('von Willebrand disease: desmopressin works only in responsive types — hematology confirms.');
+  return p}},
+
+{id:'ie',kind:'Medical history',t:'Heart valve, endocarditis risk, prosthetic joint',cls:'IE prophylaxis screen',
+ syn:['prosthetic valve','heart valve','valve replacement','valve repair','tavr','tavi','mitral valve','aortic valve','endocarditis','infective endocarditis','mitral valve prolapse','mvp','heart murmur','murmur','congenital heart disease','rheumatic heart disease','prosthetic joint','joint replacement','hip replacement','knee replacement','premedication','antibiotic prophylaxis'],
+ what:['Prophylaxis is for high-risk cardiac conditions only, before procedures that manipulate gingiva or the periapical region or perforate the mucosa (AHA 2021).','Not indicated for mitral valve prolapse, murmurs, CABG, stents, pacemakers, or prosthetic joints alone (ADA).'],
+ ctx:['proc'],
+ qs:[{k:'ieHi',q:'High-risk condition: prosthetic valve or repair material (incl. TAVR), prior endocarditis, heart transplant with valve disease, or specified congenital heart disease?',opts:YN}],
+ link:[['preop','nIE']],
+ plan(c){const p=mk();p.src=['aha','adaPro'];
+  if(c.ieHi==='n'){p.act='Not a high-risk condition: no antibiotic prophylaxis.';p.steps=['Prosthetic joints alone: no routine prophylaxis (ADA); the orthopedic surgeon may still ask.'];return p}
+  if(!has(c.ieHi)){p.d='investigate';p.prov=true;p.miss.push('High-risk cardiac condition?');p.act='Confirm the cardiac condition before procedures that manipulate gingiva.';return p}
+  if(!needCtx(p,c,'proc','sets whether the procedure qualifies')){p.d='modify';p.act='High-risk: prophylaxis before any gingival manipulation, periapical work or mucosal perforation.';return p}
+  if(c.proc==='none'){p.act='High-risk, but no gingival manipulation: no prophylaxis for exams, radiographs or LA through uninfected tissue.';return p}
+  p.d='modify';p.act='Antibiotic prophylaxis 30–60 min before: amoxicillin 2 g PO (child 50 mg/kg).';
+  p.steps=['Penicillin allergy without anaphylaxis, angioedema or urticaria: cephalexin 2 g (child 50 mg/kg).','Otherwise: azithromycin or clarithromycin 500 mg (child 15 mg/kg), or doxycycline 100 mg (<45 kg: 2.2 mg/kg). Clindamycin is no longer recommended.','Missed dose: give up to 2 h after the procedure.'];
+  return p}},
+
+{id:'cied',kind:'Medical history',t:'Pacemaker or ICD',cls:'Cardiac implantable electronic device',
+ syn:['pacemaker','icd','aicd','defibrillator','cied','crt d','biventricular pacemaker','leadless pacemaker','micra','cardiac device'],
+ what:['No endocarditis prophylaxis for the device (AHA 2021).','Monopolar electrosurgery is the main source of interference; head and neck surgery is above the umbilicus, where interference is more likely.','Bring the device card: type, last check, pacing dependence, magnet response.'],
+ ctx:[],
+ qs:[{k:'cdType',q:'Device',opts:[['pm','Pacemaker'],['icd','ICD or CRT-D']]},
+  {k:'cdDep',q:'Pacing-dependent?',opts:YN,when:()=>has(S.pf.cdType)},
+  {k:'cdMono',q:'Monopolar electrosurgery planned?',opts:YN}],
+ link:[['preop',null]],
+ plan(c){const p=mk();p.src=['apsfcied'];p.basis='ev';p.esc=['Arrest or shockable rhythm: stop electrosurgery, remove any magnet, defibrillate with pads away from the generator (SOS → Cardiac arrest).'];
+  if(!has(c.cdType)){p.miss.push('Device type');p.prov=true}
+  if(c.cdMono==='n'){p.act='No electrosurgery planned: no device change. Prefer bipolar if cautery becomes necessary.';p.steps=['AED or defibrillator in the room.','Ultrasonic scalers, apex locators and pulp testers are generally low risk with modern devices. [verify]'];return p}
+  if(!has(c.cdMono)){p.d='investigate';p.prov=true;p.miss.push('Monopolar electrosurgery planned?');p.act='Decide on electrosurgery first; it is the main interference risk.';return p}
+  p.d='investigate';p.act='Monopolar near the head and neck: contact the device clinic first (device type, pacing dependence, magnet response). Prefer bipolar.';
+  p.steps=['If monopolar is used: short bursts; place the return pad so current does not cross the generator or leads.','Magnet response varies by device; no indiscriminate magnet use (ASA). An ICD magnet usually suspends shocks but does not change pacing.'];
+  if(c.cdDep==='y')p.steps.push('Pacing-dependent: interference can inhibit pacing — watch the pulse on pleth or ECG throughout.');
+  else if(!has(c.cdDep)&&has(c.cdType)){p.miss.push('Pacing dependence');p.prov=true}
+  return p}},
+
+{id:'bupe',kind:'Medication',t:'Buprenorphine (Suboxone, Sublocade)',cls:'Partial opioid agonist · opioid use disorder or pain',
+ syn:['buprenorphine','suboxone','subutex','sublocade','brixadi','zubsolv','butrans','belbuca','opioid use disorder','oud','moud'],
+ what:['Continue it at the usual dose; do not taper or stop for surgery (multisociety 2021).','Full-agonist opioids work less well on top of it; multimodal analgesia comes first.','Coordinate with the buprenorphine prescriber.'],
+ ctx:[],
+ qs:[],
+ link:[['pain',null],['sed',null]],
+ plan(c){const p=mk();p.src=['kohan'];p.d='modify';
+  p.act='Continue buprenorphine at the usual dose. Plan analgesia with the prescriber before surgery.';
+  p.steps=['Multimodal: scheduled ibuprofen + acetaminophen; long-acting local anesthetic (bupivacaine) at the end of the case.','Pain not controlled: a full-agonist opioid or a higher or divided buprenorphine dose, coordinated with the prescriber; monitor closely.','Any added opioid: fewest tablets and a written plan back to the maintenance dose.','Sedation: additive respiratory depression with benzodiazepines or propofol — capnography, titrate slowly. Reversal may need higher naloxone doses. [verify]'];
+  return p}},
+
+{id:'epix',kind:'Medication',t:'Epinephrine interactions (TCAs, nonselective β-blockers, cocaine)',cls:'Vasoconstrictor caution',
+ syn:['amitriptyline','elavil','nortriptyline','pamelor','imipramine','doxepin','clomipramine','desipramine','tricyclic','tricyclic antidepressant','tca','propranolol','inderal','nadolol','corgard','timolol','pindolol','sotalol','nonselective beta blocker','cocaine','methamphetamine','crystal meth','epinephrine interaction','vasoconstrictor'],
+ preset:{amitriptyline:{epAg:'tca'},elavil:{epAg:'tca'},nortriptyline:{epAg:'tca'},pamelor:{epAg:'tca'},imipramine:{epAg:'tca'},doxepin:{epAg:'tca'},clomipramine:{epAg:'tca'},desipramine:{epAg:'tca'},tricyclic:{epAg:'tca'},tca:{epAg:'tca'},propranolol:{epAg:'bb'},inderal:{epAg:'bb'},nadolol:{epAg:'bb'},corgard:{epAg:'bb'},timolol:{epAg:'bb'},pindolol:{epAg:'bb'},sotalol:{epAg:'bb'},cocaine:{epAg:'stim'},methamphetamine:{epAg:'stim'},'crystal meth':{epAg:'stim'}},
+ what:['Vasoconstrictors can raise BP sharply with these drugs.','Cardioselective β-blockers (metoprolol, atenolol) carry little risk.','Use the smallest effective dose, aspirate, inject slowly, recheck BP and HR.'],
+ ctx:[],
+ qs:[{k:'epAg',q:'Which?',opts:[['tca','Tricyclic antidepressant'],['bb','Nonselective β-blocker'],['stim','Cocaine or methamphetamine']]},
+  {k:'ep24',q:'Used in the last 24 h, or signs of intoxication?',opts:YN,when:()=>S.pf.epAg==='stim'}],
+ link:[['htn',null]],
+ plan(c){const p=mk();p.src=['malamed'];p.basis='ev';
+  if(!has(c.epAg)){p.d='investigate';p.prov=true;p.miss.push('Which interacting drug');p.act='Identify the drug before choosing a vasoconstrictor dose.';return p}
+  if(c.epAg==='stim'){
+   if(c.ep24==='y'){p.d='defer';p.act='Defer elective care. No epinephrine or levonordefrin within 24 h of cocaine use.';p.steps=['Methamphetamine: same caution. [verify]','Chest pain, severe hypertension or agitation: SOS tab.'];return p}
+   if(!has(c.ep24)){p.d='investigate';p.prov=true;p.miss.push('Last use / intoxication');p.act='Ask about last use. Within 24 h: no vasoconstrictor; defer elective care.';return p}
+   p.d='modify';p.act='Over 24 h since use, no intoxication: smallest effective vasoconstrictor dose; monitor BP.';return p}
+  p.d='modify';
+  if(c.epAg==='tca'){p.act='Tricyclic: smallest effective epinephrine dose; avoid levonordefrin. Aspirate, inject slowly, recheck BP and HR. [verify: no validated dose limit]';return p}
+  p.act='Nonselective β-blocker: epinephrine can cause hypertension with reflex bradycardia. Smallest effective dose, aspirate, inject slowly, BP and HR after each cartridge.';
+  p.steps=['Anaphylaxis may resist epinephrine: glucagon is on the SOS Anaphylaxis card.'];return p}},
+
+{id:'tx',kind:'Medical history',t:'Organ transplant · immunosuppressants',cls:'Solid organ transplant',
+ syn:['organ transplant','kidney transplant','renal transplant','liver transplant','heart transplant','lung transplant','transplant recipient','tacrolimus','prograf','cyclosporine','ciclosporin','neoral','sandimmune','sirolimus','rapamune','mycophenolate','cellcept','myfortic','azathioprine','immunosuppressed','immunosuppression','immunosuppressant'],
+ what:['Higher infection risk and slower healing; coordinate with the transplant team.','No established recommendation on antibiotic prophylaxis (2024 review) — the transplant team decides.','Drug interactions and steroid cover are the common traps.'],
+ ctx:[],
+ qs:[{k:'txRecent',q:'Transplant within 6 months, recent rejection, or unstable?',opts:YN},
+  {k:'txSteroid',q:'Also on corticosteroids?',opts:YN}],
+ link:[['infection',null],['steroid',null]],
+ plan(c){const p=mk();p.src=['cobo'];p.basis='ev';
+  if(c.txSteroid==='y')p.steps.push('On steroids: search “steroids” for stress-dose cover.');else if(!has(c.txSteroid)){p.miss.push('Corticosteroids?');p.prov=true}
+  if(c.txRecent==='y'){p.d='defer';p.act='Defer elective surgery; treat only urgent problems, with the transplant team. [verify: 6-month window is common practice, not a guideline]';return p}
+  if(!has(c.txRecent)){p.d='investigate';p.prov=true;p.miss.push('Time since transplant / rejection');p.act='Confirm stability with the transplant team before elective surgery.';return p}
+  p.d='modify';p.act='Proceed after confirming with the transplant team; current CBC, and renal or liver function as relevant.';
+  p.steps.push('Antibiotic prophylaxis: per the transplant team.','Interactions: clarithromycin, erythromycin and azole antifungals raise tacrolimus, cyclosporine and sirolimus levels; NSAIDs add kidney injury with calcineurin inhibitors — prefer acetaminophen. [verify: check a drug-interaction reference]','Treat infection early; cyclosporine often causes gingival overgrowth.');
+  return p}}
+
 ];
 const FX=Object.fromEntries(FIND.map(f=>[f.id,f]));
 const ANTITHROMB=['doac','warfarin','antiplatelet'];
@@ -2076,8 +2186,8 @@ function asmtBody(){return atabsHTML()+(S.atab==='io'?`<div id="iobody">${ioHTML
 function home(){
  S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const on=onCall(),GO=['Hospital on-call',...ORDER],gm=MODS.map(m=>[m,homeGroup(m,on)]).filter(x=>x[1]);const groups=[...new Set(gm.map(x=>x[1]))].sort((x,y)=>GO.indexOf(x)-GO.indexOf(y));
  app.innerHTML=topHTML(1)+tabsHTML('decide')+
- `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab, history or topic — e.g. Eliquis, INR, sinus" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="groups"${S.q?' hidden':''}>`+
- oncallHTML(on)+pmodeHTML()+groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
+ `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab or topic · e.g. Eliquis" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="groups"${S.q?' hidden':''}>`+
+ `<details class="box sets" id="settings"${S.setOpen?' open':''}><summary><span>Settings <em class="setsum">On-call ${on?'on':'off'} · ${colleague()?'Colleague':'Author'} mode</em></span></summary><div class="inner">${oncallHTML(on)}${pmodeHTML()}</div></details>`+groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
  `<p class="foot">Search shows a finding’s implications first. Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);S.fid=null;updBar();
 }
