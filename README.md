@@ -28,3 +28,10 @@ Note: a public repo makes the site public. It contains no patient data.
 1. Replace `index.html` with the new version.
 2. In `sw.js`, change `VERSION` (e.g., `compass-2026-11-01a`).
 3. Upload both. Phones refresh on the next open while online.
+
+## Validation
+
+Run `node tests/reconciliation.cjs` for dependency-free reconciliation and state-isolation checks.
+See `RECONCILIATION-REVIEW.md` for scope, source checks and limitations.
+The existing browser suite remains `node tests/run.cjs` (requires Playwright Chromium).
+Software tests do not establish clinical validity.

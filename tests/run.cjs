@@ -44,7 +44,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
    for(let pass=0;pass<4;pass++)fQs(f).forEach(q=>{if(S.pf[q.k]!==undefined)return;const r=Math.random();
     if(q.type==='num'){if(r<.7)S.pf[q.k]=String(q.k==='plt'?Math.round(Math.random()*300):q.k==='a1c'?(5+Math.random()*6).toFixed(1):q.k==='age'?'50':(0.9+Math.random()*4).toFixed(1))}
     else if(r<.85)S.pf[q.k]=[...q.opts.map(o=>o[0]),'u'][Math.floor(Math.random()*(q.opts.length+1))]});
-   prune();const p=fPlan(f);const open=fQs(f).some(q=>!has(S.pf[q.k]));
+   prune();const p=fPlan(f);const open=fQs(f).some(q=>!q.optional&&!has(S.pf[q.k]));
    if(open&&!p.prov)bad.push(f.id+':not provisional '+JSON.stringify(S.pf));
    if(open&&p.d==='proceed'&&!p.prov)bad.push(f.id+':clearance');
    if(!DISP[p.d])bad.push(f.id+':bad disp '+p.d)}}
@@ -352,7 +352,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(ca.single.od!=='investigate'&&!ca.single.res,'Single finding: no invented conflict');
  await E(page,()=>{newPatient();S.asmt=['doac','renal'];Object.assign(S.pf,{proc:'high',doacAg:'api',ap:'n',dial:'hd'});S.atab='find';asmtView()});
  const asTxt=await page.locator('#arest').innerText();
- ok(/hemostatic bundle/i.test(asTxt)&&/Follow-up \/ escalate if/i.test(asTxt)&&/Resolve conflict/i.test(asTxt),'Assessment screen shows steps, follow-up/escalation and the unresolved conflict');
+ ok(/hemostatic bundle/i.test(asTxt)&&/Follow-up \/ escalat(e if|ion)/i.test(asTxt)&&/Resolve conflict/i.test(asTxt),'Assessment screen shows steps, follow-up/escalation and the unresolved conflict');
  await page.click('[data-pf="proc"][data-pv="low"]');const cc=await E(page,()=>{const m=asmtModel();return{od:m.od,doac:fPlan(FX.doac).act,res:m.miss.some(x=>/^Resolve conflict/.test(x))}});
  ok(/Continue without interruption/.test(cc.doac)&&cc.od==='investigate'&&cc.res,'Context change (procedure → low) recomputes the DOAC plan; the renal conflict stays unresolved');
  // R8 practice modes
@@ -434,6 +434,84 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  const firstMod=await E(page,()=>document.querySelector('#groups .mod').getBoundingClientRect().top);ok(firstMod<700,'First module visible without scrolling (top '+Math.round(firstMod)+')');
  await E(page,()=>view('emergency'));ok(await page.locator('.jump [data-em]').count()===16,'SOS: one jump chip per card');
  await page.click('.jump [data-em="mh"]');ok(await E(page,()=>document.getElementById('em-mh').open),'SOS: jump chip opens its card');
+
+
+ console.log('15. v3.4 review — reconciled plan, comparisons, change notices, consultation draft, a11y, phone, offline');
+ const dupIds=()=>E(page,()=>{const c={};document.querySelectorAll('[id]').forEach(e=>{c[e.id]=(c[e.id]||0)+1});return Object.keys(c).filter(k=>c[k]>1)});
+ const unnamed=()=>E(page,()=>[...document.querySelectorAll('#app button,#app input,#app select,#app textarea')].filter(e=>e.offsetParent!==null).filter(e=>{const t=(e.getAttribute('aria-label')||e.textContent||'').trim();if(e.matches('button'))return!t;const l=e.id&&document.querySelector(`label[for="${e.id}"]`);return!(l||e.getAttribute('aria-label')||e.closest('label'))}).map(e=>e.outerHTML.slice(0,80)));
+ // Comparison through the UI: preview only, then explicit Apply
+ await E(page,()=>{newPatient();S.asmt=['glp1'];Object.assign(S.pf,{anes:'sed',glpGi:'y',glpEsc:'n'});S.atab='find';asmtView()});
+ ok(await page.locator('.reconciled').count()===1,'Assessment shows one reconciled plan');
+ ok((await dupIds()).length===0,'Assessment page: no duplicate element IDs ('+(await dupIds()).join(',')+')');
+ await page.click('#compare-panel summary');await page.click('[data-cmp="local"]');
+ ok(await page.locator('.cmp-result').isVisible(),'Compare: Local-only preview renders');
+ ok(await E(page,()=>S.pf.anes==='sed'&&/IV sedation/.test(asmtText())),'Compare: real context and copied note unchanged during preview');
+ const tgt15=await E(page,()=>[...document.querySelectorAll('[data-cmp],[data-cmpapply],[data-consult-copy],[data-question]')].filter(e=>e.offsetParent!==null).map(e=>Math.round(e.getBoundingClientRect().height)));
+ ok(tgt15.length>=3&&tgt15.every(h=>h>=44),'New controls are at least 44 px tall ('+tgt15.join(',')+')');
+ await page.click('[data-cmpapply]');
+ ok(await E(page,()=>S.pf.anes==='la'&&S.compare===undefined),'Compare: Apply changes the real context');
+ ok(/Approach comparison applied/.test(await page.locator('.delta[role="status"]').first().innerText()),'Change notice names the reason for the change');
+ // Staged comparison requires explicit qualification
+ await E(page,()=>{newPatient();S.asmt=['doac'];Object.assign(S.pf,{proc:'high',doacAg:'api',ap:'n'});asmtView()});
+ await page.click('#compare-panel summary');await page.click('[data-cmp="staged"]');
+ ok(await page.locator('.cmp-result').count()===0&&await page.locator('[data-cmpapply]').count()===0,'Staged: no lower-risk result or Apply before qualification');
+ await page.click('[data-cmpqualify]');
+ ok(await page.locator('.cmp-result').count()===1&&await E(page,()=>S.pf.proc==='high'),'Staged: qualified preview shown; real procedure still high');
+ // Context change through the UI records a reason
+ await E(page,()=>{S.ctxOpen=true;delete S.compare;asmtView()});
+ await page.click('#actxd [data-pf="proc"][data-pv="low"]');
+ ok(/Changed because: Planned procedure/.test(await page.locator('.delta[role="status"]').first().innerText()),'Context edit shows a change explanation');
+ // Consultation draft
+ const cd=await E(page,()=>document.querySelector('textarea[aria-label="De-identified consultation draft"]').value);
+ ok(/Decision requested:/.test(cd)&&!/@|DOB|MRN|Patient name/.test(cd)&&/does not send/.test(cd),'Consultation draft: decision requested, no identifier fields, not sent');
+ await page.click('#app details:has([data-consult-copy]) summary');await page.click('[data-consult-copy]');
+ ok(true,'Consultation copy button runs without page error');
+ // Reconciled conflict in UI: buprenorphine + kidney disease
+ await E(page,()=>{newPatient();S.asmt=['bupe','renal'];Object.assign(S.pf,{age:'60',proc:'low',dial:'no',esrd:'n'});asmtView()});
+ const rp=await page.locator('.reconciled').innerText();
+ ok(!/scheduled ibuprofen/.test(rp)&&/scheduled acetaminophen/.test(rp),'Reconciled plan hides the conflicting NSAID step, keeps acetaminophen');
+ ok(await page.locator('summary:has-text("Advice suppressed")').count()===1,'Suppressed advice is disclosed with a reason');
+ // Author protocol stays visible in the reconciled plan
+ await E(page,()=>{setPmode('author');newPatient();S.asmt=['warfarin'];Object.assign(S.pf,{proc:'low',inr:'3.6',inrAge:'d1',ap:'n'});asmtView()});
+ ok(/Author’s protocol/.test(await page.locator('.reconciled').innerText()),'Author protocol shown in the reconciled plan');
+ // Accessibility across findings
+ const fa=[];for(const id of await E(page,()=>FIND.map(f=>f.id))){await E(page,id=>{newPatient();openFind(id)},id);const d=await dupIds(),u=await unnamed();if(d.length||u.length)fa.push(id+':'+d.join(',')+u.join(','))}
+ ok(fa.length===0,'All 18 finding pages: unique IDs, every visible control named '+fa.slice(0,3).join(' | '));
+ await E(page,()=>{newPatient();S.asmt=['doac','renal','glp1'];Object.assign(S.pf,{proc:'high',anes:'sed'});asmtView()});
+ ok((await unnamed()).length===0,'Assessment: every visible control has an accessible name');
+ // Age field keeps focus while typing two digits
+ await E(page,()=>{newPatient();openFind('bleeddx')});await page.click('#pf-age');await page.keyboard.type('65');
+ ok(await E(page,()=>S.pf.age==='65'&&document.activeElement.id==='pf-age'),'Age field accepts a two-digit age without losing focus');
+ // Phone widths: no horizontal overflow with every panel open
+ for(const w of [320,390]){await page.setViewportSize({width:w,height:740});
+  await E(page,()=>{newPatient();S.asmt=['doac','renal','bupe','glp1'];Object.assign(S.pf,{proc:'high',anes:'sed'});S.compare='local';S.ctxOpen=true;asmtView();document.querySelectorAll('#app details').forEach(d=>d.open=true)});
+  ok(await E(page,()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),`No horizontal overflow at ${w} px with all panels open`)}
+ await page.setViewportSize({width:390,height:664});
+ // Reset through the bottom bar double tap
+ await page.click('.abar [data-newpt]');await page.click('.abar [data-newpt]');
+ ok(await E(page,()=>!hasPatient()&&!S.changes.length&&S.compare===undefined&&!document.querySelector('.delta')),'New patient (double tap) clears context, comparison, change history');
+ ok(await E(page,()=>{const k=Object.keys(localStorage);return k.every(x=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode'].includes(x))&&sessionStorage.length===0}),'Storage holds settings only, no patient data');
+
+ // Offline and update behavior via a real service worker over HTTP
+ {const fs=require('fs'),os=require('os'),http=require('http');const root=fs.mkdtempSync(path.join(os.tmpdir(),'compass-'));const app=path.join(root,'oms-compass');fs.mkdirSync(app);
+  for(const f of fs.readdirSync(path.resolve(__dirname,'..')))if(/\.(html|js|png|webmanifest)$/.test(f))fs.copyFileSync(path.resolve(__dirname,'..',f),path.join(app,f));
+  const T={html:'text/html',js:'text/javascript',png:'image/png',webmanifest:'application/manifest+json'};
+  const srv=http.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const f=path.join(root,u);if(!f.startsWith(root)||!fs.existsSync(f)){r.writeHead(404);return r.end()}r.writeHead(200,{'content-type':T[f.split('.').pop()]||'application/octet-stream','cache-control':'no-cache'});fs.createReadStream(f).pipe(r)});
+  await new Promise(r=>srv.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${srv.address().port}/oms-compass/`;
+  const oc=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await oc.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const op=await oc.newPage();op.on('pageerror',e=>{fail++;fails.push('offline pageerror: '+e.message)});
+  await op.goto(base);await op.evaluate(()=>navigator.serviceWorker.ready);await op.reload();await op.waitForFunction(()=>!!navigator.serviceWorker.controller);
+  const v1=await op.evaluate(()=>caches.keys());ok(v1.length===1&&v1[0].endsWith('v'+(await op.evaluate(()=>VER))),'Service worker installs one versioned cache ('+v1+')');
+  await oc.setOffline(true);await op.reload();ok(await op.locator('#in-q').count()===1&&await op.evaluate(()=>VER)===await page.evaluate(()=>VER),'Offline reload serves the cached app');
+  await op.evaluate(()=>{openFind('doac');S.pf.proc='high'});ok(await op.evaluate(()=>!!fPlan(FX.doac).act),'Offline: findings compute');
+  await oc.setOffline(false);
+  fs.writeFileSync(path.join(app,'sw.js'),fs.readFileSync(path.join(app,'sw.js'),'utf8').replace(/const VERSION = '[^']+'/,"const VERSION = 'compass-test-update'"));
+  fs.writeFileSync(path.join(app,'index.html'),fs.readFileSync(path.join(app,'index.html'),'utf8').replace(/const VER='[^']+'/,"const VER='9.9.9-test'"));
+  await op.reload();let upd=[];for(let i=0;i<30;i++){upd=await op.evaluate(()=>caches.keys()).catch(()=>[]);if(upd.length===1&&upd[0]==='compass-test-update')break;await op.waitForTimeout(500)}
+  ok(JSON.stringify(upd)==='["compass-test-update"]','Update: new cache activates, old cache deleted ('+upd+')');
+  await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: online open serves the new version');
+  await oc.setOffline(true);await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: new version available offline');
+  await oc.close();srv.close();fs.rmSync(root,{recursive:true,force:true})}
 
 
  await browser.close();
