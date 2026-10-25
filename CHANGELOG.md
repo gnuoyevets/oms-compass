@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.6.0 — Oct 25, 2026 (branch `feat/chairside-focus`, pending Steven's review)
+## v3.6.0 — Oct 25, 2026 (approved by Steven Oct 25, 2026; merged to main)
 
 - **Chairside focus mode** (all 36 decision modules). One question per screen; question 20 px bold (18 px when long); Yes = filled, No = outlined, both full width, stacked, 56 px tall, in the thumb zone. Unknown kept as a smaller third button (Unknown is never read as No — Oct 23 decision).
 - **Fixed 56 px header:** back one step · title · step counter · red SOS badge. Counter shows a range ("Step 2 of 3–5") because branches differ in length. SOS from a module shows "‹ Back to <module>" with answers kept.
