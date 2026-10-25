@@ -2500,9 +2500,9 @@ function fxChips(m){const id=m.id,c=[];
  return c.join('')}
 function critHTML(m,w){const n=w.cur&&w.cur.n;if(!n)return'<p class="small">No open question.</p>';const r=w.r,ah=n.ah?n.ah(r):'';
  return`<div class="q" style="font-weight:700;margin-bottom:6px">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'<p class="small">No extra criteria for this step.</p>'}`}
-function hcOn(){const a=document.documentElement.dataset.contrast;if(a)return a==='high';try{return matchMedia('(prefers-contrast: more)').matches}catch(e){return false}}
+function hcOn(){const a=document.documentElement&&document.documentElement.dataset&&document.documentElement.dataset.contrast;if(a)return a==='high';try{return matchMedia('(prefers-contrast: more)').matches}catch(e){return false}}
 const HC_KEY='omsCompassContrast';
-function applyHC(){let v=null;try{v=localStorage.getItem(HC_KEY)}catch(e){v=S.hcv||null}if(v)document.documentElement.dataset.contrast=v;else delete document.documentElement.dataset.contrast}
+function applyHC(){const r=document.documentElement;if(!r||!r.dataset)return;let v=null;try{v=localStorage.getItem(HC_KEY)}catch(e){v=S.hcv||null}if(v)r.dataset.contrast=v;else delete r.dataset.contrast}
 function toggleHC(){const v=hcOn()?'normal':'high';S.hcv=v;try{localStorage.setItem(HC_KEY,v)}catch(e){}applyHC()}
 function hcHTML(){const on=hcOn();return`<button class="tg${on?' on':''}" data-hc aria-pressed="${on}">High contrast (operatory light) · ${on?'on':'off'}</button>`}
 function drawerHTML(m){const id=m.id;
