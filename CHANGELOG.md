@@ -2,6 +2,12 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.5.1 — Oct 25, 2026 (branch `fix/min-font-12px`, pending Steven's review)
+
+- **Readability.** Smallest text — verify tags, source badges, section labels, table headers, offline badge — raised from 10–11 px to 12 px (8 CSS rules) for chairside glare. No content or logic changes.
+- Contrast audit: all text/background tokens pass WCAG AA (≥5.2:1 light, ≥6.7:1 dark).
+- Tests: 317 browser checks and reconciliation suite pass.
+
 ## v3.5.0 — Oct 25, 2026 (branch `feat/facial-laceration`, pending Steven's review)
 
 - **New module: Facial laceration** (Trauma; listed under Hospital on-call, hidden when on-call is off like trauma triage and mandible fracture; search always finds it). Bigger injury first → deep structures (facial nerve, parotid duct, canaliculus, lid margin/globe) → bites (antibiotics, rabies, facial closure) → contaminated/late wounds → lip, ear, eyelid, nose → simple layered closure. Tetanus look-fors per CDC (reviewed Sep 8, 2026). Sources: AAFP 2017 laceration repair, CDC tetanus, facial nerve review (abstract), WikEM bites summary. Author-drafted or secondary-source lines tagged verify.
