@@ -199,8 +199,8 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(await page.locator('[data-oncall][aria-checked="true"]').count()===1,'On-call preference re-read from storage');
  await openSet(page);await page.click('[data-oncall]');
  await E(page,()=>open('extraction'));
- ok(await page.locator('#abar:not([hidden]) [data-ioopen]').count()===1,'Intraop button in bottom bar inside a module');
- await page.click('#abar [data-ioopen]');
+ ok(await page.locator('#fxsheet [data-atab="io"]').count()===1,'Intraop button in the module reference drawer (v3.6 focus mode replaces the bottom bar inside modules)');
+ await page.click('#fxsheet .fx-handle');await page.click('#fxsheet [data-atab="io"]');
  ok(await page.locator('.atabs [data-atab="io"].on').count()===1&&await page.locator('.ioi').count()>15,'Drawer opens on the Intraop checklist tab');
  await page.click('[data-io="cnt"]');
  ok(await page.locator('[data-io="cnt"][aria-checked="true"]').count()===1,'Checklist item toggles');
@@ -222,7 +222,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  const pr=await E(page,r=>{const t=parseTri(r);return{err:t.err||'',asa:t.asa,sb:t.sb,b:t.mods&&t.mods.preop&&t.mods.preop.b,d2:t.mods&&t.mods.preop&&t.mods.preop.d2,sb3:t.mods&&t.mods.sed&&t.mods.sed.c}},rep);
  ok(!pr.err&&pr.asa===3&&pr.sb===4&&pr.b===true&&pr.d2===false&&pr.sb3===true,'A whole pasted report (code in a code block) loads correctly');
  ok(/nothing could be read/.test(await E(page,()=>parseTri('Report… CT1;none').err)),'CT1;none explains that nothing was readable');
- await E(page,()=>{newPatient();open('preop')});await page.fill('#in-tri',rep);await page.click('[data-triload]');
+ await E(page,()=>{newPatient();open('preop')});await page.click('.fx-chip[data-drawer="tri"]');await page.fill('#in-tri',rep);await page.click('[data-triload]');
  ok(await E(page,()=>!!S.tri&&S.tri.asa===3),'Report pasted into the box loads through the UI');
  await E(page,()=>newPatient());
 
@@ -515,6 +515,87 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: online open serves the new version');
   await oc.setOffline(true);await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: new version available offline');
   await oc.close();srv.close();fs.rmSync(root,{recursive:true,force:true})}
+
+ console.log('16. v3.6 chairside focus mode — one decision per screen, header, drawer, back-step, latency, contrast');
+ {const fc=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await fc.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const fp=await fc.newPage();fp.on('pageerror',e=>{fail++;fails.push('focus pageerror: '+e.message)});await fp.route(/^https?:\/\//,r=>r.abort());await fp.goto(FILE);await fp.waitForSelector('#in-q');
+  const reachAll=`(()=>{const out=[];for(const m of MODS){for(const [id,nd] of Object.entries(m.nodes)){if(!nd.q)continue;const path={};let cur=m.start,g=0;
+   while(cur&&cur!==id&&g++<40){const x=m.nodes[cur];if(!x)break;if(x.note){cur=x.next;continue}if(x.out)break;
+    const ok=(function reach(k,d){if(d>40||!k)return false;if(k===id)return true;const z=m.nodes[k];if(!z)return false;if(z.note)return reach(z.next,d+1);if(z.out)return false;return reach(z.yes,d+1)||reach(z.no,d+1)})(x.yes,0);path[cur]=ok;cur=ok?x.yes:x.no}
+   if(cur===id)out.push([m.id,id,path])}}return out})()`;
+  // Header
+  await fp.evaluate(()=>{newPatient();open('preop')});
+  const hd=await fp.evaluate(()=>{const h=document.querySelector('.fx-hd'),r=h.getBoundingClientRect(),cs=getComputedStyle(h);return{h:r.height,pos:cs.position,back:!!h.querySelector('[data-back]'),sos:!!h.querySelector('.fx-sos[data-view="emergency"]'),c:document.getElementById('fxc').textContent,title:h.querySelector('h2').textContent}});
+  ok(hd.h===56&&hd.pos==='fixed'&&hd.back&&hd.sos&&/^Step 1 of \d/.test(hd.c)&&hd.title==='Pre-op clearance','Fixed 56 px header: back arrow, title, step counter, SOS badge '+JSON.stringify(hd));
+  ok(await fp.evaluate(()=>getComputedStyle(document.querySelector('.fx-sos')).backgroundColor==='rgb(165, 0, 0)'),'SOS badge is solid red');
+  // Binary screen
+  const bs=await fp.evaluate(()=>{const c=document.querySelector('.cur'),q=c.querySelector('.q'),a=c.querySelector('.fx-a'),b=c.querySelector('.fx-b'),cs=getComputedStyle(q);
+   return{n:document.querySelectorAll('.cur').length,qs:document.querySelectorAll('#flow .q').length,fs:parseFloat(cs.fontSize),fw:+cs.fontWeight,aw:a.getBoundingClientRect().width,bw:b.getBoundingClientRect().width,ah:a.getBoundingClientRect().height,bh:b.getBoundingClientRect().height,cw:c.clientWidth,abg:getComputedStyle(a).backgroundColor,bbg:getComputedStyle(b).backgroundColor,bbd:parseFloat(getComputedStyle(b).borderTopWidth),stack:b.getBoundingClientRect().top>a.getBoundingClientRect().bottom}});
+  ok(bs.n===1&&bs.qs===1,'Exactly one question on screen');
+  ok(bs.fs>=18&&bs.fs<=20&&bs.fw>=700,'Question bold 18–20 px '+bs.fs);
+  ok(bs.ah>=48&&bs.bh>=48&&bs.stack&&Math.abs(bs.aw-bs.bw)<1&&bs.aw>=bs.cw-34,'Yes/No stacked, full width, ≥48 px '+JSON.stringify(bs));
+  ok(bs.abg!=='rgba(0, 0, 0, 0)'&&bs.bbd>=2,'Yes filled, No outlined');
+  // Every question screen fits one viewport at 360, 390 and 430 px widths
+  const all=await fp.evaluate(reachAll);let bad=[],clip=[];
+  for(const [W,H] of [[360,640],[390,664],[430,740]]){await fp.setViewportSize({width:W,height:H});
+   const r=await fp.evaluate(([list,W,H])=>{const bad=[],clip=[];for(const [mid,id,path] of list){newPatient();S.ans[mid]={...path};open(mid);if(!document.querySelector(`.cur [data-a="${id}"]`)){if(!document.getElementById('plock'))bad.push(mid+'.'+id+':notshown');continue}
+     const de=document.documentElement,a=document.querySelector('.fx-a'),u=document.querySelector('.fx-u'),qw=document.querySelector('.fx-qwrap');
+     if(de.scrollHeight>innerHeight+1||de.scrollWidth>de.clientWidth)bad.push(mid+'.'+id+':pagescroll');
+     if(u.getBoundingClientRect().bottom>innerHeight-56+1||a.getBoundingClientRect().top<56)bad.push(mid+'.'+id+':buttons');
+     const q=document.querySelector('#fxq');if(q.getBoundingClientRect().bottom>qw.getBoundingClientRect().bottom+1)clip.push(mid+'.'+id)}
+    newPatient();return{bad,clip}},[all,W,H]);
+   bad.push(...r.bad.map(x=>W+':'+x));if(W===360)clip=r.clip}
+  ok(bad.length===0,`All ${all.length} question screens: no page scroll, buttons in the thumb zone above the drawer at 360/390/430 px (bad: ${bad.slice(0,6)})`);
+  ok(clip.length===0,`Question text never needs scrolling at 360×640 (clipped: ${clip.slice(0,6)})`);
+  await fp.setViewportSize({width:390,height:664});
+  // Back-step: arrow, swipe, system back
+  await fp.evaluate(()=>{newPatient();open('preop')});
+  await fp.click('.cur [data-a="a"][data-v="0"]');await fp.click('.cur [data-a="b"][data-v="0"]');
+  const c2=await fp.textContent('#fxc');ok(/^Step 3 of/.test(c2),'Counter advances ('+c2+')');
+  await fp.click('.fx-hd [data-back]');ok(await fp.evaluate(()=>S.ans.preop.b===undefined&&S.ans.preop.a===false&&/^Step 2 of/.test(document.getElementById('fxc').textContent)),'Back arrow undoes exactly one answer');
+  await fp.click('.cur [data-a="b"][data-v="0"]');
+  const swipe=(x0,x1)=>fp.evaluate(([x0,x1])=>{const el=document.querySelector('#flow .cur'),mk=x=>new Touch({identifier:1,target:el,clientX:x,clientY:300});
+   el.dispatchEvent(new TouchEvent('touchstart',{touches:[mk(x0)],changedTouches:[mk(x0)],bubbles:true}));el.dispatchEvent(new TouchEvent('touchend',{touches:[],changedTouches:[mk(x1)],bubbles:true}))},[x0,x1]);
+  await swipe(60,220);ok(await fp.evaluate(()=>S.ans.preop.b===undefined&&S.ans.preop.a===false),'Swipe right steps back one node');
+  await swipe(220,60);ok(await fp.evaluate(()=>S.ans.preop.a===false&&S.view==='mod'),'Swipe left does nothing');
+  await swipe(5,200);ok(await fp.evaluate(()=>S.ans.preop.a===false),'Edge swipe (x<16) left to the browser');
+  await fp.evaluate(()=>history.back());await fp.waitForFunction(()=>S.ans.preop.a===undefined);
+  ok(await fp.evaluate(()=>S.view==='mod'&&S.mod==='preop'&&history.state&&history.state.cs===1),'System back (popstate) steps back one node and stays in the module');
+  await fp.evaluate(()=>history.back());await fp.waitForFunction(()=>S.view==='decide');ok(true,'System back on the first question returns to the module list');
+  // Latency: full walk, no page reload
+  await fp.evaluate(()=>{window.__noReload=1;newPatient();open('preop')});
+  const lat=await fp.evaluate(()=>{const t=[];for(let i=0;i<12;i++){const b=document.querySelector('.cur .fx-b');if(!b)break;const t0=performance.now();b.click();t.push(performance.now()-t0)}return{t,max:Math.max(...t),out:!!document.querySelector('.plan .pact'),nav:performance.getEntriesByType('navigation').length,flag:window.__noReload}});
+  ok(lat.max<100&&lat.t.length>=3&&lat.out,`Node-to-node update <100 ms (max ${lat.max.toFixed(1)} ms over ${lat.t.length} steps)`);
+  ok(lat.nav===1&&lat.flag===1,'No page reload between nodes');
+  // Terminal card
+  const tc=await fp.evaluate(()=>{const p=document.querySelector('.plan'),pa=p.querySelector('.pact');return{copy:!!pa.querySelector('[data-copy]'),end:!!pa.querySelector('[data-endsess]'),vis:pa.getBoundingClientRect().bottom<=innerHeight-56+1,scroll:document.documentElement.scrollHeight<=innerHeight+1}});
+  ok(tc.copy&&tc.end&&tc.vis&&tc.scroll,'Terminal card: Copy note and End session pinned on screen '+JSON.stringify(tc));
+  await fp.click('.pact [data-endsess]');ok(await fp.evaluate(()=>S.view==='decide'&&!Object.keys(S.ans.preop||{}).length),'End session clears this decision and returns to the list');
+  // Drawer
+  await fp.evaluate(()=>{newPatient();open('extraction')});
+  ok(await fp.evaluate(()=>{const b=document.getElementById('fxbody');return b.hasAttribute('inert')&&!document.getElementById('fxsheet').classList.contains('open')}),'Drawer starts collapsed and inert');
+  const hand=await fp.evaluate(()=>{const h=document.querySelector('.fx-handle');const mk=y=>new Touch({identifier:2,target:h,clientX:200,clientY:y});h.dispatchEvent(new TouchEvent('touchstart',{touches:[mk(640)],changedTouches:[mk(640)],bubbles:true}));h.dispatchEvent(new TouchEvent('touchend',{touches:[],changedTouches:[mk(520)],bubbles:true}));return S.drOpen});
+  ok(hand===true,'Swipe up on the handle opens the reference drawer');
+  ok(await fp.locator('#fxbody #fxpath').count()===1&&await fp.locator('#fxbody [data-reset]').count()===1&&await fp.locator('#fxbody details.box').count()>=1,'Drawer holds answers, sources/look-fors and reset');
+  await fp.keyboard.press('Escape');ok(await fp.evaluate(()=>!S.drOpen),'Escape closes the drawer');
+  const crit=await fp.evaluate(()=>{for(const m of MODS)for(const [id,n] of Object.entries(m.nodes))if(n.h&&m.start===id)return m.id;return null});
+  if(crit){await fp.evaluate(id=>{newPatient();open(id)},crit);await fp.click('.cur .fx-crit');ok(await fp.evaluate(()=>S.drOpen&&document.querySelectorAll('#fxcrit .h li').length>0),'Criteria button opens the drawer at this step’s criteria')}
+  ok(await fp.evaluate(()=>{const m=MODS.find(x=>x.inputs&&x.inputs.includes('cbct'));newPatient();open(m.id);return!!document.querySelector('.fx-chip[data-drawer="inputs"]')&&!!document.querySelector('#fxbody #in-rbh')}),'Data inputs (e.g. CBCT) live in the drawer, reached from a chip');
+  // SOS from a module and back
+  await fp.evaluate(()=>{newPatient();open('preop')});await fp.click('.cur [data-a="a"][data-v="0"]');await fp.click('.fx-sos');
+  ok(await fp.evaluate(()=>S.view==='emergency'&&!!document.querySelector('.fx-ret[data-open="preop"]')),'SOS from a module offers a way back');
+  await fp.click('.fx-ret');ok(await fp.evaluate(()=>S.view==='mod'&&S.ans.preop.a===false),'Back from SOS keeps the answers');
+  // High contrast (AAA)
+  await fp.evaluate(()=>{newPatient();home()});await fp.evaluate(()=>{toggleHC();open('preop')});
+  const hc=await fp.evaluate(()=>{const cs=getComputedStyle(document.documentElement),v=k=>cs.getPropertyValue(k).trim();
+   const L=h=>{h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const c=[0,2,4].map(i=>parseInt(h.slice(i,i+2),16)/255).map(x=>x<=.03928?x/12.92:((x+.055)/1.055)**2.4);return .2126*c[0]+.7152*c[1]+.0722*c[2]};
+   const cr=(a,b)=>{const x=L(a),y=L(b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+   const P=[['--ink','--bg'],['--muted','--bg'],['--muted','--surface'],['--accent','--bg'],['--accent-ink','--accent'],['--chip-ink','--chip'],['--warn-ink','--warn-bg'],['--red-ink','--red-bg'],['--ok-ink','--ok-bg'],['--bg','--ink']];
+   return{attr:document.documentElement.dataset.contrast,low:P.map(([a,b])=>[a,b,cr(v(a),v(b))]).filter(x=>x[2]<7).map(x=>x[0]+'/'+x[1]+' '+x[2].toFixed(2)),sos:cr('#ffffff','#a50000'),ls:localStorage.getItem('omsCompassContrast')}});
+  ok(hc.attr==='high'&&hc.ls==='high','High-contrast toggle applies and is remembered (setting, not patient data)');
+  ok(hc.low.length===0&&hc.sos>=7,'High-contrast tokens all ≥7:1 (WCAG AAA); SOS badge '+hc.sos.toFixed(2)+':1 '+hc.low);
+  await fp.evaluate(()=>newPatient());ok(await fp.evaluate(()=>document.documentElement.dataset.contrast==='high'),'New patient keeps the contrast setting');
+  await fc.close()}
 
 
  await browser.close();

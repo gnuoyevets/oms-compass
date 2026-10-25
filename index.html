@@ -297,6 +297,81 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .decision-tools .chips{margin:10px 0}.decision-tools .go,.go{min-height:44px}.delta{font-size:13px;line-height:1.5;padding:10px 12px;border-left:3px solid var(--accent);margin-bottom:10px;background:var(--surface)}
 .cmp-result{border:2px dashed var(--warn-line);border-radius:10px;padding:12px;margin-top:10px}.cmp-result h4{margin:0 0 8px;font-size:14px}.question-next{border:2px solid var(--warn-line)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== v3.6 chairside focus mode (module decision screens) =====
+ One question per screen, thumb-zone buttons, fixed 56px header, reference in a bottom drawer.
+ Column 360–430 px. High-contrast mode targets WCAG AAA (≥7:1) for overhead operatory light. */
+body.focus{overflow:hidden;overscroll-behavior:none}
+body.focus .wrap,body.focus.hasbar .wrap{max-width:430px;height:100vh;height:100dvh;display:flex;flex-direction:column;padding-top:calc(64px + env(safe-area-inset-top,0px));padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+body.focus .abar{display:none!important}
+.fx-hd.bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;max-width:430px;margin:0 auto;height:56px;z-index:30;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:0 max(8px,env(safe-area-inset-right,0px)) 0 max(8px,env(safe-area-inset-left,0px));background:var(--bg);border-bottom:1px solid var(--line)}
+.fx-ib{width:48px;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:28px;line-height:1;padding:0 0 3px}
+.fx-t{min-width:0}
+.fx-t h2{font:800 16px/1.2 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fx-c{font-size:13px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fx-sos{min-width:64px;height:44px;border-radius:22px;border:0;background:#a50000;color:#fff;font:800 15px var(--display);letter-spacing:.6px;padding:0 14px;box-shadow:0 0 0 2px var(--bg),0 0 0 4px #a50000}
+.fx{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+.fx-chips{flex:none;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.fx-chips:empty{display:none}
+.fx-chips::-webkit-scrollbar{display:none}
+.fx-chip{flex:none;min-height:36px;border-radius:18px;padding:0 12px;font-size:13px;font-weight:700;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);white-space:nowrap;max-width:260px;overflow:hidden;text-overflow:ellipsis}
+.fx-chip.c-def,.fx-chip.c-red{background:var(--red-bg);border-color:var(--red-line);color:var(--red-ink)}
+.fx-chip.c-mod{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
+.fx-chip.c-ok{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-ink)}
+#flow.fx-flow{flex:1;min-height:0;display:flex;flex-direction:column}
+.fx-flow .cur{flex:1;min-height:0;display:flex;flex-direction:column;padding:16px;border-radius:14px}
+.fx-qwrap{flex:1;min-height:0;overflow:auto}
+.fx-flow .cur .q{font:800 20px/1.3 var(--display);margin:6px 0 10px;letter-spacing:-.2px}
+.fx-flow .cur .q.long{font-size:18px}
+.fx-crit{min-height:40px;border-radius:20px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-weight:700;font-size:14px;padding:0 14px;margin-top:2px}
+.fx-act{flex:none;display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.fx-a,.fx-b{width:100%;min-height:56px;border-radius:12px;font:800 19px var(--display);letter-spacing:.2px}
+.fx-a{background:var(--accent);border:2px solid var(--accent);color:var(--accent-ink)}
+.fx-b{background:var(--surface);border:2.5px solid var(--ink);color:var(--ink)}
+.fx-u{width:100%;min-height:48px;border-radius:12px;background:none;border:1.5px dashed var(--warn-line);color:var(--warn-ink);font-weight:700;font-size:15px}
+.fx-a.sug::after,.fx-b.sug::after{content:" · 📷 suggested";font:600 14px var(--sans)}
+.fx-flow .plan{flex:1;min-height:0;display:flex;flex-direction:column;padding:0;overflow:hidden;border-width:2px}
+.plan .pbody{flex:1;min-height:0;overflow:auto;padding:14px;-webkit-overflow-scrolling:touch}
+.fx-flow .plan .pt{font-size:19px;font-weight:800}
+.plan .pact{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 14px 14px;border-top:1.5px solid currentColor}
+.pact button{min-height:52px;border-radius:12px;font:800 16px var(--display)}
+.pact .p1{background:var(--ink);color:var(--bg);border:2px solid var(--ink)}
+.pact .p2{background:var(--surface);color:var(--ink);border:2px solid var(--ink)}
+.fx-lock{flex:1;min-height:0;overflow:auto}
+.fx-scrim{position:fixed;inset:0;z-index:35;background:rgba(0,0,0,.4)}
+.fx-sheet{position:fixed;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;z-index:40;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-bottom:0;border-radius:16px 16px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.18);max-height:86vh;max-height:86dvh;display:flex;flex-direction:column;transform:translateY(calc(100% - 56px - env(safe-area-inset-bottom,0px)));transition:transform .16s ease-out;will-change:transform}
+.fx-sheet.open{transform:none}
+.fx-handle{flex:none;position:relative;width:100%;height:calc(56px + env(safe-area-inset-bottom,0px));padding:0 16px env(safe-area-inset-bottom,0px);border:0;background:none;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:15px;touch-action:none}
+.fx-sheet.open .fx-handle{height:56px;padding-bottom:0}
+.fx-handle .grip{position:absolute;top:7px;left:50%;width:44px;height:5px;margin-left:-22px;border-radius:3px;background:var(--muted)}
+.fx-handle .chev{color:var(--accent);font-size:16px}
+.fx-body{flex:1;min-height:0;overflow:auto;padding:0 16px calc(20px + env(safe-area-inset-bottom,0px));overscroll-behavior:contain}
+.fx-sec{padding:12px 0;border-top:1px solid var(--line)}
+.fx-sec:first-child{border-top:0;padding-top:0}
+.fx-sec>.lab{margin-bottom:8px}
+.fx-sec .path{margin:0}
+.fx-sec .h ul{margin:0;padding-left:18px;font-size:15px;line-height:1.5}
+.fx-tools{display:flex;flex-wrap:wrap;gap:8px}
+.fx-tools button{min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font-weight:700;font-size:14px;padding:0 14px}
+.fx-tools button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fx-ret{margin:0 0 10px}
+@media (prefers-reduced-motion:reduce){.fx-sheet{transition:none}}
+/* High-contrast (AAA) mode: manual toggle, or automatic when the OS asks for more contrast. Always black on white. */
+html:root[data-contrast="high"]{
+ --bg:#ffffff;--surface:#ffffff;--ink:#000000;--muted:#262626;--line:#000000;--soft:#ececec;
+ --accent:#00443b;--accent-ink:#ffffff;--chip:#e6f2ef;--chip-ink:#00332c;
+ --warn-bg:#fff6dc;--warn-line:#5a3d00;--warn-ink:#4a3200;
+ --red-bg:#fff0ee;--red-line:#7a0000;--red-ink:#7a0000;
+ --ok-bg:#ecf8ef;--ok-line:#0a3d1d;--ok-ink:#0a3d1d;color-scheme:light}
+@media (prefers-contrast:more){html:root:not([data-contrast="normal"]){
+ --bg:#ffffff;--surface:#ffffff;--ink:#000000;--muted:#262626;--line:#000000;--soft:#ececec;
+ --accent:#00443b;--accent-ink:#ffffff;--chip:#e6f2ef;--chip-ink:#00332c;
+ --warn-bg:#fff6dc;--warn-line:#5a3d00;--warn-ink:#4a3200;
+ --red-bg:#fff0ee;--red-line:#7a0000;--red-ink:#7a0000;
+ --ok-bg:#ecf8ef;--ok-line:#0a3d1d;--ok-ink:#0a3d1d;color-scheme:light}}
+html[data-contrast="high"] :focus-visible{outline:3px solid #000;outline-offset:2px}
+html[data-contrast="high"] .fx-chip,html[data-contrast="high"] .fx-ib,html[data-contrast="high"] .fx-u{border-width:2px}
+html[data-contrast="high"] .fx-sheet{box-shadow:none;border:2px solid #000;border-bottom:0}
 </style>
 
 <div class="wrap" id="app"></div>
@@ -1351,7 +1426,7 @@ function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v=
 function view(v){
  if(v==='decide')return home();
  S.mod=null;S.view=v;
- app.innerHTML=`${topHTML(1)}${tabsHTML(v)}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():v==='new'?newHTML():v==='handouts'?hoHTML():calcHTML()}</div>${fbHTML(v==='emergency'?'SOS':v==='handouts'?'Handouts':v)}`;
+ app.innerHTML=`${topHTML(1)}${tabsHTML(v)}${S.retMod&&M(S.retMod)?`<button class="go fx-ret" data-open="${S.retMod}">‹ Back to ${esc(M(S.retMod).title)}</button>`:''}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():v==='new'?newHTML():v==='handouts'?hoHTML():calcHTML()}</div>${fbHTML(v==='emergency'?'SOS':v==='handouts'?'Handouts':v)}`;
  window.scrollTo(0,0);try{history.replaceState(null,'','#'+v)}catch(e){}updBar();
 }
 function rebody(){const b=document.getElementById('vbody');if(!b)return;
@@ -1454,8 +1529,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.5.1';
+const VER='3.6.0';
 const CHANGES=[
+{v:'3.6.0',d:'Oct 25, 2026',i:['Chairside focus mode for every decision module: one question per screen, Yes (filled) and No (outlined) as full-width stacked buttons in the thumb zone, Unknown kept as a smaller third button.','Fixed 56 px header: back one step, module title, step counter (Step 2 of 3–5 when branches differ in length), red SOS badge. SOS from a module offers a way back with answers kept.','Back one step: header arrow, swipe right anywhere on the screen, or the phone’s own back gesture/button.','Criteria, your answers (tap to change), medical gate, red flags, photo triage, data inputs, look-fors, sources and reset moved into a swipe-up reference drawer; chips on screen open the right section.','Plan screen: Copy note and End session pinned at the bottom; long plans scroll inside the card.','High-contrast mode (black on white, all text ≥7:1, WCAG AAA) for operatory light: Settings or the drawer; turns on automatically if the phone asks for more contrast.']},
 {v:'3.5.1',d:'Oct 25, 2026',i:['Readability: smallest text (verify tags, source badges, section labels, table headers) raised from 10–11 px to 12 px for chairside glare. Color contrast already meets WCAG AA in light and dark modes.']},
 {v:'3.5.0',d:'Oct 25, 2026',i:['New module: Facial laceration (Hospital on-call). Bigger injury first; explore facial nerve, parotid duct, canaliculus and lid before closing; bites (antibiotics, rabies, facial closure); contaminated or late wounds; lip, ear, eyelid and nose repairs; simple layered closure. Tetanus per CDC 2026. Author-drafted lines tagged verify.']},
 {v:'3.4.0',d:'Oct 24, 2026',i:['Approved by Steven after independent review. One reconciled assessment with conflicting instructions suppressed and unresolved alternatives visible.','Decisive unanswered questions, isolated approach comparisons with explicit Apply, in-memory change explanations, and copy-only consultation drafts.','Missing numeric INR stays provisional. New patient clears all clinical data, comparison state and change history. Software checks do not establish clinical validity.','Review fixes: age-restricted local anesthetic advice withholds only that drug; missing age no longer escalates; Author protocol shown in the reconciled plan.']},
@@ -2275,7 +2351,7 @@ function newPatient(){
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
-function updBar(){let b=document.getElementById('abar');if(!b){b=document.createElement('div');b.id='abar';b.className='abar';document.body.appendChild(b)}
+function updBar(){document.body.classList.toggle('focus',S.view==='mod');let b=document.getElementById('abar');if(!b){b=document.createElement('div');b.id='abar';b.className='abar';document.body.appendChild(b)}
  const n=(S.asmt||[]).length,io=Object.values(S.io||{}).filter(Boolean).length,on=(hasPatient()||S.view==='mod'||S.view==='asmt')&&S.view!=='gate';b.hidden=!on;document.body.classList.toggle('hasbar',on);b.classList.add('three');
  const cur=t=>S.view==='asmt'&&(S.atab||'find')===t?' aria-current="page"':'';
  b.innerHTML=`<button class="abtn" data-asmt${cur('find')}>Assessment${n?` · <b>${n}</b>`:''}</button><button class="abtn" data-ioopen${cur('io')}>Intraop${io?` · <b>${io}</b>`:''}</button><button class="abtn np${npArm?' arm':''}" data-newpt>${npArm?'Tap again':'New patient'}</button>`}
@@ -2350,10 +2426,10 @@ function ioHTML(){const c=S.io||{};
 function atabsHTML(){const t=S.atab||'find';return`<div class="tabs atabs" role="tablist"><button role="tab" aria-selected="${t==='find'}" class="${t==='find'?'on':''}" data-atab="find">Findings</button><button role="tab" aria-selected="${t==='io'}" class="${t==='io'?'on':''}" data-atab="io">Intraop checklist</button></div>`}
 function asmtBody(){return atabsHTML()+(S.atab==='io'?`<div id="iobody">${ioHTML()}</div>`:asmtHTML())}
 function home(){
- S.mod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const on=onCall(),GO=['Hospital on-call',...ORDER],gm=MODS.map(m=>[m,homeGroup(m,on)]).filter(x=>x[1]);const groups=[...new Set(gm.map(x=>x[1]))].sort((x,y)=>GO.indexOf(x)-GO.indexOf(y));
+ S.mod=null;S.retMod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const on=onCall(),GO=['Hospital on-call',...ORDER],gm=MODS.map(m=>[m,homeGroup(m,on)]).filter(x=>x[1]);const groups=[...new Set(gm.map(x=>x[1]))].sort((x,y)=>GO.indexOf(x)-GO.indexOf(y));
  app.innerHTML=topHTML(1)+tabsHTML('decide')+
  `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab or topic · e.g. Eliquis" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="groups"${S.q?' hidden':''}>`+
- `<details class="box sets" id="settings"${S.setOpen?' open':''}><summary><span>Settings <em class="setsum">On-call ${on?'on':'off'} · ${colleague()?'Colleague':'Author'} mode</em></span></summary><div class="inner">${oncallHTML(on)}${pmodeHTML()}</div></details>`+groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
+ `<details class="box sets" id="settings"${S.setOpen?' open':''}><summary><span>Settings <em class="setsum">On-call ${on?'on':'off'} · ${colleague()?'Colleague':'Author'} mode</em></span></summary><div class="inner">${oncallHTML(on)}${pmodeHTML()}<div class="toggles" style="margin-top:10px">${hcHTML()}</div></div></details>`+groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
  `<p class="foot">Search shows a finding’s implications first. Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);S.fid=null;updBar();
 }
@@ -2381,19 +2457,20 @@ function inputsHTML(m){
  return out.join('');
 }
 function srcLink(k){const s=SRC[k];return s?`<a href="${s.u}" target="_blank" rel="noopener">${esc(s.n.split(' · ')[0])} ↗</a>`:''}
-function flowHTML(m){
- if(m.id==='sed'&&pedsLock())return lockHTML()+'<p class="caveat">The adult office-sedation screen and dosing are hidden while age &lt;12 (or weight &lt;40 kg with no age). Change age or weight in Calc, SOS or the Assessment to reopen it.</p>';
- const w=walk(m),r=w.r,parts=[triBannerHTML(m.id)];
- const isAu=k=>SRC_AU.includes(k),col=colleague(),split=it=>{const v=col?it.filter(x=>!x[1]):it,h=col?it.filter(x=>x[1]):[];return(v.length?`<ol>${v.map(x=>x[0]).join('')}</ol>`:'')+(h.length?auWrap(`<ol>${h.map(x=>x[0]).join('')}</ol>`):'')};
- const notes=w.steps.filter(s=>s.note);
- parts.push('<div class="path">'+w.steps.map(s=>{
+function pathHTML(m,w){const st=w.steps.filter(s=>s.note||s.val!==undefined);if(!st.length)return'<p class="small">No answers yet.</p>';
+ return'<div class="path">'+st.map(s=>{
   if(s.note)return`<div class="notechip">＋ ${esc(s.n.t)}</div>`;
-  if(s.val===undefined)return'';
-  return`<div class="step"><div class="qt">${esc(s.n.q)}${s.auto?'<small>auto</small>':''}${s.tri?`<small class="trs">${s.triFlip?'changed from triage':'triage ✓'}</small>`:''}</div><div class="seg"><button class="${s.val===true?'on':''}" data-a="${s.id}" data-v="1">Yes</button><button class="${s.val===false?'on':''}" data-a="${s.id}" data-v="0">No</button><button class="${s.val==='u'?'on':''}" data-a="${s.id}" data-v="u" aria-label="Unknown">?</button></div></div>`}).join('')+'</div>');
- if(w.cur){const n=w.cur.n,ah=n.ah?n.ah(r):'',sug=w.cur.sug,hasS=sug!==undefined;
-  parts.push(`<div class="cur${hasS?' tricur':''}"><div class="lab">Next question</div><div class="q">${esc(n.q)}</div>${hasS?`<div class="trihint">📷 Photo triage says <b>${sug?'Yes':'No'}</b> <span class="unv">verify</span> — confirm or change.</div>`:''}${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}<div class="yn yn3"><button class="${!hasS||sug?'y':''}" data-a="${w.cur.id}" data-v="1">Yes</button><button class="${hasS&&!sug?'y':''}" data-a="${w.cur.id}" data-v="0">No</button><button class="unk" data-a="${w.cur.id}" data-v="u">Unknown</button></div></div>`)}
- if(w.unk){const items=[[`<li>Unknown is not treated as No. Verify it, then answer the step above.</li>`,0],...notes.map(s=>[`<li><b>${esc(s.n.t)}:</b> ${escV(s.n.x)}</li>`,isAu(s.n.src)])];
-  parts.push(`<div class="plan action"><div class="lab">Plan pending · verify first</div><div class="pt">Can’t finalize: “${esc(w.unk.n.q)}” is unknown.</div>${split(items)}<button class="go" data-copy>Copy for the note</button><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div>`)}
+  return`<div class="step"><div class="qt">${esc(s.n.q)}${s.auto?'<small>auto</small>':''}${s.tri?`<small class="trs">${s.triFlip?'changed from triage':'triage ✓'}</small>`:''}</div><div class="seg"><button class="${s.val===true?'on':''}" data-a="${s.id}" data-v="1">Yes</button><button class="${s.val===false?'on':''}" data-a="${s.id}" data-v="0">No</button><button class="${s.val==='u'?'on':''}" data-a="${s.id}" data-v="u" aria-label="Unknown">?</button></div></div>`}).join('')+'</div>'}
+function flowHTML(m){
+ if(m.id==='sed'&&pedsLock())return'<div class="fx-lock">'+lockHTML()+'<p class="caveat">The adult office-sedation screen and dosing are hidden while age &lt;12 (or weight &lt;40 kg with no age). Change age or weight in Calc, SOS or the Assessment to reopen it.</p></div>';
+ const w=walk(m),r=w.r;
+ const isAu=k=>SRC_AU.includes(k),col=colleague(),split=it=>{const v=col?it.filter(x=>!x[1]):it,h=col?it.filter(x=>x[1]):[];return(v.length?`<ol>${v.map(x=>x[0]).join('')}</ol>`:'')+(h.length?auWrap(`<ol>${h.map(x=>x[0]).join('')}</ol>`):'')};
+ const notes=w.steps.filter(s=>s.note),answered=w.steps.some(s=>!s.note&&s.val!==undefined);
+ if(w.cur){const n=w.cur.n,ah=n.ah?n.ah(r):'',sug=w.cur.sug,hasS=sug!==undefined,nh=n.h?n.h.length:0;
+  return`<div class="cur${hasS?' tricur':''}" role="group" aria-labelledby="fxq"><div class="fx-qwrap"><div class="lab">${answered?'Next question':'First question'}</div><h3 class="q${n.q.length>64?' long':''}" id="fxq">${esc(n.q)}</h3>${hasS?`<div class="trihint">📷 Photo triage suggests <b>${sug?'Yes':'No'}</b> <span class="unv">verify</span> — confirm or change.</div>`:''}${ah?`<div class="autohint">${esc(ah)}</div>`:''}${nh?`<button class="fx-crit" data-drawer="crit" aria-label="Show ${nh} criteria for this question">ⓘ Criteria · ${nh}</button>`:''}</div>`+
+  `<div class="fx-act"><button class="fx-a${hasS&&sug?' sug':''}" data-a="${w.cur.id}" data-v="1">Yes</button><button class="fx-b${hasS&&!sug?' sug':''}" data-a="${w.cur.id}" data-v="0">No</button><button class="fx-u unk" data-a="${w.cur.id}" data-v="u">Unknown — verify first</button></div></div>`}
+ if(w.unk){const items=[[`<li>Unknown is not treated as No. Verify it, then step back and answer.</li>`,0],...notes.map(s=>[`<li><b>${esc(s.n.t)}:</b> ${escV(s.n.x)}</li>`,isAu(s.n.src)])];
+  return`<div class="plan action" role="region" aria-label="Plan pending"><div class="pbody"><div class="lab">Plan pending · verify first</div><div class="pt">Can’t finalize: “${esc(w.unk.n.q)}” is unknown.</div>${split(items)}<textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-back>‹ Answer it</button><button class="p2" data-copy>Copy note</button></div></div>`}
  if(w.out){const o=w.out,items=[];
   if(o.ex)items.push([`<li>${escV(o.ex)}</li>`,isAu(o.src)&&(!o.src2||isAu(o.src2))]);
   notes.forEach(s=>items.push([`<li><b>${esc(s.n.t)}:</b> ${escV(s.n.x)}${s.n.src?` <span class="small">(${esc(SRC[s.n.src].n.split(' · ')[0])})</span>`:''}</li>`,isAu(s.n.src)]));
@@ -2401,29 +2478,78 @@ function flowHTML(m){
   if(o.scr)items.push([`<li><b>Not covered by this screen:</b> ${escV(o.scr)}</li>`,0]);
   const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
   const bas=basisOf([o.src,o.src2,...notes.map(s=>s.n.src)],[o.out,o.ex,...notes.map(s=>s.n.x)].join(' '));
-  parts.push(`<div class="plan ${o.tone||''}"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div><button class="go" data-copy>Copy plan for the note</button>${HANDOUTS_LIVE&&HO_FOR[m.id]?` <button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button>`:''}<textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div>`)}
- return parts.join('');
+  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${HANDOUTS_LIVE&&HO_FOR[m.id]?`<div><button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button></div>`:''}${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>End session</button></div></div>`}
+ return'<div class="plan action"><div class="pbody"><div class="pt">Path incomplete — step back.</div></div></div>';
 }
+/* Step counter: answered steps + shortest/longest remaining question count from the current node. */
+const FXR={};
+function fxRemain(m,id){const k=m.id+'.'+id;if(FXR[k])return FXR[k];
+ const f=(x,d)=>{if(!x||d>40)return[0,0];const z=m.nodes[x];if(!z||z.out)return[0,0];if(z.note)return f(z.next,d+1);const a=f(z.yes,d+1),b=f(z.no,d+1);return[1+Math.min(a[0],b[0]),1+Math.max(a[1],b[1])]};
+ return FXR[k]=f(id,0)}
+function fxCount(m,w){if(m.id==='sed'&&pedsLock())return'Locked · pediatric';
+ const done=w.steps.filter(s=>!s.note&&s.val!==undefined&&s.val!=='u').length;
+ if(w.out)return`Plan · ${done} step${done===1?'':'s'} answered`;
+ if(w.unk)return`Step ${done+1} · paused (unknown)`;
+ if(w.cur){const [lo,hi]=fxRemain(m,w.cur.id);return`Step ${done+1} of ${lo===hi?done+hi:(done+lo)+'–'+(done+hi)}`}
+ return''}
+function fxChips(m){const id=m.id,c=[];
+ if(GATED.includes(id)){const g=gateModel();c.push(`<button class="fx-chip c-${g.tone}" data-drawer="gate">Gate: ${esc(g.t)}</button>`)}
+ if(m.red)c.push('<button class="fx-chip c-red" data-drawer="red">⚠ Red flags</button>');
+ if(TRI_MODS.includes(id))c.push(`<button class="fx-chip${S.tri?' c-mod':''}" data-drawer="tri">📷 ${S.tri?'Triage loaded':'Photo triage'}</button>`);
+ if((m.inputs||[]).length){const i=S.inp[id]||{},set=Object.keys(i).some(k=>i[k]!==''&&i[k]!=null&&i[k]!==false);c.push(`<button class="fx-chip${set?' c-ok':''}" data-drawer="inputs">${set?'✓ ':''}Data inputs</button>`)}
+ return c.join('')}
+function critHTML(m,w){const n=w.cur&&w.cur.n;if(!n)return'<p class="small">No open question.</p>';const r=w.r,ah=n.ah?n.ah(r):'';
+ return`<div class="q" style="font-weight:700;margin-bottom:6px">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'<p class="small">No extra criteria for this step.</p>'}`}
+function hcOn(){const a=document.documentElement.dataset.contrast;if(a)return a==='high';try{return matchMedia('(prefers-contrast: more)').matches}catch(e){return false}}
+const HC_KEY='omsCompassContrast';
+function applyHC(){let v=null;try{v=localStorage.getItem(HC_KEY)}catch(e){v=S.hcv||null}if(v)document.documentElement.dataset.contrast=v;else delete document.documentElement.dataset.contrast}
+function toggleHC(){const v=hcOn()?'normal':'high';S.hcv=v;try{localStorage.setItem(HC_KEY,v)}catch(e){}applyHC()}
+function hcHTML(){const on=hcOn();return`<button class="tg${on?' on':''}" data-hc aria-pressed="${on}">High contrast (operatory light) · ${on?'on':'off'}</button>`}
+function drawerHTML(m){const id=m.id;
+ return`<div class="fx-scrim" data-drclose${S.drOpen?'':' hidden'}></div><section class="fx-sheet${S.drOpen?' open':''}" id="fxsheet" aria-label="Reference drawer"><button class="fx-handle" data-drawer aria-expanded="${!!S.drOpen}" aria-controls="fxbody"><span class="grip" aria-hidden="true"></span><span>Reference · criteria · answers</span><span class="chev" aria-hidden="true">${S.drOpen?'▾':'▴'}</span></button><div class="fx-body" id="fxbody"${S.drOpen?'':' inert'}>
+ <div class="fx-sec" id="sec-crit"><div class="lab">This step</div><div id="fxcrit"></div></div>
+ <div class="fx-sec" id="sec-path"><div class="lab">Your answers · tap to change</div><div id="fxpath"></div></div>
+ ${GATED.includes(id)?'<div class="fx-sec" id="sec-gate"><div id="fxgate"></div></div>':''}
+ ${m.red?`<div class="fx-sec" id="sec-red"><div class="lab">Red flags</div><div class="red">${m.red}</div></div>`:''}
+ ${TRI_MODS.includes(id)?`<div class="fx-sec" id="sec-tri"><div class="lab">Photo triage</div>${id==='preop'?handoffHTML():''}<div id="fxtri"></div></div>`:''}
+ ${(m.inputs||[]).length?`<div class="fx-sec" id="sec-inputs"><div class="lab">Data inputs · answer steps automatically</div>${inputsHTML(m)}</div>`:''}
+ ${m.look?`<div class="fx-sec"><details class="box"><summary>What to look for</summary><div class="inner look">${m.look.map(([h,l])=>`<h4>${esc(h)}</h4><ul>${l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`).join('')}</div></details></div>`:''}
+ ${m.refs.length?`<div class="fx-sec"><details class="box"><summary>Sources <em>${m.refs.length}</em></summary><div class="inner">${m.refs.map(k=>{const s=SRC[k];return`<div class="src"><a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a><span>${esc(s.v)}</span></div>`}).join('')}</div></details></div>`:''}
+ <div class="fx-sec"><p class="caveat" style="margin:0">${esc(m.caveat)}</p></div>
+ <div class="fx-sec fx-tools"><span id="fxhc">${hcHTML()}</span><button data-reset>Reset this decision</button><button data-goasmt>Assessment${(S.asmt||[]).length?` · ${S.asmt.length}`:''}</button><button data-atab="io">Intraop</button><button data-newpt>New patient</button></div>
+ ${fbHTML(m.title)}</div></section>`}
+function fxSync(m){const w=walk(m),c=document.getElementById('fxc');if(c)c.textContent=fxCount(m,w);
+ const ch=document.getElementById('fxchips');if(ch)ch.innerHTML=fxChips(m);
+ const cr=document.getElementById('fxcrit');if(cr)cr.innerHTML=critHTML(m,w);
+ const pa=document.getElementById('fxpath');if(pa)pa.innerHTML=pathHTML(m,w);
+ const g=document.getElementById('fxgate');if(g)g.innerHTML=gateHTML(m.id);
+ const t=document.getElementById('fxtri');if(t)t.innerHTML=triBannerHTML(m.id)}
+function setDrawer(on,sec){S.drOpen=!!on;const sh=document.getElementById('fxsheet');if(!sh)return;
+ sh.classList.toggle('open',S.drOpen);const b=document.getElementById('fxbody'),h=sh.querySelector('.fx-handle'),sc=document.querySelector('.fx-scrim');
+ if(b){if(S.drOpen)b.removeAttribute('inert');else b.setAttribute('inert','')}
+ if(h){h.setAttribute('aria-expanded',S.drOpen);const cv=h.querySelector('.chev');if(cv)cv.textContent=S.drOpen?'▾':'▴'}
+ if(sc)sc.hidden=!S.drOpen;
+ if(S.drOpen&&sec){const el=document.getElementById('sec-'+sec);if(el&&b){b.scrollTop=Math.max(0,el.offsetTop-b.offsetTop-4)}const d=el&&el.querySelector('details');if(d)d.open=true}}
+/* Back one node: undo the most recent answer the clinician gave on the current path (auto-answered steps are recomputed, not undone). No answers left → module list. */
+function backStep(){const id=S.mod;if(!id||S.view!=='mod')return false;const m=M(id),w=walk(m);
+ const man=w.steps.filter(s=>!s.note&&s.val!==undefined&&!s.auto),last=man[man.length-1];
+ if(!last){home();return false}
+ const before=planBeforeEdit();delete (S.ans[id]||{})[last.id];recordPlanEdit(before,'screen:'+id+':'+last.id);refresh();return true}
 function calcs(m){
  const r=R(m.id);const sb=document.getElementById('calc-sb');
  if(sb){sb.hidden=r.sb==null;sb.textContent=r.sb!=null?`STOP-Bang ${r.sb}/8 · ${r.sbCat} OSA risk`:''}
  const t=document.getElementById('calc-tmd');
  if(t){const bits=[];if(r.cpi!=null)bits.push(`CPI ${r.cpi}`);if(r.grade)bits.push(`GCPS grade ${r.grade}`);if(r.phq!=null)bits.push(`PHQ-4 ${r.phq} (${r.phqBand})`);if(r.joint)bits.push('severe joint limitation');t.hidden=!bits.length;t.textContent=bits.join(' · ')}
 }
-function refresh(){const m=M(S.mod);document.getElementById('flow').innerHTML=flowHTML(m);calcs(m)}
+function refresh(){const m=M(S.mod);document.getElementById('flow').innerHTML=flowHTML(m);calcs(m);fxSync(m)}
 function open(id){
- const m=M(id);if(!m)return home();S.mod=id;
- app.innerHTML=`<div class="bar"><button class="icon-btn back" data-home aria-label="All decisions">‹</button><h2>${esc(m.title)}</h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button><button class="icon-btn" data-reset>Reset</button></div>
- ${gateHTML(id)}
- ${m.red?`<div class="red">${m.red}</div>`:''}
- ${id==='preop'?handoffHTML():''}
- ${inputsHTML(m)}
- <div id="flow"></div>
- <p class="caveat">${esc(m.caveat)}</p>
- ${m.look?`<details class="box"><summary>What to look for</summary><div class="inner look">${m.look.map(([h,l])=>`<h4>${esc(h)}</h4><ul>${l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`).join('')}</div></details>`:''}
- ${m.refs.length?`<details class="box"><summary>Sources <em>${m.refs.length}</em></summary><div class="inner">${m.refs.map(k=>{const s=SRC[k];return`<div class="src"><a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a><span>${esc(s.v)}</span></div>`}).join('')}</div></details>`:''}${fbHTML(m.title)}`;
- refresh();window.scrollTo(0,0);S.view='mod';S.fid=null;
- try{history.replaceState(null,'','#'+id)}catch(e){}updBar();
+ const m=M(id);if(!m)return home();S.mod=id;S.drOpen=false;S.retMod=null;
+ app.innerHTML=`<header class="bar fx-hd"><button class="fx-ib" data-back aria-label="Back one step">‹</button><div class="fx-t"><h2>${esc(m.title)}</h2><div class="fx-c" id="fxc" aria-live="polite"></div></div><button class="fx-sos" data-view="emergency" aria-label="Emergency protocols (SOS)">SOS</button></header>
+ <main class="fx" id="fx"><div class="fx-chips" id="fxchips"></div><div id="flow" class="fx-flow"></div></main>${drawerHTML(m)}`;
+ S.view='mod';refresh();window.scrollTo(0,0);S.fid=null;
+ /* A triage message (error or old-link notice) opens the drawer at the paste box so it is not hidden. */
+ if(id==='preop'&&S.triErr)setDrawer(true,'tri');
+ try{history.replaceState(null,'','#'+id);history.pushState({cs:1},'','#'+id)}catch(e){}updBar();
 }
 
 function planText(m,w){const L=[`OMS Compass v${VER} · ${m.title} (decision support)`];
@@ -2444,7 +2570,11 @@ app.addEventListener('click',e=>{
 
  if(b.dataset.lkuse||b.dataset.lkkeep){const before=planBeforeEdit();const k=b.dataset.lkuse||b.dataset.lkkeep,x=(S.lkc||{})[k];if(x){if(b.dataset.lkuse)S.pf[k]=x.next;delete S.lkc[k];recordPlanEdit(before,k)}return redraw()}
  if(b.dataset.pm){setPmode(b.dataset.pm);return home()}
- if(b.dataset.view)return view(b.dataset.view);
+ if(b.hasAttribute('data-hc')){toggleHC();document.querySelectorAll('[data-hc]').forEach(x=>{const on=hcOn();x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);x.textContent=`High contrast (operatory light) · ${on?'on':'off'}`});return}
+ if(b.hasAttribute('data-drclose'))return setDrawer(false);
+ if(b.hasAttribute('data-drawer')){const sec=b.dataset.drawer;return setDrawer(sec?true:!S.drOpen,sec)}
+ if(b.hasAttribute('data-back')){backStep();return}
+ if(b.dataset.view){S.retMod=S.view==='mod'&&S.mod?S.mod:(b.dataset.view==='emergency'||b.dataset.view==='calc')?S.retMod:null;return view(b.dataset.view)}
  if(b.dataset.asa){S.asa=b.dataset.asa==='3'?'3':'12';return rebody()}
  if(b.dataset.rc!=null){const rc=S.rcri=S.rcri||{};rc[b.dataset.rc]=!rc[b.dataset.rc];return rebody()}
  if(b.hasAttribute('data-oncall')){setOnCall(!onCall());return home()}
@@ -2470,8 +2600,8 @@ app.addEventListener('click',e=>{
  const id=S.mod;if(!id)return;
  if(b.hasAttribute('data-copy')){const m=M(id),w=walk(m),t=planText(m,w);try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}
  if(b.hasAttribute('data-reset')){S.ans[id]={};S.inp[id]={};return open(id)}
- if(b.dataset.a){const before=planBeforeEdit();const a=S.ans[id]=S.ans[id]||{};const v=b.dataset.v==='1'?true:b.dataset.v==='u'?'u':false;a[b.dataset.a]=v;recordPlanEdit(before,'screen:'+id+':'+b.dataset.a);refresh();
-  if(!b.closest('.path')){const f=document.getElementById('flow').lastElementChild;f&&f.scrollIntoView({block:'nearest',behavior:'smooth'})}return}
+ if(b.hasAttribute('data-endsess')){S.ans[id]={};S.inp[id]={};return home()}
+ if(b.dataset.a){const before=planBeforeEdit();const a=S.ans[id]=S.ans[id]||{};const v=b.dataset.v==='1'?true:b.dataset.v==='u'?'u':false;a[b.dataset.a]=v;recordPlanEdit(before,'screen:'+id+':'+b.dataset.a);refresh();return}
  const i=S.inp[id]=S.inp[id]||{};
  if(b.dataset.sb){const k='sb_'+b.dataset.sb;i[k]=!i[k];i.sbTouched=true;b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
  if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
@@ -2480,6 +2610,21 @@ app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q'))
 app.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='in-tri'){e.preventDefault();loadTri(e.target.value);open('preop')}});
 app.addEventListener('change',e=>{const el=e.target;if(el.dataset.pfu){const before=planBeforeEdit();if(el.value)S.pf[el.dataset.pfu]=el.value;else delete S.pf[el.dataset.pfu];recordPlanEdit(before,el.dataset.pfu);return redraw()}if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
+
+/* ===== v3.6 gestures: swipe right = back one node; drawer swipe up/down; system back (Android button, Safari edge swipe) = back one node ===== */
+document.addEventListener('click',e=>{if(e.target.closest('.fx-scrim'))setDrawer(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.drOpen)setDrawer(false)});
+let fxT=null;
+document.addEventListener('touchstart',e=>{if(S.view!=='mod'||e.touches.length!==1)return;const t=e.touches[0];
+ fxT={x:t.clientX,y:t.clientY,t:Date.now(),h:!!e.target.closest('.fx-handle'),sheet:!!e.target.closest('.fx-sheet'),field:!!e.target.closest('input,select,textarea,.fx-chips')}},{passive:true});
+document.addEventListener('touchend',e=>{const s0=fxT;fxT=null;if(!s0||S.view!=='mod')return;const t=e.changedTouches[0],dx=t.clientX-s0.x,dy=t.clientY-s0.y,dt=Date.now()-s0.t;
+ if(s0.h){if(dy<-30)setDrawer(true);else if(dy>30)setDrawer(false);return}
+ if(s0.sheet||s0.field||S.drOpen)return;
+ /* x<16: leave the screen edge to the browser's own back swipe, which arrives as popstate below. */
+ if(s0.x>=16&&dx>70&&Math.abs(dy)<dx*.6&&dt<800)backStep()},{passive:true});
+addEventListener('popstate',()=>{if(S.view!=='mod'||!S.mod)return;if(S.drOpen){setDrawer(false)}else backStep();
+ if(S.view==='mod'&&S.mod)try{history.pushState({cs:1},'','#'+S.mod)}catch(x){}});
+applyHC();
 let start=(location.hash||'').slice(1);
 /* Privacy: triage data no longer travels in URLs. An old link is wiped from the address bar unread. */
 const TRI_URL_MSG='Triage links no longer carry data (privacy). Copy the CT1 code from the report and paste it here.';

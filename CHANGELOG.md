@@ -2,6 +2,17 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.6.0 — Oct 25, 2026 (branch `feat/chairside-focus`, pending Steven's review)
+
+- **Chairside focus mode** (all 36 decision modules). One question per screen; question 20 px bold (18 px when long); Yes = filled, No = outlined, both full width, stacked, 56 px tall, in the thumb zone. Unknown kept as a smaller third button (Unknown is never read as No — Oct 23 decision).
+- **Fixed 56 px header:** back one step · title · step counter · red SOS badge. Counter shows a range ("Step 2 of 3–5") because branches differ in length. SOS from a module shows "‹ Back to <module>" with answers kept.
+- **Back one node:** header arrow, swipe right on the screen (edge strip left to the browser), or the system back gesture/button (popstate). Undoes the last answer you gave; auto-answered steps recompute. On the first question, back returns to the module list.
+- **Reference drawer** (tap or swipe up the bottom handle): this step's criteria, your answers (tap to change), medical gate, red flags, photo triage paste, data inputs (CBCT, STOP-Bang, TMD scores), look-fors, sources, caveat, reset, Assessment/Intraop/New patient, high contrast. On-screen chips (gate, red flags, triage, inputs) open the matching section. The bottom Assessment bar is hidden inside modules; the drawer replaces it.
+- **Plan screen:** high-contrast card; long plans scroll inside the card; Copy note and End session (clears this decision, returns to the list) pinned at the bottom.
+- **High-contrast mode (WCAG AAA):** black on white; every text token ≥7:1 (tested); SOS badge 8.8:1. Toggle in Settings and the drawer; follows the phone's "Increase contrast" setting unless switched off. Stored as a setting (`omsCompassContrast`), not patient data.
+- Column capped at 430 px; laid out for 360–430 px phones.
+- Tests: 347 browser checks (30 new: header, one question per screen, all 142 question screens fit one viewport at 360/390/430 px with no page scroll, back arrow/swipe/system back, node update <100 ms with no reload, drawer, SOS return, AAA contrast). Two older tests updated to open the drawer (Intraop button, triage paste).
+
 ## v3.5.1 — Oct 25, 2026 (branch `fix/min-font-12px`, pending Steven's review)
 
 - **Readability.** Smallest text — verify tags, source badges, section labels, table headers, offline badge — raised from 10–11 px to 12 px (8 CSS rules) for chairside glare. No content or logic changes.
