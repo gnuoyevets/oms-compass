@@ -8,8 +8,8 @@ Newest first. Every change is reviewed by Steven before publishing. The app show
 - **Procedure FAQs (8):** wisdom teeth removal, dental implants, bone grafting/socket preservation, sinus lift, full-arch (teeth in a day), IV sedation, biopsy, exposure of an impacted canine.
 - **Diagnosis FAQs (7):** dry socket, tooth infection/facial swelling, numbness after surgery, sinus opening after upper extraction, TMD, MRONJ (bone medicines), peri-implantitis.
 - English and Español (drafted by Claude; Spanish pending review). Kriolu and 中文 show English with a note. Share by text like the handouts: practice phone appended, no review link; Colleague mode uses the neutral header. Each FAQ cites existing Compass sources. Search finds them.
-- Not yet on the standalone /handouts/ page.
-- Tests: 354 browser checks (7 new); reconciliation suite passes.
+- **Patient page (/handouts/)** renamed "Patient information"; home lists After surgery · About your procedure · About your diagnosis. Each FAQ has its own link for texting or QR codes (e.g. `#fwis-en`, `#fao-es`); `?site=bayside` works as before. Kriolu/中文 show English FAQs with a note (section labels and note machine-drafted, pending native review). Emergency answers highlighted in red. No review request on FAQ pages.
+- Tests: 359 browser checks (12 new), including a check that post-op and FAQ text on /handouts/ is identical to Compass; reconciliation suite passes.
 
 ## v3.6.0 — Oct 25, 2026 (approved by Steven Oct 25, 2026; merged to main)
 

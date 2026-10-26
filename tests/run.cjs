@@ -161,6 +161,15 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(fq.par&&fq.src&&fq.uniq,'FAQs: EN/ES question counts match, sources resolve, ids unique');
  await E(page,()=>home());await page.fill('#in-q','dry socket');ok(await page.locator('#hits [data-ho="fao"]').count()===1,'Search reaches the dry socket FAQ');
  const ft=await E(page,()=>{S.site='young';return faqText(FAQ.find(f=>f.id==='fwis'),'es')});ok(/^Extracción de muelas del juicio/.test(ft)&&/Teléfono: \(401\) 273-7802$/.test(ft),'FAQ share text in Spanish with office phone');
+ // Standalone patient page (/handouts/) mirrors Compass text
+ const cmp=await E(page,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i}))}));
+ const hp=await ctx.newPage();hp.on('pageerror',e=>{fail++;fails.push('handouts pageerror: '+e.message)});await hp.route(/^https?:\/\//,r=>r.abort());
+ await hp.goto(FILE.replace(/index\.html$/,'handouts/index.html')+'#-en');await hp.waitForSelector('.card');
+ ok(await E(hp,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i}))}))===cmp,'Handouts page: post-op and FAQ text identical to Compass');
+ ok(await hp.locator('.card').count()===20&&await hp.locator('h3.sec').count()===3,'Handouts page home lists 5 instructions + 15 FAQs in 3 sections');
+ await E(hp,()=>{location.hash='#fao-es'});await hp.waitForSelector('.qa');ok(/Alveolitis seca/.test(await hp.locator('h2').innerText())&&await hp.locator('.qa h3').count()===5,'Handouts page: FAQ link #fao-es opens Spanish dry socket FAQ');
+ await E(hp,()=>{location.hash='#finf-zh'});await hp.waitForFunction(()=>/Tooth infection/.test(document.querySelector('h2')?.textContent||''));ok(/英文和西班牙文/.test(await hp.locator('#app').innerText())&&await hp.locator('.qa p.warn').count()===1,'Handouts page: 中文 FAQ falls back to English with note; 911 answer highlighted');
+ ok(await E(hp,()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Handouts page FAQ: no horizontal scroll');await hp.close();
  ok(await E(page,()=>{S.lang='zh';view('handouts');const ok=/English shown/.test(document.getElementById('vbody').textContent)&&/Wisdom teeth removal/.test(document.getElementById('ho-fwis').textContent);S.lang='en';return ok}),'中文: FAQs fall back to English with a note');
 
  console.log('9. Basis, assumptions and review status shown');

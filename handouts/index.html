@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>After Your Surgery</title>
-<meta name="description" content="Post-operative instructions in English, Spanish, Cape Verdean Kriolu and Chinese.">
+<title>Patient Information</title>
+<meta name="description" content="Post-operative instructions and patient FAQs in English, Spanish, Cape Verdean Kriolu and Chinese.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#f5f7f3">
 <link rel="icon" href="../icon-192.png">
@@ -36,6 +36,11 @@ li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--re
 .rev p{margin:0 0 10px}
 .rev a{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:12px;border:1px solid var(--accent);color:var(--accent);font-weight:700;text-decoration:none}
 .note{font-size:14px;color:var(--muted);margin-top:22px}
+@media print{.qa p.warn{background:none;color:#000;border:1px solid #000}}
+h3.sec{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:22px 0 8px}
+.qa h3{font-size:18px;margin:18px 0 4px}
+.qa p{margin:0}
+.qa p.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:10px;padding:10px 12px;font-weight:600}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media print{.rev{border:1px solid #000}.rev a{border:0;justify-content:flex-start;min-height:0;color:#000}.rev a::after{content:' — ' attr(href);font-weight:400}body{background:#fff;color:#000;font-size:13pt}.lang,.back,.row,.noprint{display:none!important}.call{background:none;color:#000;justify-content:flex-start;margin:8px 0;padding:0;min-height:0}li.warn{background:none;color:#000;border:1px solid #000}}
 </style>
@@ -73,22 +78,179 @@ en:["A responsible adult must take you home and stay with you for the rest of th
 es:["Un adulto responsable debe llevarlo a casa y quedarse con usted el resto del día (al menos 4 horas).","Hasta mañana por la mañana: no maneje, no use maquinaria, no cocine en la estufa, ni tome decisiones importantes o firme documentos. No tome alcohol por 24 horas. No maneje mientras tome analgésicos opioides.","No cuide solo a niños pequeños hoy.","Empiece con sorbos de líquidos claros y luego comida ligera. Si tiene náuseas, tome sorbos pequeños; el ginger ale puede ayudar.","Descanse con la cabeza elevada. Puede sentirse con sueño u olvidadizo hoy.","Es normal un pequeño moretón donde estuvo el suero. Llámenos si hay una línea roja y dolorosa o hinchazón en el brazo.","Llame al 911 si: le cuesta respirar, no se puede despertar o tiene dolor en el pecho."],
 kea:["Un adultu rasponsável ten ki leba-bu kasa i fika ku bu resta di dia (pelo menus 4 ora).","Ti amanhan di palmanhan: ka bu kondus, ka bu uza mákina, ka bu kuzinha na fogon, nen ka bu toma disizon importanti o sina dokumentu. Ka bu bebe álkool pa 24 ora. Ka bu kondus enkuantu bu sta ta toma rémédiu pa dor opioidi.","Oji ka bu toma konta di mininu pikinoti sozinhu.","Kumesa ku golinhu di líkidu klaru, dipôs kumida leve. Si bu sta ku nóziu, bebe golinhu pikinoti; ginger ale pode djuda.","Diskansa ku kabesa altu. Oji bu pode xinti ku sonu o skesedu.","Un manxa roxu pikinoti na lugar di soru é normal. Txoma-nu si bu tene un risku burmedju ki ta dói o inxason na brasu.","Txoma 911 si: difikuldadi di rispira, ka ta kunsigi korda, o dor na pextu."],
 zh:["必须由一名负责任的成年人送您回家，并在当天余下时间陪伴您（至少4小时）。","到明天早上之前：不要开车、操作机器、用炉灶做饭，也不要做重要决定或签署文件。24小时内不要饮酒。服用阿片类止痛药期间不要开车。","今天不要独自照顾幼儿。","先小口喝清澈的液体，再吃清淡的食物。如有恶心，请小口慢喝；姜汁汽水可能有帮助。","休息时垫高头部。今天您可能会感到困倦或健忘。","静脉输液处有小块淤青是正常的。如手臂出现发红、疼痛的条纹或肿胀，请致电我们。","请拨打911：呼吸困难、叫不醒，或胸痛。"]}}];
+/* FAQs: same text as Compass FAQ (sources live there). EN/ES only; other languages show English. */
+const FAQ=[
+{id:"fwis",k:"proc",t:{en:"Wisdom teeth removal",es:"Extracción de muelas del juicio"},i:{
+en:[["Why remove them?","Wisdom teeth often lack room to come in. They can cause infection, decay or gum disease in the tooth next to them, or cysts. We recommend removal when there is a problem now or a high chance of one later."],
+["Is there a best age?","Usually the late teens or early twenties. Roots are shorter and bone is softer, so healing is faster and nerve risk is lower."],
+["Will I be awake?","You choose with us: local numbing only, or IV sedation so you are relaxed and remember little."],
+["How long is recovery?","Swelling peaks on day 2–3. Most people return to school or work in 3–5 days. Soft food for about 2 weeks."],
+["What are the risks?","Swelling, bruising and dry socket are the most common. Lower teeth sit near a nerve; numbness of the lip, chin or tongue can occur and is usually temporary. Upper teeth sit near the sinus. We will review your own risk from your X-rays."]],
+es:[["¿Por qué sacarlas?","Las muelas del juicio a menudo no tienen espacio para salir. Pueden causar infección, caries o enfermedad de las encías en la muela de al lado, o quistes. Recomendamos sacarlas cuando ya hay un problema o hay mucha probabilidad de que lo haya."],
+["¿Hay una edad ideal?","Por lo general, al final de la adolescencia o a principios de los 20 años. Las raíces son más cortas y el hueso más blando, así que se sana más rápido y hay menos riesgo para el nervio."],
+["¿Estaré despierto?","Usted decide con nosotros: solo anestesia local, o sedación intravenosa para estar relajado y recordar poco."],
+["¿Cuánto dura la recuperación?","La hinchazón es mayor el día 2–3. La mayoría vuelve a la escuela o al trabajo en 3–5 días. Comida blanda por unas 2 semanas."],
+["¿Cuáles son los riesgos?","Lo más común es hinchazón, moretones y alveolitis seca. Las muelas de abajo están cerca de un nervio; puede haber adormecimiento del labio, la barbilla o la lengua, que por lo general es temporal. Las de arriba están cerca del seno. Revisaremos su riesgo en sus radiografías."]]}},
+{id:"fimp",k:"proc",t:{en:"Dental implants",es:"Implantes dentales"},i:{
+en:[["What is an implant?","A small titanium or zirconia post placed in the jawbone. It acts like a tooth root and holds a crown, bridge or denture."],
+["Does it hurt?","Most people say it hurts less than a tooth removal. Over-the-counter pain medicine is usually enough for 2–3 days."],
+["How long until I get my tooth?","The bone usually needs about 2–6 months to bond to the implant. Sometimes a temporary tooth is placed the same day. Your plan depends on bone quality and how firm the implant is at surgery."],
+["How long do implants last?","Most last many years. Daily cleaning, regular checkups and not smoking give the best chance."],
+["Who is at higher risk of problems?","People who smoke, have poorly controlled diabetes, grind their teeth, or have past gum disease. Tell us about bone or cancer medicines and head and neck radiation."]],
+es:[["¿Qué es un implante?","Un pequeño poste de titanio o zirconio que se coloca en el hueso. Funciona como la raíz de un diente y sostiene una corona, un puente o una dentadura."],
+["¿Duele?","La mayoría dice que duele menos que una extracción. Por lo general bastan analgésicos sin receta por 2–3 días."],
+["¿Cuánto falta para tener mi diente?","El hueso suele tardar unos 2–6 meses en unirse al implante. A veces se coloca un diente provisional el mismo día. Su plan depende de la calidad del hueso y de qué tan firme quede el implante en la cirugía."],
+["¿Cuánto duran los implantes?","La mayoría dura muchos años. Limpiarlos a diario, ir a sus controles y no fumar da la mejor probabilidad."],
+["¿Quién tiene más riesgo de problemas?","Las personas que fuman, tienen diabetes mal controlada, aprietan o rechinan los dientes, o han tenido enfermedad de las encías. Avísenos si toma medicinas para los huesos o el cáncer, o si recibió radiación en la cabeza o el cuello."]]}},
+{id:"fgraft",k:"proc",t:{en:"Bone grafting and socket preservation",es:"Injerto óseo y preservación del alvéolo"},i:{
+en:[["Why do I need a graft?","After a tooth is removed, the bone shrinks. A graft keeps or rebuilds bone so an implant can be placed later."],
+["Where does the graft come from?","It may be your own bone, donor bone, animal bone, or a synthetic material. Donor and animal grafts are processed and sterilized. We will tell you which we used."],
+["Is it normal for grains to come out?","Yes. A few sand-like grains in the first days are normal. Call us if a large amount comes out or the site opens wide."],
+["How long does it take to heal?","Usually about 3–6 months before an implant, depending on the size of the graft."]],
+es:[["¿Por qué necesito un injerto?","Después de sacar un diente, el hueso se encoge. El injerto mantiene o reconstruye el hueso para poder colocar un implante más adelante."],
+["¿De dónde viene el injerto?","Puede ser hueso propio, hueso de donante, hueso de origen animal o un material sintético. Los de donante y origen animal se procesan y esterilizan. Le diremos cuál usamos."],
+["¿Es normal que salgan granitos?","Sí. Unos granitos como arena en los primeros días es normal. Llámenos si sale mucho o la herida se abre bastante."],
+["¿Cuánto tarda en sanar?","Por lo general unos 3–6 meses antes del implante, según el tamaño del injerto."]]}},
+{id:"fsinus",k:"proc",t:{en:"Sinus lift",es:"Elevación de seno"},i:{
+en:[["What is a sinus lift?","The sinus is an air space above the upper back teeth. When bone there is too thin, we gently lift the sinus lining and add bone graft so an implant has enough support."],
+["Will it affect my breathing or nose?","A stuffy nose or a little blood from the nose for a few days is common. Follow the sinus precautions in your instructions: do not blow your nose and sneeze with your mouth open."],
+["How long before the implant?","Sometimes the implant goes in the same day. Otherwise the graft heals for several months first."],
+["When should I call?","Call for fever, worsening sinus pain or pressure after day 3, thick bad-smelling nasal drainage, or graft grains coming from your nose."]],
+es:[["¿Qué es una elevación de seno?","El seno es un espacio con aire arriba de las muelas de arriba. Si el hueso ahí es muy delgado, levantamos con cuidado la membrana del seno y ponemos injerto para que el implante tenga apoyo."],
+["¿Afectará mi nariz o mi respiración?","Es común tener la nariz tapada o sangrar un poco por la nariz unos días. Siga las precauciones de seno de sus instrucciones: no se suene la nariz y estornude con la boca abierta."],
+["¿Cuánto falta para el implante?","A veces el implante se coloca el mismo día. Si no, el injerto sana primero por varios meses."],
+["¿Cuándo debo llamar?","Llame si tiene fiebre, dolor o presión del seno que empeora después del día 3, secreción nasal espesa con mal olor, o granitos del injerto saliendo por la nariz."]]}},
+{id:"farch",k:"proc",t:{en:"Full-arch implants (teeth in a day)",es:"Implantes de arcada completa (dientes en un día)"},i:{
+en:[["What happens on surgery day?","Remaining failing teeth are removed and usually 4–6 implants are placed. In most cases a fixed temporary bridge is attached the same day."],
+["Can I take the teeth out?","No. They are fixed to the implants. Only we remove them, for checks and cleaning."],
+["When do I get my final teeth?","After the implants heal, usually about 3–6 months. Until then, follow the soft diet so the implants are not overloaded."],
+["Will it look and feel natural?","Speech and bite feel different for a few weeks, then most people adapt. The final bridge is shaped to your face and smile."],
+["How do I keep them for life?","Clean under the bridge daily, wear a night guard if we give you one, do not smoke, and keep every maintenance visit."]],
+es:[["¿Qué pasa el día de la cirugía?","Se sacan los dientes que están fallando y por lo general se colocan 4–6 implantes. En la mayoría de los casos se fija un puente provisional el mismo día."],
+["¿Puedo quitarme los dientes?","No. Están fijos a los implantes. Solo nosotros los quitamos, para revisar y limpiar."],
+["¿Cuándo recibo mis dientes definitivos?","Cuando sanen los implantes, por lo general en unos 3–6 meses. Mientras tanto, siga la dieta blanda para no sobrecargar los implantes."],
+["¿Se verán y sentirán naturales?","El habla y la mordida se sienten diferentes por unas semanas; después la mayoría se acostumbra. El puente final se diseña según su cara y su sonrisa."],
+["¿Cómo los cuido de por vida?","Limpie debajo del puente cada día, use el protector nocturno si se lo damos, no fume y no falte a sus citas de mantenimiento."]]}},
+{id:"fsed",k:"proc",t:{en:"IV sedation",es:"Sedación intravenosa"},i:{
+en:[["Is IV sedation general anesthesia?","No. Medicine through a small IV in your arm makes you deeply relaxed and drowsy. You breathe on your own, and most people remember little of the procedure."],
+["How am I monitored?","We check your breathing, oxygen level, heart rate and blood pressure throughout, with emergency equipment ready."],
+["Why can’t I eat beforehand?","An empty stomach lowers the risk of food or liquid entering the lungs. Follow the fasting times on your “Before IV sedation” sheet."],
+["Why do I need a driver?","Sedation affects judgment and reaction time for the rest of the day, even if you feel fine. A responsible adult must take you home."],
+["Who should tell us more before sedation?","Tell us about sleep apnea, heart or lung disease, pregnancy, past anesthesia problems, and all medicines, especially blood thinners and weekly diabetes or weight-loss injections."]],
+es:[["¿La sedación intravenosa es anestesia general?","No. La medicina por un pequeño suero en el brazo lo relaja mucho y le da sueño. Usted respira solo, y la mayoría recuerda poco del procedimiento."],
+["¿Cómo me vigilan?","Revisamos su respiración, nivel de oxígeno, pulso y presión arterial todo el tiempo, con equipo de emergencia listo."],
+["¿Por qué no puedo comer antes?","Con el estómago vacío hay menos riesgo de que comida o líquido pase a los pulmones. Siga los horarios de ayuno de su hoja “Antes de la sedación intravenosa”."],
+["¿Por qué necesito quien me lleve?","La sedación afecta el juicio y los reflejos el resto del día, aunque se sienta bien. Un adulto responsable debe llevarlo a casa."],
+["¿Qué debo contarles antes de la sedación?","Avísenos si tiene apnea del sueño, enfermedad del corazón o de los pulmones, embarazo, problemas con anestesia antes, y todas sus medicinas, sobre todo anticoagulantes e inyecciones semanales para la diabetes o para bajar de peso."]]}},
+{id:"fbx",k:"proc",t:{en:"Biopsy",es:"Biopsia"},i:{
+en:[["What is a biopsy?","We remove a small piece of tissue, or the whole spot if it is small, and send it to a pathologist who examines it under a microscope."],
+["Does it mean I have cancer?","No. Most mouth biopsies are not cancer. A biopsy is the only way to know for sure what a spot is."],
+["What is recovery like?","Mild soreness for a few days. Stitches usually dissolve in 1–2 weeks. Avoid spicy, hot or crunchy food near the site."],
+["When will I get results?","Usually in about 1–2 weeks. We will contact you to explain them and the next steps. Call us if you have not heard from us in 2 weeks."]],
+es:[["¿Qué es una biopsia?","Sacamos un pedacito de tejido, o toda la lesión si es pequeña, y lo enviamos a un patólogo que lo examina con microscopio."],
+["¿Significa que tengo cáncer?","No. La mayoría de las biopsias de la boca no son cáncer. La biopsia es la única forma de saber con certeza qué es una lesión."],
+["¿Cómo es la recuperación?","Un poco de dolor por unos días. Los puntos por lo general se disuelven en 1–2 semanas. Evite comida picante, caliente o crujiente cerca de la zona."],
+["¿Cuándo tendré los resultados?","Por lo general en 1–2 semanas. Lo llamaremos para explicarle los resultados y los siguientes pasos. Llámenos si no sabe de nosotros en 2 semanas."]]}},
+{id:"fcan",k:"proc",t:{en:"Exposure of an impacted canine",es:"Exposición de un canino retenido"},i:{
+en:[["Why is this needed?","The eye tooth (canine) is stuck in the bone and will not come in on its own. We uncover it so your orthodontist can guide it into place."],
+["What happens during surgery?","We uncover the tooth and usually attach a small bracket with a thin chain. The chain is tied to your braces."],
+["How long does it take to come in?","Your orthodontist moves the tooth slowly, usually over several months to a year."],
+["When should I call?","Call us or your orthodontist if the chain or bracket comes loose, or for swelling or fever after day 3."]],
+es:[["¿Por qué se necesita?","El colmillo (canino) está atrapado en el hueso y no saldrá solo. Lo descubrimos para que su ortodoncista lo guíe a su lugar."],
+["¿Qué pasa en la cirugía?","Descubrimos el diente y por lo general pegamos un pequeño bracket con una cadenita delgada. La cadenita se amarra a los frenos."],
+["¿Cuánto tarda en salir?","Su ortodoncista mueve el diente poco a poco, por lo general en varios meses a un año."],
+["¿Cuándo debo llamar?","Llámenos a nosotros o a su ortodoncista si la cadenita o el bracket se suelta, o si hay hinchazón o fiebre después del día 3."]]}},
+{id:"fao",k:"dx",t:{en:"Dry socket",es:"Alveolitis seca (alvéolo seco)"},i:{
+en:[["What is a dry socket?","The blood clot in the socket breaks down or is lost too early, leaving bone exposed. It is irritated bone, not an infection."],
+["What does it feel like?","Pain that gets worse instead of better, usually 2–4 days after removal. It often spreads to the ear. There may be a bad taste or smell."],
+["Who gets it?","It is most common after lower wisdom teeth. Smoking, vaping and a hard removal raise the risk."],
+["How is it treated?","We gently clean the socket and may place a soothing medicated dressing. Pain usually eases within a day. Antibiotics are usually not needed."],
+["How long does it last?","With care, most heal over 1–2 weeks. It does not cause lasting harm."]],
+es:[["¿Qué es la alveolitis seca?","El coágulo del alvéolo se deshace o se pierde antes de tiempo y el hueso queda expuesto. Es hueso irritado, no una infección."],
+["¿Cómo se siente?","Dolor que empeora en vez de mejorar, por lo general 2–4 días después de la extracción. A menudo se extiende al oído. Puede haber mal sabor o mal olor."],
+["¿A quién le da?","Es más común después de sacar muelas del juicio de abajo. Fumar, vapear y una extracción difícil aumentan el riesgo."],
+["¿Cómo se trata?","Limpiamos el alvéolo con cuidado y podemos poner un apósito con medicina que calma. El dolor suele bajar en un día. Por lo general no se necesitan antibióticos."],
+["¿Cuánto dura?","Con cuidado, la mayoría sana en 1–2 semanas. No deja daño permanente."]]}},
+{id:"finf",k:"dx",t:{en:"Tooth infection and facial swelling",es:"Infección dental e hinchazón de la cara"},i:{
+en:[["Why do I need a procedure, not just antibiotics?","Antibiotics do not reach the source. The infection returns unless the tooth is treated (root canal or removal) and any pus is drained."],
+["Are antibiotics always needed?","No. They help when infection is spreading or you have a fever. If prescribed, take them exactly as directed."],
+["How fast will I improve?","Most people feel better within 2–3 days of treatment. Swelling can take a week to go away."],
+["When is it an emergency?","Go to the emergency room or call 911 for trouble breathing or swallowing, swelling under the tongue or in the neck, an eye swelling shut, or a high fever with feeling very ill."]],
+es:[["¿Por qué necesito un procedimiento y no solo antibióticos?","Los antibióticos no llegan al origen. La infección regresa si no se trata el diente (endodoncia o extracción) y no se drena el pus."],
+["¿Siempre se necesitan antibióticos?","No. Ayudan cuando la infección se está extendiendo o tiene fiebre. Si se los recetan, tómelos tal como se indica."],
+["¿Qué tan rápido mejoraré?","La mayoría se siente mejor en 2–3 días después del tratamiento. La hinchazón puede tardar una semana en bajar."],
+["¿Cuándo es una emergencia?","Vaya a la sala de emergencias o llame al 911 si tiene dificultad para respirar o tragar, hinchazón debajo de la lengua o en el cuello, un ojo que se cierra por la hinchazón, o fiebre alta y se siente muy mal."]]}},
+{id:"fnerve",k:"dx",t:{en:"Numbness after surgery",es:"Adormecimiento después de la cirugía"},i:{
+en:[["Why is my lip, chin or tongue still numb?","A nerve near the surgery was bruised or stretched. This can happen even when surgery goes well."],
+["Will it come back?","Most numbness improves over weeks to months. Permanent numbness is uncommon."],
+["What should I do?","Take care not to bite or burn the numb area. Tell us right away. We will test the feeling and follow you closely."],
+["What if it is not improving?","If feeling has not started to return within the first few months, we may send you to a nerve specialist. Some nerves can be repaired, and earlier referral gives the best chance."]],
+es:[["¿Por qué sigo con el labio, la barbilla o la lengua dormidos?","Un nervio cerca de la cirugía se golpeó o se estiró. Esto puede pasar aunque la cirugía salga bien."],
+["¿Volverá la sensibilidad?","La mayoría mejora en semanas o meses. El adormecimiento permanente es poco común."],
+["¿Qué debo hacer?","Cuídese de no morder ni quemar la zona dormida. Avísenos de inmediato. Revisaremos la sensibilidad y le daremos seguimiento de cerca."],
+["¿Y si no mejora?","Si la sensibilidad no empieza a volver en los primeros meses, podemos enviarlo con un especialista en nervios. Algunos nervios se pueden reparar, y referirlo a tiempo da la mejor probabilidad."]]}},
+{id:"foac",k:"dx",t:{en:"Sinus opening after an upper tooth removal",es:"Comunicación con el seno después de sacar un diente de arriba"},i:{
+en:[["What happened?","The roots of upper back teeth can sit right next to the sinus. Removing the tooth can leave a small opening between the mouth and the sinus."],
+["Will it close?","Small openings usually close on their own. Larger ones are closed with a small procedure, often the same day."],
+["What precautions should I take?","For 2 weeks: do not blow your nose, sneeze with your mouth open, no straws, no smoking, and no flying unless we say it is OK."],
+["When should I call?","Call if liquid comes out of your nose when you drink, air passes between mouth and nose, or you have bad-smelling nasal drainage or worsening sinus pain."]],
+es:[["¿Qué pasó?","Las raíces de las muelas de arriba pueden estar junto al seno. Al sacar el diente puede quedar una pequeña comunicación entre la boca y el seno."],
+["¿Se cerrará?","Las comunicaciones pequeñas suelen cerrarse solas. Las grandes se cierran con un pequeño procedimiento, a menudo el mismo día."],
+["¿Qué precauciones debo tomar?","Por 2 semanas: no se suene la nariz, estornude con la boca abierta, no use popotes (pajillas), no fume, y no viaje en avión a menos que le digamos que puede."],
+["¿Cuándo debo llamar?","Llame si sale líquido por la nariz al beber, pasa aire entre la boca y la nariz, o tiene secreción nasal con mal olor o dolor del seno que empeora."]]}},
+{id:"ftmd",k:"dx",t:{en:"Jaw joint and muscle pain (TMD)",es:"Dolor de la articulación y los músculos de la mandíbula (TTM)"},i:{
+en:[["What is TMD?","Pain or clicking in the jaw joint (TMJ) and chewing muscles. It is common and usually not serious."],
+["Will it get better?","Most people improve with simple self-care over weeks to months. It can come and go, often with stress or clenching."],
+["What helps?","Soft food, small bites, no gum. Warm or cool packs. Keep teeth apart and jaw relaxed. Gentle stretches we show you. Short-term pain relievers if safe for you."],
+["What else can be done?","A night guard, physical therapy, and help with stress, sleep or clenching. Surgery is rarely needed."],
+["When should I call?","Call if your jaw locks open or closed, your bite suddenly changes, or pain is severe or getting worse."]],
+es:[["¿Qué es el TTM?","Dolor o chasquidos en la articulación de la mandíbula (ATM) y los músculos de masticar. Es común y por lo general no es grave."],
+["¿Va a mejorar?","La mayoría mejora con cuidados sencillos en semanas o meses. Puede ir y venir, a menudo con estrés o al apretar los dientes."],
+["¿Qué ayuda?","Comida blanda, bocados pequeños, nada de chicle. Compresas tibias o frías. Mantenga los dientes separados y la mandíbula relajada. Estiramientos suaves que le enseñemos. Analgésicos por poco tiempo si son seguros para usted."],
+["¿Qué más se puede hacer?","Un protector nocturno, fisioterapia y ayuda con el estrés, el sueño o el hábito de apretar. La cirugía rara vez se necesita."],
+["¿Cuándo debo llamar?","Llame si la mandíbula se traba abierta o cerrada, la mordida cambia de repente, o el dolor es fuerte o empeora."]]}},
+{id:"fmronj",k:"dx",t:{en:"Bone medicines and jaw bone health (MRONJ)",es:"Medicinas para los huesos y salud del hueso de la mandíbula (MRONJ)"},i:{
+en:[["What is MRONJ?","Exposed jaw bone that does not heal for more than 8 weeks in someone who takes, or took, certain bone or cancer medicines."],
+["Which medicines?","Bone medicines such as Fosamax (alendronate), Boniva, Reclast or Zometa (zoledronic acid), Prolia or Xgeva (denosumab), and some cancer drugs that block blood vessel growth."],
+["How likely is it?","At osteoporosis doses the risk is low. It is higher with the stronger doses used for cancer."],
+["Should I stop my medicine before surgery?","Do not stop it on your own. These medicines protect you from fractures or cancer problems. Your prescribing doctor and surgeon will decide together."],
+["How can I lower my risk?","Tell every dentist about these medicines. Get needed dental work done before starting them when possible, and keep up with cleanings and good home care. Report any exposed bone, sore spot or loose tooth."]],
+es:[["¿Qué es la MRONJ?","Hueso expuesto en la mandíbula que no sana por más de 8 semanas en alguien que toma, o tomó, ciertas medicinas para los huesos o el cáncer."],
+["¿Qué medicinas?","Medicinas para los huesos como Fosamax (alendronato), Boniva, Reclast o Zometa (ácido zoledrónico), Prolia o Xgeva (denosumab), y algunos medicamentos para el cáncer que bloquean el crecimiento de vasos sanguíneos."],
+["¿Qué tan probable es?","Con las dosis para la osteoporosis el riesgo es bajo. Es mayor con las dosis más fuertes que se usan para el cáncer."],
+["¿Debo dejar mi medicina antes de la cirugía?","No la deje por su cuenta. Estas medicinas lo protegen de fracturas o de problemas del cáncer. Su médico y su cirujano lo decidirán juntos."],
+["¿Cómo bajo mi riesgo?","Avísele a todo dentista que toma estas medicinas. Si es posible, hágase el trabajo dental necesario antes de empezarlas, y mantenga sus limpiezas y buena higiene en casa. Avise si ve hueso expuesto, una llaga o un diente flojo."]]}},
+{id:"fperi",k:"dx",t:{en:"Gum disease around implants (peri-implantitis)",es:"Enfermedad de las encías alrededor de implantes (periimplantitis)"},i:{
+en:[["What is peri-implantitis?","Infection and inflammation of the gum around an implant, with loss of the bone that holds it. Caught early (gum only), it is easier to reverse."],
+["What are the signs?","Bleeding when brushing, swelling, pus, bad taste, gum pulling back, or a loose implant crown. It may not hurt."],
+["What raises the risk?","Plaque buildup, past gum disease, smoking, diabetes, and missing checkups."],
+["How is it treated?","Deep cleaning around the implant, sometimes with antiseptic rinses or antibiotics. If bone is lost, surgery may clean and reshape or regrow bone. Rarely, the implant must be removed."],
+["How do I prevent it?","Clean around implants daily with a brush and floss or water flosser. Keep regular cleanings, usually every 3–6 months, as we advise. Do not smoke."]],
+es:[["¿Qué es la periimplantitis?","Infección e inflamación de la encía alrededor de un implante, con pérdida del hueso que lo sostiene. Si se detecta temprano (solo en la encía), es más fácil revertirla."],
+["¿Cuáles son las señales?","Sangrado al cepillarse, hinchazón, pus, mal sabor, encía que se retrae, o una corona sobre implante floja. Puede no doler."],
+["¿Qué aumenta el riesgo?","Acumulación de placa, enfermedad de las encías antes, fumar, diabetes y faltar a los controles."],
+["¿Cómo se trata?","Limpieza profunda alrededor del implante, a veces con enjuagues antisépticos o antibióticos. Si hay pérdida de hueso, una cirugía puede limpiar y remodelar o regenerar el hueso. Rara vez hay que retirar el implante."],
+["¿Cómo la prevengo?","Limpie alrededor de los implantes cada día con cepillo e hilo dental o irrigador de agua. Vaya a sus limpiezas, por lo general cada 3–6 meses, según le indiquemos. No fume."]]}}];
+const FAQ_LANGS=['en','es'],faqL=l=>FAQ_LANGS.includes(l)?l:'en',ALL=[...HO,...FAQ];
 const LANGS=[['en','English'],['es','Español'],['kea','Kriolu'],['zh','中文']];
-const UI={en:{title:'After your surgery',pick:'Choose your procedure',call:'Call the office',back:'‹ All instructions',share:'Share',print:'Print',copied:'Link copied',rev:'{biz} would love your feedback. Post a review to our profile.',revBtn:'Leave a Google review',note:'General instructions. If your surgeon told you something different, follow your surgeon. Emergencies: call 911.'},
-es:{title:'Después de su cirugía',pick:'Elija su procedimiento',call:'Llamar a la oficina',back:'‹ Todas las instrucciones',share:'Compartir',print:'Imprimir',copied:'Enlace copiado',rev:'A {biz} le encantaría conocer su opinión. Publique una reseña en nuestro perfil.',revBtn:'Dejar una reseña en Google',note:'Instrucciones generales. Si su cirujano le indicó algo diferente, siga sus indicaciones. Emergencias: llame al 911.'},
-kea:{title:'Dipôs di bu sirurjia',pick:'Skodje bu prusedimentu',call:'Txoma ofisina',back:'‹ Tudu instruson',share:'Partilha',print:'Inprimi',copied:'Link kopiadu',rev:'{biz} ta gosta txeu di obi bu opinion. Poi un komentáriu na nos perfil.',revBtn:'Dexa un komentáriu na Google',note:'Instruson jeral. Si bu sirurjion fla-bu otu kuza, sigi bu sirurjion. Emerjénsia: txoma 911.'},
-zh:{title:'术后须知',pick:'请选择您的手术',call:'致电诊所',back:'‹ 所有须知',share:'分享',print:'打印',copied:'链接已复制',rev:'{biz} 期待您的反馈。欢迎在我们的主页上发表评价。',revBtn:'在 Google 上发表评价',note:'一般性说明。如果您的医生另有指示，请遵从医生的指示。紧急情况：请拨打911。'}};
+const UI={en:{title:'Patient information',pick:'Choose your procedure',secHo:'After surgery',secProc:'About your procedure',secDx:'About your diagnosis',faqOnly:'',call:'Call the office',back:'‹ All topics',share:'Share',print:'Print',copied:'Link copied',rev:'{biz} would love your feedback. Post a review to our profile.',revBtn:'Leave a Google review',note:'General instructions. If your surgeon told you something different, follow your surgeon. Emergencies: call 911.'},
+es:{title:'Información para pacientes',pick:'Elija su procedimiento',secHo:'Después de la cirugía',secProc:'Sobre su procedimiento',secDx:'Sobre su diagnóstico',faqOnly:'',call:'Llamar a la oficina',back:'‹ Todos los temas',share:'Compartir',print:'Imprimir',copied:'Enlace copiado',rev:'A {biz} le encantaría conocer su opinión. Publique una reseña en nuestro perfil.',revBtn:'Dejar una reseña en Google',note:'Instrucciones generales. Si su cirujano le indicó algo diferente, siga sus indicaciones. Emergencias: llame al 911.'},
+kea:{title:'Informason pa paciente',pick:'Skodje bu prusedimentu',secHo:'Dipôs di sirurjia',secProc:'Sobri bu prusedimentu',secDx:'Sobri bu diagnóstiku',faqOnly:'Pergunta ku risposta sta só na inglês i spanhol pa gora.',call:'Txoma ofisina',back:'‹ Tudu asuntu',share:'Partilha',print:'Inprimi',copied:'Link kopiadu',rev:'{biz} ta gosta txeu di obi bu opinion. Poi un komentáriu na nos perfil.',revBtn:'Dexa un komentáriu na Google',note:'Instruson jeral. Si bu sirurjion fla-bu otu kuza, sigi bu sirurjion. Emerjénsia: txoma 911.'},
+zh:{title:'患者须知',pick:'请选择您的手术',secHo:'术后须知',secProc:'关于您的手术',secDx:'关于您的诊断',faqOnly:'常见问题目前仅提供英文和西班牙文版本。',call:'致电诊所',back:'‹ 所有主题',share:'分享',print:'打印',copied:'链接已复制',rev:'{biz} 期待您的反馈。欢迎在我们的主页上发表评价。',revBtn:'在 Google 上发表评价',note:'一般性说明。如果您的医生另有指示，请遵从医生的指示。紧急情况：请拨打911。'}};
 const app=document.getElementById('app');
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let lang=(()=>{const n=(navigator.language||'en').toLowerCase();return n.startsWith('es')?'es':n.startsWith('zh')?'zh':(n.startsWith('kea')||n==='pt-cv')?'kea':'en'})();
-function parse(){const m=location.hash.replace('#','').match(/^([a-z]+)?(?:-(en|es|kea|zh))?$/);if(m&&m[2])lang=m[2];return m&&HO.some(h=>h.id===m[1])?m[1]:null}
+function parse(){const m=location.hash.replace('#','').match(/^([a-z]+)?(?:-(en|es|kea|zh))?$/);if(m&&m[2])lang=m[2];return m&&ALL.some(h=>h.id===m[1])?m[1]:null}
 function setHash(id){const h=id?`#${id}-${lang}`:(lang!=='en'?'#-'+lang:'');try{history.replaceState(null,'',location.pathname+location.search+h)}catch(e){}}
 const isWarn=t=>/911|^Call us|^Llámenos|^Llame|^Txoma|^出现以下情况请致电/.test(t);
 function render(){const id=parse(),u=UI[lang];document.documentElement.lang=lang;
  const top=`<header><h1>${u.title}</h1><div class="lang" role="group" aria-label="Language">${LANGS.map(([c,n])=>`<button data-l="${c}" lang="${c}" aria-pressed="${lang===c}">${n}</button>`).join('')}</div></header>`;
  const call=`<a class="call" href="tel:${TEL}">📞 ${u.call} · ${PHONE}</a>`;
  const rev=`<div class="rev"><p>${esc(u.rev.replace('{biz}',SITE.n))}</p><a href="${esc(SITE.u)}" target="_blank" rel="noopener">★ ${esc(u.revBtn)} ↗</a></div>`;
- if(!id){document.title=u.title;app.innerHTML=`${top}<p style="margin:0 0 12px;color:var(--muted)">${u.pick}</p><div class="list">${HO.map(h=>`<a class="card" href="#${h.id}-${lang}">${esc(h.t[lang])}<span>›</span></a>`).join('')}</div>${call}${rev}<p class="note">${u.note}</p>`;return}
+ const L=faqL(lang),cards=(xs,l)=>`<div class="list">${xs.map(h=>`<a class="card" href="#${h.id}-${lang}"${l!==lang?` lang="${l}"`:''}>${esc(h.t[l])}<span>›</span></a>`).join('')}</div>`,only=L!==lang?`<p class="note" style="margin:0 0 8px">${u.faqOnly}</p>`:'';
+ if(!id){document.title=u.title;app.innerHTML=`${top}<h3 class="sec">${u.secHo}</h3>${cards(HO,lang)}<h3 class="sec">${u.secProc}</h3>${only}${cards(FAQ.filter(f=>f.k==='proc'),L)}<h3 class="sec">${u.secDx}</h3>${only}${cards(FAQ.filter(f=>f.k==='dx'),L)}${call}${rev}<p class="note">${u.note}</p>`;return}
+ const f=FAQ.find(x=>x.id===id);
+ if(f){document.title=f.t[L];app.innerHTML=`${top}<button class="back" data-home>${u.back}</button>${only}<h2 lang="${L}">${esc(f.t[L])}</h2><div class="qa" lang="${L}">${f.i[L].map(([q,a])=>`<h3>${esc(q)}</h3><p${/911/.test(a)?' class="warn"':''}>${esc(a)}</p>`).join('')}</div>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div><p class="note">${u.note}</p>`;window.scrollTo(0,0);return}
  const h=HO.find(x=>x.id===id);document.title=h.t[lang];
  app.innerHTML=`${top}<button class="back" data-home>${u.back}</button><h2>${esc(h.t[lang])}</h2><ol>${h.i[lang].map(t=>`<li${isWarn(t)?' class="warn"':''}>${esc(t)}</li>`).join('')}</ol>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div>${rev}<p class="note">${u.note}</p>`;
  window.scrollTo(0,0)}
@@ -96,8 +258,8 @@ app.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)
  if(b.dataset.l){const id=parse();lang=b.dataset.l;setHash(id);render();return}
  if(b.hasAttribute('data-home')){setHash(null);render();return}
  if(b.hasAttribute('data-print')){window.print();return}
- if(b.hasAttribute('data-share')){const id=parse(),h=HO.find(x=>x.id===id),url=location.href.split('#')[0]+`#${id}-${lang}`;
-  try{if(navigator.share){await navigator.share({title:h.t[lang],url});return}}catch(x){if(x&&x.name==='AbortError')return}
+ if(b.hasAttribute('data-share')){const id=parse(),h=ALL.find(x=>x.id===id),url=location.href.split('#')[0]+`#${id}-${lang}`;
+  try{if(navigator.share){await navigator.share({title:h.t[lang]||h.t.en,url});return}}catch(x){if(x&&x.name==='AbortError')return}
   try{await navigator.clipboard.writeText(url);b.textContent=UI[lang].copied}catch(x){prompt('',url)}}});
 addEventListener('hashchange',render);render();
 </script>
