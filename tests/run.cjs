@@ -153,6 +153,15 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  await page.fill('#in-q','avulsion');ok(await page.locator('#hits [data-open="dentotrauma"]').count()>0,'Search still reaches modules (avulsion)');
  await page.fill('#in-q','laceration');ok(await page.locator('#hits [data-open="lac"]').count()>0,'Search reaches facial laceration');
  await page.fill('#in-q','tooth removal');ok(await page.locator('#hits [data-ho]').count()>0,'Search still reaches handouts');
+ // Patient tab: renamed from Post-op; FAQs
+ ok(await E(page,()=>{home();const t=document.querySelector('[data-view="handouts"]');return t&&t.textContent==='Patient'}),'Tab labelled “Patient”');
+ const fq=await E(page,()=>{S.lang='en';view('handouts');return{n:FAQ.length,dom:FAQ.filter(f=>document.getElementById('ho-'+f.id)).length,proc:FAQ.filter(f=>f.k==='proc').length,dx:FAQ.filter(f=>f.k==='dx').length,
+  par:FAQ.every(f=>f.t.en&&f.t.es&&f.i.en.length===f.i.es.length&&f.i.en.concat(f.i.es).every(x=>x.length===2&&x[0]&&x[1])),src:FAQ.every(f=>f.src.length&&f.src.every(k=>SRC[k])),uniq:new Set([...HO,...FAQ].map(x=>x.id)).size===HO.length+FAQ.length,heads:!!document.getElementById('ho-sec-proc')&&!!document.getElementById('ho-sec-dx')}});
+ ok(fq.n===15&&fq.dom===15&&fq.proc===8&&fq.dx===7&&fq.heads,`Patient tab shows 8 procedure + 7 diagnosis FAQs (got ${fq.proc}+${fq.dx}, rendered ${fq.dom})`);
+ ok(fq.par&&fq.src&&fq.uniq,'FAQs: EN/ES question counts match, sources resolve, ids unique');
+ await E(page,()=>home());await page.fill('#in-q','dry socket');ok(await page.locator('#hits [data-ho="fao"]').count()===1,'Search reaches the dry socket FAQ');
+ const ft=await E(page,()=>{S.site='young';return faqText(FAQ.find(f=>f.id==='fwis'),'es')});ok(/^Extracción de muelas del juicio/.test(ft)&&/Teléfono: \(401\) 273-7802$/.test(ft),'FAQ share text in Spanish with office phone');
+ ok(await E(page,()=>{S.lang='zh';view('handouts');const ok=/English shown/.test(document.getElementById('vbody').textContent)&&/Wisdom teeth removal/.test(document.getElementById('ho-fwis').textContent);S.lang='en';return ok}),'中文: FAQs fall back to English with a note');
 
  console.log('9. Basis, assumptions and review status shown');
  await E(page,()=>{newPatient();open('preop')});for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await page.click(`.cur [data-a="${id}"][data-v="${v}"]`);
@@ -256,6 +265,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(await E(page,()=>localStorage.getItem('oms_compass_practice_mode')==='colleague'),'Practice mode stored under oms_compass_practice_mode');
  await E(page,()=>{S.hoOpen='ext';view('handouts')});
  ok(await page.locator('[data-site]').count()===0&&/Oral & Maxillofacial Surgery — Patient Instructions/.test(await page.locator('#ho-neutral').textContent()),'Colleague: no Dr. Young/Bayside pills, neutral header');
+ ok(await E(page,()=>{const t=faqText(FAQ[0],'en');return/^Oral & Maxillofacial Surgery — Patient Instructions/.test(t)&&!/Young|Bayside|401|508/.test(t)}),'Colleague: shared FAQ has neutral header, no practice phone');
  const ht=await E(page,()=>hoText(HO[0],'en'));ok(!/Young|Bayside|401|508|g\.page/.test(ht)&&/^Oral & Maxillofacial Surgery — Patient Instructions/.test(ht),'Colleague: shared handout has no practice name, phone or review link');
  await E(page,()=>view('calc'));ok(await page.locator('.audisc').count()>=1&&await E(page,()=>{const d=document.querySelector('.auhid');return d.hidden&&/Your sedation protocol/.test(d.textContent)}),'Colleague: Calc sedation protocol collapsed');
  await page.click('.audisc');ok(await E(page,()=>!document.querySelector('.auhid').hidden),'Disclosure opens the author protocol');

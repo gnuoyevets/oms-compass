@@ -43,7 +43,7 @@ li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--re
 <body>
 <div class="wrap" id="app"></div>
 <script>
-/* Patient handouts — same text as OMS Compass (Post-op tab): EN/ES/Kriolu/中文. Edit both together. */
+/* Patient handouts — same text as OMS Compass (Patient tab, post-op instructions): EN/ES/Kriolu/中文. Edit both together. */
 
 const SITES={young:{ph:'(401) 273-7802',tel:'+14012737802',n:'Steven H. Young, DDS, OMS',u:'https://g.page/r/CWM8GLnZutc8EBE/review'},bayside:{ph:'(508) 422-5007',tel:'+15084225007',n:'Bayside Oral & Facial Surgery',u:'https://g.page/r/CVPfUjdMh6k6EBM/review'}};
 const SITE=SITES[new URLSearchParams(location.search).get('site')]||SITES.young,PHONE=SITE.ph,TEL=SITE.tel;
