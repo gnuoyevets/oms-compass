@@ -2,6 +2,21 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.8.0 — Oct 26, 2026 (approved by Steven Oct 26, 2026; merged to main)
+
+- **Seven new Ref cards** (Ref now has 17):
+  - Filler complications & vision loss: hyaluronidase on hand; arterial vs venous occlusion; published hyaluronidase doses as a range (≥200 to ~1,500 U per area, tagged verify); nitroglycerin paste optional (weak evidence); vision change = immediate ED/ophthalmology transfer; retrobulbar hyaluronidase unproven.
+  - Oral pathology chairside framework (from the Oral Pathology Pearls deck): Rule of 7s (labelled a heuristic), 10–14 day biopsy rule, gauze test, diascopy, Michel's for DIF, MACHO + malignancy, Vincent's sign.
+  - Odontogenic cysts & tumors: decompression protocol, Gorlin workup, ameloblastoma/myxoma/CEOT margins, AOT, cementoblastoma, WHO 2022 note.
+  - GBR & narrow ridge (Readwise GBR protocol and Dr. Cho lecture); 1.8 mm buccal threshold tagged verify.
+  - Implant biomechanics & restorative space (Lecture Pearls Videos 10–12).
+  - Orofacial pain red flags: trigeminal neuralgia, giant cell arteritis, atypical odontalgia, burning mouth, cluster (oxygen flow tagged verify), splints.
+  - Implant antibiotic prophylaxis: Cochrane 2 g amoxicillin (NNT 25) alongside the EAO 2015 consensus against routine use.
+- New sources: Oral Pathology Pearls deck, Readwise Quick Passages, WHO 2022 summary, filler occlusion review, filler vision-loss consensus (2021), Cochrane CD004152, EAO summary. "Your OMS Lecture Pearls" source renamed (no longer limited to infections and fractures).
+- Ref cards containing a verify line now show the Unverified draft label (same rule as plans).
+- Left out on purpose: the 2015 complications deck's bisphosphonate drug holiday (superseded by AAOMS 2022); AJCC 7th-edition staging from Lecture Pearls (outdated).
+- Tests: 370 browser checks (9 new); reconciliation suite passes.
+
 ## v3.7.0 — Oct 26, 2026 (approved by Steven Oct 26, 2026; merged to main)
 
 - **Tab renamed** "Post-op" → "Patient" (Decide · SOS · Calc · Ref · Patient). Post-op instructions unchanged, now under a "Post-op instructions" heading.

@@ -456,13 +456,20 @@ tetcdc:{n:'CDC · Clinical guidance for wound management to prevent tetanus',v:'
 bitewk:{n:'WikEM · Mammalian bites (antibiotics, facial closure, rabies)',v:'Secondary summary; cites IDSA 2014 SSTI',chk:'2026-10-25',u:'https://www.wikem.org/wiki/Mammalian_bites'},
 fn72:{n:'Extratemporal facial nerve injury review (PubMed 11951222)',v:'Abstract only: repair within 72 h; graft at 9–12 months',chk:'2026-10-25',u:'https://pubmed.ncbi.nlm.nih.gov/11951222/'},
 fxabx:{n:'Harryman et al. · Prophylactic antibiotics in mandible fractures (TRIO Best Practice)',v:'Laryngoscope 2023',u:'https://www.enttoday.org/article/prophylactic-antibiotics-should-be-used-conservatively-in-setting-mandibular-fractures/'},
-lect:{n:'Your OMS Lecture Pearls (Drive) — infections, mandible fractures',v:'Jun 2026 · lecture notes',u:'https://drive.google.com/file/d/1KKI7X5dwrOVV1oFIWOo5q__TgCMON8UP/view'},
+lect:{n:'Your OMS Lecture Pearls (Drive)',v:'Jun 2026 · lecture notes',u:'https://drive.google.com/file/d/1KKI7X5dwrOVV1oFIWOo5q__TgCMON8UP/view'},
 board:{n:'Your OMS Clinical Protocols — Board Review (Readwise)',v:'Board-review notes; textbook-derived',u:'https://read.readwise.io/'},
 dysp:{n:'AAOMS · Position paper on oral mucosal dysplasia (Carlson et al.)',v:'J Oral Maxillofac Surg 2023;81:1042',u:'https://read.readwise.io/read/01h769fmrm3d2wt17f4vk2jjbb'},
 fa6:{n:'Your Full-Arch Preop Decision Checklist v6',v:'Oct 12, 2026 · cites Schwarz et al. 2026 Global Consensus',u:'https://drive.google.com/file/d/1QiMOj9LzOmz4No1OkiBV8VTQFgw4SsVJ/view'},
 schwarz:{n:'Schwarz et al. · Global Consensus, full-arch maxilla',v:'Clin Oral Implants Res 2026;37 Suppl 30:S7–S27',u:'https://doi.org/10.1111/clr.70084'},
 goodson:{n:'Goodson et al. · Classifications and Lists in OMFS (impacted canines, cleft timing)',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
 kademani:{n:'Kademani & Tiwana · Atlas of OMS (canine exposure techniques)',v:'Your Readwise highlights',u:'https://read.readwise.io/'},
+pathdeck:{n:'Your Oral Pathology Pearls lecture (Drive)',v:'2026 · lecture deck',u:'https://drive.google.com/file/d/1zdtsxQlMum5LKlvEN9MRdEaMwON8oPd5/view'},
+quickp:{n:'Your Readwise Quick Passages (GBR protocol, Dr. Cho narrow-ridge lecture, extraction checklist)',v:'Personal notes',u:'https://read.readwise.io/'},
+who22:{n:'Soluk-Tekkesin & Wright · WHO 2022 (5th ed.) odontogenic lesions: summary of changes',v:'Turk Patoloji Derg 2022',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9999699/',chk:'2026-10-26'},
+fillervo:{n:'Vascular occlusion after hyaluronic acid filler injection (review)',v:'Review; case-based evidence',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8016809/',chk:'2026-10-26'},
+fillervis:{n:'Consensus opinion · Management of soft-tissue filler-induced vision loss',v:'J Clin Aesthet Dermatol 2021',u:'https://jcadonline.com/cmac-soft-tissue-filler-vision-loss/',chk:'2026-10-26'},
+cochimp:{n:'Esposito et al. · Antibiotics at dental implant placement (Cochrane CD004152)',v:'Cochrane review 2013',u:'https://www.cochrane.org/CD004152/ORAL_antibiotic-prophylaxis-at-dental-implant-placement',chk:'2026-10-26'},
+eaoelf:{n:'National Elf Service · Implant antibiotic protocol (summarizes EAO 2015 consensus)',v:'Secondary summary',u:'https://nationalelfservice.net/dentistry/restorative-dentistry/dental-implant-placement-antibiotic-protocol',chk:'2026-10-26'},
 mynotes:{n:'Your Readwise clinical notes (immediate placement, socket shield, PATZy, short implants)',v:'Personal protocol notes',u:'https://read.readwise.io/'},
 perio6:{n:'Periospot · A 6-mm implant is not a shortcut',v:'Via your Readwise checklist',u:'https://www.periospot.com/'},
 binder:{n:'Your Office Emergency Binder',v:'May 2026 · cites ACLS 2020 · needs re-verification',u:'https://drive.google.com/file/d/1cm2t4yNo2BUDjviZJHhqzFfdJD7dEgTi/view'},
@@ -1373,13 +1380,74 @@ const REF=[
  'Lavage ≥60 mL lactated Ringer’s (200 mL clears degraded proteins)',
  'Finish with steroid or hyaluronic acid (avoid HA with avian allergy), then stretch',
  'Exercises, Rule of 10: 10 reps of opening, laterals, protrusion, for ≥10 days',
- 'Expect ~47% pain reduction (arthroscopy ~70%); better results if symptoms <6 months']}
+ 'Expect ~47% pain reduction (arthroscopy ~70%); better results if symptoms <6 months']},
+{t:'Filler complications & vision loss',k:'filler hyaluronidase vascular occlusion blindness necrosis cosmetic botox ptosis',src:['lect','fillervo','fillervis'],i:[
+ 'Keep hyaluronidase in every office that injects HA filler (refrigerated; check expiry)',
+ 'Prevention: plain lidocaine in the mix (epinephrine blanching mimics ischemia); blunt cannula for deep cheek and temple; with a needle in the glabella or deep nasolabial fold, aspirate and inject slowly',
+ 'Arterial occlusion (blanching, then mottling, pain): stop; flood the whole ischemic territory with high-dose hyaluronidase and repeat until capillary refill returns. Published doses run from ≥200 U to ~1,500 U per area [verify: no agreed dose]',
+ 'Adjuncts: warm compresses, massage, aspirin. Nitroglycerin paste is optional, with weak evidence',
+ 'Venous compression (dusky purple, mild pain): warm compresses only',
+ 'Vision change, eye pain or ophthalmoplegia after facial filler: emergency. Transfer immediately to ED or ophthalmology; stroke signs → 911',
+ 'Retrobulbar hyaluronidase is unproven; not first line for non-ophthalmologists',
+ 'Nodules within 2 weeks: infective → antibiotics ± drainage. Granuloma (weeks–years): intralesional steroid first',
+ 'Botulinum toxin eyelid ptosis: apraclonidine or phenylephrine 2.5% eye drops']},
+{t:'Oral pathology chairside framework',k:'lesion biopsy white pigmented ulcer diascopy nikolsky michel dif macho vincent radiolucency melanoma',src:['pathdeck','usc'],i:[
+ 'Ask duration first (Rule of 7s, a teaching heuristic): ~7 days reactive · 7 weeks–7 months neoplastic · 7 years developmental',
+ 'Unexplained lesion >10–14 days → biopsy. Healing lesions may be watched with a firm review date; stagnant or growing ones must be sampled. Lower the bar over age 40',
+ 'Gauze test: rubs off = surface debris (candida, burn). Fixed and rough = epithelial thickening (dysplasia/SCC risk). Early SCC is painless',
+ 'Diascopy: blanches = intravascular (hemangioma, varix). Non-blanching and persistent → biopsy; melanoma stays on the list until excluded',
+ 'Nikolsky positive or chronic vesiculobullous: two specimens — formalin for H&E, perilesional tissue in Michel’s for DIF (formalin destroys the antigen)',
+ 'On the film: attenuation, margins, relationship to teeth. Benign displaces teeth and expands cortex; malignant loosens teeth and destroys cortex',
+ 'Multilocular lucency: MACHO (myxoma, ameloblastoma, CGCG, hemangioma, OKC) has no malignancy — add it. Aspirate anything with a bruit or thrill before incising',
+ 'Escalate today: fixed painless node; moth-eaten bone; symmetric widened PDL on one tooth (osteosarcoma); numb chin or lip without dental cause (Vincent’s sign — metastasis or myeloma)']},
+{t:'Odontogenic cysts & tumors: management',k:'okc kcot keratocyst ameloblastoma gorlin myxoma pindborg aot marsupialization decompression cyst tumor',src:['lect','board','who22'],i:[
+ 'Submit all excised tissue. Ask for oral pathology review when a report does not fit the clinical picture',
+ 'Large cyst or OKC: decompress first (drain, saline flushes 2–3×/day, often ~1 year), then enucleation + peripheral ostectomy ± liquid nitrogen (3 freeze–thaw cycles)',
+ 'Multiple OKCs in a child → Gorlin syndrome workup (PTCH1). Favor conservative surgery',
+ 'Ameloblastoma, solid/multicystic: resect with ~1–1.5 cm bony margin. Unicystic with mural invasion recurs in up to ~40% → treat as solid',
+ 'Odontogenic myxoma: resect with 1–1.5 cm margin. CEOT (Pindborg): ~1 cm margin; enucleation alone recurs 14–20%',
+ 'Calcifying odontogenic cyst: curettage plus peripheral ostectomy or cryotherapy, not curettage alone. Glandular odontogenic cyst: ~25% recurrence; long follow-up',
+ 'AOT (⅔ female, ⅔ anterior maxilla, ⅔ with an impacted tooth): enucleate; recurrence rare. Cementoblastoma: vital tooth — extract with the lesion',
+ 'WHO 2022 (5th ed.) is conceptually similar to 2017; adenoid ameloblastoma is the one new odontogenic tumor']},
+{t:'GBR & narrow ridge',k:'gbr guided bone regeneration membrane ridge width narrow alveoloplasty dehiscence graft',src:['quickp','mynotes'],i:[
+ 'Never judge width by palpation — thick palatal tissue hides narrow ridges. CBCT every case; expect 0.5–1 mm resorption after surgery',
+ 'Simultaneous GBR for contained defects (intra-socket, dehiscence) with good primary stability (~≥35 Ncm or ISQ >60). Stage horizontal and vertical defects',
+ 'Buccal bone <1.8 mm after placement tends to resorb → augment [verify: single-source threshold]',
+ 'Layering: autogenous chips on the implant surface, xenograft over it for volume; decorticate; over-contour',
+ 'Membrane ≥2 mm beyond the defect, immobilized (pins or tacks). Tension-free closure: mattress sutures reinforced with simple interrupted sutures',
+ 'Alveoloplasty: reduce only at implant sites, ≤4 mm. After removing cortex, drill one step narrower',
+ 'Narrow implants (≤3.5 mm): mandibular incisors and maxillary laterals only; ≥4.5 mm for molars',
+ 'Infected socket: debride thoroughly and graft the same day']},
+{t:'Implant biomechanics & restorative space',k:'implant length diameter short narrow hex cement screw bruxism overload hybrid zirconia space',src:['lect'],i:[
+ 'Short rough-surface implants (≤10 mm, down to 6 mm) perform comparably; length mainly helps primary stability',
+ 'No narrow-diameter (≤3.5 mm) implants in posterior load areas — augment and place standard or wide',
+ 'Non-axial load stresses components (screws, abutments, implant walls), not the bone interface',
+ 'External hex: avoid posteriorly (late screw fatigue). Tapered internal connections can split: crescent bone loss + widened walls = suspect wall fracture',
+ 'Late bone loss: rule out subgingival cement and wall fracture before blaming overload or peri-implantitis. Keep cement margins at or above the tissue',
+ 'Do not leave provisionals out of occlusion for long — opposing teeth supererupt',
+ 'Bruxism is not a contraindication: consent, night guard, metal or monolithic occlusal surfaces',
+ 'Full-arch space: ≥13–15 mm acrylic hybrid on a bar · 8–10 mm monolithic zirconia · <7 mm crown and bridge. Cantilever ≤1.5× AP spread']},
+{t:'Orofacial pain red flags',k:'trigeminal neuralgia giant cell arteritis burning mouth atypical odontalgia cluster headache neuropathic facial pain splint',src:['lect'],i:[
+ 'Rule out dental causes first, then TMJ, myofascial, neuropathic and vascular causes',
+ 'Trigeminal neuralgia: seconds-long electric unilateral attacks, trigger zones, rarely at night. Carbamazepine first line; alternatives oxcarbazepine, gabapentin, baclofen, lamotrigine. MRI — urgently if young or any cranial nerve deficit',
+ 'Giant cell arteritis (age >50): temporal headache, jaw claudication, visual symptoms → same-day ESR/CRP and urgent steroids to protect vision; physician referral for temporal artery biopsy',
+ 'Atypical odontalgia: continuous dull pain, often posterior maxilla, poor response to local anesthetic. No endodontics or extraction; amitriptyline or nortriptyline',
+ 'Burning mouth: a diagnosis of exclusion. Check candida, xerostomia, B12/iron/folate, glucose, thyroid, contact allergy. Clonazepam (topical) and CBT',
+ 'Cluster headache: young male, periorbital, tearing and rhinorrhea; high-flow oxygen aborts attacks [verify: flow and duration]',
+ 'Post-surgical neuropathic pain: gabapentin or TCA, topical capsaicin; refer early',
+ 'Splints: hard, flat-plane, full coverage. Avoid long-term anterior-only (NTI) or posterior-only appliances']},
+{t:'Implant antibiotic prophylaxis',k:'implant antibiotic amoxicillin prophylaxis failure cochrane',src:['cochimp','eaoelf'],i:[
+ 'Cochrane (6 RCTs, 1,162 patients): amoxicillin 2 g PO 1 h before placement reduced implant failure; NNT 25 at a 6% baseline failure rate',
+ 'No evidence that post-op courses add benefit; best agent unknown',
+ 'EAO 2015 consensus: no routine prophylaxis for straightforward placement in healthy patients (resistance, adverse events)',
+ 'Commonly used when grafting, placing into infected sites, for long procedures or medically compromised patients [verify: practice consensus, not trial-tested]',
+ 'Endocarditis prophylaxis is a separate decision (AHA)']}
 ];
 function refHTML(){
  const q=(S.refq||'').toLowerCase().trim();
  const list=REF.filter(r=>!q||(r.t+' '+r.k+' '+r.i.join(' ')).toLowerCase().includes(q));
  return `<div class="wtbar" style="grid-template-columns:1fr"><label class="fld" for="in-refq">Search reference<input id="in-refq" data-refq placeholder="e.g. cleft, socket shield, parotid" value="${esc(S.refq||'')}"></label></div>
- ${list.map(r=>{const b=basisOf(r.src);const body=`<ul>${r.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small" style="margin-top:8px">${r.src.map(srcLink).join(' · ')}</div>`;return`<details class="box"><summary><span>${esc(r.t)} ${basisChip(b)}</span></summary><div class="inner look">${b==='au'?auWrap(body):body}</div></details>`}).join('')||'<p class="caveat">No match.</p>'}
+ ${list.map(r=>{const b=basisOf(r.src,r.i.join(' '));const body=`<ul>${r.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small" style="margin-top:8px">${r.src.map(srcLink).join(' · ')}</div>`;return`<details class="box"><summary><span>${esc(r.t)} ${basisChip(b)}</span></summary><div class="inner look">${b==='au'?auWrap(body):body}</div></details>`}).join('')||'<p class="caveat">No match.</p>'}
  <p class="caveat">Reference cards summarize your notes and cited sources; your personal protocols are labeled as such.</p>`;
 }
 const LA=[
@@ -1529,8 +1597,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.7.0';
+const VER='3.8.0';
 const CHANGES=[
+{v:'3.8.0',d:'Oct 26, 2026',i:['Seven new Ref cards: Filler complications & vision loss, Oral pathology chairside framework, Odontogenic cysts & tumors, GBR & narrow ridge, Implant biomechanics & restorative space, Orofacial pain red flags, Implant antibiotic prophylaxis. Built from your Lecture Pearls, Oral Pathology Pearls deck and Readwise notes, checked against published sources; single-source or unsettled lines tagged verify.','Ref cards with a verify line now show the Unverified draft label.']},
 {v:'3.7.0',d:'Oct 26, 2026',i:['“Post-op” tab renamed “Patient”. Post-op instructions unchanged, now under a heading.','New Procedure FAQs (wisdom teeth, implants, bone graft, sinus lift, full-arch, IV sedation, biopsy, canine exposure) and Diagnosis FAQs (dry socket, tooth infection, numbness, sinus opening, TMD, MRONJ, peri-implantitis), English and Español; Kriolu and 中文 show English for now. Share by text like the handouts (practice phone added; neutral header in Colleague mode). Search finds them.','Patient page (/handouts/) now has the FAQs too, one link each (e.g. #fao-es).','“Patient FAQ” button on the plan screen of 16 matching modules (e.g. Dry socket, Nerve injury, TMD, Sinus lift) opens that FAQ on the Patient tab.']},
 {v:'3.6.0',d:'Oct 25, 2026',i:['Chairside focus mode for every decision module: one question per screen, Yes (filled) and No (outlined) as full-width stacked buttons in the thumb zone, Unknown kept as a smaller third button.','Fixed 56 px header: back one step, module title, step counter (Step 2 of 3–5 when branches differ in length), red SOS badge. SOS from a module offers a way back with answers kept.','Back one step: header arrow, swipe right anywhere on the screen, or the phone’s own back gesture/button.','Criteria, your answers (tap to change), medical gate, red flags, photo triage, data inputs, look-fors, sources and reset moved into a swipe-up reference drawer; chips on screen open the right section.','Plan screen: Copy note and End session pinned at the bottom; long plans scroll inside the card.','High-contrast mode (black on white, all text ≥7:1, WCAG AAA) for operatory light: Settings or the drawer; turns on automatically if the phone asks for more contrast.']},
 {v:'3.5.1',d:'Oct 25, 2026',i:['Readability: smallest text (verify tags, source badges, section labels, table headers) raised from 10–11 px to 12 px for chairside glare. Color contrast already meets WCAG AA in light and dark modes.']},
@@ -1809,7 +1878,7 @@ function hitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);co
 const BASIS={gl:'Guideline / label',ev:'Evidence-informed',au:'Author’s practice',un:'Unverified draft'};
 const BASIS_RANK={gl:0,ev:1,au:2,un:3};
 const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','palsca','palsbr','flumaped','glucaped','bupilabel','giai','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2','sux','wfhdent','kohan','tetcdc'];
-const SRC_AU=['mysed','fa6','mynotes','lect','board'];
+const SRC_AU=['mysed','fa6','mynotes','lect','board','pathdeck','quickp'];
 const SRC_UN=['binder'];
 function basisOf(keys,text){
  const ks=(keys||[]).filter(Boolean);let b=ks.length?'gl':'un';
