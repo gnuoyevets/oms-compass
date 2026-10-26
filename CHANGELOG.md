@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.8.0 — Oct 26, 2026 (branch `feat/ref-cards`, pending Steven's review)
+## v3.8.0 — Oct 26, 2026 (approved by Steven Oct 26, 2026; merged to main)
 
 - **Seven new Ref cards** (Ref now has 17):
   - Filler complications & vision loss: hyaluronidase on hand; arterial vs venous occlusion; published hyaluronidase doses as a range (≥200 to ~1,500 U per area, tagged verify); nitroglycerin paste optional (weak evidence); vision change = immediate ED/ophthalmology transfer; retrobulbar hyaluronidase unproven.
