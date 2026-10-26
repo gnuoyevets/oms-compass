@@ -161,6 +161,9 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(fq.par&&fq.src&&fq.uniq,'FAQs: EN/ES question counts match, sources resolve, ids unique');
  await E(page,()=>home());await page.fill('#in-q','dry socket');ok(await page.locator('#hits [data-ho="fao"]').count()===1,'Search reaches the dry socket FAQ');
  const ft=await E(page,()=>{S.site='young';return faqText(FAQ.find(f=>f.id==='fwis'),'es')});ok(/^Extracción de muelas del juicio/.test(ft)&&/Teléfono: \(401\) 273-7802$/.test(ft),'FAQ share text in Spanish with office phone');
+ ok(await E(page,()=>Object.entries(FAQ_FOR).every(([m,f])=>M(m)&&FAQ.some(x=>x.id===f))&&FAQ.every(f=>Object.values(FAQ_FOR).includes(f.id))),'Every FAQ is linked from a real module');
+ await E(page,()=>{newPatient();S.ans.ao={};open('ao');for(let i=0;i<12&&!document.querySelector('.plan');i++){const b=document.querySelector('.cur [data-a]');if(!b)break;b.click()}});
+ const fb=page.locator('.plan [data-ho="fao"]');if(await fb.count()){await fb.click();ok(await E(page,()=>S.view==='handouts'&&document.getElementById('ho-fao').open),'Dry socket plan “Patient FAQ” opens the FAQ on the Patient tab')}else ok(false,'Dry socket plan shows a Patient FAQ button');
  // Standalone patient page (/handouts/) mirrors Compass text
  const cmp=await E(page,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i}))}));
  const hp=await ctx.newPage();hp.on('pageerror',e=>{fail++;fails.push('handouts pageerror: '+e.message)});await hp.route(/^https?:\/\//,r=>r.abort());
