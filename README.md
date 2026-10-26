@@ -7,7 +7,7 @@ Offline web app version of OMS Compass. This repo is the canonical copy; the "OM
 - `manifest.webmanifest` — name, icon, full-screen mode
 - `sw.js` — offline cache
 - `CHANGELOG.md` — dated change log
-- `handouts/index.html` — standalone patient handouts (EN/ES); text mirrors the Compass Post-op tab
+- `handouts/index.html` — standalone patient page: post-op instructions and FAQs; text mirrors the Compass Patient tab (a test checks they match)
 - `*.png` — app icons
 - `tests/run.cjs` — automated checks (software behavior, not clinical validation). Run: `npm i -D playwright && npx playwright install chromium && node tests/run.cjs`
 
