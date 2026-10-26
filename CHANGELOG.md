@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.7.0 — Oct 26, 2026 (branch `feat/patient-info-faqs`, pending Steven's review)
+## v3.7.0 — Oct 26, 2026 (approved by Steven Oct 26, 2026; merged to main)
 
 - **Tab renamed** "Post-op" → "Patient" (Decide · SOS · Calc · Ref · Patient). Post-op instructions unchanged, now under a "Post-op instructions" heading.
 - **Procedure FAQs (8):** wisdom teeth removal, dental implants, bone grafting/socket preservation, sinus lift, full-arch (teeth in a day), IV sedation, biopsy, exposure of an impacted canine.
