@@ -164,6 +164,12 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(await E(page,()=>Object.entries(FAQ_FOR).every(([m,f])=>M(m)&&FAQ.some(x=>x.id===f))&&FAQ.every(f=>Object.values(FAQ_FOR).includes(f.id))),'Every FAQ is linked from a real module');
  await E(page,()=>{newPatient();S.ans.ao={};open('ao');for(let i=0;i<12&&!document.querySelector('.plan');i++){const b=document.querySelector('.cur [data-a]');if(!b)break;b.click()}});
  const fb=page.locator('.plan [data-ho="fao"]');if(await fb.count()){await fb.click();ok(await E(page,()=>S.view==='handouts'&&document.getElementById('ho-fao').open),'Dry socket plan “Patient FAQ” opens the FAQ on the Patient tab')}else ok(false,'Dry socket plan shows a Patient FAQ button');
+ // v3.8 Ref cards
+ const rf=await E(page,()=>({n:REF.length,src:REF.every(r=>r.src.every(k=>SRC[k])),bad:REF.filter(r=>!r.t||!r.i.length).length}));
+ ok(rf.n===17&&rf.src&&rf.bad===0,`Ref: 17 cards, every source resolves (got ${rf.n})`);
+ for(const [q,t] of [['Nikolsky','Oral pathology chairside framework'],['hyaluronidase','Filler complications & vision loss'],['ameloblastoma','Odontogenic cysts & tumors: management'],['narrow ridge','GBR & narrow ridge'],['external hex','Implant biomechanics & restorative space'],['trigeminal','Orofacial pain red flags'],['amoxicillin','Implant antibiotic prophylaxis']])
+  ok(await E(page,([q,t])=>{S.refq=q;view('ref');const s=[...document.querySelectorAll('#vbody details.box summary')].map(x=>x.textContent);S.refq='';return s.some(x=>x.includes(t))},[q,t]),`Ref search “${q}” finds ${t}`);
+ ok(await E(page,()=>{S.refq='hyaluronidase';view('ref');const t=document.querySelector('#vbody details.box summary').textContent;S.refq='';return/Unverified draft/.test(t)}),'Ref card with a verify line is labelled Unverified draft');
  // Standalone patient page (/handouts/) mirrors Compass text
  const cmp=await E(page,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i}))}));
  const hp=await ctx.newPage();hp.on('pageerror',e=>{fail++;fails.push('handouts pageerror: '+e.message)});await hp.route(/^https?:\/\//,r=>r.abort());
