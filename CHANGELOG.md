@@ -2,6 +2,14 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.9.1 — Oct 27, 2026 (approved by Steven Oct 27, 2026; merged to main)
+
+- **TMJ arthrocentesis Ref card** revised after feedback from a senior OMS faculty reviewer (email, Oct 27, 2026):
+  - The old line "finish with steroid or hyaluronic acid" is now three lines. Steroid: use sparingly, one or two injections per joint. Hyaluronic acid: not FDA-approved for the TMJ (off-label) and causes significant inflammation at first; the avian-allergy caution stays. PRP: an alternative, often given at arthroscopy.
+  - Reviewer practice noted on the card: arthroscopy with PRP.
+  - New source: Haddad et al., J Oral Rehabil 2023, a systematic review of PRP for TMJ disorders (small, heterogeneous trials). Search now finds the card under "PRP", "platelet-rich plasma", "hyaluronic acid" and "steroid".
+- The reviewer is not named in the app.
+
 ## v3.9.0 — Oct 27, 2026 (approved by Steven Oct 27, 2026; merged to main)
 
 - **Kriolu and 中文 patient FAQs:** all 15 FAQs translated, on the Compass Patient tab and /handouts/ (links like `#fao-kea`, `#finf-zh`). The "English shown" fallback no longer appears. Machine-drafted by Claude (Kriolu: Santiago variant, same spelling as the handouts); pending native-speaker review.
