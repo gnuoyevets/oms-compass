@@ -296,6 +296,32 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .reconciled li{margin:6px 0}.reconciled .small{display:block;margin-top:3px}.decision-tools textarea{width:100%;min-height:180px;font:14px/1.5 var(--sans);padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 .decision-tools .chips{margin:10px 0}.decision-tools .go,.go{min-height:44px}.delta{font-size:13px;line-height:1.5;padding:10px 12px;border-left:3px solid var(--accent);margin-bottom:10px;background:var(--surface)}
 .cmp-result{border:2px dashed var(--warn-line);border-radius:10px;padding:12px;margin-top:10px}.cmp-result h4{margin:0 0 8px;font-size:14px}.question-next{border:2px solid var(--warn-line)}
+.unc h4{font-size:13.5px;margin:12px 0 2px}
+.unl{list-style:none;margin:0;padding:0}
+.unl>li{padding:8px 0;border-top:1px solid var(--warn-line);line-height:1.45}.unl>li:first-child{border-top:0}
+.nact{display:inline-block;font:700 11.5px/1.5 var(--sans);letter-spacing:.3px;text-transform:uppercase;border:1px solid currentColor;border-radius:5px;padding:0 5px;margin-right:6px;white-space:nowrap}
+.unl .cond{display:block;font-size:12.5px;margin-top:3px}
+.unl .go{margin-top:6px}
+.unl .fq{margin-top:6px}
+.labcap{background:var(--surface);border:2px solid var(--accent);border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.labcap .lv{font:800 20px/1.3 var(--display);margin:4px 0}
+.labcap p{margin:6px 0}
+.labcap .chips{margin:8px 0}
+.labcap .gobtn[disabled]{opacity:.45}
+.mbar{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;line-height:1.35;margin:0 0 10px;padding:4px 4px 4px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.mbar .tg{color:var(--ink);white-space:nowrap}
+.ioit{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;border-top:1px solid var(--line)}
+.io>.ioit:first-of-type,.io h3+.ioit{border-top:0}
+.ioit .ioi{border-top:0}
+.iost{display:flex;gap:4px;padding:4px 8px 4px 0}
+.iost .tg{min-height:44px;min-width:44px;padding:4px 7px;font-size:12px;text-align:center;color:var(--ink)}
+.iost .tg.on{background:var(--chip);color:var(--chip-ink);border-color:var(--chip-ink)}
+.ioi .bx.pend{border-style:dashed;border-color:var(--warn-ink)}
+.ioit.st-na .ioi{color:var(--muted)}.ioit.st-na .bx{color:var(--muted)}
+.iohid{border-top:1px solid var(--line)}.iohid>summary{font-size:12.5px;color:var(--muted);padding:12px 14px;min-height:44px;cursor:pointer}
+.ioopen{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
+.ioopen h3{background:none}.ioopen .unl,.ioopen p{padding:0 14px;margin:0 0 8px}
+.ionote{font-size:12.5px;color:var(--muted);margin:0 0 10px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* ===== v3.6 chairside focus mode (module decision screens) =====
@@ -1588,9 +1614,14 @@ function fluids(w){return w?Math.round(w<=10?w*4:w<=20?40+(w-10)*2:60+(w-20)):nu
 
 /* Practice mode: a device preference (not patient data). Author = Bayside/Dr. Young presets; Colleague = neutral. */
 const PM_KEY='oms_compass_practice_mode';
-function pmode(){try{const v=localStorage.getItem(PM_KEY);if(v)return v==='colleague'?'colleague':'author'}catch(e){}return S.pm==='colleague'?'colleague':'author'}
-function setPmode(v){S.pm=v==='colleague'?'colleague':'author';try{localStorage.setItem(PM_KEY,S.pm)}catch(e){}}
+/* v3.10: new users start in Colleague; a stored choice (or an existing user's migrated Author default) is kept. */
+function pmode(){if(S.pmOv)return S.pmOv;try{const v=localStorage.getItem(PM_KEY);if(v)return v==='author'?'author':'colleague'}catch(e){}return S.pm==='author'?'author':'colleague'}
+function setPmode(v){S.pm=v==='author'?'author':'colleague';try{localStorage.setItem(PM_KEY,S.pm)}catch(e){}}
 const colleague=()=>pmode()==='colleague';
+function inOtherMode(fn){const o=S.pmOv;S.pmOv=colleague()?'author':'colleague';try{return fn()}finally{if(o)S.pmOv=o;else delete S.pmOv}}
+function modeBarHTML(){const c=colleague();return`<div class="mbar" role="group" aria-label="Practice mode"><span>Mode: <b>${c?'Colleague':'Author'}</b><span class="small"> · ${c?'guideline rules':'author protocols, labeled'}</span></span><button class="tg" data-pmsw aria-label="Switch to ${c?'Author':'Colleague'} mode">Switch to ${c?'Author':'Colleague'}</button></div>`}
+function modeLines(P){const au=P.filter(({p})=>p.author).map(({p})=>authorText(p.author)),ap=P.filter(({p})=>!p.author&&p.basis==='au').map(({f})=>`${f.t}: author's practice (no guideline equivalent)`);
+ return[`Practice mode: ${colleague()?'Colleague - guideline thresholds where guidance exists':'Author - author protocols applied where marked'}`,...(au.length||ap.length?['Departures from guidelines: '+[...au,...ap].join(' | ')]:['Departures from guidelines: none flagged in the included findings'])]}
 function pmodeHTML(){const m=pmode();return`<div class="pmode" role="group" aria-label="Practice mode"><span class="pl">Mode</span>${[['author','Author'],['colleague','Colleague (Standard)']].map(([v,l])=>`<button class="tg${m===v?' on':''}" data-pm="${v}" aria-pressed="${m===v}">${l}</button>`).join('')}</div><p class="small pmdesc" id="pmdesc">${m==='colleague'?'<b>Colleague:</b> guideline rules where a guideline exists (warfarin INR &lt;4 and DOAC dose timing per SDCEP 2022). Author-only content with no guideline equivalent (no-pump sedation card, personal Ref notes) is folded and labeled, not replaced. Handouts are neutral.':'<b>Author:</b> applies the author’s protocols — warfarin INR &lt;3.5 and uninterrupted DOACs for dentoalveolar surgery, the no-pump sedation card — each labeled with where it differs from guidance.'}</p>`}
 /* Colleague mode: author's-practice content sits behind a disclosure; guideline/evidence content stays visible. */
 let AUN=0;
@@ -1602,8 +1633,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.9.2';
+const VER='3.10.0';
 const CHANGES=[
+{v:'3.10.0',d:'Oct 27, 2026',i:['Unresolved items are listed once per encounter and split into “Changes the plan” and “Also needed to finalize”. Each shows its next action (ask patient, examine, check records, obtain result, contact clinician, decide plan) and, where existing branches differ, what each answer would lead to. The plan stays visible and copyable while provisional.','Type a result in search — “INR 2.6”, “eGFR 28”, “platelets 45 k”, “A1c 8.2 %” — and confirm to record it. Units are chosen, never assumed; date and trend are never read from text. Replacing a result clears the answers that described the old one. eGFR is never used as CrCl.','Intraop checklist follows the encounter: Done, Pending or N/A per item; sedation, implant and specimen checks fold away when the entered anesthesia or procedure makes them not apply; one check per assessment finding; unresolved questions listed (checking never answers them). Checks reset when the plan facts they covered change.','New users start in Colleague mode; an existing Author setting is kept. Switch mode from the finding or assessment screen without losing entered facts. Copied notes name the mode and any departures from guidelines.']},
 {v:'3.9.2',d:'Oct 27, 2026',i:['Search box now shows three examples: Eliquis, INR, dry socket (a drug, a lab and a topic).']},
 {v:'3.9.1',d:'Oct 27, 2026',i:['TMJ arthrocentesis Ref card: injectate guidance revised after senior OMS faculty review. Steroid used sparingly (one or two injections per joint); hyaluronic acid flagged as off-label for the TMJ with significant initial inflammation; PRP (often at arthroscopy) added as an alternative, with a systematic review cited.']},
 {v:'3.9.0',d:'Oct 27, 2026',i:['Patient FAQs now in Kriolu and 中文 (all 15, on the Patient tab and the patient page). Machine-drafted by Claude; pending native-speaker review, like the handout translations.','Front-desk QR sheets rebuilt: 4 codes per row in separate boxes with wide gaps (was 5, tightly packed), two pages per language, and Kriolu and 中文 pages added.']},
@@ -1802,7 +1834,8 @@ function idx(){if(IDX)return IDX;const strip=t=>String(t).replace(/<[^>]+>/g,' '
   ...REF.map(r=>({k:'ref',id:r.t,t:r.t,sub:'Ref',x:[r.t,r.k,r.i.join(' ')].join(' ').toLowerCase()})),
   ...(HANDOUTS_LIVE?HO.map(h=>({k:'ho',id:h.id,t:h.t.en,sub:'Patient handout',x:(h.t.en+' '+h.i.en.join(' ')).toLowerCase()})):[]),
   ...(HANDOUTS_LIVE?FAQ.map(f=>({k:'ho',id:f.id,t:f.t.en,sub:f.k==='proc'?'Patient FAQ · procedure':'Patient FAQ · diagnosis',x:(f.t.en+' '+f.i.en.flat().join(' ')).toLowerCase()})):[])];return IDX}
-function hitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);const fh=findHitsHTML(q);
+function hitsHTML(q){return labCapHTML(q)+searchHitsHTML(q)}
+function searchHitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);const fh=findHitsHTML(q);
  const hits=idx().filter(e=>terms.every(t=>e.x.includes(t))).sort((a,b)=>(terms.every(t=>b.t.toLowerCase().includes(t))-terms.every(t=>a.t.toLowerCase().includes(t))));
  if(!hits.length)return fh||NOMATCH(q);
  return`${fh}${fh?'<div class="lab group">Modules · SOS · reference</div>':''}<div class="mods">${hits.slice(0,25).map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`}
@@ -1838,6 +1871,10 @@ const pfNum=k=>{const v=String(S.pf[k]??'').trim();return /^(?:\d+(?:\.\d*)?|\.\
 
 /* Shared rule helpers */
 function needCtx(p,c,k,why){if(!has(c[k])){p.miss.push(`${CTXQ[k].q}${why?' — '+why:''}`);p.prov=true;return false}return true}
+/* eGFR is documentation on the kidney finding: it never relaxes NSAID avoidance and is never used as CrCl. */
+function egfrNote(p){const raw=S.pf.egfr;if(raw===undefined||raw===''||raw==='u')return;const v=pfNum('egfr');
+ if(v==null||v>200){p.steps.push('eGFR entry is not a usable number; re-enter it as reported.');return}
+ p.steps.push(`eGFR ${v} mL/min/1.73 m² as reported; result date not recorded. Not a CrCl: where a drug label or protocol specifies CrCl, obtain CrCl separately.${v<60?' NKF: avoid NSAIDs, especially when eGFR is below 60.':''}`);if(v<60&&!p.src.includes('nkfpain'))p.src.push('nkfpain')}
 function mk(){return{d:'proceed',prov:false,act:'',steps:[],esc:[],miss:[],assume:[],basis:'gl',src:[],tags:[]}}
 const BLEED_ESC='Bleeding not controlled by firm pressure and local measures → Post-op bleeding pathway. Airway threat or expanding floor-of-mouth swelling → 911.';
 
@@ -1868,7 +1905,7 @@ const FIND=[
    else{p.prov=true;p.act='Retime one dose (SDCEP); the change depends on the agent and dosing time.';
     if(!has(ag))p.miss.push('Which DOAC (twice- vs once-daily)');else p.miss.push('Morning vs evening dosing');p.steps.unshift(BID,AM,PM)}
    p.steps.push('One-dose timing change, not a stop. Confirm with the patient; ask the prescriber if unsure.','Stage multiple extractions where possible.')}
-  else{p.d='refer';p.src=['chest','allyn'];p.basis='gl';p.act='Plan any interruption with the prescriber; timing depends on agent and renal function.';p.miss.push('Renal function (CrCl), if interruption is planned');p.steps=['Heparin bridging is generally harmful; reserve it for specific high-risk cases (2024 AHA/ACC).']}
+  else{p.d='refer';p.src=['chest','allyn'];p.basis='gl';p.act='Plan any interruption with the prescriber; timing depends on agent and renal function.';p.miss.push('Renal function (CrCl), if interruption is planned');p.steps=['Heparin bridging is generally harmful; reserve it for specific high-risk cases (2024 AHA/ACC).'];if(pfNum('egfr')!=null)p.steps.push('A recorded eGFR is not substituted for CrCl. Where the agent’s label or the prescriber’s interruption plan uses CrCl, obtain CrCl separately.')}
   if(c.ap==='y'){p.d=DRANK[p.d]<2?'investigate':p.d;p.tags.push('combo');p.steps.unshift('Anticoagulant + antiplatelet: higher bleeding risk. Consult the prescriber about the combination before procedures likely to bleed (SDCEP §9).');if(!p.src.includes('sdcepFull'))p.src.push('sdcepFull')}
   else if(!has(c.ap)&&BLEEDP.includes(c.proc)){p.miss.push('Antiplatelet co-therapy, including OTC aspirin');p.prov=true}
   return p}},
@@ -2106,15 +2143,16 @@ const FIND=[
  what:['Avoid NSAIDs; renally dose drugs.','Uremic platelet dysfunction raises bleeding risk.','Hemodialysis: operate the day after dialysis; never use the fistula arm for BP or IV.'],
  ctx:[],
  qs:[{k:'dial',q:'Dialysis',opts:[['hd','Hemodialysis'],['pd','Peritoneal dialysis'],['no','Not on dialysis']]},
-  {k:'esrd',q:'ESRD (kidney failure) and not on regular dialysis?',opts:YN,when:()=>S.pf.dial==='no'}],
+  {k:'esrd',q:'ESRD (kidney failure) and not on regular dialysis?',opts:YN,when:()=>S.pf.dial==='no'},
+  {k:'egfr',q:'eGFR, if reported (optional)',type:'num',unit:'mL/min/1.73 m²',mode:'decimal',optional:1}],
  link:[['renal',null]],
- plan(c){const p=mk();p.src=['dialysis','andersson'];p.basis='ev';p.tags.push('nsaid');
+ plan(c){const p=(c=>{const p=mk();p.src=['dialysis','andersson'];p.basis='ev';p.tags.push('nsaid');
   if(!has(c.dial)){p.d='modify';p.prov=true;p.miss.push('Dialysis status');p.act='Avoid NSAIDs and renally dose; dialysis status sets timing.';return p}
   if(c.dial==='hd'){p.d='modify';p.act='Operate the day after dialysis with local hemostasis.';p.steps=['Never use the fistula/shunt arm for BP or IV.','Check platelets.','Analgesia: avoid aspirin and NSAIDs; low-dose acetaminophen.'];p.tags.push('bleedrisk');return p}
   if(c.dial==='pd'){p.d='investigate';p.basis='un';p.act='Peritoneal dialysis is not covered here — discuss with nephrology.';return p}
   if(c.esrd==='y'){p.d='refer';p.src=['asaps'];p.basis='gl';p.act='ESRD not on dialysis (ASA IV): physician/nephrology input before anything elective; hospital setting for surgery.';return p}
   if(!has(c.esrd)){p.prov=true;p.miss.push('ESRD without dialysis?')}
-  p.d='modify';p.act='Renal dosing and NSAID avoidance.';p.steps=['Confirm current eGFR and potassium if sedating.'];return p}},
+  p.d='modify';p.act='Renal dosing and NSAID avoidance.';p.steps=['Confirm current eGFR and potassium if sedating.'];return p})(c);egfrNote(p);return p}},
 
 {id:'bleeddx',kind:'Medical history',t:'Inherited bleeding disorder (hemophilia, von Willebrand)',cls:'Hemophilia A/B · von Willebrand disease',
  syn:['hemophilia','haemophilia','hemophilia a','hemophilia b','christmas disease','factor viii deficiency','factor ix deficiency','von willebrand','von willebrand disease','vwd','inherited bleeding disorder'],
@@ -2219,7 +2257,7 @@ const AUTHOR={
  inr:{rule:'Warfarin: proceed only if INR <3.5 (recent)',applies:'Office dentoalveolar surgery — extractions, alveoloplasty, routine implants',guide:'SDCEP 2022: proceed if INR <4, measured within 24 h (72 h if stable)',src:'sdcepFull'},
  doac:{rule:'DOACs: continue without interruption',applies:'Higher-bleeding-risk dentoalveolar surgery — surgical/multiple extractions, alveoloplasty, routine implants. Not major surgery.',guide:'CHEST 2022 continues DOACs for minor dental work; SDCEP 2022 retimes one dose for higher-risk procedures (skip the morning dose of a twice-daily agent; delay a morning once-daily dose until 4 h after hemostasis)',src:'sdcepDoac'}};
 const inrMax=()=>colleague()?4:3.5;
-function authorHTML(k){const a=AUTHOR[k];return`<div class="fsec authp"><div class="lab">Author’s protocol · differs from guidance</div><ul><li><b>Rule:</b> ${esc(a.rule)}</li><li><b>Applies to:</b> ${esc(a.applies)}</li><li><b>Guidance instead:</b> ${esc(a.guide)} ${srcLink(a.src)}</li></ul><div class="small">Switch Home → Mode → Colleague to apply the guideline rule.</div></div>`}
+function authorHTML(k){const a=AUTHOR[k];return`<div class="fsec authp"><div class="lab">Author’s protocol · differs from guidance</div><ul><li><b>Rule:</b> ${esc(a.rule)}</li><li><b>Applies to:</b> ${esc(a.applies)}</li><li><b>Guidance instead:</b> ${esc(a.guide)} ${srcLink(a.src)}</li></ul><div class="small">Use “Switch to Colleague” above to apply the guideline rule; entered facts are kept.</div></div>`}
 function authorText(k){const a=AUTHOR[k];return`Author protocol applied: ${a.rule} (applies to: ${a.applies}). Guidance instead: ${a.guide}.`}
 
 /* Questions relevant now (finding + shared context), and pruning of stale answers */
@@ -2230,7 +2268,7 @@ function prune(){
  const act=[...new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])])].map(id=>FX[id]).filter(Boolean);
  for(let i=0;i<3;i++){let changed=false;
   const allQ=act.flatMap(f=>f.qs);const keys=[...new Set(allQ.map(q=>q.k))];
-  keys.forEach(k=>{if(S.pf[k]===undefined)return;const qs=allQ.filter(q=>q.k===k);if(qs.every(q=>q.when&&!q.when())){delete S.pf[k];changed=true}});
+  keys.forEach(k=>{if(S.pf[k]===undefined)return;const qs=allQ.filter(q=>q.k===k);if(qs.every(q=>q.when&&!q.when()&&!inOtherMode(()=>q.when()))){delete S.pf[k];changed=true}});
   if(!changed)break}}
 function baseFindingPlan(f){const p=f.plan({...S.pf});
  /* Strength matches inputs: any visible question unanswered or Unknown keeps the action provisional. */
@@ -2332,7 +2370,7 @@ function rankQuestions(ids){
    if(q.optional){r.score=0;r.reason='Optional: '+q.q.replace(/^[^(]*\(|\)$/g,'')+'.'}
    else if(q.type==='num'){r.score=3;r.reason='A reported numeric value and unit are required; no test value is assumed.'}
    else{
-    r.choices=q.opts.map(([value,label])=>{const m=modelFor(ids,{[q.k]:value});return{value,label,d:m.od,provisional:m.prov,key:outcomeKey(m)}});
+    r.choices=q.opts.map(([value,label])=>{const m=modelFor(ids,{[q.k]:value});return{value,label,d:m.od,pd:Object.fromEntries(m.P.map(({f,p})=>[f.id,p.d])),provisional:m.prov,key:outcomeKey(m)}});
     const dispos=new Set(r.choices.map(x=>x.d)),plans=new Set(r.choices.map(x=>x.key));
     if(dispos.size>1){r.score=5;r.reason='The listed answers can change the overall disposition.'}
     else if(plans.size>1){r.score=4;r.reason='The listed answers can change an essential step or precaution.'}
@@ -2346,9 +2384,97 @@ function rankQuestions(ids){
 function nextQuestionHTML(m){const r=rankQuestions(m.A).find(x=>!x.q.optional);if(!r)return'';
  return`<div class="fsec question-next"><div class="lab">Next decisive question</div><p>${esc(r.reason)}</p>${['proc','anes','urg'].includes(r.q.k)?`<p><b>${esc(r.q.q)}</b> — answer under Context above.</p>`:qHTML(r.q).replace(/ (id|for)="(question|pf)-/g,' $1="next-$2-')}<button class="go" data-question="${r.q.k}" data-qfid="${r.fid}">Open finding and details ›</button></div>`;
 }
-function changeConditionsHTML(ids){const rows=rankQuestions(ids).filter(r=>r.choices.length&&r.score>=4).slice(0,3);
+function changeConditionsHTML(ids,ranked){const rows=(ranked||rankQuestions(ids)).filter(r=>r.choices.length&&r.score>=4).slice(0,3);
  return`<details class="box"><summary>What would change this plan?</summary><div class="inner"><p class="small">Existing rule branches, not predictions. Unanswered facts remain Unknown. Other clinical considerations may be outside Compass.</p>${rows.length?rows.map(r=>`<h4>${esc(r.q.q)}</h4><ul>${r.choices.map(c=>`<li>${esc(c.label)} → ${esc(c.d?DISP[c.d][0]:'No finding action')}${c.provisional?' (still provisional)':''}</li>`).join('')}</ul>`).join(''):'<p>No different disposition or essential step was found among the currently visible option branches. Numeric results and hidden downstream questions may still change the plan.</p>'}</div></details>`;
 }
+
+/* ===== v3.10 Actionable uncertainty =====
+   Each open question appears once per encounter (by key, across findings), split into facts that can change the
+   plan and facts only needed to finalize, each with its next action. Listing an item never answers it. */
+const NACT={ask:'Ask patient',exam:'Examine',rec:'Check records',lab:'Obtain result',doc:'Contact clinician',plan:'Decide plan'};
+const Q_ACT={proc:'plan',anes:'plan',urg:'plan',cdMono:'plan',
+ age:'ask',doacAg:'ask',doacTime:'ask',ap:'ask',apReg:'ask',inrOn:'ask',arSteroid:'ask',glpGi:'ask',glpEsc:'ask',sgAg:'ask',stAI:'ask',stRisk:'ask',stUnwell:'ask',rtWhen:'ask',rtChemo:'ask',dial:'ask',cdType:'ask',epAg:'ask',ep24:'ask',txSteroid:'ask',
+ stent:'rec',inrAge:'rec',stable:'rec',inrRef:'rec',arInd:'rec',stRec:'rec',pltAge:'rec',pltTrend:'rec',pltCause:'rec',a1cAge:'rec',esrd:'rec',bdType:'rec',ieHi:'rec',
+ inr:'lab',plt:'lab',a1c:'lab',egfr:'lab',exposed:'exam',
+ rtDose:['doc','radiation oncology'],cdDep:['doc','cardiology / device clinic'],txRecent:['doc','transplant team']};
+/* Plan-level "missing" text that restates a question; matched so it is listed once, under the question. */
+const MISS_Q=[[/^Planned procedure/,['proc']],[/^Anesthesia/,['anes']],[/^Urgency/,['urg']],[/^Which DOAC/,['doacAg']],[/^Morning vs evening/,['doacTime']],[/^Antiplatelet co-therapy/,['ap']],[/^Regimen/,['apReg']],
+ [/^(INR value|Numeric INR|Valid INR)/,['inr']],[/^(Date of the INR|Current INR result date)/,['inrAge']],[/^INR stability/,['stable']],[/^Anticoagulant status/,['inrOn']],[/^Compare with the lab/,['inrRef']],
+ [/^(Platelet count|Platelet unit|Valid platelet)/,['plt']],[/^Result date/,['pltAge']],[/^Trend/,['pltTrend']],[/^Cause of thrombocytopenia/,['pltCause']],[/^(HbA1c|Valid HbA1c)/,['a1c']],[/^Date of the HbA1c/,['a1cAge']],
+ [/^Dialysis status/,['dial']],[/^ESRD without/,['esrd']],[/^Indication \/ dosing/,['arInd']],[/^Exposed bone/,['exposed']],[/^Corticosteroids\?/,['arSteroid','txSteroid']],[/^Current GI/,['glpGi']],[/^Higher-risk features/,['glpEsc']],
+ [/^Agent \(sets/,['sgAg']],[/^Known adrenal/,['stAI']],[/^Steroid dose/,['stRisk']],[/^HPA-axis/,['stRec']],[/^Unwell today/,['stUnwell']],[/^Radiation planned/,['rtWhen']],[/^Dose to the surgical site/,['rtDose']],[/^Active chemotherapy/,['rtChemo']],
+ [/^Which disorder/,['bdType']],[/^High-risk cardiac/,['ieHi']],[/^Device type/,['cdType']],[/^Pacing dependence/,['cdDep']],[/^Monopolar/,['cdMono']],[/^Which interacting drug/,['epAg']],[/^Last use/,['ep24']],[/^Time since transplant/,['txRecent']]];
+function actOf(k,q){const a=Q_ACT[k]||(q&&q.type==='num'?'lab':'ask');return Array.isArray(a)?a:[a]}
+function missAct(t){if(/lookup conflict|medication list|which the patient takes/i.test(t))return['ask'];if(/screen/i.test(t))return['rec'];if(/CrCl|verification of INR/i.test(t))return['lab'];return['doc']}
+function openItems(ids,miss,ranked){ranked=ranked||rankQuestions(ids);const rk=new Map(ranked.map(r=>[r.q.k,r])),qs=new Map(),other=[];
+ ids.forEach(id=>{const f=FX[id];if(!f)return;fQs(f).forEach(q=>{if(q.optional)return;
+  if(has(S.pf[q.k])&&(!q.unitSel||has(S.pf[q.unitSel])))return;
+  const it=qs.get(q.k)||{k:q.k,q,fids:[],unk:S.pf[q.k]==='u',r:rk.get(q.k)};if(!it.fids.includes(id))it.fids.push(id);qs.set(q.k,it)})});
+ (miss||[]).forEach(x=>{const t=String(x).replace(/ — unknown$/,'');
+  if([...qs.values()].some(it=>it.q.q===t))return;
+  const hit=MISS_Q.find(([re])=>re.test(t)),keys=hit&&hit[1];
+  /* A restated question is dropped only while that question is still listed; otherwise the text stays. */
+  if(keys&&keys.some(k=>qs.has(k)))return;
+  if(!other.some(o=>o.t===t))other.push({t,act:keys?actOf(keys[0]):missAct(t),dec:true})});
+ const items=[...qs.values()].map(it=>({...it,act:actOf(it.k,it.q),dec:!!it.r&&it.r.score>=3})).sort((a,b)=>(b.r?.score||0)-(a.r?.score||0));
+ /* Branches are evaluated with today's answers. A fact in a finding that still has a decisive gap may matter once
+    that gap is filled, so it is not called non-decisive; it is labelled with what it waits on. */
+ items.forEach(it=>{if(it.dec)return;const g=items.find(d=>d.dec&&d.fids.some(id=>it.fids.includes(id)));if(g){it.dec=true;it.after=itemLab(g)}});
+ return{dec:[...other,...items.filter(x=>x.dec)],fin:items.filter(x=>!x.dec)}}
+/* What the plan is conditional on: the existing branch outcomes for each answer, never a prediction. */
+function condText(it){const r=it.r;if(!it.q||!r)return'';
+ if(it.after)return`Can change the plan once “${it.after}” is known; no answer is assumed.`;
+ if(it.q.type==='num')return'No value is assumed; the reported result'+(it.q.unitSel?' and unit set':' sets')+' the plan.';
+ if(!r.choices.length)return'';const g=new Map();
+ r.choices.forEach(c=>{const ds=it.fids.map(id=>c.pd&&c.pd[id]).filter(Boolean),d=ds.length?ds.reduce((a,b)=>DRANK[b]>DRANK[a]?b:a):c.d,l=d?DISP[d][0]:'No finding action';g.set(l,[...(g.get(l)||[]),c.label.split(' (')[0].split(' · ')[0]])});
+ return[...g].map(([d,ls])=>`${ls.join(' / ')} → ${d}`).join(' · ')+(g.size===1&&r.score>=4?' (steps differ)':'')}
+const itemLab=it=>it.q?it.q.q.replace(/[?…]$/,''):it.t.replace(/^Resolve conflict: /,'Resolve conflict: ').replace(/^(Resolve conflict: [^.]*\.).*$/,'$1');
+const itemCtx=it=>it.q?(it.q.ctx?'shared context':it.fids.map(id=>FX[id].t.split(' (')[0]).join(' · ')):'';
+const actChip=a=>`<span class="nact">${esc(NACT[a[0]])}${a[1]?' · '+esc(a[1]):''}</span>`;
+function itemText(it){return`${NACT[it.act[0]]}${it.act[1]?' ('+it.act[1]+')':''}: ${itemLab(it)}${it.unk?' [marked unknown]':''}${it.dec&&condText(it)?' - '+condText(it):''}`}
+function uncHTML(ids,miss,where,ranked){const o=openItems(ids,miss,ranked);if(!o.dec.length&&!o.fin.length)return'';
+ const inline=where==='asmt'&&o.dec.find(it=>it.q&&!['proc','anes','urg'].includes(it.k));
+ const li=it=>`<li>${actChip(it.act)}${it===inline?`<span class="small">${esc(itemCtx(it))}</span>${qHTML(it.q).replace(/ (id|for)="(question|pf)-/g,' $1="next-$2-')}`:`<b>${esc(itemLab(it))}</b>${it.unk?' <span class="small">(marked Unknown)</span>':''}${itemCtx(it)?` <span class="small">· ${esc(itemCtx(it))}</span>`:''}`}${it.dec&&condText(it)?`<span class="cond">${esc(condText(it))}</span>`:''}${it.q&&where==='asmt'?((['proc','anes','urg'].includes(it.k)?`<button class="go" data-ctxq="${it.k}">Answer under Context ›</button>`:`<button class="go" data-question="${it.k}" data-qfid="${it.fids[0]}">${it===inline?'Open finding':'Answer'} ›</button>`)):''}</li>`;
+ return`<div class="fsec warn unc" id="unc"><div class="lab">Before finalizing · unresolved</div><p class="small" style="margin:4px 0 0">The plan shown stays visible and copyable, but it is provisional until these are resolved. Unknown is never read as normal.</p>${o.dec.length?`<h4>Changes the plan · ${o.dec.length}</h4><ul class="unl">${o.dec.map(li).join('')}</ul>`:''}${o.fin.length?`<h4>Also needed to finalize · ${o.fin.length}</h4><ul class="unl">${o.fin.map(li).join('')}</ul>`:''}${where==='find'&&[...o.dec,...o.fin].some(it=>it.q)?'<button class="go" data-qscroll="fqs">Answer below ›</button>':''}</div>`}
+
+/* ===== v3.10 Lab capture from search ("INR 2.6", "eGFR 28"). Recorded only after the clinician confirms.
+   Units, dates and trends are never inferred; replacing a value clears answers that described the old result. ===== */
+const LABCAP=[
+ {k:'inr',re:/^(?:pt ?\/? ?inr|inr)$/,name:'INR',fid:()=>(S.asmt||[]).includes('warfarin')?'warfarin':'inr',unit:'ratio (INR has no unit)',stale:['inrAge','stable','inrRef']},
+ {k:'plt',re:/^(?:plts?|platelets?|platelet count)$/,name:'Platelet count',fid:()=>'plt',unitSel:'pltU',stale:['pltAge','pltTrend'],
+  units:[[/^(k|k ?\/ ?[uµ]l|x ?10\^?3 ?\/ ?[uµ]l|×10³\/µl|x ?10\^?9 ?\/ ?l|10\^?9 ?\/ ?l|×10⁹\/l)$/,'k'],[/^(\/ ?[uµ]l|per ?[uµ]l|cells ?\/ ?[uµ]l)$/,'raw']]},
+ {k:'a1c',re:/^(?:a1c|hba1c|hb a1c|hgb ?a1c|hemoglobin a1c)$/,name:'HbA1c',fid:()=>'a1c',unitSel:'a1cU',stale:['a1cAge'],units:[[/^%$/,'pct'],[/^mmol ?\/ ?mol$/,'mmol']]},
+ {k:'egfr',re:/^e ?gfr$/,name:'eGFR',fid:()=>'renal',unit:'mL/min/1.73 m² (eGFR is reported per 1.73 m²)',stale:[],okTail:/^ml ?\/ ?min(?: ?\/ ?1\.73 ?m(?:2|²|\^2))?$/}];
+const LAB_STALE=Object.fromEntries(LABCAP.map(L=>[L.k,L.stale]));
+function labQ(L){for(const f of FIND){const q=f.qs.find(q=>q.k===L.k);if(q)return q}return null}
+function parseLab(raw){const m=String(raw||'').trim().toLowerCase().match(/^([a-z][a-z0-9 \/]*?)(?:\s*[:=]\s*|\s+)(\d+(?:\.\d+)?|\.\d+)(.*)$/);if(!m)return null;
+ const name=m[1].trim().replace(/\s+/g,' '),tail=m[3].trim();
+ if(/^(crcl|cr cl|creatinine clearance)$/.test(name))return{crcl:m[2]};
+ const L=LABCAP.find(x=>x.re.test(name));if(!L)return null;
+ if(/^[,.\d]/.test(m[3]))return{L,bad:true};
+ let unit=null,extra='';
+ if(L.unitSel){const u=L.units.find(([re])=>re.test(tail));if(u)unit=u[1];else if(tail)extra=tail}
+ else if(tail&&!(L.okTail&&L.okTail.test(tail)))extra=tail;
+ return{L,v:m[2].replace(/^\./,'0.'),unit,extra}}
+const unitName=(L,u)=>{const q=labQ(L),o=q&&q.units&&q.units.find(x=>x[0]===u);return o?o[1]:''};
+function labState(r){const L=r.L,pick=S.labPick&&S.labPick.q===S.q?S.labPick.u:null,unit=L.unitSel?(r.unit||pick):null,cur=S.pf[L.k],curU=L.unitSel?S.pf[L.unitSel]:null;
+ return{L,unit,needUnit:!!L.unitSel&&!unit,same:cur===r.v&&(!L.unitSel||curU===unit),prev:has(cur)?`${cur}${L.unitSel&&curU?' '+unitName(L,curU):''}`:cur==='u'?'Unknown':null,
+  stale:L.stale.filter(k=>S.pf[k]!==undefined).map(k=>fieldLabel(k).replace(/[?…]$/,''))}}
+function labCapHTML(q){const r=parseLab(q);if(!r)return'';
+ if(r.crcl)return`<div class="labcap" role="note"><div class="lab">CrCl ${esc(r.crcl)} · not recorded</div><p class="small">Compass has no CrCl field, and it never converts CrCl to or from eGFR. The DOAC finding asks for CrCl when an interruption is planned.</p></div>`;
+ if(r.bad)return`<div class="labcap" role="note"><div class="lab">${esc(r.L.name)} · not recorded</div><p class="small">Type the number without commas or spaces (e.g., ${r.L.k==='plt'?'“platelets 45 k” or “platelets 45000 /µL”':'“'+esc(r.L.name)+' 2.6”'}).</p></div>`;
+ const st=labState(r),L=r.L,q0=labQ(L);
+ return`<div class="labcap" role="group" aria-label="Record ${esc(L.name)} result"><div class="lab">Record this result? · not yet recorded</div><div class="lv">${esc(L.name)} ${esc(r.v)}${st.unit?' '+esc(unitName(L,st.unit)):''}</div>
+ ${L.unitSel?`<p class="small">${r.unit?'Unit as typed.':'<b>Choose the unit as reported</b> — it is never assumed.'}</p>${r.unit?'':`<div class="chips">${q0.units.map(([v,l])=>`<button class="tg${st.unit===v?' on':''}" data-labu="${v}" aria-pressed="${st.unit===v}">${esc(l)}</button>`).join('')}</div>`}`:`<p class="small">Unit: ${esc(L.unit)}</p>`}
+ ${r.extra?`<p class="small">“${esc(r.extra)}” is not recorded. Dates, trends and units are entered on the finding, never read from text.</p>`:''}
+ <p class="small">Not recorded: result date${L.k==='plt'?' and trend':''}. Recording does not mark the result current, stable or normal.</p>
+ ${st.prev&&!st.same?`<p class="small"><b>Replaces ${esc(L.name)} ${esc(st.prev)}.</b>${st.stale.length?' Clears answers about the old result: '+st.stale.map(esc).join('; ')+'.':''}</p>`:''}
+ ${L.k==='egfr'?'<p class="small">eGFR is not CrCl and is not used where a drug label specifies CrCl.</p>':''}
+ <button class="gobtn" data-labrec${st.needUnit?' disabled':''}>${st.same?`Already recorded · open ${esc(FX[L.fid()].t.split(' (')[0])}`:st.needUnit?'Choose a unit to record':`Record ${esc(L.name)} ${esc(r.v)} and open`}</button></div>`}
+function recordLab(){const r=parseLab(S.q);if(!r||!r.L)return;const st=labState(r);if(st.needUnit)return;const L=r.L,fid=L.fid();
+ S.fid=fid;const before=planBeforeEdit();let cleared=[];
+ if(!st.same){cleared=L.stale.filter(k=>S.pf[k]!==undefined);S.pf[L.k]=r.v;if(L.unitSel)S.pf[L.unitSel]=st.unit;cleared.forEach(k=>delete S.pf[k]);if(S.lkc)delete S.lkc[L.k]}
+ S.q='';delete S.labPick;openFind(fid);if(!st.same)recordPlanEdit(before,L.k,cleared);redraw()}
 
 /* Comparisons clone and restore every clinical state object. They never edit the real assessment. */
 function comparisonPatch(){
@@ -2365,19 +2491,19 @@ function comparisonHTML(m){const patch=comparisonPatch(),hyp=comparisonModel();
 }
 function applyComparison(){const patch=comparisonPatch();if(!patch)return false;const before=planBeforeEdit();Object.assign(S.pf,patch);delete S.compare;delete S.compareEligible;prune();recordPlanEdit(before,'comparison applied');return true}
 
-function fieldLabel(k){if(k.startsWith('finding:'))return'Finding: '+(FX[k.slice(8)]?.t||'updated');if(k.startsWith('screen:'))return'Pre-op / pathway answer';if(CTXQ[k])return CTXQ[k].q;for(const f of FIND){const q=f.qs.find(q=>q.k===k||q.unitSel===k);if(q)return q.q+(q.unitSel===k?' unit':'')}return k==='comparison applied'?'Approach comparison applied':'Clinical context'}
+function fieldLabel(k){if(k.startsWith('finding:'))return'Finding: '+(FX[k.slice(8)]?.t||'updated');if(k.startsWith('screen:'))return'Pre-op / pathway answer';if(CTXQ[k])return CTXQ[k].q;for(const f of FIND){const q=f.qs.find(q=>q.k===k||q.unitSel===k);if(q)return q.q+(q.unitSel===k?' unit':'')}return k==='comparison applied'?'Approach comparison applied':k==='mode'?'Practice mode':'Clinical context'}
 function planBeforeEdit(){const ids=[...new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])])];return{ids,m:modelFor(ids)}}
-function recordPlanEdit(before,k){if(!before)return;prune();const ids=[...new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])])],m=modelFor(ids),old=before.m;
+function recordPlanEdit(before,k,cleared){if(!before)return;prune();const ids=[...new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])])],m=modelFor(ids),old=before.m;
  const changed=m.P.filter(x=>{const o=old.P.find(y=>y.f.id===x.f.id);return!o||JSON.stringify([o.p.d,o.p.act,o.p.steps])!==JSON.stringify([x.p.d,x.p.act,x.p.steps])}).map(x=>x.f.t.split(' (')[0]);
- const item={key:k,label:fieldLabel(k),from:disposition(old),to:disposition(m),changed,unresolved:m.miss.length};
+ const item={key:k,label:fieldLabel(k),from:disposition(old),to:disposition(m),changed,unresolved:m.miss.length,cleared:(cleared||[]).map(x=>fieldLabel(x).replace(/[?…]$/,''))};
  S.changes=S.changes||[];const last=S.changes.at(-1);if(last?.key===k){item.from=last.from;S.changes.pop()}S.changes.push(item);S.changes=S.changes.slice(-5);
 }
-function changeNoticeHTML(){const c=S.changes?.at(-1);return c?`<div class="delta" role="status"><b>Changed because: ${esc(c.label)}</b><br>${esc(c.from)} → ${esc(c.to)}.${c.changed.length?' Updated: '+c.changed.map(esc).join(', ')+'.':' Disposition and essential finding steps are unchanged.'}${c.unresolved?' Unresolved items remain.':''}</div>`:''}
+function changeNoticeHTML(){const c=S.changes?.at(-1);return c?`<div class="delta" role="status"><b>Changed because: ${esc(c.label)}</b><br>${esc(c.from)} → ${esc(c.to)}.${c.changed.length?' Updated: '+c.changed.map(esc).join(', ')+'.':' Disposition and essential finding steps are unchanged.'}${c.unresolved?' Unresolved items remain.':''}${c.cleared&&c.cleared.length?` New result: cleared ${c.cleared.map(esc).join('; ')} — answer again for this result.`:''}</div>`:''}
 function consultText(m){const facts=ctxSummary().join('; '),issues=[...new Set([...m.miss,...m.conf.filter(c=>c.raise).map(c=>c.t)])];
  const question=issues.length?'Please advise on these specific unresolved decisions before the proposed procedure: '+issues.join(' | '):'Please advise whether the medication or perioperative plan below needs modification for the proposed procedure.';
- return asciiT(['CONSULTATION DRAFT — no identifiers','Proposed procedure / context: '+facts,'Relevant findings: '+m.P.map(({f,p})=>f.t+': '+p.act).join(' | '),'Decision requested: '+question,'Current disposition: '+disposition(m)+(m.prov?' (provisional)':''),'Basis / sources: '+[...new Set(m.P.flatMap(({p})=>p.src))].filter(k=>SRC[k]).map(k=>SRC[k].n+' '+SRC[k].u).join(' | '),'Draft only. Verify facts, choose the appropriate recipient, and edit before using; Compass does not send it.'].join('\n\n'));
+ return asciiT(['CONSULTATION DRAFT — no identifiers','Proposed procedure / context: '+facts,'Relevant findings: '+m.P.map(({f,p})=>f.t+': '+p.act).join(' | '),'Decision requested: '+question,'Current disposition: '+disposition(m)+(m.prov?' (provisional)':''),...modeLines(m.P),'Basis / sources: '+[...new Set(m.P.flatMap(({p})=>p.src))].filter(k=>SRC[k]).map(k=>SRC[k].n+' '+SRC[k].u).join(' | '),'Draft only. Verify facts, choose the appropriate recipient, and edit before using; Compass does not send it.'].join('\n\n'));
 }
-function decisionToolsHTML(m){return changeConditionsHTML(m.A)+comparisonHTML(m)+`<details class="box decision-tools"><summary>Consultation draft · decision requested</summary><div class="inner"><p class="small">De-identified facts from the actual assessment only. No patient name, recipient, date or identifier fields. Nothing is sent.</p><textarea readonly aria-label="De-identified consultation draft">${esc(consultText(m))}</textarea><button class="go" data-consult-copy>Copy consultation draft</button></div></details>`}
+function decisionToolsHTML(m,ranked){return changeConditionsHTML(m.A,ranked)+comparisonHTML(m)+`<details class="box decision-tools"><summary>Consultation draft · decision requested</summary><div class="inner"><p class="small">De-identified facts from the actual assessment only. No patient name, recipient, date or identifier fields. Nothing is sent.</p><textarea readonly aria-label="De-identified consultation draft">${esc(consultText(m))}</textarea><button class="go" data-consult-copy>Copy consultation draft</button></div></details>`}
 
 /* Finding view */
 function chipRow(q,val){const opts=[...q.opts,['u','Unknown']];
@@ -2391,10 +2517,10 @@ function fDynHTML(f){const p=fPlan(f);return`<div id="ftop">${fTopHTML(f,p)}</di
 function fQsHTML(f){const ranked=rankQuestions([f.id]),order=new Map(ranked.map((r,i)=>[r.q.k,i]));const qs=fQs(f).sort((a,b)=>(order.get(a.k)??999)-(order.get(b.k)??999));return`<div class="fsec"><div class="lab">Refine the plan · decisive questions first</div>${ranked[0]&&!ranked[0].q.optional?`<p class="small">Next: ${esc(ranked[0].reason)}</p>`:''}${qs.map(qHTML).join('')}</div>${changeConditionsHTML([f.id])}`}
 function lkcHTML(f){const c=Object.values(S.lkc||{}).filter(x=>x.fid===f.id);return c.map(x=>`<div class="fsec lkc" role="alert"><div class="lab">Lookup conflict · unresolved</div><p style="margin:4px 0 8px">You looked up <b>${esc(x.hit)}</b> (${esc(x.nextL)}), but <b>${esc(x.prevL)}</b> is already selected. Confirm which the patient takes.</p><div class="chips"><button class="tg" data-lkuse="${x.k}">Use ${esc(x.nextL.split(' (')[0])}</button><button class="tg" data-lkkeep="${x.k}">Keep ${esc(x.prevL.split(' (')[0])}</button></div></div>`).join('')}
 function addBtnHTML(f){const inA=(S.asmt||[]).includes(f.id);return`<div class="fact top"><button class="gobtn" data-addf="${f.id}"${inA?' disabled':''}>${inA?'✓ In assessment':'＋ Add to assessment'}</button></div>`}
-function fTopHTML(f,p){const assume=[...p.assume,...p.miss.map(m=>'Missing: '+m)];
- return lkcHTML(f)+dispHTML(p,1)+changeNoticeHTML()+addBtnHTML(f)+(p.author?authorHTML(p.author):'')+
+function fTopHTML(f,p){
+ return lkcHTML(f)+dispHTML(p,1)+changeNoticeHTML()+addBtnHTML(f)+uncHTML([f.id],p.miss,'find')+modeBarHTML()+(p.author?authorHTML(p.author):'')+
   `<div class="fsec"><div class="lab">What changes</div><ul>${f.what.map(x=>`<li>${escV(x)}</li>`).join('')}</ul></div>`+
-  (assume.length?`<div class="fsec warn"><div class="lab">Depends on · not yet known</div><ul>${assume.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small">Unknown is never read as normal or negative.</div></div>`:'')}
+  (p.assume.length?`<div class="fsec warn"><div class="lab">Assumed</div><ul>${p.assume.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'')}
 function fNextHTML(f,p){return(p.steps.length||p.esc.length?`<div class="fsec"><div class="lab">Next steps</div>${p.steps.length?`<ol>${p.steps.map(x=>`<li>${escV(x)}</li>`).join('')}</ol>`:''}${p.esc.length?`<div class="lab" style="margin-top:8px">Escalate if</div><ul>${p.esc.map(x=>`<li>${escV(x)}</li>`).join('')}</ul>`:''}</div>`:'')+
   (p.suppressed?.length?`<details class="box"><summary>Suppressed advice · why</summary><div class="inner">${p.suppressed.map(x=>`<p>${esc(x.reason)} ${x.src.map(srcLink).join(' ')}</p>`).join('')}</div></details>`:'')+
   `<details class="box" id="fwhy"><summary>Why · sources · review <em>${f.link.length} linked</em></summary><div class="inner look">
@@ -2454,10 +2580,10 @@ function asmtHTML(){return`<div id="actx">${asmtCtxHTML()}</div><div id="arest">
 function asmtCtxHTML(){const ctxQ=['proc','anes','urg'].map(k=>chipRow({k,...CTXQ[k],ctx:0},S.pf[k])).join('');
  return`<details class="box" id="actxd"${S.ctxOpen?' open':''}><summary><span>Context <span class="ctxsum">${esc(ctxShort())}</span></span><em>Edit</em></summary><div class="inner">
   <div class="grid3">${ptFields('2')}</div>${S.wt?`<div class="small" id="wtx2" style="margin:6px 0 2px">${esc(wtLine())}${pedsLock()?' · pediatric sedation lockout':''}</div>`:''}${ctxQ}</div></details>`}
-function asmtRestHTML(){const m=asmtModel();return`${changeNoticeHTML()}${m.A.length?`${m.worst?dispHTML({...m.worst.p,d:m.od,act:m.conf.some(c=>c.raise)?'Resolve the listed conflicts before finalizing the plan.':m.worst.p.act,prov:m.prov,basis:m.P.reduce((b,x)=>BASIS_RANK[x.p.basis]>BASIS_RANK[b]?x.p.basis:b,'gl')}):''}
-  ${m.miss.length?`<div class="fsec warn"><div class="lab">Before finalizing · unresolved</div><ul>${m.miss.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+function asmtRestHTML(){const m=asmtModel(),ranked=m.A.length?rankQuestions(m.A):[];return`${changeNoticeHTML()}${m.A.length?`${m.worst?dispHTML({...m.worst.p,d:m.od,act:m.conf.some(c=>c.raise)?'Resolve the listed conflicts before finalizing the plan.':m.worst.p.act,prov:m.prov,basis:m.P.reduce((b,x)=>BASIS_RANK[x.p.basis]>BASIS_RANK[b]?x.p.basis:b,'gl')}):''}
+  ${modeBarHTML()}${uncHTML(m.A,m.miss,'asmt',ranked)}
   <div class="fsec"><div class="lab">Conflicts · overlapping precautions</div>${m.conf.length?`<ul>${m.conf.map(c=>`<li>${esc(c.t)}${c.src?` ${srcLink(c.src)}`:''}</li>`).join('')}</ul>`:'<p class="small" style="margin:4px 0">None of the checked pairs apply.</p>'}<p class="small" style="margin:6px 0 0">Only listed pairs are checked. No listed conflict is not proof there is none.</p></div>
-  ${m.conf.some(c=>/screen/.test(c.t))?'<button class="go" data-open="preop">Reconcile pre-op screen ›</button>':''}${unifiedPlanHTML(m)}${nextQuestionHTML(m)}${decisionToolsHTML(m)}
+  ${m.conf.some(c=>/screen/.test(c.t))?'<button class="go" data-open="preop">Reconcile pre-op screen ›</button>':''}${unifiedPlanHTML(m)}${decisionToolsHTML(m,ranked)}
   <details class="box"><summary>Individual findings · basis and details</summary><div class="inner"><div class="lab">Findings</div>${m.P.map(({f,p})=>`<div class="arow"><button class="alink" data-find="${f.id}"><b>${esc(f.t)}</b><span><span class="dtag sm d-${DISP[p.d][1]}">${esc(DISP[p.d][0])}</span>${p.prov?' provisional · ':' '}${escV(p.act)}</span></button><button class="icon-btn" data-rmf="${f.id}" aria-label="Remove ${esc(f.t)}">✕</button></div>${p.steps.length||p.esc.length||p.author?`<div class="asteps">${p.author?`<div class="small"><b>Author’s protocol:</b> ${esc(AUTHOR[p.author].rule)} — guidance: ${esc(AUTHOR[p.author].guide)}</div>`:''}${p.steps.length?`<ul>${p.steps.map(x=>`<li>${escV(x)}</li>`).join('')}</ul>`:''}${p.esc.length?`<div class="small"><b>Follow-up / escalate if:</b> ${p.esc.map(x=>escV(x)).join(' ')}</div>`:''}</div>`:''}`).join('')}</div></details>
 `
  :`<p class="caveat">No findings yet. Search a medication, lab or prior treatment and tap “Add to assessment”.</p>`}
@@ -2465,10 +2591,10 @@ function asmtRestHTML(){const m=asmtModel();return`${changeNoticeHTML()}${m.A.le
  <button class="go" data-home>＋ Look up another finding</button>
  <p class="caveat">Held in memory only — nothing is saved to the device, the URL or any server. New patient clears it.</p>`}
 /* EMR note: four fixed blocks, plain ASCII so it pastes cleanly into Dentrix, Epic and PCHC notes. No dates, no identifiers. */
-const ASCII={'—':'-','–':'-','·':'-','’':"'",'‘':"'",'“':'"','”':'"','≥':'>=','≤':'<=','×':'x','→':'->','⁹':'^9','±':'+/-','≈':'~','°':' deg','µ':'mc','…':'...','₂':'2','⁺':'+','½':'1/2','✓':'ok','•':'-'};
-const asciiT=t=>String(t).replace(/[—–·’‘“”≥≤×→⁹±≈°µ…₂⁺½✓•]/g,c=>ASCII[c]).replace(/[^\x09\x0a\x20-\x7e]/g,'');
+const ASCII={'—':'-','–':'-','·':'-','’':"'",'‘':"'",'“':'"','”':'"','≥':'>=','≤':'<=','×':'x','→':'->','⁹':'^9','³':'^3','±':'+/-','≈':'~','°':' deg','µ':'mc','…':'...','₂':'2','⁺':'+','½':'1/2','✓':'ok','•':'-'};
+const asciiT=t=>String(t).replace(/[—–·’‘“”≥≤×→⁹³±≈°µ…₂⁺½✓•]/g,c=>ASCII[c]).replace(/[^\x09\x0a\x20-\x7e]/g,'');
 function asmtText(){const m=asmtModel(),c=S.pf,H=[],F=[],A=[],P=[];
- const ansL=(q,v)=>`${q.q.replace(/\?$/,'')}: ${q.type==='num'?(v==='u'?'UNKNOWN':v+(q.unitSel?' '+((q.units.find(u=>u[0]===S.pf[q.unitSel])||[])[1]||'(unit not set)'):'')):(q.opts.find(o=>o[0]===v)||[])[1]}`;
+ const ansL=(q,v)=>`${q.q.replace(/\?$/,'')}: ${q.type==='num'?(v==='u'?'UNKNOWN':v+(q.unitSel?' '+((q.units.find(u=>u[0]===S.pf[q.unitSel])||[])[1]||'(unit not set)'):q.k==='egfr'?' '+q.unit+' (date not recorded)':'')):(q.opts.find(o=>o[0]===v)||[])[1]}`;
  /* 1 HISTORY */
  H.push(`Age: ${ageNum()!=null?ageNum()+' y':'not entered'}; Weight: ${S.wt?wtLine():'not entered'}`);
  H.push(['proc','anes','urg'].map(k=>`${CTXQ[k].q}: ${has(c[k])?CTXL[k][c[k]]:c[k]==='u'?'unknown':'not entered'}`).join('; '));
@@ -2478,8 +2604,7 @@ function asmtText(){const m=asmtModel(),c=S.pf,H=[],F=[],A=[],P=[];
   H.push(`${f.t}${ent.length?': '+ent.join('; '):''}${unk.length?` (unknown: ${unk.join('; ')})`:''}`)});
  if(!m.P.length)H.push('Medications/labs/history: none added to the assessment');
  /* 2 FINDINGS & RISK */
- F.push(`Practice mode: ${colleague()?'Colleague - guideline thresholds where guidance exists':'Author - author protocols applied where marked'}`);
- m.P.filter(({p})=>p.author).forEach(({p})=>F.push(authorText(p.author)));
+ modeLines(m.P).forEach(x=>F.push(x));
  m.P.forEach(({f,p})=>F.push(`${f.t}: ${DISP[p.d][0].toUpperCase()}${p.prov?' (provisional)':''} - ${p.act.replace(/ \[verify[^\]]*\]/g,' [unverified]')} [${BASIS[p.basis]}${p.src.length?'; '+p.src.filter(k=>SRC[k]).map(k=>SRC[k].n.split(' · ')[0]).join(', '):''}]`));
  if(m.worst)F.push(`Overall: ${DISP[m.od][0].toUpperCase()} (most restrictive: ${m.why})${m.prov?' - provisional':''}`);
  const g=gateModel();if(g.tone!=='none')F.push(`Medical gate (pre-op screen): ${g.t}${g.hits.length?' - '+g.hits.map(h=>h[1]).join('; '):''}`);
@@ -2499,7 +2624,10 @@ function asmtText(){const m=asmtModel(),c=S.pf,H=[],F=[],A=[],P=[];
  const steps=[...new Set(m.P.flatMap(({p})=>p.steps))];steps.forEach(x=>P.push(x.replace(/ \[verify[^\]]*\]/g,' [unverified]')));
  const escs=[...new Set(m.P.flatMap(({p})=>p.esc))];escs.forEach(x=>P.push('Escalate if: '+x));
  m.miss.filter(x=>/^Resolve conflict/.test(x)).forEach(x=>P.push('UNRESOLVED - '+x));
- const om=m.miss.filter(x=>!/^Resolve conflict/.test(x));if(om.length)P.push(`Before finalizing: ${om.join('; ')}`);
+ if(m.A.length){const o=openItems(m.A,m.miss.filter(x=>!/^Resolve conflict/.test(x)));
+  o.dec.forEach(it=>P.push('OPEN (changes plan) - '+itemText(it)));
+  if(o.fin.length)P.push('Also needed to finalize: '+o.fin.map(it=>`${itemLab(it)} (${NACT[it.act[0]].toLowerCase()})`).join('; '));
+  if(m.prov)P.push('Plan above is provisional until the open items are resolved.')}
  P.push('Decision support only; clinician judgment applies. Verify doses against the label.');
  const B=(h,a)=>[h+':',...a.map(x=>x.startsWith('  ')?x:'- '+x)].join('\n');
  return asciiT([`OMS Compass v${VER} - pre-op note (de-identified)`,B('HISTORY',H),B('FINDINGS & RISK',F),B('ANESTHESIA & LIMITS',A),B('PLAN & ALERTS',P)].join('\n\n'))}
@@ -2510,12 +2638,12 @@ function asmtView(){S.mod=null;S.view='asmt';S.fid=null;
 function newPatient(){
  S.changes=[];delete S.compare;delete S.compareEligible;document.body.classList.remove('kb');
  ['pf','ans','inp','rcri','io'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
- ['tri','triErr','wt','wtIn','lkc','asa','q','refq','fid','fhit','emOpen','hoOpen','mod'].forEach(k=>{delete S[k]});
+ ['tri','triErr','wt','wtIn','lkc','asa','q','refq','fid','fhit','emOpen','hoOpen','mod','ioSig','ioReset','labPick'].forEach(k=>{delete S[k]});
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
 function updBar(){document.body.classList.toggle('focus',S.view==='mod');let b=document.getElementById('abar');if(!b){b=document.createElement('div');b.id='abar';b.className='abar';document.body.appendChild(b)}
- const n=(S.asmt||[]).length,io=Object.values(S.io||{}).filter(Boolean).length,on=(hasPatient()||S.view==='mod'||S.view==='asmt')&&S.view!=='gate';b.hidden=!on;document.body.classList.toggle('hasbar',on);b.classList.add('three');
+ if(S.io&&Object.keys(S.io).length)ioSync();const n=(S.asmt||[]).length,io=Object.values(S.io||{}).filter(v=>v===true||v==='done').length,on=(hasPatient()||S.view==='mod'||S.view==='asmt')&&S.view!=='gate';b.hidden=!on;document.body.classList.toggle('hasbar',on);b.classList.add('three');
  const cur=t=>S.view==='asmt'&&(S.atab||'find')===t?' aria-current="page"':'';
  b.innerHTML=`<button class="abtn" data-asmt${cur('find')}>Assessment${n?` · <b>${n}</b>`:''}</button><button class="abtn" data-ioopen${cur('io')}>Intraop${io?` · <b>${io}</b>`:''}</button><button class="abtn np${npArm?' arm':''}" data-newpt>${npArm?'Tap again':'New patient'}</button>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-newpt]');if(!b)return;e.stopPropagation();
@@ -2582,10 +2710,38 @@ const IO=[
   ['hem','Hemostasis confirmed'],
   ['po','Instructions, prescriptions and after-hours number given'],
   ['dc','If sedated: discharge criteria met and escort present']]]];
-function ioHTML(){const c=S.io||{};
- return IO.map(([h,items])=>{const n=items.filter(([k])=>c[k]).length;
-  return`<div class="io"><h3>${esc(h)}<small class="${n===items.length?'done':''}">${n}/${items.length}</small></h3>${items.map(([k,t,links])=>`<button class="ioi" role="checkbox" aria-checked="${!!c[k]}" data-io="${k}"><span class="bx" aria-hidden="true">✓</span><span>${esc(t)}</span></button>${links&&!c[k]?`<div class="iogo">${links.map(([to,l])=>to[0]==='@'?`<button class="go" data-view="${to.slice(1)}">${esc(l)} ›</button>`:`<button class="go" data-open="${to}">${esc(l)} ›</button>`).join('')}</div>`:''}`).join('')}</div>`}).join('')+
- `<button class="go" data-ioclear>Clear checklist</button><p class="caveat">Cognitive aid for the team; the circulating assistant can read it aloud. Adapted from the WHO Surgical Safety Checklist (2009) — author’s draft, clinician review. Held in memory only; New patient clears it. ${srcLink('who')}</p>`}
+/* v3.10 encounter checklist. Status per item: done / pend / na (legacy true = done). Items that do not apply to the
+   entered procedure or anesthesia fold away (never removed); unset context shows everything. Each status remembers
+   the plan facts it depended on and resets when they change. Statuses never feed back into the clinical model. */
+const IO_DEP={id:['proc'],cons:['proc','anes','plan'],gate:['plan'],img:['proc'],kit:['proc'],em:['anes'],mon:['anes'],iv:['anes'],npo:['anes','plan'],la:['wt'],vit:['anes'],stop:['proc'],spec:['proc'],lot:['proc'],frag:['proc'],hem:['plan'],po:['plan'],dc:['anes']};
+const IO_FOLD={mon:'sed',iv:'sed',npo:'sed',vit:'sed',dc:'sed',kit:'impl',lot:'impl',img:'surg',frag:'surg',spec:'surg'};
+function ioFold(k){const a=S.pf.anes,p=S.pf.proc,t=IO_FOLD[k];
+ if(t==='sed')return a==='la'?'local anesthesia only':null;
+ if(t==='impl')return p==='none'||p==='low'?'no implant or graft at the entered procedure tier':null;
+ if(t==='surg')return p==='none'?'no bleeding-risk procedure entered':null;return null}
+const ioVal=k=>{const v=(S.io||{})[k];return v===true?'done':v||null};
+function ioPlanSig(){const A=S.asmt||[];let m=null;if(A.length)m=asmtModel();return[gateModel().tone,m&&m.od,A.slice().sort(),m&&m.P.map(({f,p})=>[f.id,p.d,p.act])]}
+function ioSig(k){if(k.startsWith('x_')){const id=k.slice(2);if(!(S.asmt||[]).includes(id)||!FX[id])return'removed';const p=fPlan(FX[id]);return JSON.stringify([p.d,p.act,p.steps])}
+ let ps=null;return JSON.stringify((IO_DEP[k]||[]).map(x=>x==='plan'?(ps=ps||ioPlanSig()):x==='wt'?[S.wt??null,ageNum()]:S.pf[x]??null))}
+function ioLabel(k){if(k.startsWith('x_'))return FX[k.slice(2)]?FX[k.slice(2)].t.split(' (')[0]:'Removed finding';for(const [,items] of IO)for(const [kk,t] of items)if(kk===k)return t.split(/[,:;]/)[0];return k}
+function ioSync(){const c=S.io||{},sg=S.ioSig=S.ioSig||{},reset=[];
+ Object.keys(c).forEach(k=>{if(!c[k])return;const now=ioSig(k);if(sg[k]===undefined){sg[k]=now;return}if(sg[k]!==now){reset.push(ioLabel(k));delete c[k];delete sg[k]}});
+ if(reset.length)S.ioReset=[...new Set([...(S.ioReset||[]),...reset])]}
+function ioSet(k,v){const c=S.io=S.io||{},sg=S.ioSig=S.ioSig||{};if(!v||ioVal(k)===v){delete c[k];delete sg[k]}else{c[k]=v;sg[k]=ioSig(k)}delete S.ioReset}
+function ioEncounter(){return(S.asmt||[]).filter(id=>FX[id]).map(id=>['x_'+id,`${FX[id].t.split(' (')[0]}: plan steps from the assessment ready or done`,[['#'+id,'Open finding']]])}
+function ioRow([k,t,links]){const v=ioVal(k);
+ return`<div class="ioit st-${v||'open'}"><button class="ioi" role="checkbox" aria-checked="${v==='done'}" data-io="${k}"><span class="bx${v==='pend'?' pend':''}" aria-hidden="true">${v==='na'?'–':'✓'}</span><span>${esc(t)}${v==='pend'?' <b>· Pending</b>':v==='na'?' · N/A':''}</span></button><div class="iost">${[['pend','Pending'],['na','N/A']].map(([s,l])=>`<button class="tg${v===s?' on':''}" data-iost="${k}" data-v="${s}" aria-pressed="${v===s}" aria-label="${l}: ${esc(t)}">${l}</button>`).join('')}</div></div>${links&&!v?`<div class="iogo">${links.map(([to,l])=>to[0]==='@'?`<button class="go" data-view="${to.slice(1)}">${esc(l)} ›</button>`:to[0]==='#'?`<button class="go" data-find="${to.slice(1)}">${esc(l)} ›</button>`:`<button class="go" data-open="${to}">${esc(l)} ›</button>`).join('')}</div>`:''}`}
+function ioHTML(){ioSync();
+ const secs=[IO[0],...(ioEncounter().length?[['This encounter · from the assessment',ioEncounter()]]:[]),...IO.slice(1)];
+ const A=S.asmt||[],m=A.length?asmtModel():null,open=m?openItems(A,m.miss):null;
+ const openHTML=open&&open.dec.length?`<div class="io ioopen" role="note"><h3>Unresolved · answer in the assessment<small>${open.dec.length}</small></h3><p>Checklist items record team steps only. They do not answer these questions or change the plan.</p><ul class="unl">${open.dec.map(it=>`<li>${actChip(it.act)}<b>${esc(itemLab(it))}</b>${it.q?(['proc','anes','urg'].includes(it.k)?` <button class="go" data-ctxq="${it.k}">Answer ›</button>`:` <button class="go" data-question="${it.k}" data-qfid="${it.fids[0]}">Answer ›</button>`):''}</li>`).join('')}</ul></div>`:'';
+ const rs=S.ioReset&&S.ioReset.length?`<div class="delta" role="status"><b>Reset because the plan changed:</b> ${S.ioReset.map(esc).join(', ')}. Check them again for the current plan.</div>`:'';
+ const ctx=['proc','anes'].filter(k=>!has(S.pf[k])).map(k=>CTXQ[k].q.toLowerCase());
+ return rs+openHTML+(ctx.length?`<p class="ionote">${esc(ctx.join(' and '))} not entered: all checks shown. Enter them under Assessment → Context to fold checks that do not apply.</p>`:'')+secs.map(([h,items])=>{
+  const show=items.filter(([k])=>!ioFold(k)),fold=items.filter(([k])=>ioFold(k)),n=show.filter(([k])=>['done','na'].includes(ioVal(k))).length,pn=show.filter(([k])=>ioVal(k)==='pend').length;
+  if(!show.length&&!fold.length)return'';
+  return`<div class="io"><h3>${esc(h)}<small class="${show.length&&n===show.length?'done':''}">${show.length?`${n}/${show.length}${pn?` · ${pn} pending`:''}`:'not applicable'}</small></h3>${show.map(ioRow).join('')}${fold.length?`<details class="iohid"><summary>${fold.length} folded · ${esc([...new Set(fold.map(([k])=>ioFold(k)))].join('; '))}</summary>${fold.map(ioRow).join('')}</details>`:''}</div>`}).join('')+
+ `<button class="go" data-ioclear>Clear checklist</button><p class="caveat">Cognitive aid for the team; the circulating assistant can read it aloud. Done, Pending and N/A record team steps only — never a clinical answer or a change in disposition. Adapted from the WHO Surgical Safety Checklist (2009) — author’s draft, clinician review. Held in memory only; New patient clears it. ${srcLink('who')}</p>`}
 function atabsHTML(){const t=S.atab||'find';return`<div class="tabs atabs" role="tablist"><button role="tab" aria-selected="${t==='find'}" class="${t==='find'?'on':''}" data-atab="find">Findings</button><button role="tab" aria-selected="${t==='io'}" class="${t==='io'?'on':''}" data-atab="io">Intraop checklist</button></div>`}
 function asmtBody(){return atabsHTML()+(S.atab==='io'?`<div id="iobody">${ioHTML()}</div>`:asmtHTML())}
 function home(){
@@ -2715,10 +2871,12 @@ function open(id){
  try{history.replaceState(null,'','#'+id);history.pushState({cs:1},'','#'+id)}catch(e){}updBar();
 }
 
-function planText(m,w){const L=[`OMS Compass v${VER} · ${m.title} (decision support)`];
+function planText(m,w){const L=[`OMS Compass v${VER} · ${m.title} (decision support)`,`Practice mode: ${colleague()?'Colleague':'Author'}`];
  w.steps.forEach(s=>{if(s.note)return;L.push(`- ${s.n.q} ${s.val==='u'?'Unknown — verify':s.val?'Yes':'No'}${s.auto?' (from entered data)':''}${s.tri?(s.triFlip?' (changed from photo triage)':' (photo triage, confirmed)'):''}`)});
  if(w.unk)L.push(`Plan pending: verify “${w.unk.n.q}” before finalizing.`);
- if(w.out){L.push(`${w.out.scr?'Screen result':'Plan'}: ${w.out.out}`);if(w.out.ex)L.push(w.out.ex);if(w.out.scr)L.push(`Not covered by this screen: ${w.out.scr}`);w.steps.filter(s=>s.note).forEach(s=>L.push(`${s.n.t}: ${s.n.x}`))}
+ if(w.out){const ns=w.steps.filter(s=>s.note).map(s=>s.n.src),bas=basisOf([w.out.src,w.out.src2,...ns],[w.out.out,w.out.ex].join(' '));
+  if(bas==='au'||[w.out.src,w.out.src2,...ns].some(k=>SRC_AU.includes(k)))L.push(`Departure from guidelines: includes author's practice content${colleague()?' (shown in Colleague mode behind "Show Author\'s Clinical Protocol")':''}.`);
+  L.push(`${w.out.scr?'Screen result':'Plan'}: ${w.out.out}`);if(w.out.ex)L.push(w.out.ex);if(w.out.scr)L.push(`Not covered by this screen: ${w.out.scr}`);w.steps.filter(s=>s.note).forEach(s=>L.push(`${s.n.t}: ${s.n.x}`))}
  L.push('Decision support only; clinician judgment applies.');return L.join('\n')}
 function showCopy(t){const x=document.getElementById('copybox');if(!x)return;x.hidden=false;x.value=t;x.focus();x.select()}
 /* ===== Events ===== */
@@ -2728,11 +2886,16 @@ app.addEventListener('click',e=>{
  if(b.dataset.cmp){S.compare=b.dataset.cmp;S.compareEligible=false;return redraw()}
  if(b.hasAttribute('data-cmpqualify')){S.compareEligible=!S.compareEligible;return redraw()}
  if(b.hasAttribute('data-cmpapply')){applyComparison();return redraw()}
+ if(b.dataset.labu){S.labPick={q:S.q,u:b.dataset.labu};document.getElementById('hits').innerHTML=hitsHTML(S.q);return}
+ if(b.hasAttribute('data-labrec'))return recordLab();
+ if(b.hasAttribute('data-pmsw')){const before=planBeforeEdit();setPmode(colleague()?'author':'colleague');recordPlanEdit(before,'mode');return redraw()}
+ if(b.dataset.ctxq){S.ctxOpen=true;S.atab='find';asmtView();const d=document.getElementById('actxd');if(d){d.open=true;document.getElementById('question-'+b.dataset.ctxq)?.scrollIntoView({block:'start',behavior:'smooth'})}return}
+ if(b.dataset.qscroll){document.getElementById(b.dataset.qscroll==='fqs'?'fqs':'question-'+b.dataset.qscroll)?.scrollIntoView({block:'start',behavior:'smooth'});return}
  if(b.hasAttribute('data-question')){const fid=b.dataset.qfid,k=b.dataset.question;openFind(fid);document.getElementById('question-'+k)?.scrollIntoView({block:'start',behavior:'smooth'});return}
  if(b.hasAttribute('data-consult-copy')){const t=consultText(asmtModel());try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}
 
  if(b.dataset.lkuse||b.dataset.lkkeep){const before=planBeforeEdit();const k=b.dataset.lkuse||b.dataset.lkkeep,x=(S.lkc||{})[k];if(x){if(b.dataset.lkuse)S.pf[k]=x.next;delete S.lkc[k];recordPlanEdit(before,k)}return redraw()}
- if(b.dataset.pm){setPmode(b.dataset.pm);return home()}
+ if(b.dataset.pm){const before=planBeforeEdit();setPmode(b.dataset.pm);recordPlanEdit(before,'mode');return home()}
  if(b.hasAttribute('data-hc')){toggleHC();document.querySelectorAll('[data-hc]').forEach(x=>{const on=hcOn();x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);x.textContent=`High contrast (operatory light) · ${on?'on':'off'}`});return}
  if(b.hasAttribute('data-drclose'))return setDrawer(false);
  if(b.hasAttribute('data-drawer')){const sec=b.dataset.drawer;return setDrawer(sec?true:!S.drOpen,sec)}
@@ -2743,8 +2906,8 @@ app.addEventListener('click',e=>{
  if(b.hasAttribute('data-oncall')){setOnCall(!onCall());return home()}
  if(b.hasAttribute('data-goasmt')){S.atab='find';return asmtView()}
  if(b.dataset.atab){S.atab=b.dataset.atab;return asmtView()}
- if(b.dataset.io){const c=S.io=S.io||{};c[b.dataset.io]=!c[b.dataset.io];const y=window.scrollY;document.getElementById('iobody').innerHTML=ioHTML();window.scrollTo(0,y);return updBar()}
- if(b.hasAttribute('data-ioclear')){S.io={};document.getElementById('iobody').innerHTML=ioHTML();return updBar()}
+ if(b.dataset.io||b.dataset.iost){const k=b.dataset.io||b.dataset.iost;ioSet(k,b.dataset.io?'done':b.dataset.v);const y=window.scrollY,ob=document.getElementById('iobody');if(ob)ob.innerHTML=ioHTML();window.scrollTo(0,y);return updBar()}
+ if(b.hasAttribute('data-ioclear')){S.io={};S.ioSig={};delete S.ioReset;document.getElementById('iobody').innerHTML=ioHTML();return updBar()}
  if(b.dataset.open)return open(b.dataset.open);
  if(b.dataset.find)return openFind(b.dataset.find,b.dataset.hit);
  if(b.dataset.pf){const before=planBeforeEdit();const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;if(S.lkc)delete S.lkc[k];recordPlanEdit(before,k);return redraw()}
@@ -2769,7 +2932,7 @@ app.addEventListener('click',e=>{
  if(b.dataset.sb){const k='sb_'+b.dataset.sb;i[k]=!i[k];i.sbTouched=true;b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
  if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
 });
-app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q')){S.q=el.value.trim();const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){S.wtIn={src:'kg',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return S.view==='asmt'?redraw():rebody()}if(el.hasAttribute('data-lb')){S.wtIn={src:'lb',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<880?Math.round(v/LB*10)/10:null;return S.view==='asmt'?redraw():rebody()}if(el.dataset.pfn==='age'&&(S.view==='calc'||S.view==='emergency')){const v=el.value.trim();if(v==='')delete S.pf.age;else S.pf.age=v;return rebody()}if(el.dataset.pfn){const before=planBeforeEdit();const v=el.value.trim();if(v==='')delete S.pf[el.dataset.pfn];else S.pf[el.dataset.pfn]=v;recordPlanEdit(before,el.dataset.pfn);return redraw()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
+app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q')){S.q=el.value.trim();if(S.labPick&&S.labPick.q!==S.q)delete S.labPick;const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){S.wtIn={src:'kg',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return S.view==='asmt'?redraw():rebody()}if(el.hasAttribute('data-lb')){S.wtIn={src:'lb',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<880?Math.round(v/LB*10)/10:null;return S.view==='asmt'?redraw():rebody()}if(el.dataset.pfn==='age'&&(S.view==='calc'||S.view==='emergency')){const v=el.value.trim();if(v==='')delete S.pf.age;else S.pf.age=v;return rebody()}if(el.dataset.pfn){const before=planBeforeEdit(),k=el.dataset.pfn,v=el.value.trim(),old=S.pf[k];const cleared=has(old)&&old!==v?(LAB_STALE[k]||[]).filter(x=>S.pf[x]!==undefined):[];if(v==='')delete S.pf[k];else S.pf[k]=v;cleared.forEach(x=>delete S.pf[x]);recordPlanEdit(before,k,cleared);return redraw()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
 app.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='in-tri'){e.preventDefault();loadTri(e.target.value);open('preop')}});
 app.addEventListener('change',e=>{const el=e.target;if(el.dataset.pfu){const before=planBeforeEdit();if(el.value)S.pf[el.dataset.pfu]=el.value;else delete S.pf[el.dataset.pfu];recordPlanEdit(before,el.dataset.pfu);return redraw()}if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
@@ -2788,6 +2951,8 @@ document.addEventListener('touchend',e=>{const s0=fxT;fxT=null;if(!s0||S.view!==
 addEventListener('popstate',()=>{if(S.view!=='mod'||!S.mod)return;if(S.drOpen){setDrawer(false)}else backStep();
  if(S.view==='mod'&&S.mod)try{history.pushState({cs:1},'','#'+S.mod)}catch(x){}});
 applyHC();
+function migratePmode(){try{if(localStorage.getItem(PM_KEY)==null&&acked())localStorage.setItem(PM_KEY,'author')}catch(e){}}
+migratePmode();
 let start=(location.hash||'').slice(1);
 /* Privacy: triage data no longer travels in URLs. An old link is wiped from the address bar unread. */
 const TRI_URL_MSG='Triage links no longer carry data (privacy). Copy the CT1 code from the report and paste it here.';

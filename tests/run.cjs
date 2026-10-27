@@ -133,7 +133,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  const st=await E(page,()=>({pf:Object.keys(S.pf).length,asmt:S.asmt.length,ans:Object.keys(S.ans).length,inp:Object.keys(S.inp).length,tri:!!S.tri,wt:S.wt,rcri:Object.keys(S.rcri).length,asa:S.asa,q:S.q,lang:S.lang,site:S.site,has:hasPatient(),qval:document.getElementById('in-q').value,ls:Object.keys(localStorage),ss:Object.keys(sessionStorage),hash:location.hash}));
  ok(!st.pf&&!st.asmt&&!st.ans&&!st.inp&&!st.tri&&!st.wt&&!st.rcri&&!st.asa&&!st.q&&!st.has&&st.qval==='','All patient-specific state cleared '+JSON.stringify(st));
  ok(st.lang==='es'&&st.site==='bayside','Non-clinical preferences kept (language, site)');
- ok(st.ls.length===1&&st.ls[0]==='omsCompassAck'&&st.ss.length===0,'Storage holds only the disclaimer acknowledgement');
+ ok(st.ls.every(k=>['omsCompassAck','oms_compass_practice_mode'].includes(k))&&st.ss.length===0,'Storage holds only the disclaimer acknowledgement and the migrated mode preference (v3.10)');
  ok(await page.locator('#abar[hidden]').count()===1,'Bottom bar hides after clearing');
 
  console.log('7b. No clinical data in URLs');
@@ -192,7 +192,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  await E(page,()=>{open('sed');S.ans.sed={a:false,b:true,c:false,d:true,e:false};refresh()});ok(/Author’s practice|Unverified draft/i.test(await page.locator('#flow').innerText()),'Personal sedation note labelled author’s practice / unverified');
  await E(page,()=>{newPatient();openFind('doac','Eliquis')});
  ok(await page.locator('#ftop .bas').count()===1,'Finding shows a basis chip');ok(/Provisional action/i.test(await page.locator('#ftop').innerText()),'Finding with missing context says “Provisional”');
- ok(/Missing: Planned procedure/.test(await page.locator('#ftop').innerText()),'Finding lists what it depends on');
+ ok(/Planned procedure/.test(await page.locator('#ftop #unc').innerText()),'Finding lists what it depends on (v3.10 unresolved panel)');
  await page.click('#fwhy summary');ok(/Checked: 2026-10-23/.test(await page.locator('#fwhy').innerText())&&/clinician review not recorded/.test(await page.locator('#fwhy').innerText()),'Why shows source check date and honest review status');
 
  console.log('10. Phone controls with the keyboard open');
@@ -627,6 +627,99 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(hc.low.length===0&&hc.sos>=7,'High-contrast tokens all ≥7:1 (WCAG AAA); SOS badge '+hc.sos.toFixed(2)+':1 '+hc.low);
   await fp.evaluate(()=>newPatient());ok(await fp.evaluate(()=>document.documentElement.dataset.contrast==='high'),'New patient keeps the contrast setting');
   await fc.close()}
+
+ console.log('17. v3.10 encounter — actionable uncertainty, confirmed lab capture, encounter checklist, practice mode');
+ {const c17=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c17.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c17);const X=(fn,a)=>p.evaluate(fn,a);
+  // A. Lab capture requires confirmation; never infers unit, date or trend
+  await X(()=>{newPatient();home()});await p.fill('#in-q','INR 2.6');
+  ok(await p.locator('.labcap [data-labrec]').count()===1&&await X(()=>S.pf.inr===undefined),'“INR 2.6” shows a confirm card; nothing recorded before confirmation');
+  await p.click('[data-labrec]');
+  ok(await X(()=>S.pf.inr==='2.6'&&S.pf.inrAge===undefined&&S.view==='find'&&S.fid==='inr'),'Confirm records INR 2.6, opens the INR finding, date left unanswered');
+  const rp=await X(()=>{newPatient();Object.assign(S.pf,{inr:'3.1',inrAge:'d1',inrRef:'n',inrOn:'none',proc:'low'});S.q='INR 2.6';home();const t=document.querySelector('.labcap').innerText;recordLab();return{t,pf:{...S.pf}}});
+  ok(/Replaces INR 3\.1/.test(rp.t)&&/Clears/.test(rp.t)&&rp.pf.inr==='2.6'&&rp.pf.inrAge===undefined&&rp.pf.inrRef===undefined&&rp.pf.inrOn==='none'&&rp.pf.proc==='low','Replacing a result clears its date and range answer, keeps unrelated facts');
+  ok(await X(()=>/New result: cleared/.test(document.querySelector('#ftop').innerText)),'Change notice says which answers were cleared');
+  await X(()=>{newPatient();home()});await p.fill('#in-q','platelets 45');
+  ok(await p.locator('[data-labrec][disabled]').count()===1&&await X(()=>S.pf.plt===undefined),'Platelets without a unit: record disabled until a unit is chosen');
+  await X(()=>{S.pf.pltAge='wk';S.pf.pltTrend='st';S.pf.pltCause='itp';S.pf.plt='120';S.pf.pltU='k'});await p.fill('#in-q','platelets 45');
+  await p.click('[data-labu="k"]');await p.click('[data-labrec]');
+  ok(await X(()=>S.pf.plt==='45'&&S.pf.pltU==='k'&&S.pf.pltAge===undefined&&S.pf.pltTrend===undefined&&S.pf.pltCause==='itp'),'Platelet unit chosen explicitly; date and trend cleared on replacement; cause kept');
+  const pu=await X(()=>[parseLab('platelets 45 k').unit,parseLab('plt 45000 /uL').unit,parseLab('A1c 8.2').unit,parseLab('a1c 8.2 %').unit,parseLab('HbA1c 64 mmol/mol').unit,!!parseLab('platelets 45,000').bad,parseLab('INR 2.6 today').extra,parseLab('eGFR 28 mL/min/1.73m2').extra,!!parseLab('CrCl 40').crcl,parseLab('Eliquis'),parseLab('dry socket 3')]);
+  ok(pu[0]==='k'&&pu[1]==='raw'&&pu[2]===null&&pu[3]==='pct'&&pu[4]==='mmol'&&pu[5]&&pu[6]==='today'&&pu[7]===''&&pu[8]&&pu[9]===null&&pu[10]===null,'Lab parser: explicit units only, commas rejected, extra text not interpreted, non-labs ignored '+JSON.stringify(pu));
+  await X(()=>{newPatient();home()});await p.fill('#in-q','INR 2.6 today');await p.click('[data-labrec]');
+  ok(await X(()=>S.pf.inr==='2.6'&&S.pf.inrAge===undefined),'“today” in the query is not recorded as the result date');
+  await X(()=>{newPatient();home()});await p.fill('#in-q','CrCl 40');
+  ok(await p.locator('.labcap [data-labrec]').count()===0&&/never converts CrCl/.test(await p.locator('.labcap').innerText())&&await X(()=>Object.keys(S.pf).length===0),'CrCl is acknowledged, not stored and not converted');
+  await X(()=>{newPatient();home()});await p.fill('#in-q','eGFR 28');await p.click('[data-labrec]');
+  const eg=await X(()=>{const r={fid:S.fid,v:S.pf.egfr,txt:fPlan(FX.renal).steps.join(' ')};S.pf.dial='no';S.pf.esrd='n';const a=fPlan(FX.renal).d;delete S.pf.egfr;const b=fPlan(FX.renal).d;
+   newPatient();S.asmt=['doac'];Object.assign(S.pf,{proc:'major',doacAg:'api',ap:'n',egfr:'28'});const d=asmtModel();r.same=a===b;r.crcl=d.miss.some(x=>/CrCl/.test(x))&&d.P[0].p.steps.some(x=>/not substituted for CrCl/.test(x));r.noKey=S.pf.crcl===undefined;return r});
+  ok(eg.fid==='renal'&&eg.v==='28'&&/not a CrCl/i.test(eg.txt)&&eg.same,'eGFR 28 recorded on the kidney finding; documented, disposition unchanged');
+  ok(eg.crcl&&eg.noKey,'DOAC interruption still asks for CrCl when eGFR is recorded (eGFR never substituted)');
+  ok(await X(()=>{newPatient();S.fid='warfarin';Object.assign(S.pf,{proc:'low',inr:'2.1',inrAge:'d1'});openFind('warfarin');const i=document.getElementById('pf-inr');i.value='2.4';i.dispatchEvent(new Event('input',{bubbles:true}));return S.pf.inr==='2.4'&&S.pf.inrAge===undefined}),'Editing an entered INR on the finding clears its date');
+  // B. Actionable uncertainty: one item per question, next action, provisional plan visible and copyable
+  const un=await X(()=>{newPatient();S.asmt=['doac','warfarin','inr','renal'];S.pf.proc='high';const m=asmtModel(),o=openItems(m.A,m.miss),all=[...o.dec,...o.fin];
+   const keys=all.filter(i=>i.q).map(i=>i.k),labs=all.map(itemLab);S.atab='find';asmtView();
+   return{dup:keys.length!==new Set(keys).size,apOnce:keys.filter(k=>k==='ap').length,inrDup:labs.filter(l=>/^INR value and date/.test(l)).length,acts:all.every(i=>NACT[i.act[0]]),od:m.od,copy:!!document.querySelector('[data-acopy]'),disp:!!document.querySelector('#arest .disp'),txt:asmtText()}});
+  ok(!un.dup&&un.apOnce===1&&un.inrDup===0,'Unresolved list: each question once across findings (antiplatelet once; INR not restated)');
+  ok(un.acts&&/OPEN \(changes plan\) - (Ask patient|Obtain result|Check records|Decide plan)/.test(un.txt),'Each open item names a next action; copied note carries it');
+  ok(un.copy&&un.disp&&!['defer','refer'].includes(un.od)&&/provisional/.test(un.txt),'Incomplete history: provisional plan stays visible and copyable, no automatic defer/refer');
+  ok(await X(()=>FIND.every(f=>{newPatient();S.fid=f.id;return!['defer','refer'].includes(fPlan(f).d)})),'No finding defers or refers solely because nothing is entered');
+  const keep=await X(()=>{const bad=[];for(let i=0;i<300;i++){newPatient();const ids=FIND.map(f=>f.id).filter(()=>Math.random()<.3);if(!ids.length)continue;S.asmt=ids;
+    for(const id of ids)fQs(FX[id]).forEach(q=>{if(Math.random()<.5)S.pf[q.k]=q.type==='num'?(Math.random()<.2?'u':String(Math.round(Math.random()*60)/10)):[...q.opts.map(o=>o[0]),'u'][Math.floor(Math.random()*(q.opts.length+1))]});prune();
+    const m=asmtModel(),o=openItems(m.A,m.miss),all=[...o.dec,...o.fin],ks=new Set(all.filter(x=>x.q).map(x=>x.k));
+    m.miss.forEach(t=>{const tt=t.replace(/ — unknown$/,'');const hit=MISS_Q.find(([re])=>re.test(tt));const listed=all.some(x=>x.t===tt)||all.some(x=>x.q&&x.q.q===tt)||(hit&&hit[1].some(k=>ks.has(k)));if(!listed)bad.push(t)})}newPatient();return bad.slice(0,3)});
+  ok(keep.length===0,'Consolidation never drops an unresolved item (300 random combined cases) '+keep.join(' | '));
+  const gate=await X(()=>{newPatient();S.asmt=['warfarin'];S.pf.proc='high';const o=openItems(['warfarin'],asmtModel().miss);const ia=[...o.dec,...o.fin].find(x=>x.k==='inrAge');return{dec:ia.dec,t:condText(ia)}});
+  ok(gate.dec&&/once “Most recent INR” is known/.test(gate.t),'INR date stays “changes the plan”, labelled as waiting on the INR value');
+  // C. Practice mode
+  const pm=await X(()=>{newPatient();setPmode('author');S.asmt=['doac','warfarin'];Object.assign(S.pf,{proc:'high',doacAg:'riv',doacTime:'am',ap:'n',inr:'3.7',inrAge:'d1'});S.atab='find';asmtView();
+   const before=JSON.stringify(S.pf),a=asmtModel().od,an=asmtText();document.querySelector('[data-pmsw]').click();const after=JSON.stringify(S.pf),c=asmtModel().od,cn=asmtText();
+   document.querySelector('[data-pmsw]').click();const back=JSON.stringify(S.pf);setPmode('author');
+   return{same:before===after&&after===back,a,c,an,cn,mode:localStorage.getItem('oms_compass_practice_mode'),notice:/Practice mode/.test(document.querySelector('#arest').innerText)}});
+  ok(pm.same,'Switching mode keeps every entered fact (including the Colleague-only DOAC dose-time answer)');
+  ok(pm.a==='defer'&&pm.c!=='defer','Mode switch recomputes: INR 3.7 defers under Author (<3.5), not under Colleague (<4)');
+  ok(/Practice mode: Author/.test(pm.an)&&/Departures from guidelines: Author protocol applied/.test(pm.an)&&/Practice mode: Colleague/.test(pm.cn)&&/Departures from guidelines: none flagged/.test(pm.cn),'Copied note names the active mode and departures from guidelines');
+  ok(pm.notice,'Change notice records the mode switch');
+  ok(await X(()=>{newPatient();open('extraction');return/Practice mode: (Author|Colleague)/.test(planText(M('extraction'),walk(M('extraction'))))}),'Module plan note names the practice mode');
+  ok(await X(()=>{newPatient();setPmode('author');S.asmt=['doac'];S.pf.proc='high';const c=consultText(asmtModel());return/Practice mode: Author/.test(c)}),'Consultation draft names the practice mode');
+  {const cn=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});const q=await cn.newPage();await q.route(/^https?:\/\//,r=>r.abort());await q.goto(FILE);
+   const r=await q.evaluate(()=>({m:pmode(),ls:localStorage.getItem('oms_compass_practice_mode')}));ok(r.m==='colleague'&&r.ls===null,'New user (no prior use) starts in Colleague mode');await cn.close()}
+  {const cn=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await cn.addInitScript(()=>{try{if(!sessionStorage.getItem('x')){localStorage.setItem('omsCompassAck','1');sessionStorage.setItem('x','1')}}catch(e){}});const q=await cn.newPage();await q.route(/^https?:\/\//,r=>r.abort());await q.goto(FILE);await q.waitForSelector('#in-q');
+   ok(await q.evaluate(()=>pmode()==='author'&&localStorage.getItem('oms_compass_practice_mode')==='author'),'Existing user without a stored mode keeps Author (migrated)');
+   ok(await q.evaluate(()=>{setPmode('colleague');migratePmode();return pmode()==='colleague'&&localStorage.getItem('oms_compass_practice_mode')==='colleague'}),'A stored Colleague choice is preserved (migration never overrides it)');await cn.close()}
+  // D. Encounter checklist
+  const io=await X(()=>{newPatient();setPmode('author');S.asmt=['warfarin','renal'];Object.assign(S.pf,{proc:'high',anes:'sed'});S.atab='io';asmtView();
+   const snap=()=>JSON.stringify([S.pf,S.ans,S.asmt,outcomeKey(asmtModel())]),s0=snap();
+   document.querySelectorAll('[data-io]').forEach(b=>b.click());const s1=snap();document.querySelectorAll('[data-iost][data-v="na"]').forEach(b=>b.click());const s2=snap();
+   const r={iso:s0===s1&&s1===s2,x:!!document.querySelector('[data-io="x_warfarin"]')&&!!document.querySelector('[data-io="x_renal"]'),open:!!document.querySelector('.ioopen')};
+   S.io={};S.ioSig={};ioSet('mon','done');ioSet('cons','done');ioSet('cnt','pend');ioSet('id','na');
+   r.tri=ioVal('mon')==='done'&&ioVal('cnt')==='pend'&&ioVal('id')==='na';
+   S.pf.anes='ga';ioSync();r.monReset=ioVal('mon')===null&&ioVal('cnt')==='pend'&&ioVal('id')==='na';
+   S.pf.dial='hd';ioSync();r.consReset=ioVal('cons')===null&&ioVal('id')==='na';
+   S.pf.anes='la';asmtView();r.fold=!!document.querySelector('.iohid [data-io="mon"]')&&!document.querySelector('.io>.ioit [data-io="mon"]');
+   S.pf.proc='low';asmtView();r.foldImpl=!!document.querySelector('.iohid [data-io="kit"]');r.resetMsg=/Reset because the plan changed/.test(document.getElementById('iobody').innerText);
+   newPatient();r.cleared=!S.io||Object.keys(S.io).length===0;r.sig=!S.ioSig;return r});
+  ok(io.iso,'Checklist isolation: Done/N/A on every item never changes facts, answers or the plan');
+  ok(io.x&&io.open,'Checklist adds one check per assessment finding and lists unresolved questions (read-only)');
+  ok(io.tri,'Checklist supports Done, Pending and N/A');
+  ok(io.monReset&&io.consReset,'Checks reset when the facts they covered change (anesthesia → monitors; plan → consent); unrelated checks kept');
+  ok(io.fold&&io.foldImpl,'Sedation and implant checks fold (not deleted) when local only / low-risk procedure is entered');
+  ok(io.resetMsg,'Checklist says which checks were reset');
+  ok(io.cleared&&io.sig,'New patient clears checklist statuses and their plan signatures');
+  ok(await X(()=>{newPatient();S.atab='io';asmtView();return document.querySelectorAll('.iohid').length===0&&/not entered: all checks shown/.test(document.getElementById('iobody').innerText)}),'Unset context folds nothing and says so (never assumed)');
+  ok(await X(()=>Object.keys(localStorage).every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','omsCompassContrast'].includes(k))&&sessionStorage.length===0),'v3.10 state stays in memory (storage holds settings only)');
+  // E. Phone layouts
+  for(const w of [320,360,390,430]){await p.setViewportSize({width:w,height:780});
+   const ov=await X(async()=>{const res=[];const chk=n=>{if(document.documentElement.scrollWidth>innerWidth+1)res.push(n)};
+    newPatient();S.q='platelets 45';home();chk('labcap');
+    S.asmt=['warfarin','renal','plt','doac'];S.pf.proc='high';openFind('plt');chk('finding');S.atab='find';asmtView();chk('assessment');S.atab='io';asmtView();chk('checklist');newPatient();home();return res});
+   ok(ov.length===0,`No horizontal overflow at ${w}px: lab card, finding, assessment, checklist ${ov}`)}
+  await p.setViewportSize({width:390,height:844});
+  const small=await X(()=>{newPatient();S.q='platelets 45';home();const a=[...document.querySelectorAll('.labcap button')];S.asmt=['warfarin'];S.pf.proc='high';S.atab='find';asmtView();a.push(...document.querySelectorAll('.unc .go,.unc .tg,.mbar .tg'));S.atab='io';asmtView();a.push(...document.querySelectorAll('.iost .tg,.ioi,.ioopen .go'));
+   return a.filter(b=>b.isConnected&&b.offsetParent).map(b=>b.getBoundingClientRect()).filter(r=>r.height<44||r.width<44).length});
+  ok(small===0,'v3.10 controls are at least 44 px ('+small+' smaller)');
+  await c17.close()}
 
 
  await browser.close();
