@@ -1,6 +1,6 @@
 // OMS Compass offline cache.
 // To publish an update: edit index.html, bump VERSION, push. Phones pick it up on next open.
-const VERSION = 'compass-2026-10-26-v3.8.0';
+const VERSION = 'compass-2026-10-27-v3.9.0';
 const CORE = ['./', './index.html', './manifest.webmanifest',
   './apple-touch-icon.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 

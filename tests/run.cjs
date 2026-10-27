@@ -177,9 +177,12 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(await E(hp,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i}))}))===cmp,'Handouts page: post-op and FAQ text identical to Compass');
  ok(await hp.locator('.card').count()===20&&await hp.locator('h3.sec').count()===3,'Handouts page home lists 5 instructions + 15 FAQs in 3 sections');
  await E(hp,()=>{location.hash='#fao-es'});await hp.waitForSelector('.qa');ok(/Alveolitis seca/.test(await hp.locator('h2').innerText())&&await hp.locator('.qa h3').count()===5,'Handouts page: FAQ link #fao-es opens Spanish dry socket FAQ');
- await E(hp,()=>{location.hash='#finf-zh'});await hp.waitForFunction(()=>/Tooth infection/.test(document.querySelector('h2')?.textContent||''));ok(/英文和西班牙文/.test(await hp.locator('#app').innerText())&&await hp.locator('.qa p.warn').count()===1,'Handouts page: 中文 FAQ falls back to English with note; 911 answer highlighted');
+ await E(hp,()=>{location.hash='#finf-zh'});await hp.waitForFunction(()=>/牙齿感染/.test(document.querySelector('h2')?.textContent||''));ok(!/英文和西班牙文/.test(await hp.locator('#app').innerText())&&await hp.locator('.qa p.warn').count()===1,'Handouts page: 中文 FAQ in Chinese, no fallback note; 911 answer highlighted');
+ await E(hp,()=>{location.hash='#fao-kea'});await hp.waitForFunction(()=>/Alvéolu seku/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.qa h3').count()===5,'Handouts page: Kriolu dry socket FAQ link works');
  ok(await E(hp,()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Handouts page FAQ: no horizontal scroll');await hp.close();
- ok(await E(page,()=>{S.lang='zh';view('handouts');const ok=/English shown/.test(document.getElementById('vbody').textContent)&&/Wisdom teeth removal/.test(document.getElementById('ho-fwis').textContent);S.lang='en';return ok}),'中文: FAQs fall back to English with a note');
+ ok(await E(page,()=>{S.lang='zh';view('handouts');const ok=!/English shown/.test(document.getElementById('vbody').textContent)&&/拔除智齿/.test(document.getElementById('ho-fwis').textContent);S.lang='kea';view('handouts');const ok2=/Tira denti di juízu/.test(document.getElementById('ho-fwis').textContent);S.lang='en';return ok&&ok2}),'Kriolu and 中文 FAQs show in their own language, no fallback note');
+ ok(await E(page,()=>FAQ.every(f=>['kea','zh'].every(l=>f.t[l]&&f.i[l].length===f.i.en.length&&f.i[l].every(x=>x.length===2&&x[0]&&x[1])))),'FAQs: Kriolu and 中文 complete, question counts match English');
+ ok(await E(page,()=>/^拔除智齿/.test(faqText(FAQ.find(f=>f.id==='fwis'),'zh'))&&/电话: /.test(faqText(FAQ[0],'zh'))),'中文 FAQ share text in Chinese with phone label');
 
  console.log('9. Basis, assumptions and review status shown');
  await E(page,()=>{newPatient();open('preop')});for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await page.click(`.cur [data-a="${id}"][data-v="${v}"]`);
