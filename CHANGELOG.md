@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.9.2 — Oct 27, 2026 (pending Steven's review)
+## v3.9.2 — Oct 27, 2026 (approved by Steven Oct 27, 2026; merged to main)
 
 - **Search box examples:** the placeholder now reads "Drug, lab or topic: Eliquis, INR, dry socket" (was "· e.g. Eliquis"). Fits a 375 px phone screen without cutting off.
 
