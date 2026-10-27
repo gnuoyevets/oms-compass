@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.9.1 — Oct 27, 2026 (pending Steven's review)
+## v3.9.1 — Oct 27, 2026 (approved by Steven Oct 27, 2026; merged to main)
 
 - **TMJ arthrocentesis Ref card** revised after feedback from a senior OMS faculty reviewer (email, Oct 27, 2026):
   - The old line "finish with steroid or hyaluronic acid" is now three lines. Steroid: use sparingly, one or two injections per joint. Hyaluronic acid: not FDA-approved for the TMJ (off-label) and causes significant inflammation at first; the avian-allergy caution stays. PRP: an alternative, often given at arthroscopy.
