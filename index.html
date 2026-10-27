@@ -466,6 +466,7 @@ kademani:{n:'Kademani & Tiwana · Atlas of OMS (canine exposure techniques)',v:'
 pathdeck:{n:'Your Oral Pathology Pearls lecture (Drive)',v:'2026 · lecture deck',u:'https://drive.google.com/file/d/1zdtsxQlMum5LKlvEN9MRdEaMwON8oPd5/view'},
 quickp:{n:'Your Readwise Quick Passages (GBR protocol, Dr. Cho narrow-ridge lecture, extraction checklist)',v:'Personal notes',u:'https://read.readwise.io/'},
 who22:{n:'Soluk-Tekkesin & Wright · WHO 2022 (5th ed.) odontogenic lesions: summary of changes',v:'Turk Patoloji Derg 2022',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9999699/',chk:'2026-10-26'},
+prptmj:{n:'Haddad et al. · PRP injections for TMJ disorders (systematic review)',v:'J Oral Rehabil 2023 · 7 studies, small and heterogeneous',u:'https://doi.org/10.1111/joor.13545',chk:'2026-10-27'},
 fillervo:{n:'Vascular occlusion after hyaluronic acid filler injection (review)',v:'Review; case-based evidence',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8016809/',chk:'2026-10-26'},
 fillervis:{n:'Consensus opinion · Management of soft-tissue filler-induced vision loss',v:'J Clin Aesthet Dermatol 2021',u:'https://jcadonline.com/cmac-soft-tissue-filler-vision-loss/',chk:'2026-10-26'},
 cochimp:{n:'Esposito et al. · Antibiotics at dental implant placement (Cochrane CD004152)',v:'Cochrane review 2013',u:'https://www.cochrane.org/CD004152/ORAL_antibiotic-prophylaxis-at-dental-implant-placement',chk:'2026-10-26'},
@@ -1375,10 +1376,14 @@ const REF=[
  'Pleomorphic adenoma: excise with pseudocapsule intact; new facial palsy → carcinoma ex-PA',
  'Sialadenitis: hydration, sialogogues, warm compresses, hygiene, antibiotics',
  'Plunging ranula: check the airway']},
-{t:'TMJ arthrocentesis',k:'tmj arthrocentesis arthroscopy',src:['lect'],i:[
+{t:'TMJ arthrocentesis',k:'tmj arthrocentesis arthroscopy prp platelet-rich plasma hyaluronic acid steroid injectate',src:['lect','prptmj'],i:[
  '20–21 G needles into the superior joint space; avoid scuffing the fossa',
  'Lavage ≥60 mL lactated Ringer’s (200 mL clears degraded proteins)',
- 'Finish with steroid or hyaluronic acid (avoid HA with avian allergy), then stretch',
+ 'Lavage alone is a reasonable finish; the injectate is optional, then stretch',
+ 'Steroid: use sparingly, one or two injections per joint at most',
+ 'Hyaluronic acid: not FDA-approved for the TMJ (off-label) and causes significant inflammation at first; avoid with avian allergy',
+ 'PRP is an alternative, often given at arthroscopy; small trials favor it over HA for pain and opening, but protocols vary',
+ 'Senior OMS reviewer (Oct 2026): prefers arthroscopy with PRP; uses steroid rarely and avoids HA',
  'Exercises, Rule of 10: 10 reps of opening, laterals, protrusion, for ≥10 days',
  'Expect ~47% pain reduction (arthroscopy ~70%); better results if symptoms <6 months']},
 {t:'Filler complications & vision loss',k:'filler hyaluronidase vascular occlusion blindness necrosis cosmetic botox ptosis',src:['lect','fillervo','fillervis'],i:[
@@ -1597,8 +1602,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.9.0';
+const VER='3.9.1';
 const CHANGES=[
+{v:'3.9.1',d:'Oct 27, 2026',i:['TMJ arthrocentesis Ref card: injectate guidance revised after senior OMS faculty review. Steroid used sparingly (one or two injections per joint); hyaluronic acid flagged as off-label for the TMJ with significant initial inflammation; PRP (often at arthroscopy) added as an alternative, with a systematic review cited.']},
 {v:'3.9.0',d:'Oct 27, 2026',i:['Patient FAQs now in Kriolu and 中文 (all 15, on the Patient tab and the patient page). Machine-drafted by Claude; pending native-speaker review, like the handout translations.','Front-desk QR sheets rebuilt: 4 codes per row in separate boxes with wide gaps (was 5, tightly packed), two pages per language, and Kriolu and 中文 pages added.']},
 {v:'3.8.0',d:'Oct 26, 2026',i:['Seven new Ref cards: Filler complications & vision loss, Oral pathology chairside framework, Odontogenic cysts & tumors, GBR & narrow ridge, Implant biomechanics & restorative space, Orofacial pain red flags, Implant antibiotic prophylaxis. Built from your Lecture Pearls, Oral Pathology Pearls deck and Readwise notes, checked against published sources; single-source or unsettled lines tagged verify.','Ref cards with a verify line now show the Unverified draft label.']},
 {v:'3.7.0',d:'Oct 26, 2026',i:['“Post-op” tab renamed “Patient”. Post-op instructions unchanged, now under a heading.','New Procedure FAQs (wisdom teeth, implants, bone graft, sinus lift, full-arch, IV sedation, biopsy, canine exposure) and Diagnosis FAQs (dry socket, tooth infection, numbness, sinus opening, TMD, MRONJ, peri-implantitis), English and Español; Kriolu and 中文 show English for now. Share by text like the handouts (practice phone added; neutral header in Colleague mode). Search finds them.','Patient page (/handouts/) now has the FAQs too, one link each (e.g. #fao-es).','“Patient FAQ” button on the plan screen of 16 matching modules (e.g. Dry socket, Nerve injury, TMD, Sinus lift) opens that FAQ on the Patient tab.']},
