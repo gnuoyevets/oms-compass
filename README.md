@@ -8,7 +8,7 @@ Offline web app version of OMS Compass. This repo is the canonical copy; the "OM
 - `sw.js` — offline cache
 - `CHANGELOG.md` — dated change log
 - `handouts/index.html` — standalone patient page: post-op instructions and FAQs; text mirrors the Compass Patient tab (a test checks they match)
-- `handouts/qr/` — front-desk QR sheets (PDF, Dr. Young and Bayside; English and Spanish pages). Regenerate after adding or renaming topics: `python3 handouts/qr/make_qr_sheets.py`
+- `handouts/qr/` — front-desk QR sheets (PDF, Dr. Young and Bayside; English, Spanish, Kriolu and 中文, two pages each). Regenerate after adding or renaming topics: `python3 handouts/qr/make_qr_sheets.py`
 - `*.png` — app icons
 - `tests/run.cjs` — automated checks (software behavior, not clinical validation). Run: `npm i -D playwright && npx playwright install chromium && node tests/run.cjs`
 
