@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.9.0 — Oct 27, 2026 (branch `feat/faq-kea-zh-qr-spacing`, pending Steven's review)
+## v3.9.0 — Oct 27, 2026 (approved by Steven Oct 27, 2026; merged to main)
 
 - **Kriolu and 中文 patient FAQs:** all 15 FAQs translated, on the Compass Patient tab and /handouts/ (links like `#fao-kea`, `#finf-zh`). The "English shown" fallback no longer appears. Machine-drafted by Claude (Kriolu: Santiago variant, same spelling as the handouts); pending native-speaker review.
 - **QR sheets rebuilt** after reports of the wrong code scanning: 4 codes per row (was 5), each in its own outlined box, ~0.8 in clear space between codes, codes slightly larger (1.05 in). Two pages per language (post-op + procedures; diagnoses) and Kriolu and 中文 pages added: 8 pages per practice. Each page says to hold the phone close so one code fills the screen. All 168 codes decoded and matched to their pages.
