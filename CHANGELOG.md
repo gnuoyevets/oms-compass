@@ -2,6 +2,10 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.9.2 — Oct 27, 2026 (approved by Steven Oct 27, 2026; merged to main)
+
+- **Search box examples:** the placeholder now reads "Drug, lab or topic: Eliquis, INR, dry socket" (was "· e.g. Eliquis"). Fits a 375 px phone screen without cutting off.
+
 ## v3.9.1 — Oct 27, 2026 (approved by Steven Oct 27, 2026; merged to main)
 
 - **TMJ arthrocentesis Ref card** revised after feedback from a senior OMS faculty reviewer (email, Oct 27, 2026):
