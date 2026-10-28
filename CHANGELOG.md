@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.10.0 — Oct 27, 2026 (branch `feat/encounter-uncertainty`, pending Steven's review — not merged)
+## v3.10.0 — Oct 27, 2026 (approved by Steven Oct 28, 2026; merged to main)
 
 - **Actionable uncertainty.** Assessment and finding screens show one "Before finalizing · unresolved" panel. Each open question appears once per encounter, even when several findings ask it (e.g., "Also on an antiplatelet" for DOAC, warfarin and INR; "INR value and date" no longer repeats "Most recent INR"). Two groups: **Changes the plan** and **Also needed to finalize**. Each item names the next action: Ask patient, Examine, Check records, Obtain result, Contact clinician (radiation oncology, cardiology/device clinic, transplant team where specific) or Decide plan. Where existing branches differ, the item shows what each answer leads to for its own finding (e.g., "Hemodialysis / Not on dialysis → Proceed with changes · Peritoneal dialysis → Verify first"). Facts that wait on a missing result (e.g., INR date before the INR value) are kept under "Changes the plan" and labelled with what they wait on. The separate "Next decisive question" card is merged into this panel; the first decisive question can still be answered inline.
 - **Provisional plans stay visible.** No finding defers or refers because inputs are empty (tested across all 18). Copied notes list each open item as `OPEN (changes plan) - <action>: <item>` and say the plan is provisional.
