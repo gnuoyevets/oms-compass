@@ -2,6 +2,24 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.12.0 — Oct 31, 2026 (preview; awaiting Steven's approval; builds on v3.11.0)
+
+Patient side, from the Oct 30–31 audit.
+
+- **Red flags first.** In every post-op handout, the "call us" and 911 lines now come first and are highlighted, on the Patient tab, in shared text and on the patient page, in all four languages. No wording changed.
+- **Pictograms.** One icon per handout line (bleeding, ice, no straws, no smoking, diet, pain medicines, phone, 911…). Hidden from screen readers.
+- **Teach-back.** Three questions under each post-op handout for the clinician ("I want to be sure I explained it well. Can you tell me…"). Not in shared text. AHRQ Health Literacy Toolkit, Tool 5.
+- **Option grids (English).** One-page, side-by-side answers to patients' common questions, Option Grid format:
+  - Lower wisdom tooth near the nerve: remove the whole tooth vs coronectomy (Peixoto 2023 meta-analysis via Dental Elf; Di Spirito 2025).
+  - Missing tooth: implant vs bridge vs leave the space (Pjetursson 2007; BDJ 2005 correspondence on over-eruption).
+  - After extraction: socket graft vs healing on its own (Tan 2012; Avila-Ortiz 2019; Couso-Queiruga 2022).
+  - On the Patient tab with a Share button; linked from the Extractions, Implants and Ridge augmentation plans. Each grid says numbers are averages, not a promise.
+- **Day-7 check-in message** (English, Español) with the selected site's phone and Google review link; Copy or Share. Author mode only.
+- **Patient page:** the Google review request is now a small link at the very bottom, below the note.
+- **Registry link (Author mode).** "Log to outcomes registry" on plan cards copies a CR1 line: procedure (from the module), anesthesia and anticoagulant flag (from Pre-op answers), ASA (from Today's plan), age band and the plan. No identifiers or dates. The Surgical Outcomes Registry has a new "From Compass" box that fills the form from it; sex, date and outcome stay manual.
+- Tests: 460 browser checks (21 new in section 19); reconciliation suite 75. Software checks only; not clinical validation.
+- Not yet: option grids in Español/Kriolu/中文 and on the patient page; teach-back in other languages.
+
 ## v3.11.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 Fast path and clean-up from the Oct 30–31 audit. Goal: a healthy patient to a copied note in about 30 seconds.

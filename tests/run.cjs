@@ -767,6 +767,37 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await c18.close()}
 
 
+ console.log('19. v3.12 patient side — red flags first, pictograms, teach-back, option grids, day-7, registry line');
+ {const c19=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c19.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c19),X=f=>p.evaluate(f);await X(()=>setPmode('author'));
+  ok(await X(()=>HO.every(h=>(HO_ICON[h.id]||[]).length===h.i.en.length)),'Every handout line has a pictogram');
+  ok(await X(()=>HO.every(h=>['en','es','kea','zh'].every(l=>{const a=h.i[l].filter(HO_WARN).length,b=h.i.en.filter(HO_WARN).length;return a===b}))),'Red-flag lines detected in all four languages, same count as English');
+  ok(await X(()=>{const it=hoItems(HO.find(h=>h.id==='ext'),'en');return it[0].w&&it[1].w&&/^Call us/.test(it[0].t)&&/911/.test(it[1].t)&&!it[2].w}),'Extraction handout: call-us and 911 lines first');
+  ok(await X(()=>{const t=hoText(HO.find(h=>h.id==='ext'),'es');return t.indexOf('911')<t.indexOf('🩸')}),'Shared text (Español): red flags before bleeding care');
+  ok(await X(()=>HO.every(h=>hoItems(h,'en').length===h.i.en.length)),'Reordering keeps every line');
+  await X(()=>{view('handouts')});
+  ok(await p.locator('#vbody ul.hol li.warn').count()>=5,'Patient tab highlights red-flag lines');
+  ok(await p.locator('#vbody .tb').count()===5,'Teach-back under each of the 5 post-op handouts');
+  ok(await X(()=>!/Teach-back|explained it well/.test(hoText(HO[0],'en'))),'Teach-back is not in shared handout text');
+  ok(await p.locator('#vbody #ho-ogcoro').count()===1&&await p.locator('#vbody #ho-ogimp').count()===1&&await p.locator('#vbody #ho-oggraft').count()===1,'Three option grids on the Patient tab');
+  ok(await X(()=>OG.every(g=>g.r.every(([q,a])=>a.length===g.o.length&&a.every(x=>x&&x.length<220)))),'Option grids: every row answers every option, briefly');
+  ok(await X(()=>OG.every(g=>g.src.every(k=>SRC[k]))),'Option grids cite known sources');
+  ok(await X(()=>/Numbers are averages/.test(ogText(OG[0]))),'Option grid share text carries the averages caveat');
+  ok(await p.locator('#vbody #ho-d7').count()===1&&/g\.page\/r\//.test(await X(()=>d7Text('en'))),'Day-7 message with review link (Author mode)');
+  ok(await X(()=>{S.site='bayside';const t=d7Text('es');S.site='young';return/Bayside/.test(t)&&/508/.test(t)&&/Hola/.test(t)}),'Day-7 message follows site and language');
+  ok(await X(()=>{const was=pmode();setPmode('colleague');view('handouts');const n=document.querySelectorAll('#vbody #ho-d7').length;setPmode('author');view('handouts');const m=document.querySelectorAll('#vbody #ho-d7').length;setPmode(was);return n===0&&m===1}),'Colleague mode hides the day-7 message');
+  await X(()=>{newPatient();open('extraction')});
+  ok(await X(()=>{S.ans.extraction={};const m=M('extraction');let w=walk(m),n=0;while(w.cur&&n<20){S.ans.extraction[w.cur.id]=false;w=walk(m);n++}refresh();return !!w.out}),'Extraction module reaches a plan');
+  ok(await p.locator('.plan [data-ho="ogcoro"]').count()===1&&await p.locator('.plan [data-ho="oggraft"]').count()===1,'Extraction plan links both option grids');
+  await p.click('.plan [data-ho="ogcoro"]');ok(await X(()=>S.view==='handouts'&&document.getElementById('ho-ogcoro').open),'Option-grid button opens that grid');
+  await X(()=>{newPatient();open('preop');S.ans.preop={a:false,b:false,c:true,d:false,d2:false,e:true,f:false,g:false};S.today={asa:2};S.pf.age='52';open('implant');const m=M('implant');let w=walk(m),n=0;S.ans.implant={};while(w.cur&&n<20){S.ans.implant[w.cur.id]=false;w=walk(m);n++}refresh()});
+  const line=await X(()=>{const m=M('implant');return regLine(m,walk(m))});
+  ok(/^CR1;proc=(Implant%20placement|Immediate%20implant);anes=IV%20sedation;asa=II;age=45%E2%80%9364;rf=ac;plan=/.test(line),'Registry line: procedure, anesthesia, ASA, age band, anticoagulant, plan ('+line.slice(0,90)+')');
+  ok(!/[A-Za-z]+%20\d{1,2}%2C|\d{4}-\d{2}-\d{2}/.test(line),'Registry line carries no dates');
+  ok(await p.locator('.plan [data-reg]').count()===1,'Author mode: registry button on the plan');
+  await c19.close()}
+
  await browser.close();
  
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}

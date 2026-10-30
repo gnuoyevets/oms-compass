@@ -28,6 +28,9 @@ h2{font-size:22px;line-height:1.3;margin:0 0 12px}
 .call{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-weight:700;text-decoration:none;margin:16px 0}
 ol{padding-left:24px;margin:0}
 li{margin:0 0 12px}
+ul.hol{list-style:none;padding:0;margin:0 0 12px}ul.hol li{display:grid;grid-template-columns:30px 1fr;gap:6px;margin:8px 0}ul.hol li.warn{margin-left:0}ul.hol .ic{font-size:20px;line-height:1.3}
+.revs{margin:18px 0 8px;font-size:14px;text-align:center}.revs a{color:var(--muted,#555)}
+@media print{.revs a::after{content:' — ' attr(href)}}
 li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:10px;padding:10px 12px;list-style-position:inside;margin-left:-24px;font-weight:600}
 .back{border:1px solid var(--line);background:var(--surface);color:var(--accent);border-radius:10px;min-height:44px;padding:0 14px;font:600 16px inherit;font-family:inherit;cursor:pointer;margin-bottom:12px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -167,16 +170,18 @@ let lang=(()=>{const n=(navigator.language||'en').toLowerCase();return n.startsW
 function parse(){const m=location.hash.replace('#','').match(/^([a-z]+)?(?:-(en|es|kea|zh))?$/);if(m&&m[2])lang=m[2];return m&&ALL.some(h=>h.id===m[1])?m[1]:null}
 function setHash(id){const h=id?`#${id}-${lang}`:(lang!=='en'?'#-'+lang:'');try{history.replaceState(null,'',location.pathname+location.search+h)}catch(e){}}
 const isWarn=t=>/911|^Call us|^Llámenos|^Llame|^Txoma|^出现以下情况请致电/.test(t);
+const ICON={ext:['🩸','🧊','🥤','🚭','🧂','🥣','💊','⚠️','💊','🤢','ℹ️','📞','🚑'],imp:['🩸','🧊','✋','🥣','🫧','🦷','ℹ️','🤧','🚭','💊','⚠️','💊','📞'],arch:['🧊','🦷','🥣','🪥','🚭','💊','⚠️','🗣️','📞','📅'],presed:['🍽️','🥤','💊','🚭','🚗','👕','🤒'],sed:['🧑‍🤝‍🧑','🚗','👶','🥤','🛏️','💉','🚑']};
+function items(h,l){const xs=h.i[l].map((t,k)=>({t,ic:(ICON[h.id]||[])[k]||'',w:isWarn(t)}));return[...xs.filter(x=>x.w),...xs.filter(x=>!x.w)]}
 function render(){const id=parse(),u=UI[lang];document.documentElement.lang=lang;
  const top=`<header><h1>${u.title}</h1><div class="lang" role="group" aria-label="Language">${LANGS.map(([c,n])=>`<button data-l="${c}" lang="${c}" aria-pressed="${lang===c}">${n}</button>`).join('')}</div></header>`;
  const call=`<a class="call" href="tel:${TEL}">📞 ${u.call} · ${PHONE}</a>`;
- const rev=`<div class="rev"><p>${esc(u.rev.replace('{biz}',SITE.n))}</p><a href="${esc(SITE.u)}" target="_blank" rel="noopener">★ ${esc(u.revBtn)} ↗</a></div>`;
+ const rev=`<p class="revs"><a href="${esc(SITE.u)}" target="_blank" rel="noopener">★ ${esc(u.revBtn)} ↗</a></p>`;
  const L=faqL(lang),cards=(xs,l)=>`<div class="list">${xs.map(h=>`<a class="card" href="#${h.id}-${lang}"${l!==lang?` lang="${l}"`:''}>${esc(h.t[l])}<span>›</span></a>`).join('')}</div>`,only=L!==lang?`<p class="note" style="margin:0 0 8px">${u.faqOnly}</p>`:'';
- if(!id){document.title=u.title;app.innerHTML=`${top}<h3 class="sec">${u.secHo}</h3>${cards(HO,lang)}<h3 class="sec">${u.secProc}</h3>${only}${cards(FAQ.filter(f=>f.k==='proc'),L)}<h3 class="sec">${u.secDx}</h3>${only}${cards(FAQ.filter(f=>f.k==='dx'),L)}${call}${rev}<p class="note">${u.note}</p>`;return}
+ if(!id){document.title=u.title;app.innerHTML=`${top}<h3 class="sec">${u.secHo}</h3>${cards(HO,lang)}<h3 class="sec">${u.secProc}</h3>${only}${cards(FAQ.filter(f=>f.k==='proc'),L)}<h3 class="sec">${u.secDx}</h3>${only}${cards(FAQ.filter(f=>f.k==='dx'),L)}${call}<p class="note">${u.note}</p>${rev}`;return}
  const f=FAQ.find(x=>x.id===id);
  if(f){document.title=f.t[L];app.innerHTML=`${top}<button class="back" data-home>${u.back}</button>${only}<h2 lang="${L}">${esc(f.t[L])}</h2><div class="qa" lang="${L}">${f.i[L].map(([q,a])=>`<h3>${esc(q)}</h3><p${/911/.test(a)?' class="warn"':''}>${esc(a)}</p>`).join('')}</div>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div><p class="note">${u.note}</p>`;window.scrollTo(0,0);return}
  const h=HO.find(x=>x.id===id);document.title=h.t[lang];
- app.innerHTML=`${top}<button class="back" data-home>${u.back}</button><h2>${esc(h.t[lang])}</h2><ol>${h.i[lang].map(t=>`<li${isWarn(t)?' class="warn"':''}>${esc(t)}</li>`).join('')}</ol>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div>${rev}<p class="note">${u.note}</p>`;
+ app.innerHTML=`${top}<button class="back" data-home>${u.back}</button><h2>${esc(h.t[lang])}</h2><ul class="hol">${items(h,lang).map(x=>`<li${x.w?' class="warn"':''}><span class="ic" aria-hidden="true">${x.ic}</span><span>${esc(x.t)}</span></li>`).join('')}</ul>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div><p class="note">${u.note}</p>${rev}`;
  window.scrollTo(0,0)}
 app.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;
  if(b.dataset.l){const id=parse();lang=b.dataset.l;setHash(id);render();return}
