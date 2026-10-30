@@ -2,6 +2,25 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.11.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
+
+Fast path and clean-up from the Oct 30–31 audit. Goal: a healthy patient to a copied note in about 30 seconds.
+
+- **Pinned row** on Decide: Pre-op clearance, Sedation plan, Implants, Extractions, Post-op handouts (Steven's five most-opened). Hidden while searching. Settings moved below the module list.
+- **Today's plan** on Pre-op clearance. Every non-urgent pre-op result (local, sedation, airway plan) ends on one panel:
+  - ASA class, one tap (I–IV). III and IV show the existing Office sedation plan wording. Choosing I–III also sets the Calc sedation card's ASA toggle.
+  - Local anesthetic maximum for the weight typed there (same table and AAPD/age rules as Calc).
+  - Analgesia, reused from the Post-op analgesia module: NSAID first, or acetaminophen when an anticoagulant or antiplatelet was answered Yes (SDCEP).
+  - Handout buttons: extraction, implant/graft, and before/after sedation when sedation is planned.
+  - Copy note now includes ASA class, LA maximum and analgesia.
+  - No new dose, threshold or disposition rule. Held in memory only; New patient clears it.
+- **Yes and No carry equal weight.** Yes was a filled button, No outlined; No is the usual answer.
+- **Photo triage and Data inputs chips** show on the first question only, unless triage is loaded, inputs are set, or the current step reads entered data (e.g., STOP-Bang). Both stay in the drawer.
+- **Plan cards:** source links and the review-status line are folded under "More · sources and review status".
+- Healthy local pre-op: 10 interactions from the home screen to a copied note (pin, 6 answers, ASA, weight, Copy).
+- Tests: 439 browser checks (25 new in section 18); reconciliation suite 75 checks. Software checks only; not clinical validation.
+- Not in this build (next): option grids (extraction vs coronectomy; implant vs bridge vs nothing; graft vs no graft), teach-back prompts, pictograms and red flags first in handouts, a small review link plus a day-7 message, the registry link.
+
 ## v3.10.0 — Oct 27, 2026 (approved by Steven Oct 28, 2026; merged to main)
 
 - **Actionable uncertainty.** Assessment and finding screens show one "Before finalizing · unresolved" panel. Each open question appears once per encounter, even when several findings ask it (e.g., "Also on an antiplatelet" for DOAC, warfarin and INR; "INR value and date" no longer repeats "Most recent INR"). Two groups: **Changes the plan** and **Also needed to finalize**. Each item names the next action: Ask patient, Examine, Check records, Obtain result, Contact clinician (radiation oncology, cardiology/device clinic, transplant team where specific) or Decide plan. Where existing branches differ, the item shows what each answer leads to for its own finding (e.g., "Hemodialysis / Not on dialysis → Proceed with changes · Peritoneal dialysis → Verify first"). Facts that wait on a missing result (e.g., INR date before the INR value) are kept under "Changes the plan" and labelled with what they wait on. The separate "Next decisive question" card is merged into this panel; the first decisive question can still be answered inline.

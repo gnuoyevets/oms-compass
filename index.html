@@ -178,6 +178,15 @@ details.em[open]>summary::after{content:'−'}
 .b-un{color:var(--warn-ink);background:var(--warn-bg)}
 .b-au{color:var(--chip-ink);background:var(--chip);border-color:var(--chip)}
 .rev{font-size:12px;opacity:.85;margin-top:8px;line-height:1.4}
+.pins{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px}
+.pin{min-height:60px;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:700 16px var(--sans)}
+.pin span{display:block;font-weight:500;font-size:13px;opacity:.75;margin-top:2px}
+.pin.wide{grid-column:1/-1}
+details.more{margin-top:10px;font-size:13px}details.more summary{cursor:pointer;opacity:.85}
+.today{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.today h4{margin:12px 0 6px;font-size:14px}
+.today .asab{display:flex;gap:8px}.today .asab .tg{flex:1;min-height:44px}
+.today .tw{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}.today .la{font-size:14px;line-height:1.5}
+.today .hob{display:flex;flex-wrap:wrap;gap:6px}
 .nomatch{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.5}
 .nomatch b{display:block;margin-bottom:2px}
 .fcls{font-size:12.5px;color:var(--muted);margin:-4px 0 10px}
@@ -352,7 +361,7 @@ body.focus .abar{display:none!important}
 .fx-crit{min-height:40px;border-radius:20px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-weight:700;font-size:14px;padding:0 14px;margin-top:2px}
 .fx-act{flex:none;display:flex;flex-direction:column;gap:10px;margin-top:12px}
 .fx-a,.fx-b{width:100%;min-height:56px;border-radius:12px;font:800 19px var(--display);letter-spacing:.2px}
-.fx-a{background:var(--accent);border:2px solid var(--accent);color:var(--accent-ink)}
+.fx-a{background:var(--surface);border:2.5px solid var(--ink);color:var(--ink)}
 .fx-b{background:var(--surface);border:2.5px solid var(--ink);color:var(--ink)}
 .fx-u{width:100%;min-height:48px;border-radius:12px;background:none;border:1.5px dashed var(--warn-line);color:var(--warn-ink);font-weight:700;font-size:15px}
 .fx-a.sug::after,.fx-b.sug::after{content:" · 📷 suggested";font:600 14px var(--sans)}
@@ -1633,8 +1642,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.10.0';
+const VER='3.11.0';
 const CHANGES=[
+{v:'3.11.0',d:'Oct 31, 2026',i:['Pinned row on Decide: Pre-op clearance, Sedation plan, Implants, Extractions, Post-op handouts. Settings moved to the bottom.','Pre-op clearance ends on one Today’s plan panel: ASA class (one tap), local anesthetic maximum for the entered weight, analgesic plan (acetaminophen first when an anticoagulant or antiplatelet is entered), patient handout buttons. All of it goes into Copy note. No new dose or threshold; content is reused from Calc and Post-op analgesia.','Yes and No buttons now carry equal weight (Yes was filled).','Photo triage and Data inputs chips show on the first question only, unless triage is loaded, inputs are set, or the current step reads entered data. Both stay in the drawer.','Plan cards: sources and review status folded under More.']},
 {v:'3.10.0',d:'Oct 27, 2026',i:['Unresolved items are listed once per encounter and split into “Changes the plan” and “Also needed to finalize”. Each shows its next action (ask patient, examine, check records, obtain result, contact clinician, decide plan) and, where existing branches differ, what each answer would lead to. The plan stays visible and copyable while provisional.','Type a result in search — “INR 2.6”, “eGFR 28”, “platelets 45 k”, “A1c 8.2 %” — and confirm to record it. Units are chosen, never assumed; date and trend are never read from text. Replacing a result clears the answers that described the old one. eGFR is never used as CrCl.','Intraop checklist follows the encounter: Done, Pending or N/A per item; sedation, implant and specimen checks fold away when the entered anesthesia or procedure makes them not apply; one check per assessment finding; unresolved questions listed (checking never answers them). Checks reset when the plan facts they covered change.','New users start in Colleague mode; an existing Author setting is kept. Switch mode from the finding or assessment screen without losing entered facts. Copied notes name the mode and any departures from guidelines.']},
 {v:'3.9.2',d:'Oct 27, 2026',i:['Search box now shows three examples: Eliquis, INR, dry socket (a drug, a lab and a topic).']},
 {v:'3.9.1',d:'Oct 27, 2026',i:['TMJ arthrocentesis Ref card: injectate guidance revised after senior OMS faculty review. Steroid used sparingly (one or two injections per joint); hyaluronic acid flagged as off-label for the TMJ with significant initial inflammation; PRP (often at arthroscopy) added as an alternative, with a systematic review cited.']},
@@ -2638,7 +2648,7 @@ function asmtView(){S.mod=null;S.view='asmt';S.fid=null;
 function newPatient(){
  S.changes=[];delete S.compare;delete S.compareEligible;document.body.classList.remove('kb');
  ['pf','ans','inp','rcri','io'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
- ['tri','triErr','wt','wtIn','lkc','asa','q','refq','fid','fhit','emOpen','hoOpen','mod','ioSig','ioReset','labPick'].forEach(k=>{delete S[k]});
+ ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','emOpen','hoOpen','mod','ioSig','ioReset','labPick'].forEach(k=>{delete S[k]});
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
@@ -2744,11 +2754,13 @@ function ioHTML(){ioSync();
  `<button class="go" data-ioclear>Clear checklist</button><p class="caveat">Cognitive aid for the team; the circulating assistant can read it aloud. Done, Pending and N/A record team steps only — never a clinical answer or a change in disposition. Adapted from the WHO Surgical Safety Checklist (2009) — author’s draft, clinician review. Held in memory only; New patient clears it. ${srcLink('who')}</p>`}
 function atabsHTML(){const t=S.atab||'find';return`<div class="tabs atabs" role="tablist"><button role="tab" aria-selected="${t==='find'}" class="${t==='find'?'on':''}" data-atab="find">Findings</button><button role="tab" aria-selected="${t==='io'}" class="${t==='io'?'on':''}" data-atab="io">Intraop checklist</button></div>`}
 function asmtBody(){return atabsHTML()+(S.atab==='io'?`<div id="iobody">${ioHTML()}</div>`:asmtHTML())}
+const PINS=[['preop','Pre-op clearance','Start here'],['sed','Sedation plan','Office vs hospital'],['implant','Implants','Placement & augment'],['extraction','Extractions','Remove · coronectomy'],['ho','Post-op handouts','Share with patient']];
+function pinsHTML(){return`<div class="lab group">Pinned</div><div class="pins">${PINS.map(([id,t,d],i)=>`<button class="pin${i===PINS.length-1?' wide':''}" ${id==='ho'?'data-view="handouts"':`data-open="${id}"`}>${esc(t)}<span>${esc(d)}</span></button>`).join('')}</div>`}
 function home(){
  S.mod=null;S.retMod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const on=onCall(),GO=['Hospital on-call',...ORDER],gm=MODS.map(m=>[m,homeGroup(m,on)]).filter(x=>x[1]);const groups=[...new Set(gm.map(x=>x[1]))].sort((x,y)=>GO.indexOf(x)-GO.indexOf(y));
  app.innerHTML=topHTML(1)+tabsHTML('decide')+
- `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab or topic: Eliquis, INR, dry socket" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="groups"${S.q?' hidden':''}>`+
- `<details class="box sets" id="settings"${S.setOpen?' open':''}><summary><span>Settings <em class="setsum">On-call ${on?'on':'off'} · ${colleague()?'Colleague':'Author'} mode</em></span></summary><div class="inner">${oncallHTML(on)}${pmodeHTML()}<div class="toggles" style="margin-top:10px">${hcHTML()}</div></div></details>`+groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`</div>`+
+ `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab or topic: Eliquis, INR, dry socket" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="pins"${S.q?' hidden':''}>${pinsHTML()}</div><div id="groups"${S.q?' hidden':''}>`+
+ groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`<details class="box sets" id="settings"${S.setOpen?' open':''}><summary><span>Settings <em class="setsum">On-call ${on?'on':'off'} · ${colleague()?'Colleague':'Author'} mode</em></span></summary><div class="inner">${oncallHTML(on)}${pmodeHTML()}<div class="toggles" style="margin-top:10px">${hcHTML()}</div></div></details>`+`</div>`+
  `<p class="foot">Search shows a finding’s implications first. Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);S.fid=null;updBar();
 }
@@ -2797,7 +2809,7 @@ function flowHTML(m){
   if(o.scr)items.push([`<li><b>Not covered by this screen:</b> ${escV(o.scr)}</li>`,0]);
   const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
   const bas=basisOf([o.src,o.src2,...notes.map(s=>s.n.src)],[o.out,o.ex,...notes.map(s=>s.n.x)].join(' '));
-  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}</div>`:''}${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>End session</button></div></div>`}
+  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}</div>`:''}${m.id==='preop'?todayHTML(w):''}<details class="more"><summary>More · sources and review status</summary>${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div></details><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>End session</button></div></div>`}
  return'<div class="plan action"><div class="pbody"><div class="pt">Path incomplete — step back.</div></div></div>';
 }
 /* Step counter: answered steps + shortest/longest remaining question count from the current node. */
@@ -2814,8 +2826,9 @@ function fxCount(m,w){if(m.id==='sed'&&pedsLock())return'Locked · pediatric';
 function fxChips(m){const id=m.id,c=[];
  if(GATED.includes(id)){const g=gateModel();c.push(`<button class="fx-chip c-${g.tone}" data-drawer="gate">Gate: ${esc(g.t)}</button>`)}
  if(m.red)c.push('<button class="fx-chip c-red" data-drawer="red">⚠ Red flags</button>');
- if(TRI_MODS.includes(id))c.push(`<button class="fx-chip${S.tri?' c-mod':''}" data-drawer="tri">📷 ${S.tri?'Triage loaded':'Photo triage'}</button>`);
- if((m.inputs||[]).length){const i=S.inp[id]||{},set=Object.keys(i).some(k=>i[k]!==''&&i[k]!=null&&i[k]!==false);c.push(`<button class="fx-chip${set?' c-ok':''}" data-drawer="inputs">${set?'✓ ':''}Data inputs</button>`)}
+ const w0=walk(m),first=!w0.steps.some(s=>!s.note&&s.val!==undefined&&!s.auto),autoStep=!!(w0.cur&&w0.cur.n.auto);
+ if(TRI_MODS.includes(id)&&(first||S.tri))c.push(`<button class="fx-chip${S.tri?' c-mod':''}" data-drawer="tri">📷 ${S.tri?'Triage loaded':'Photo triage'}</button>`);
+ if((m.inputs||[]).length){const i=S.inp[id]||{},set=Object.keys(i).some(k=>i[k]!==''&&i[k]!=null&&i[k]!==false);if(first||set||autoStep)c.push(`<button class="fx-chip${set?' c-ok':''}" data-drawer="inputs">${set?'✓ ':''}Data inputs</button>`)}
  return c.join('')}
 function critHTML(m,w){const n=w.cur&&w.cur.n;if(!n)return'<p class="small">No open question.</p>';const r=w.r,ah=n.ah?n.ah(r):'';
  return`<div class="q" style="font-weight:700;margin-bottom:6px">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'<p class="small">No extra criteria for this step.</p>'}`}
@@ -2871,12 +2884,32 @@ function open(id){
  try{history.replaceState(null,'','#'+id);history.pushState({cs:1},'','#'+id)}catch(e){}updBar();
 }
 
+/* v3.11 Today's plan: pre-op screen ends on one actionable panel (ASA, LA maximum for weight, analgesic plan, handouts). Reuses existing Calc and Post-op analgesia content; adds no new dose or threshold. Held in memory only. */
+const TD_ASA={1:'ASA I',2:'ASA II',3:'ASA III: optimize with the physician first; open Office sedation plan before sedating.',4:'ASA IV: not an office sedation case. Local only for urgent care, or hospital setting with anesthesia (Office sedation plan).'};
+function tdShow(w){return!!(w&&w.out&&w.out.tone!=='urgent')}
+function tdThinner(w){return w.steps.some(s=>s.id==='c'&&s.val===true)}
+function tdSed(w){return w.steps.some(s=>s.id==='e'&&s.val===true)}
+function tdLA(){const w=S.wt;if(!w)return'<span class="small">Enter weight for maximum doses.</span>';
+ return laRows(w,laKid()).map(r=>r.blocked?`${esc(r.n)}: not under ${r.minAge} y`:`${esc(r.n)}: <b>${r.mg} mg</b>${r.capped?' (cap)':''} · <b>${r.carp}</b> carps`).join('<br>')+`<br><span class="small">${esc(wtLine())}${laKid()?' · pediatric (AAPD) maximums':''}. Combining agents: doses add.</span>`}
+function tdAnalg(w){const P=M('pain').nodes;return tdThinner(w)?`${esc(P.oApap.out)} Anticoagulant or antiplatelet: SDCEP advises acetaminophen rather than NSAIDs.`:`${esc(P.oFirst.out)} ${esc(P.oFirst.ex)} Skip the NSAID with pregnancy ≥20 weeks, kidney disease, NSAID allergy or GI bleed/ulcer.`}
+function todayHTML(w){if(!tdShow(w))return'';const t=S.today||{},a=t.asa;
+ const ho=[['ext','Extraction'],['imp','Implant / graft'],...(tdSed(w)?[['presed','Before sedation'],['sed','After sedation']]:[])];
+ return`<div class="today" id="today"><div class="lab">Today’s plan</div>
+ <h4>ASA class</h4><div class="asab">${[1,2,3,4].map(n=>`<button class="tg${a==n?' on':''}" data-tasa="${n}" aria-pressed="${a==n}">${['I','II','III','IV'][n-1]}</button>`).join('')}</div>${a>2?`<p class="small" style="margin:6px 0 0">${esc(TD_ASA[a])} ${srcLink('asaps')}</p>`:''}
+ <h4>Local anesthetic maximum</h4><div class="tw"><label class="fld" for="in-wtt">Weight, kg<input id="in-wtt" data-wt inputmode="decimal" enterkeyhint="done" autocomplete="off" placeholder="kg" value="${esc(kgVal())}"></label><label class="fld" for="in-lbt">or lb<input id="in-lbt" data-lb inputmode="decimal" enterkeyhint="done" autocomplete="off" placeholder="lb" value="${esc(lbVal())}"></label></div><div class="la" id="today-la">${tdLA()}</div>
+ <h4>Analgesia</h4><p class="la" style="margin:0">${tdAnalg(w)} ${srcLink('ada24')} <button class="go" data-open="pain">Post-op analgesia ›</button></p>
+ ${HANDOUTS_LIVE?`<h4>Patient handout</h4><div class="hob">${ho.map(([k,l])=>`<button class="go" data-ho="${k}">${esc(l)} ›</button>`).join('')}</div>`:''}</div>`}
+function todayText(w){if(!tdShow(w))return[];const t=S.today||{},L=['Today’s plan:'];
+ L.push(`- ASA class: ${t.asa?TD_ASA[t.asa]:'not recorded'}`);
+ if(S.wt)L.push(`- LA maximum (${wtLine()}): `+laRows(S.wt,laKid()).map(r=>r.blocked?`${r.n} not under ${r.minAge} y`:`${r.n} ${r.mg} mg (${r.carp} carps)`).join('; '));else L.push('- LA maximum: weight not entered');
+ L.push('- Analgesia: '+tdAnalg(w).replace(/<[^>]+>/g,''));return L}
+function todaySync(){const el=document.getElementById('today-la');if(el)el.innerHTML=tdLA()}
 function planText(m,w){const L=[`OMS Compass v${VER} · ${m.title} (decision support)`,`Practice mode: ${colleague()?'Colleague':'Author'}`];
  w.steps.forEach(s=>{if(s.note)return;L.push(`- ${s.n.q} ${s.val==='u'?'Unknown — verify':s.val?'Yes':'No'}${s.auto?' (from entered data)':''}${s.tri?(s.triFlip?' (changed from photo triage)':' (photo triage, confirmed)'):''}`)});
  if(w.unk)L.push(`Plan pending: verify “${w.unk.n.q}” before finalizing.`);
  if(w.out){const ns=w.steps.filter(s=>s.note).map(s=>s.n.src),bas=basisOf([w.out.src,w.out.src2,...ns],[w.out.out,w.out.ex].join(' '));
   if(bas==='au'||[w.out.src,w.out.src2,...ns].some(k=>SRC_AU.includes(k)))L.push(`Departure from guidelines: includes author's practice content${colleague()?' (shown in Colleague mode behind "Show Author\'s Clinical Protocol")':''}.`);
-  L.push(`${w.out.scr?'Screen result':'Plan'}: ${w.out.out}`);if(w.out.ex)L.push(w.out.ex);if(w.out.scr)L.push(`Not covered by this screen: ${w.out.scr}`);w.steps.filter(s=>s.note).forEach(s=>L.push(`${s.n.t}: ${s.n.x}`))}
+  L.push(`${w.out.scr?'Screen result':'Plan'}: ${w.out.out}`);if(w.out.ex)L.push(w.out.ex);if(w.out.scr)L.push(`Not covered by this screen: ${w.out.scr}`);w.steps.filter(s=>s.note).forEach(s=>L.push(`${s.n.t}: ${s.n.x}`));if(m.id==='preop')L.push(...todayText(w))}
  L.push('Decision support only; clinician judgment applies.');return L.join('\n')}
 function showCopy(t){const x=document.getElementById('copybox');if(!x)return;x.hidden=false;x.value=t;x.focus();x.select()}
 /* ===== Events ===== */
@@ -2901,6 +2934,7 @@ app.addEventListener('click',e=>{
  if(b.hasAttribute('data-drawer')){const sec=b.dataset.drawer;return setDrawer(sec?true:!S.drOpen,sec)}
  if(b.hasAttribute('data-back')){backStep();return}
  if(b.dataset.view){S.retMod=S.view==='mod'&&S.mod?S.mod:(b.dataset.view==='emergency'||b.dataset.view==='calc')?S.retMod:null;return view(b.dataset.view)}
+ if(b.dataset.tasa){const n=+b.dataset.tasa;S.today=S.today||{};S.today.asa=S.today.asa===n?undefined:n;if(S.today.asa)S.asa=n===3?'3':n<3?'12':S.asa;return refresh()}
  if(b.dataset.asa){S.asa=b.dataset.asa==='3'?'3':'12';return rebody()}
  if(b.dataset.rc!=null){const rc=S.rcri=S.rcri||{};rc[b.dataset.rc]=!rc[b.dataset.rc];return rebody()}
  if(b.hasAttribute('data-oncall')){setOnCall(!onCall());return home()}
@@ -2932,7 +2966,7 @@ app.addEventListener('click',e=>{
  if(b.dataset.sb){const k='sb_'+b.dataset.sb;i[k]=!i[k];i.sbTouched=true;b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
  if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
 });
-app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q')){S.q=el.value.trim();if(S.labPick&&S.labPick.q!==S.q)delete S.labPick;const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){S.wtIn={src:'kg',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return S.view==='asmt'?redraw():rebody()}if(el.hasAttribute('data-lb')){S.wtIn={src:'lb',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<880?Math.round(v/LB*10)/10:null;return S.view==='asmt'?redraw():rebody()}if(el.dataset.pfn==='age'&&(S.view==='calc'||S.view==='emergency')){const v=el.value.trim();if(v==='')delete S.pf.age;else S.pf.age=v;return rebody()}if(el.dataset.pfn){const before=planBeforeEdit(),k=el.dataset.pfn,v=el.value.trim(),old=S.pf[k];const cleared=has(old)&&old!==v?(LAB_STALE[k]||[]).filter(x=>S.pf[x]!==undefined):[];if(v==='')delete S.pf[k];else S.pf[k]=v;cleared.forEach(x=>delete S.pf[x]);recordPlanEdit(before,k,cleared);return redraw()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
+app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-q')){S.q=el.value.trim();if(S.labPick&&S.labPick.q!==S.q)delete S.labPick;const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;const pn=document.getElementById('pins');if(pn)pn.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){S.wtIn={src:'kg',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return S.view==='asmt'?redraw():S.view==='mod'?todaySync():rebody()}if(el.hasAttribute('data-lb')){S.wtIn={src:'lb',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<880?Math.round(v/LB*10)/10:null;return S.view==='asmt'?redraw():S.view==='mod'?todaySync():rebody()}if(el.dataset.pfn==='age'&&(S.view==='calc'||S.view==='emergency')){const v=el.value.trim();if(v==='')delete S.pf.age;else S.pf.age=v;return rebody()}if(el.dataset.pfn){const before=planBeforeEdit(),k=el.dataset.pfn,v=el.value.trim(),old=S.pf[k];const cleared=has(old)&&old!==v?(LAB_STALE[k]||[]).filter(x=>S.pf[x]!==undefined):[];if(v==='')delete S.pf[k];else S.pf[k]=v;cleared.forEach(x=>delete S.pf[x]);recordPlanEdit(before,k,cleared);return redraw()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
 app.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='in-tri'){e.preventDefault();loadTri(e.target.value);open('preop')}});
 app.addEventListener('change',e=>{const el=e.target;if(el.dataset.pfu){const before=planBeforeEdit();if(el.value)S.pf[el.dataset.pfu]=el.value;else delete S.pf[el.dataset.pfu];recordPlanEdit(before,el.dataset.pfu);return redraw()}if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
