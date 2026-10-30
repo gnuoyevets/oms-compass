@@ -187,6 +187,10 @@ details.more{margin-top:10px;font-size:13px}details.more summary{cursor:pointer;
 .today .asab{display:flex;gap:8px}.today .asab .tg{flex:1;min-height:44px}
 .today .tw{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}.today .la{font-size:14px;line-height:1.5}
 .today .hob{display:flex;flex-wrap:wrap;gap:6px}
+ul.hol{list-style:none;padding-left:0}ul.hol li{display:grid;grid-template-columns:28px 1fr;gap:6px;margin:6px 0}ul.hol .ic{font-size:18px;line-height:1.3}
+ul.hol li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:10px;padding:8px;font-weight:600}
+.tb{margin:10px 0;padding:8px 10px;border:1px dashed var(--line);border-radius:10px}.tb ul{margin:6px 0 0;padding-left:18px}
+.og h4{margin:12px 0 4px;font-size:15px}.og p{margin:2px 0 6px}.ogl{display:inline-block;margin-right:4px}.ogl0{color:var(--accent)}.ogl2{opacity:.8}
 .nomatch{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.5}
 .nomatch b{display:block;margin-bottom:2px}
 .fcls{font-size:12.5px;color:var(--muted);margin:-4px 0 10px}
@@ -414,6 +418,15 @@ html[data-contrast="high"] .fx-sheet{box-shadow:none;border:2px solid #000;borde
 <script>
 /* ===== Sources (checked Oct 21, 2026) ===== */
 const SRC={
+tan12:{n:'Tan 2012 · Ridge changes after extraction (systematic review)',v:'Clin Oral Implants Res 2012',u:'https://pubmed.ncbi.nlm.nih.gov/22211303/'},
+avila19:{n:'Avila-Ortiz 2019 · Alveolar ridge preservation (systematic review)',v:'J Clin Periodontol 2019',u:'https://pubmed.ncbi.nlm.nih.gov/30623987/'},
+cousoq22:{n:'Couso-Queiruga 2022 · Ridge preservation and later bone augmentation',v:'J Periodontol 2022',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9322559/'},
+pjet07:{n:'Pjetursson 2007 · Survival of tooth- vs implant-supported restorations',v:'Clin Oral Implants Res 2007',u:'https://pubmed.ncbi.nlm.nih.gov/17594374/'},
+overer:{n:'BDJ 2005 · Over-eruption of unopposed teeth (correspondence)',v:'Br Dent J 2005',u:'https://www.nature.com/articles/4812246'},
+coro22:{n:'Peixoto 2023 · Coronectomy vs extraction (meta-analysis, via Dental Elf)',v:'J Oral Maxillofac Surg',u:'https://nationalelfservice.net/?p=182595'},
+coro25:{n:'Di Spirito 2025 · Re-intervention after coronectomy (review of reviews)',v:'J Clin Med 2025',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12155643/'},
+teachback:{n:'AHRQ · Teach-back (Health Literacy Universal Precautions Toolkit, Tool 5)',v:'AHRQ 2020',u:'https://www.ahrq.gov/health-literacy/improve/precautions/tool5.html'},
+optgrid:{n:'Option Grid decision aids (Elwyn et al.)',v:'BMC Health Serv Res 2014',u:'https://link.springer.com/article/10.1186/1472-6963-14-160'},
  nkfpain:{n:'National Kidney Foundation · Pain medicines and kidney disease',v:'Patient guidance; NSAID kidney precautions',chk:'2026-10-24',u:'https://www.kidney.org/kidney-topics/pain-medicines-and-kidney-disease'},
 sux:{n:'Succinylcholine chloride (Anectine) prescribing information',v:'IM 3–4 mg/kg; total IM dose ≤150 mg',chk:'2026-10-24',u:'https://www.drugs.com/dosage/anectine.html'},
 lipid70:{n:'ASRA lipid emulsion dosing for LAST (>70 kg vs ≤70 kg), summarized',v:'Oral Health Group review',chk:'2026-10-24',u:'https://www.oralhealthgroup.com/features/lipid-emulsion-treatment-for-local-anesthetic-systemic-toxicity/'},
@@ -1642,8 +1655,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.11.0';
+const VER='3.12.0';
 const CHANGES=[
+{v:'3.12.0',d:'Oct 31, 2026',i:['Post-op handouts: “call us” and 911 lines come first, highlighted; each line has a pictogram. Same order in shared text and on the patient page.','Teach-back: 3 questions under each post-op handout, for the clinician (not shared). AHRQ method.','Option grids (English): wisdom tooth near the nerve (remove vs coronectomy), missing tooth (implant vs bridge vs leave the space), after extraction (graft vs heal on its own). On the Patient tab, shareable, and linked from the Extractions, Implants and Ridge augmentation plans.','Day-7 check-in message (English, Español) with the site’s review link. Patient page: review request is now a small link at the very bottom.','Author mode: “Log to outcomes registry” on plan cards copies a de-identified CR1 line for the Surgical Outcomes Registry.']},
 {v:'3.11.0',d:'Oct 31, 2026',i:['Pinned row on Decide: Pre-op clearance, Sedation plan, Implants, Extractions, Post-op handouts. Settings moved to the bottom.','Pre-op clearance ends on one Today’s plan panel: ASA class (one tap), local anesthetic maximum for the entered weight, analgesic plan (acetaminophen first when an anticoagulant or antiplatelet is entered), patient handout buttons. All of it goes into Copy note. No new dose or threshold; content is reused from Calc and Post-op analgesia.','Yes and No buttons now carry equal weight (Yes was filled).','Photo triage and Data inputs chips show on the first question only, unless triage is loaded, inputs are set, or the current step reads entered data. Both stay in the drawer.','Plan cards: sources and review status folded under More.']},
 {v:'3.10.0',d:'Oct 27, 2026',i:['Unresolved items are listed once per encounter and split into “Changes the plan” and “Also needed to finalize”. Each shows its next action (ask patient, examine, check records, obtain result, contact clinician, decide plan) and, where existing branches differ, what each answer would lead to. The plan stays visible and copyable while provisional.','Type a result in search — “INR 2.6”, “eGFR 28”, “platelets 45 k”, “A1c 8.2 %” — and confirm to record it. Units are chosen, never assumed; date and trend are never read from text. Replacing a result clears the answers that described the old one. eGFR is never used as CrCl.','Intraop checklist follows the encounter: Done, Pending or N/A per item; sedation, implant and specimen checks fold away when the entered anesthesia or procedure makes them not apply; one check per assessment finding; unresolved questions listed (checking never answers them). Checks reset when the plan facts they covered change.','New users start in Colleague mode; an existing Author setting is kept. Switch mode from the finding or assessment screen without losing entered facts. Copied notes name the mode and any departures from guidelines.']},
 {v:'3.9.2',d:'Oct 27, 2026',i:['Search box now shows three examples: Eliquis, INR, dry socket (a drug, a lab and a topic).']},
@@ -1814,19 +1828,61 @@ zh:[["什么是种植体周围炎？","种植体周围牙龈的感染和炎症�
 const faqL=l=>FAQ_LANGS.includes(l)?l:'en';
 function faqText(f,l){const L=faqL(l),body=`${f.t[L]}\n\n${f.i[L].map(([q,a])=>`${q}\n${a}`).join('\n\n')}`;
  if(colleague())return`${HO_NEUTRAL}\n\n${body}`;return`${body}\n\n${HO_UI[L].ph}: ${HO_SITES[S.site||'young'].ph}`}
+/* ===== v3.12 Patient side: red flags first, pictograms, teach-back, option grids, day-7 message ===== */
+const HO_WARN=t=>/911|^Call us|^Llámenos|^Llame|^Txoma|^出现以下情况请致电/.test(t);
+const HO_ICON={ext:['🩸','🧊','🥤','🚭','🧂','🥣','💊','⚠️','💊','🤢','ℹ️','📞','🚑'],imp:['🩸','🧊','✋','🥣','🫧','🦷','ℹ️','🤧','🚭','💊','⚠️','💊','📞'],arch:['🧊','🦷','🥣','🪥','🚭','💊','⚠️','🗣️','📞','📅'],presed:['🍽️','🥤','💊','🚭','🚗','👕','🤒'],sed:['🧑‍🤝‍🧑','🚗','👶','🥤','🛏️','💉','🚑']};
+function hoItems(h,l){const xs=h.i[l].map((t,k)=>({t,ic:(HO_ICON[h.id]||[])[k]||'',w:HO_WARN(t)}));return[...xs.filter(x=>x.w),...xs.filter(x=>!x.w)]}
+const TEACH={ext:['What will you do if it is still bleeding at home?','What should you not do in the first 24 hours?','When would you call us, and when would you call 911?'],
+ imp:['What should you not do with your tongue, lip or denture near the surgery site?','When can you chew on that side?','What would make you call us?'],
+ arch:['What will you eat for the first 2 weeks?','How will you clean under your new teeth?','What would make you call us?'],
+ presed:['When is your last food, and your last clear drink?','Who is driving you home and staying with you?','Which of your usual medicines will you take that morning?'],
+ sed:['Who is staying with you tonight?','What will you not do until tomorrow morning?','What would make you call 911?']};
+const OG=[
+{id:'ogcoro',t:'Lower wisdom tooth close to the nerve: remove the whole tooth, or the top only?',o:['Remove the whole tooth','Remove the top only (coronectomy)'],src:['coro22','coro25'],
+ r:[['What is done?',['The whole tooth, roots included, is taken out.','The top of the tooth is removed. The roots stay in the bone, away from the nerve.']],
+ ['Numbness of the lip or chin?',['In studies of teeth close to the nerve, about 8 in 100 people had some numbness. Most of it gets better; a few people keep it.','About 1 in 100 had some numbness.']],
+ ['Will I need another surgery?',['No. The tooth is gone.','About 4 in 100 need a second surgery to take the roots out, most often within the first year or two.']],
+ ['Do the roots move?',['Not applicable.','Sometimes. They tend to move a few millimeters up, away from the nerve, and usually settle within a year.']],
+ ['Pain, infection, dry socket?',['Pain and dry socket were a little more common (dry socket about 4 in 100).','Infection was about the same (about 3–4 in 100); dry socket about 1 in 100.']],
+ ['Follow-up?',['Usual check after surgery.','Check-ups with an X-ray over the next year or longer.']],
+ ['Who is it for?',['Most wisdom teeth.','Only teeth whose roots touch the nerve on X-ray or 3D scan, with no decay or infection in the roots.']]]},
+{id:'ogimp',t:'Replacing a missing tooth: implant, bridge, or leave the space?',o:['Implant','Bridge','Leave the space'],src:['pjet07','overer'],
+ r:[['What is it?',['A titanium post in the bone, with a crown on top.','A false tooth held by crowns on the teeth next to the gap.','Nothing is placed.']],
+ ['What happens to the teeth next to the gap?',['They are not touched.','They are shaped for crowns. Decay or a root canal under a crown can happen later.','They are not touched. Over years, nearby or opposite teeth may shift or grow into the space; many people see little change.']],
+ ['How long does it last?',['About 9 in 10 implant crowns are still in place after 10 years.','About 9 in 10 bridges are still in place after 10 years.','Not applicable.']],
+ ['Is surgery needed?',['Yes, minor surgery. Sometimes bone grafting first.','No.','No.']],
+ ['Upkeep?',['Brush, floss and regular checkups. Screws or crowns sometimes need repair.','Brush, and floss under the false tooth with a threader. Regular checkups.','Regular checkups.']],
+ ['Cost?',['Usually the highest. Insurance coverage varies.','Usually less than an implant. Insurance coverage varies.','No cost now. Treatment later may be harder if the bone shrinks.']]]},
+{id:'oggraft',t:'After a tooth is removed: bone graft in the socket, or let it heal on its own?',o:['Graft the socket','Let it heal on its own'],src:['tan12','avila19','cousoq22'],
+ r:[['What is done?',['Bone graft material is placed in the socket, often under a thin cover.','The socket fills in with your own bone and gum.']],
+ ['What happens to the bone?',['The graft keeps about 2 mm more width than healing on its own.','In 6 months the ridge loses about 3–4 mm of width and about 1 mm of height.']],
+ ['Will I need more bone work when the implant goes in?',['Less likely. In one study of front and premolar teeth, about 1 in 9 grafted sites needed more bone.','More likely. In the same study, about 6 in 10 sites needed more bone.']],
+ ['Best when…',['You plan an implant in that spot.','You do not plan an implant there.']],
+ ['Downsides?',['Added cost. A small chance of graft infection, or a few graft grains coming out.','None beyond the extraction itself.']]]}];
+const OG_FOR={extraction:['ogcoro','oggraft'],implant:['ogimp','oggraft'],graft:['oggraft']};
+function ogText(g){return`${g.t}\n\n${g.r.map(([q,a])=>`${q}\n${g.o.map((o,k)=>`• ${o}: ${a[k]}`).join('\n')}`).join('\n\n')}\n\nYour surgeon will help you choose. Numbers are averages from studies, not a promise for you.`}
+function ogHTML(g){return`<details class="box" id="ho-${g.id}"${S.hoOpen===g.id?' open':''}><summary>${esc(g.t)}</summary><div class="inner og">${g.r.map(([q,a])=>`<h4>${esc(q)}</h4>${g.o.map((o,k)=>`<p><b class="ogl ogl${k}">${esc(o)}</b> ${esc(a[k])}</p>`).join('')}`).join('')}<p class="small">Numbers are averages from studies, not a promise for any one patient. English only for now.</p><button class="go" data-ogshare="${g.id}">Share ↗</button> <span class="small">${g.src.map(srcLink).join(' · ')}</span></div></details>`}
+const D7={en:(n,ph,u)=>`Hi, this is ${n}, checking in a week after your surgery. We hope you are healing well. If you have pain, swelling or any questions, call us at ${ph}. If you were happy with your care, a short Google review helps other patients find us: ${u} Thank you!`,
+ es:(n,ph,u)=>`Hola, le escribimos de ${n} una semana después de su cirugía. Esperamos que se esté recuperando bien. Si tiene dolor, hinchazón o preguntas, llámenos al ${ph}. Si quedó contento con la atención, una breve reseña en Google ayuda a otros pacientes a encontrarnos: ${u} ¡Gracias!`};
+function d7Text(l){const st=HO_SITES[S.site||'young'];return(D7[l]||D7.en)(st.n,st.ph,st.u)}
+function d7HTML(l){if(colleague())return'';return`<details class="box" id="ho-d7"><summary>Day-7 check-in message <em>${D7[l]?'':'English (Español available)'}</em></summary><div class="inner"><p style="margin:0 0 8px">${esc(d7Text(D7[l]?l:'en'))}</p><button class="go" data-d7>Copy or share ↗</button><p class="small">Send about a week after surgery, by text or email. No patient details are included.</p></div></details>`}
+function teachHTML(id){const q=TEACH[id];if(!q)return'';return`<div class="tb"><b>Teach-back</b> <span class="small">(for you, not shared): “I want to be sure I explained it well. Can you tell me…”</span><ul>${q.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`}
 const HO_FOR={extraction:'ext',ao:'ext',implant:'imp',graft:'imp',sinus:'imp',arch:'arch',sed:'sed'};
 const FAQ_FOR={extraction:'fwis',canine:'fcan',implant:'fimp',graft:'fgraft',sinus:'fsinus',arch:'farch',sed:'fsed',biopsy:'fbx',lesion:'fbx',ao:'fao',infection:'finf',nerve:'fnerve',oac:'foac',tmd:'ftmd',mronj:'fmronj',periimpl:'fperi'};
 const HO_NEUTRAL='Oral & Maxillofacial Surgery — Patient Instructions';
-function hoText(h,l){if(colleague())return`${HO_NEUTRAL}\n\n${h.t[l]}\n\n${h.i[l].map(x=>'• '+x.replace('[office phone]','your surgeon’s office')).join('\n')}`;
- const ph=HO_SITES[S.site||'young'].ph;return `${h.t[l]}\n\n${h.i[l].map(x=>'• '+x.replace('[office phone]',ph)).join('\n')}\n\n${HO_UI[l].ph}: ${ph}\n\n${HO_UI[l].rv.replace('{biz}',HO_SITES[S.site||'young'].n)}\n${HO_SITES[S.site||'young'].u}`}
+function hoText(h,l){if(colleague())return`${HO_NEUTRAL}\n\n${h.t[l]}\n\n${hoItems(h,l).map(x=>(x.ic?x.ic+' ':'• ')+x.t.replace('[office phone]','your surgeon’s office')).join('\n')}`;
+ const ph=HO_SITES[S.site||'young'].ph;return `${h.t[l]}\n\n${hoItems(h,l).map(x=>(x.ic?x.ic+' ':'• ')+x.t.replace('[office phone]',ph)).join('\n')}\n\n${HO_UI[l].ph}: ${ph}\n\n${HO_UI[l].rv.replace('{biz}',HO_SITES[S.site||'young'].n)}\n${HO_SITES[S.site||'young'].u}`}
 function hoHTML(){const l=S.lang||'en';
  return `${HANDOUTS_LIVE?'':'<div class="red"><b>DRAFT — pending Dr. Young’s review.</b> Not linked in the app yet. Approve to make them visible in the app.</div>'}
  ${colleague()?`<div class="lab" id="ho-neutral" style="margin-bottom:8px">${esc(HO_NEUTRAL)}</div>`:`<div class="toggles" id="ho-site" style="margin-bottom:6px">${[['young','Dr. Young'],['bayside','Bayside']].map(([c,n])=>`<button class="tg${(S.site||'young')===c?' on':''}" data-site="${c}" aria-pressed="${(S.site||'young')===c}">${n}</button>`).join('')}</div>`}
  <div class="toggles" style="margin-bottom:10px">${HO_LANGS.map(([c,n])=>`<button class="tg${l===c?' on':''}" data-lang="${c}" lang="${c}" aria-pressed="${l===c}">${n}</button>`).join('')}</div>
  <div class="lab" id="ho-sec-post">Post-op instructions</div>
- ${HO.map(h=>`<details class="box" id="ho-${h.id}"${S.hoOpen===h.id?' open':''}><summary>${esc(h.t[l])}</summary><div class="inner look"><ul>${h.i[l].map(x=>`<li>${esc(x)}</li>`).join('')}</ul><button class="go" data-share="${h.id}">${HO_UI[l].sh} ↗</button> <span class="small">${h.src.map(srcLink).join(' · ')}</span></div></details>`).join('')}
+ ${HO.map(h=>`<details class="box" id="ho-${h.id}"${S.hoOpen===h.id?' open':''}><summary>${esc(h.t[l])}</summary><div class="inner look"><ul class="hol">${hoItems(h,l).map(x=>`<li${x.w?' class="warn"':''}><span class="ic" aria-hidden="true">${x.ic}</span>${esc(x.t)}</li>`).join('')}</ul>${teachHTML(h.id)}<button class="go" data-share="${h.id}">${HO_UI[l].sh} ↗</button> <span class="small">${h.src.map(srcLink).join(' · ')}</span></div></details>`).join('')}
  ${[['proc','Procedure FAQs'],['dx','Diagnosis FAQs']].map(([k,n])=>`<div class="lab" id="ho-sec-${k}" style="margin-top:14px">${n}</div>${faqL(l)!==l?`<p class="small">FAQs are in English and Español for now — English shown.</p>`:''}${FAQ.filter(f=>f.k===k).map(f=>{const L=faqL(l);return`<details class="box" id="ho-${f.id}"${S.hoOpen===f.id?' open':''}><summary lang="${L}">${esc(f.t[L])}</summary><div class="inner look" lang="${L}">${f.i[L].map(([q,a])=>`<p><b>${esc(q)}</b><br>${esc(a)}</p>`).join('')}<button class="go" data-share="${f.id}">${HO_UI[L].sh} ↗</button> <span class="small">${f.src.map(srcLink).join(' · ')}</span></div></details>`}).join('')}`).join('')}
- <textarea id="copybox" class="copybox" hidden aria-label="Handout text"></textarea><p class="caveat">Plain-language drafts written from published patient instructions; edit to match your practice. FAQs are general information, not a substitute for the visit.</p>`}
+ <div class="lab" id="ho-sec-og" style="margin-top:14px">Choosing a treatment · option grids</div>${OG.map(ogHTML).join('')}
+ ${d7HTML(l)}
+ <textarea id="copybox" class="copybox" hidden aria-label="Handout text"></textarea><p class="caveat">Option grids follow the Option Grid format (one page, patients’ common questions, side by side) ${srcLink('optgrid')}; teach-back per AHRQ ${srcLink('teachback')}. Plain-language drafts written from published patient instructions; edit to match your practice. FAQs are general information, not a substitute for the visit.</p>`}
+async function shareTxt(title,t,btn){try{if(navigator.share){await navigator.share({title,text:t});return}}catch(e){if(e&&e.name==='AbortError')return}try{await navigator.clipboard.writeText(t);btn.textContent='Copied'}catch(e){showCopy(t)}}
 async function shareHO(id,btn){const h=HO.find(x=>x.id===id),f=h?null:FAQ.find(x=>x.id===id),l=h?S.lang||'en':faqL(S.lang||'en'),t=h?hoText(h,l):faqText(f,l),title=(h||f).t[l];
  try{if(navigator.share){await navigator.share({title,text:t});return}}catch(e){if(e&&e.name==='AbortError')return}
  try{await navigator.clipboard.writeText(t);btn.textContent=HO_UI[l].cp}catch(e){showCopy(t)}}
@@ -2809,7 +2865,7 @@ function flowHTML(m){
   if(o.scr)items.push([`<li><b>Not covered by this screen:</b> ${escV(o.scr)}</li>`,0]);
   const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
   const bas=basisOf([o.src,o.src2,...notes.map(s=>s.n.src)],[o.out,o.ex,...notes.map(s=>s.n.x)].join(' '));
-  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}</div>`:''}${m.id==='preop'?todayHTML(w):''}<details class="more"><summary>More · sources and review status</summary>${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div></details><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>End session</button></div></div>`}
+  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}${(OG_FOR[m.id]||[]).map(g=>` <button class="go" data-ho="${g}">Option grid: ${esc(OG.find(x=>x.id===g).o.join(' vs '))} ›</button>`).join('')}</div>`:''}${colleague()?'':`<div><button class="go" data-reg>Log to outcomes registry ›</button></div>`}${m.id==='preop'?todayHTML(w):''}<details class="more"><summary>More · sources and review status</summary>${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div></details><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>End session</button></div></div>`}
  return'<div class="plan action"><div class="pbody"><div class="pt">Path incomplete — step back.</div></div></div>';
 }
 /* Step counter: answered steps + shortest/longest remaining question count from the current node. */
@@ -2903,6 +2959,14 @@ function todayText(w){if(!tdShow(w))return[];const t=S.today||{},L=['Today’s p
  L.push(`- ASA class: ${t.asa?TD_ASA[t.asa]:'not recorded'}`);
  if(S.wt)L.push(`- LA maximum (${wtLine()}): `+laRows(S.wt,laKid()).map(r=>r.blocked?`${r.n} not under ${r.minAge} y`:`${r.n} ${r.mg} mg (${r.carp} carps)`).join('; '));else L.push('- LA maximum: weight not entered');
  L.push('- Analgesia: '+tdAnalg(w).replace(/<[^>]+>/g,''));return L}
+/* v3.12 Registry link: a de-identified CR1 line for the Surgical Outcomes Registry (paste there). Copied only; nothing is sent. */
+const REG_URL='https://claude.ai/artifact/CYcfCKQHUD67fTtnb9GF3g';
+function regProc(m,w){const o=w.out?w.out.out:'';return{extraction:'Third molar extraction',implant:/^Immediate/i.test(o)?'Immediate implant':'Implant placement',graft:'Ridge augmentation',sinus:/Transcrestal/i.test(o)?'Sinus lift – crestal':/Lateral/i.test(o)?'Sinus lift – lateral':'',arch:'Full-arch (All-on-X)',biopsy:'Biopsy',lesion:'Biopsy'}[m.id]||''}
+function regBand(){const a=ageNum();if(a==null)return'';return a<18?'<18':a<30?'18–29':a<45?'30–44':a<65?'45–64':a<80?'65–79':'80+'}
+function regLine(m,w){const pa=S.ans.preop||{},t=S.today||{},kv=[['proc',regProc(m,w)],['anes',pa.e===true?'IV sedation':pa.e===false?'Local':''],['asa',t.asa?['I','II','III','IV'][t.asa-1]:''],['age',regBand()],['rf',pa.c===true?'ac':''],['plan',(m.title+': '+(w.out?w.out.out:w.unk?'pending, verify first':'incomplete')).slice(0,200)]];
+ return'CR1;'+kv.filter(([,v])=>v).map(([k,v])=>k+'='+encodeURIComponent(v)).join(';')}
+async function regCopy(b){const m=M(S.mod),w=walk(m),t=regLine(m,w);try{await navigator.clipboard.writeText(t);b.textContent='Copied · paste in the registry'}catch(e){showCopy(t)}
+ if(!document.getElementById('regl')){b.insertAdjacentHTML('afterend',`<p class="small" id="regl">Open the <a href="${REG_URL}" target="_blank" rel="noopener">Surgical Outcomes Registry ↗</a> and paste into “From Compass”. Carries procedure, anesthesia, ASA, age band, anticoagulant flag and the plan; no identifiers or dates.</p>`)}}
 function todaySync(){const el=document.getElementById('today-la');if(el)el.innerHTML=tdLA()}
 function planText(m,w){const L=[`OMS Compass v${VER} · ${m.title} (decision support)`,`Practice mode: ${colleague()?'Colleague':'Author'}`];
  w.steps.forEach(s=>{if(s.note)return;L.push(`- ${s.n.q} ${s.val==='u'?'Unknown — verify':s.val?'Yes':'No'}${s.auto?' (from entered data)':''}${s.tri?(s.triFlip?' (changed from photo triage)':' (photo triage, confirmed)'):''}`)});
@@ -2954,6 +3018,9 @@ app.addEventListener('click',e=>{
  if(b.dataset.lang){S.lang=b.dataset.lang;return rebody()}
  if(b.dataset.site){S.site=b.dataset.site;return rebody()}
  if(b.dataset.share)return shareHO(b.dataset.share,b);
+ if(b.dataset.ogshare){const g=OG.find(x=>x.id===b.dataset.ogshare);return shareTxt(g.t,ogText(g),b)}
+ if(b.hasAttribute('data-d7')){const l=S.lang||'en';return shareTxt('Check-in',d7Text(D7[l]?l:'en'),b)}
+ if(b.dataset.reg)return regCopy(b);
  if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
  if(b.hasAttribute('data-triload')){const x=document.getElementById('in-tri');loadTri(x&&x.value);return open('preop')}
  if(b.hasAttribute('data-triclear')){S.tri=null;S.triErr='';TRI_MODS.forEach(k=>{S.ans[k]={}});return open(S.mod||'preop')}
