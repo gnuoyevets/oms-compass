@@ -1655,8 +1655,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.12.0';
+const VER='3.13.0';
 const CHANGES=[
+{v:'3.13.0',d:'Oct 31, 2026',i:['Option grids in Español, Kriolu and 中文 (machine-drafted; pending native-speaker review). They follow the Patient tab language and share in it.','Patient page: new “Choosing a treatment” section with the three option grids in all four languages; links like #ogimp-es open one directly.']},
 {v:'3.12.0',d:'Oct 31, 2026',i:['Post-op handouts: “call us” and 911 lines come first, highlighted; each line has a pictogram. Same order in shared text and on the patient page.','Teach-back: 3 questions under each post-op handout, for the clinician (not shared). AHRQ method.','Option grids (English): wisdom tooth near the nerve (remove vs coronectomy), missing tooth (implant vs bridge vs leave the space), after extraction (graft vs heal on its own). On the Patient tab, shareable, and linked from the Extractions, Implants and Ridge augmentation plans.','Day-7 check-in message (English, Español) with the site’s review link. Patient page: review request is now a small link at the very bottom.','Author mode: “Log to outcomes registry” on plan cards copies a de-identified CR1 line for the Surgical Outcomes Registry.']},
 {v:'3.11.0',d:'Oct 31, 2026',i:['Pinned row on Decide: Pre-op clearance, Sedation plan, Implants, Extractions, Post-op handouts. Settings moved to the bottom.','Pre-op clearance ends on one Today’s plan panel: ASA class (one tap), local anesthetic maximum for the entered weight, analgesic plan (acetaminophen first when an anticoagulant or antiplatelet is entered), patient handout buttons. All of it goes into Copy note. No new dose or threshold; content is reused from Calc and Post-op analgesia.','Yes and No buttons now carry equal weight (Yes was filled).','Photo triage and Data inputs chips show on the first question only, unless triage is loaded, inputs are set, or the current step reads entered data. Both stay in the drawer.','Plan cards: sources and review status folded under More.']},
 {v:'3.10.0',d:'Oct 27, 2026',i:['Unresolved items are listed once per encounter and split into “Changes the plan” and “Also needed to finalize”. Each shows its next action (ask patient, examine, check records, obtain result, contact clinician, decide plan) and, where existing branches differ, what each answer would lead to. The plan stays visible and copyable while provisional.','Type a result in search — “INR 2.6”, “eGFR 28”, “platelets 45 k”, “A1c 8.2 %” — and confirm to record it. Units are chosen, never assumed; date and trend are never read from text. Replacing a result clears the answers that described the old one. eGFR is never used as CrCl.','Intraop checklist follows the encounter: Done, Pending or N/A per item; sedation, implant and specimen checks fold away when the entered anesthesia or procedure makes them not apply; one check per assessment finding; unresolved questions listed (checking never answers them). Checks reset when the plan facts they covered change.','New users start in Colleague mode; an existing Author setting is kept. Switch mode from the finding or assessment screen without losing entered facts. Copied notes name the mode and any departures from guidelines.']},
@@ -1838,30 +1839,91 @@ const TEACH={ext:['What will you do if it is still bleeding at home?','What shou
  presed:['When is your last food, and your last clear drink?','Who is driving you home and staying with you?','Which of your usual medicines will you take that morning?'],
  sed:['Who is staying with you tonight?','What will you not do until tomorrow morning?','What would make you call 911?']};
 const OG=[
-{id:'ogcoro',t:'Lower wisdom tooth close to the nerve: remove the whole tooth, or the top only?',o:['Remove the whole tooth','Remove the top only (coronectomy)'],src:['coro22','coro25'],
- r:[['What is done?',['The whole tooth, roots included, is taken out.','The top of the tooth is removed. The roots stay in the bone, away from the nerve.']],
+{id:'ogcoro',src:['coro22','coro25'],
+t:{en:'Lower wisdom tooth close to the nerve: remove the whole tooth, or the top only?',es:'Muela del juicio inferior cerca del nervio: ¿sacar todo el diente o solo la parte de arriba?',kea:'Denti di juízu di baxu pertu di nérvu: tira denti interu, o só párti di riba?',zh:'靠近神经的下颌智齿：整颗拔除，还是只去除牙冠？'},
+o:{en:['Remove the whole tooth','Remove the top only (coronectomy)'],es:['Sacar todo el diente','Sacar solo la parte de arriba (coronectomía)'],kea:['Tira denti interu','Tira só párti di riba (koronektomia)'],zh:['整颗拔除','只去除牙冠（冠切术）']},
+r:{en:[['What is done?',['The whole tooth, roots included, is taken out.','The top of the tooth is removed. The roots stay in the bone, away from the nerve.']],
  ['Numbness of the lip or chin?',['In studies of teeth close to the nerve, about 8 in 100 people had some numbness. Most of it gets better; a few people keep it.','About 1 in 100 had some numbness.']],
  ['Will I need another surgery?',['No. The tooth is gone.','About 4 in 100 need a second surgery to take the roots out, most often within the first year or two.']],
  ['Do the roots move?',['Not applicable.','Sometimes. They tend to move a few millimeters up, away from the nerve, and usually settle within a year.']],
  ['Pain, infection, dry socket?',['Pain and dry socket were a little more common (dry socket about 4 in 100).','Infection was about the same (about 3–4 in 100); dry socket about 1 in 100.']],
  ['Follow-up?',['Usual check after surgery.','Check-ups with an X-ray over the next year or longer.']],
- ['Who is it for?',['Most wisdom teeth.','Only teeth whose roots touch the nerve on X-ray or 3D scan, with no decay or infection in the roots.']]]},
-{id:'ogimp',t:'Replacing a missing tooth: implant, bridge, or leave the space?',o:['Implant','Bridge','Leave the space'],src:['pjet07','overer'],
- r:[['What is it?',['A titanium post in the bone, with a crown on top.','A false tooth held by crowns on the teeth next to the gap.','Nothing is placed.']],
+ ['Who is it for?',['Most wisdom teeth.','Only teeth whose roots touch the nerve on X-ray or 3D scan, with no decay or infection in the roots.']]],
+es:[['¿Qué se hace?',['Se saca todo el diente, con las raíces.','Se quita la parte de arriba del diente. Las raíces se quedan en el hueso, lejos del nervio.']],
+ ['¿Adormecimiento del labio o la barbilla?',['En estudios de dientes cerca del nervio, unas 8 de cada 100 personas tuvieron algo de adormecimiento. La mayoría mejora; unas pocas personas lo conservan.','Alrededor de 1 de cada 100 tuvo algo de adormecimiento.']],
+ ['¿Necesitaré otra cirugía?',['No. El diente ya no está.','Unas 4 de cada 100 personas necesitan una segunda cirugía para sacar las raíces, casi siempre en el primer o segundo año.']],
+ ['¿Se mueven las raíces?',['No aplica.','A veces. Suelen subir unos milímetros, alejándose del nervio, y por lo general se quedan quietas en un año.']],
+ ['¿Dolor, infección, alveolitis seca?',['El dolor y la alveolitis seca fueron un poco más frecuentes (alveolitis seca en unas 4 de cada 100).','La infección fue más o menos igual (unas 3–4 de cada 100); alveolitis seca en 1 de cada 100.']],
+ ['¿Controles?',['El control normal después de la cirugía.','Controles con radiografía durante el año siguiente o más.']],
+ ['¿Para quién es?',['La mayoría de las muelas del juicio.','Solo dientes cuyas raíces tocan el nervio en la radiografía o el escáner 3D, sin caries ni infección en las raíces.']]],
+kea:[['Kuze ki ta fazedu?',['Ta tira denti interu, ku raís.','Ta tira párti di riba di denti. Raís ta fika na osu, lonji di nérvu.']],
+ ['Lábiu o kexu ta fika dromidu?',['Na studu di denti pertu di nérvu, más o menus 8 na kada 100 algen tevi un bokadu di dormênsia. Má párti ta midjora; uns pouku ta fika ku el.','Más o menus 1 na kada 100 tevi un bokadu di dormênsia.']],
+ ['N ta mesté otu sirurjia?',['Nau. Denti dja ka sta la.','Más o menus 4 na kada 100 ta mesté un sugundu sirurjia pa tira raís, má párti na purmeru o sugundu anu.']],
+ ['Raís ta move?',['Ka ta aplika.','Às bes. Es ta subi uns milímetru, pa lonji di nérvu, i normalmenti es ta para dentu di un anu.']],
+ ['Dor, infeson, alvéolu seku?',['Dor i alvéolu seku kontise un bokadu más (alvéolu seku más o menus 4 na kada 100).','Infeson é más o menus igual (más o menus 3–4 na kada 100); alvéolu seku más o menus 1 na kada 100.']],
+ ['Konsulta di kontrolu?',['Kontrolu normal dipôs di sirurjia.','Kontrolu ku raio-X duranti un anu o más.']],
+ ['É pa kenha?',['Má párti di denti di juízu.','Só denti ki raís ta toka nérvu na raio-X o na skaner 3D, sen kári nen infeson na raís.']]],
+zh:[['做什么？',['连同牙根把整颗牙拔出。','去除牙齿上半部分（牙冠），牙根留在骨头里，远离神经。']],
+ ['嘴唇或下巴会麻木吗？',['在靠近神经的牙齿的研究中，每100人约有8人出现一些麻木。大多数会好转；少数人会一直存在。','每100人约有1人出现一些麻木。']],
+ ['需要再做手术吗？',['不需要，牙齿已经拔掉了。','每100人约有4人需要第二次手术取出牙根，多数在头一两年内。']],
+ ['牙根会移动吗？',['不适用。','有时会。通常向上移动几毫米，远离神经，一般一年内稳定。']],
+ ['疼痛、感染、干槽症？',['疼痛和干槽症稍多一些（干槽症每100人约4人）。','感染差不多（每100人约3–4人）；干槽症每100人约1人。']],
+ ['复查？',['术后常规复查。','在之后一年或更长时间内拍X光复查。']],
+ ['适合谁？',['大多数智齿。','只适用于X光或3D扫描显示牙根接触神经、且牙根没有蛀牙或感染的牙齿。']]]}},
+{id:'ogimp',src:['pjet07','overer'],
+t:{en:'Replacing a missing tooth: implant, bridge, or leave the space?',es:'Reemplazar un diente perdido: ¿implante, puente o dejar el espacio?',kea:'Substitui un denti ki falta: implanti, ponti, o dexa spasu?',zh:'缺了一颗牙：种植牙、牙桥，还是留着空隙？'},
+o:{en:['Implant','Bridge','Leave the space'],es:['Implante','Puente','Dejar el espacio'],kea:['Implanti','Ponti','Dexa spasu'],zh:['种植牙','牙桥','留着空隙']},
+r:{en:[['What is it?',['A titanium post in the bone, with a crown on top.','A false tooth held by crowns on the teeth next to the gap.','Nothing is placed.']],
  ['What happens to the teeth next to the gap?',['They are not touched.','They are shaped for crowns. Decay or a root canal under a crown can happen later.','They are not touched. Over years, nearby or opposite teeth may shift or grow into the space; many people see little change.']],
  ['How long does it last?',['About 9 in 10 implant crowns are still in place after 10 years.','About 9 in 10 bridges are still in place after 10 years.','Not applicable.']],
  ['Is surgery needed?',['Yes, minor surgery. Sometimes bone grafting first.','No.','No.']],
  ['Upkeep?',['Brush, floss and regular checkups. Screws or crowns sometimes need repair.','Brush, and floss under the false tooth with a threader. Regular checkups.','Regular checkups.']],
- ['Cost?',['Usually the highest. Insurance coverage varies.','Usually less than an implant. Insurance coverage varies.','No cost now. Treatment later may be harder if the bone shrinks.']]]},
-{id:'oggraft',t:'After a tooth is removed: bone graft in the socket, or let it heal on its own?',o:['Graft the socket','Let it heal on its own'],src:['tan12','avila19','cousoq22'],
- r:[['What is done?',['Bone graft material is placed in the socket, often under a thin cover.','The socket fills in with your own bone and gum.']],
+ ['Cost?',['Usually the highest. Insurance coverage varies.','Usually less than an implant. Insurance coverage varies.','No cost now. Treatment later may be harder if the bone shrinks.']]],
+es:[['¿Qué es?',['Un tornillo de titanio en el hueso, con una corona encima.','Un diente falso sostenido por coronas en los dientes de al lado del espacio.','No se coloca nada.']],
+ ['¿Qué pasa con los dientes de al lado?',['No se tocan.','Se tallan para ponerles coronas. Más adelante puede haber caries o un tratamiento de conducto debajo de una corona.','No se tocan. Con los años, los dientes cercanos u opuestos pueden moverse o crecer hacia el espacio; muchas personas notan poco cambio.']],
+ ['¿Cuánto dura?',['Unas 9 de cada 10 coronas sobre implante siguen en su lugar a los 10 años.','Unos 9 de cada 10 puentes siguen en su lugar a los 10 años.','No aplica.']],
+ ['¿Se necesita cirugía?',['Sí, una cirugía menor. A veces primero un injerto de hueso.','No.','No.']],
+ ['¿Cuidados?',['Cepillado, hilo dental y controles regulares. A veces hay que reparar tornillos o coronas.','Cepillado, e hilo dental por debajo del diente falso con un enhebrador. Controles regulares.','Controles regulares.']],
+ ['¿Costo?',['Por lo general, el más alto. La cobertura del seguro varía.','Por lo general, menos que un implante. La cobertura del seguro varía.','Sin costo ahora. Un tratamiento más adelante puede ser más difícil si el hueso se reduce.']]],
+kea:[['Kuze ki é?',['Un pinu di titániu na osu, ku un koroa na riba.','Un denti falsu siguradu pa koroa na denti di ladu di spasu.','Ka ta poi nada.']],
+ ['Kuze ki ta kontise ku denti di ladu?',['Ka ta mexe na es.','Es ta limadu pa poi koroa. Más tardi pode ten kári o mesté tratamentu di kanal dibaxu di koroa.','Ka ta mexe na es. Ku anu, denti pertu o di frenti pode muda o kresi pa spasu; txeu genti ta nota pouku mudansa.']],
+ ['Kantu tenpu ta dura?',['Más o menus 9 na kada 10 koroa di implanti inda sta na lugar dipôs di 10 anu.','Más o menus 9 na kada 10 ponti inda sta na lugar dipôs di 10 anu.','Ka ta aplika.']],
+ ['Ta mesté sirurjia?',['Sin, un sirurjia pikinoti. Às bes primeru un enxertu di osu.','Nau.','Nau.']],
+ ['Kuidadu?',['Skova, fiu dental i konsulta di kontrolu regular. Às bes parafuzu o koroa ta mesté konsertu.','Skova, i pasa fiu dental dibaxu di denti falsu ku un pasador. Konsulta di kontrolu regular.','Konsulta di kontrolu regular.']],
+ ['Kustu?',['Normalmenti é más karu. Kubertura di seguru ta varia.','Normalmenti más baratu ki implanti. Kubertura di seguru ta varia.','Nada gosi. Tratamentu más tardi pode ser más difísil si osu diminui.']]],
+zh:[['这是什么？',['在骨头里放一根钛钉，上面装牙冠。','一颗假牙，由缺牙两侧牙齿上的牙冠固定。','不放任何东西。']],
+ ['缺牙旁边的牙齿会怎样？',['不动它们。','需要磨小以套上牙冠。以后牙冠下面可能蛀牙或需要根管治疗。','不动它们。多年后，附近或对面的牙齿可能移动或长进空隙；很多人变化不大。']],
+ ['能用多久？',['10年后，每10个种植牙冠约有9个仍在。','10年后，每10个牙桥约有9个仍在。','不适用。']],
+ ['需要手术吗？',['需要，是小手术。有时需要先植骨。','不需要。','不需要。']],
+ ['日常维护？',['刷牙、用牙线并定期复查。螺丝或牙冠有时需要修理。','刷牙，并用穿线器在假牙下方使用牙线。定期复查。','定期复查。']],
+ ['费用？',['通常最高。保险报销情况不一。','通常比种植牙便宜。保险报销情况不一。','现在不花钱。如果骨头萎缩，以后治疗可能更难。']]]}},
+{id:'oggraft',src:['tan12','avila19','cousoq22'],
+t:{en:'After a tooth is removed: bone graft in the socket, or let it heal on its own?',es:'Después de sacar un diente: ¿injerto de hueso en el alvéolo o dejar que sane solo?',kea:'Dipôs di tira un denti: enxertu di osu na alvéolu, o dexa-l kura sozinhu?',zh:'拔牙后：在牙槽窝里植骨，还是让它自然愈合？'},
+o:{en:['Graft the socket','Let it heal on its own'],es:['Injerto en el alvéolo','Dejar que sane solo'],kea:['Enxertu na alvéolu','Dexa kura sozinhu'],zh:['牙槽窝植骨','自然愈合']},
+r:{en:[['What is done?',['Bone graft material is placed in the socket, often under a thin cover.','The socket fills in with your own bone and gum.']],
  ['What happens to the bone?',['The graft keeps about 2 mm more width than healing on its own.','In 6 months the ridge loses about 3–4 mm of width and about 1 mm of height.']],
  ['Will I need more bone work when the implant goes in?',['Less likely. In one study of front and premolar teeth, about 1 in 9 grafted sites needed more bone.','More likely. In the same study, about 6 in 10 sites needed more bone.']],
  ['Best when…',['You plan an implant in that spot.','You do not plan an implant there.']],
- ['Downsides?',['Added cost. A small chance of graft infection, or a few graft grains coming out.','None beyond the extraction itself.']]]}];
+ ['Downsides?',['Added cost. A small chance of graft infection, or a few graft grains coming out.','None beyond the extraction itself.']]],
+es:[['¿Qué se hace?',['Se coloca material de injerto de hueso en el alvéolo, a menudo bajo una cubierta delgada.','El alvéolo se llena con su propio hueso y encía.']],
+ ['¿Qué pasa con el hueso?',['El injerto conserva unos 2 mm más de ancho que sanar solo.','En 6 meses, el reborde pierde unos 3–4 mm de ancho y alrededor de 1 mm de altura.']],
+ ['¿Necesitaré más hueso cuando se coloque el implante?',['Es menos probable. En un estudio de dientes delanteros y premolares, alrededor de 1 de cada 9 sitios con injerto necesitó más hueso.','Es más probable. En el mismo estudio, unos 6 de cada 10 sitios necesitaron más hueso.']],
+ ['Conviene cuando…',['Planea un implante en ese lugar.','No planea un implante ahí.']],
+ ['¿Desventajas?',['Costo adicional. Una pequeña probabilidad de infección del injerto, o de que salgan algunos granitos del injerto.','Ninguna, aparte de la extracción misma.']]],
+kea:[['Kuze ki ta fazedu?',['Ta poi material di enxertu di osu na alvéolu, txeu bes dibaxu di un kubértura fininhu.','Alvéolu ta intxi ku bu própi osu i jenjiva.']],
+ ['Kuze ki ta kontise ku osu?',['Enxertu ta manti más o menus 2 mm más di largura ki kura sozinhu.','Na 6 mês, osu ta perde más o menus 3–4 mm di largura i más o menus 1 mm di altura.']],
+ ['N ta mesté más osu ora ki ta poi implanti?',['Ménus provável. Na un studu di denti di frenti i pré-molar, más o menus 1 na kada 9 lugar ku enxertu mesté más osu.','Más provável. Na mesmu studu, más o menus 6 na kada 10 lugar mesté más osu.']],
+ ['Midjór ora ki…',['Bu sta planeia un implanti na kel lugar.','Bu ka sta planeia un implanti la.']],
+ ['Dizvantajen?',['Kustu más. Un xansi pikinoti di infeson di enxertu, o di sai uns graunzinhu.','Nenhun, fora di tira denti.']]],
+zh:[['做什么？',['在牙槽窝里放入植骨材料，通常上面盖一层薄膜。','牙槽窝由您自己的骨头和牙龈长满。']],
+ ['骨头会怎样？',['植骨比自然愈合多保留约2毫米宽度。','6个月内，牙槽嵴宽度减少约3–4毫米，高度减少约1毫米。']],
+ ['种植时还需要再补骨吗？',['可能性较小。在一项前牙和前磨牙的研究中，每9个植骨部位约有1个需要再补骨。','可能性较大。在同一项研究中，每10个部位约有6个需要再补骨。']],
+ ['适合的情况…',['您计划在这个位置做种植牙。','您不打算在那里做种植牙。']],
+ ['缺点？',['额外费用。有少许植骨感染的风险，或有几颗植骨颗粒掉出来。','除了拔牙本身外，没有其他缺点。']]]}}];
+const OG_UI={en:{h:'Choosing a treatment',c:'Numbers are averages from studies, not a promise for you. Your surgeon will help you choose.'},es:{h:'Elegir un tratamiento',c:'Los números son promedios de estudios, no una promesa para usted. Su cirujano le ayudará a decidir.'},kea:{h:'Skodje un tratamentu',c:'Numeru é média di studu, ka é un promésa pa bo. Bu sirurjion ta djuda-bu skodje.'},zh:{h:'选择治疗方案',c:'数字是研究中的平均值，并不代表对您个人的保证。您的医生会帮助您做决定。'}};
 const OG_FOR={extraction:['ogcoro','oggraft'],implant:['ogimp','oggraft'],graft:['oggraft']};
-function ogText(g){return`${g.t}\n\n${g.r.map(([q,a])=>`${q}\n${g.o.map((o,k)=>`• ${o}: ${a[k]}`).join('\n')}`).join('\n\n')}\n\nYour surgeon will help you choose. Numbers are averages from studies, not a promise for you.`}
-function ogHTML(g){return`<details class="box" id="ho-${g.id}"${S.hoOpen===g.id?' open':''}><summary>${esc(g.t)}</summary><div class="inner og">${g.r.map(([q,a])=>`<h4>${esc(q)}</h4>${g.o.map((o,k)=>`<p><b class="ogl ogl${k}">${esc(o)}</b> ${esc(a[k])}</p>`).join('')}`).join('')}<p class="small">Numbers are averages from studies, not a promise for any one patient. English only for now.</p><button class="go" data-ogshare="${g.id}">Share ↗</button> <span class="small">${g.src.map(srcLink).join(' · ')}</span></div></details>`}
+function ogText(g,l){l=g.t[l]?l:'en';return`${g.t[l]}\n\n${g.r[l].map(([q,a])=>`${q}\n${g.o[l].map((o,k)=>`• ${o}: ${a[k]}`).join('\n')}`).join('\n\n')}\n\n${OG_UI[l].c}`}
+function ogHTML(g,l){l=g.t[l]?l:'en';return`<details class="box" id="ho-${g.id}"${S.hoOpen===g.id?' open':''}><summary lang="${l}">${esc(g.t[l])}</summary><div class="inner og" lang="${l}">${g.r[l].map(([q,a])=>`<h4>${esc(q)}</h4>${g.o[l].map((o,k)=>`<p><b class="ogl ogl${k}">${esc(o)}</b> ${esc(a[k])}</p>`).join('')}`).join('')}<p class="small">${esc(OG_UI[l].c)}</p><button class="go" data-ogshare="${g.id}">${HO_UI[l].sh} ↗</button> <span class="small">${g.src.map(srcLink).join(' · ')}</span></div></details>`}
 const D7={en:(n,ph,u)=>`Hi, this is ${n}, checking in a week after your surgery. We hope you are healing well. If you have pain, swelling or any questions, call us at ${ph}. If you were happy with your care, a short Google review helps other patients find us: ${u} Thank you!`,
  es:(n,ph,u)=>`Hola, le escribimos de ${n} una semana después de su cirugía. Esperamos que se esté recuperando bien. Si tiene dolor, hinchazón o preguntas, llámenos al ${ph}. Si quedó contento con la atención, una breve reseña en Google ayuda a otros pacientes a encontrarnos: ${u} ¡Gracias!`};
 function d7Text(l){const st=HO_SITES[S.site||'young'];return(D7[l]||D7.en)(st.n,st.ph,st.u)}
@@ -1879,7 +1941,7 @@ function hoHTML(){const l=S.lang||'en';
  <div class="lab" id="ho-sec-post">Post-op instructions</div>
  ${HO.map(h=>`<details class="box" id="ho-${h.id}"${S.hoOpen===h.id?' open':''}><summary>${esc(h.t[l])}</summary><div class="inner look"><ul class="hol">${hoItems(h,l).map(x=>`<li${x.w?' class="warn"':''}><span class="ic" aria-hidden="true">${x.ic}</span>${esc(x.t)}</li>`).join('')}</ul>${teachHTML(h.id)}<button class="go" data-share="${h.id}">${HO_UI[l].sh} ↗</button> <span class="small">${h.src.map(srcLink).join(' · ')}</span></div></details>`).join('')}
  ${[['proc','Procedure FAQs'],['dx','Diagnosis FAQs']].map(([k,n])=>`<div class="lab" id="ho-sec-${k}" style="margin-top:14px">${n}</div>${faqL(l)!==l?`<p class="small">FAQs are in English and Español for now — English shown.</p>`:''}${FAQ.filter(f=>f.k===k).map(f=>{const L=faqL(l);return`<details class="box" id="ho-${f.id}"${S.hoOpen===f.id?' open':''}><summary lang="${L}">${esc(f.t[L])}</summary><div class="inner look" lang="${L}">${f.i[L].map(([q,a])=>`<p><b>${esc(q)}</b><br>${esc(a)}</p>`).join('')}<button class="go" data-share="${f.id}">${HO_UI[L].sh} ↗</button> <span class="small">${f.src.map(srcLink).join(' · ')}</span></div></details>`}).join('')}`).join('')}
- <div class="lab" id="ho-sec-og" style="margin-top:14px">Choosing a treatment · option grids</div>${OG.map(ogHTML).join('')}
+ <div class="lab" id="ho-sec-og" style="margin-top:14px">Choosing a treatment · option grids</div><p class="small">Spanish, Kriolu and 中文 are machine-drafted, pending native-speaker review.</p>${OG.map(g=>ogHTML(g,l)).join('')}
  ${d7HTML(l)}
  <textarea id="copybox" class="copybox" hidden aria-label="Handout text"></textarea><p class="caveat">Option grids follow the Option Grid format (one page, patients’ common questions, side by side) ${srcLink('optgrid')}; teach-back per AHRQ ${srcLink('teachback')}. Plain-language drafts written from published patient instructions; edit to match your practice. FAQs are general information, not a substitute for the visit.</p>`}
 async function shareTxt(title,t,btn){try{if(navigator.share){await navigator.share({title,text:t});return}}catch(e){if(e&&e.name==='AbortError')return}try{await navigator.clipboard.writeText(t);btn.textContent='Copied'}catch(e){showCopy(t)}}
@@ -2865,7 +2927,7 @@ function flowHTML(m){
   if(o.scr)items.push([`<li><b>Not covered by this screen:</b> ${escV(o.scr)}</li>`,0]);
   const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
   const bas=basisOf([o.src,o.src2,...notes.map(s=>s.n.src)],[o.out,o.ex,...notes.map(s=>s.n.x)].join(' '));
-  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}${(OG_FOR[m.id]||[]).map(g=>` <button class="go" data-ho="${g}">Option grid: ${esc(OG.find(x=>x.id===g).o.join(' vs '))} ›</button>`).join('')}</div>`:''}${colleague()?'':`<div><button class="go" data-reg>Log to outcomes registry ›</button></div>`}${m.id==='preop'?todayHTML(w):''}<details class="more"><summary>More · sources and review status</summary>${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div></details><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>End session</button></div></div>`}
+  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}${(OG_FOR[m.id]||[]).map(g=>` <button class="go" data-ho="${g}">Option grid: ${esc(OG.find(x=>x.id===g).o.en.join(' vs '))} ›</button>`).join('')}</div>`:''}${colleague()?'':`<div><button class="go" data-reg>Log to outcomes registry ›</button></div>`}${m.id==='preop'?todayHTML(w):''}<details class="more"><summary>More · sources and review status</summary>${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div></details><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>End session</button></div></div>`}
  return'<div class="plan action"><div class="pbody"><div class="pt">Path incomplete — step back.</div></div></div>';
 }
 /* Step counter: answered steps + shortest/longest remaining question count from the current node. */
@@ -3018,7 +3080,7 @@ app.addEventListener('click',e=>{
  if(b.dataset.lang){S.lang=b.dataset.lang;return rebody()}
  if(b.dataset.site){S.site=b.dataset.site;return rebody()}
  if(b.dataset.share)return shareHO(b.dataset.share,b);
- if(b.dataset.ogshare){const g=OG.find(x=>x.id===b.dataset.ogshare);return shareTxt(g.t,ogText(g),b)}
+ if(b.dataset.ogshare){const g=OG.find(x=>x.id===b.dataset.ogshare);const l=S.lang||'en';return shareTxt(g.t[l]||g.t.en,ogText(g,l),b)}
  if(b.hasAttribute('data-d7')){const l=S.lang||'en';return shareTxt('Check-in',d7Text(D7[l]?l:'en'),b)}
  if(b.dataset.reg)return regCopy(b);
  if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
