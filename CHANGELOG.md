@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.12.0 — Oct 31, 2026 (preview; awaiting Steven's approval; builds on v3.11.0)
+## v3.12.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 Patient side, from the Oct 30–31 audit.
 
