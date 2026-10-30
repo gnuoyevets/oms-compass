@@ -2,6 +2,13 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.13.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
+
+- **Option grids translated** into Español, Kriolu and 中文 (machine-drafted by Claude; pending native-speaker review, like the other translations). Same rows, numbers and sources as English. On the Patient tab they follow the selected language, and Share sends that language.
+- **Patient page:** new 4th section, "Choosing a treatment", with the three grids in all four languages. Direct links work (e.g. `#ogimp-es`, `#oggraft-zh`). The caveat ("numbers are averages from studies, not a promise for you") shows on every grid.
+- Front-desk QR sheets unchanged (they list post-op instructions and FAQs only).
+- Tests: 464 browser checks (4 new; the patient-page mirror test now also compares option-grid text); reconciliation 75. Software checks only; not clinical validation.
+
 ## v3.12.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 Patient side, from the Oct 30–31 audit.

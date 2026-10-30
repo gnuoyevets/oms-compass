@@ -29,6 +29,7 @@ h2{font-size:22px;line-height:1.3;margin:0 0 12px}
 ol{padding-left:24px;margin:0}
 li{margin:0 0 12px}
 ul.hol{list-style:none;padding:0;margin:0 0 12px}ul.hol li{display:grid;grid-template-columns:30px 1fr;gap:6px;margin:8px 0}ul.hol li.warn{margin-left:0}ul.hol .ic{font-size:20px;line-height:1.3}
+.og h3{margin:18px 0 6px;font-size:17px}.og p{margin:4px 0 8px}.ogl{margin-right:4px}.ogl0{color:var(--accent)}
 .revs{margin:18px 0 8px;font-size:14px;text-align:center}.revs a{color:var(--muted,#555)}
 @media print{.revs a::after{content:' — ' attr(href)}}
 li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:10px;padding:10px 12px;list-style-position:inside;margin-left:-24px;font-weight:600}
@@ -158,7 +159,90 @@ en:[["What is peri-implantitis?","Infection and inflammation of the gum around a
 es:[["¿Qué es la periimplantitis?","Infección e inflamación de la encía alrededor de un implante, con pérdida del hueso que lo sostiene. Si se detecta temprano (solo en la encía), es más fácil revertirla."],["¿Cuáles son las señales?","Sangrado al cepillarse, hinchazón, pus, mal sabor, encía que se retrae, o una corona sobre implante floja. Puede no doler."],["¿Qué aumenta el riesgo?","Acumulación de placa, enfermedad de las encías antes, fumar, diabetes y faltar a los controles."],["¿Cómo se trata?","Limpieza profunda alrededor del implante, a veces con enjuagues antisépticos o antibióticos. Si hay pérdida de hueso, una cirugía puede limpiar y remodelar o regenerar el hueso. Rara vez hay que retirar el implante."],["¿Cómo la prevengo?","Limpie alrededor de los implantes cada día con cepillo e hilo dental o irrigador de agua. Vaya a sus limpiezas, por lo general cada 3–6 meses, según le indiquemos. No fume."]],
 kea:[["Kuze ki é periimplantiti?","Infeson i inflamason di jenjiva na volta di un implanti, ku pérda di osu ki ta sigura-l. Si ta diskubri sedu (só na jenjiva), é más fásil di inverte."],["Kuze ki é sinal?","Sangi ora ki bu skova, inxason, pus, gostu mau, jenjiva ki ta baxa, o un koroa di implanti moli. Pode ka dói."],["Kuze ki ta aumenta risku?","Pláka akumuladu, duensa di jenjiva antis, fuma, diabetis i falta konsulta di kontrolu."],["Modi ki ta trata-l?","Linpéza fundu na volta di implanti, às bes ku lava boka antisétiku o antibiótiku. Si dja pérde osu, un sirurjia pode linpa i modela o torna kria osu. Raramenti ta mesté tira implanti."],["Modi ki N ta preveni-l?","Linpa na volta di implanti tudu dia ku skova i fiu dental o irigador di agu. Bai bu linpéza, normalmenti di 3 en 3 o di 6 en 6 mês, sima nu fla-bu. Ka bu fuma."]],
 zh:[["什么是种植体周围炎？","种植体周围牙龈的感染和炎症，并伴有支撑种植体的骨头流失。如果早期发现（只累及牙龈），较容易逆转。"],["有哪些迹象？","刷牙时出血、肿胀、流脓、口中有怪味、牙龈退缩，或种植牙冠松动。可能不痛。"],["什么会增加风险？","牙菌斑堆积、曾有牙周病、吸烟、糖尿病，以及不按时复查。"],["怎么治疗？","深度清洁种植体周围，有时配合抗菌漱口水或抗生素。如果有骨流失，可能需要手术清理、修整或再生骨头。极少数情况下需要取出种植体。"],["如何预防？","每天用牙刷和牙线或冲牙器清洁种植体周围。按我们的建议定期洁牙，通常每3–6个月一次。不要吸烟。"]]}}];
-const FAQ_LANGS=['en','es','kea','zh'],faqL=l=>FAQ_LANGS.includes(l)?l:'en',ALL=[...HO,...FAQ];
+const OG=[
+{id:'ogcoro',src:['coro22','coro25'],
+t:{en:'Lower wisdom tooth close to the nerve: remove the whole tooth, or the top only?',es:'Muela del juicio inferior cerca del nervio: ¿sacar todo el diente o solo la parte de arriba?',kea:'Denti di juízu di baxu pertu di nérvu: tira denti interu, o só párti di riba?',zh:'靠近神经的下颌智齿：整颗拔除，还是只去除牙冠？'},
+o:{en:['Remove the whole tooth','Remove the top only (coronectomy)'],es:['Sacar todo el diente','Sacar solo la parte de arriba (coronectomía)'],kea:['Tira denti interu','Tira só párti di riba (koronektomia)'],zh:['整颗拔除','只去除牙冠（冠切术）']},
+r:{en:[['What is done?',['The whole tooth, roots included, is taken out.','The top of the tooth is removed. The roots stay in the bone, away from the nerve.']],
+ ['Numbness of the lip or chin?',['In studies of teeth close to the nerve, about 8 in 100 people had some numbness. Most of it gets better; a few people keep it.','About 1 in 100 had some numbness.']],
+ ['Will I need another surgery?',['No. The tooth is gone.','About 4 in 100 need a second surgery to take the roots out, most often within the first year or two.']],
+ ['Do the roots move?',['Not applicable.','Sometimes. They tend to move a few millimeters up, away from the nerve, and usually settle within a year.']],
+ ['Pain, infection, dry socket?',['Pain and dry socket were a little more common (dry socket about 4 in 100).','Infection was about the same (about 3–4 in 100); dry socket about 1 in 100.']],
+ ['Follow-up?',['Usual check after surgery.','Check-ups with an X-ray over the next year or longer.']],
+ ['Who is it for?',['Most wisdom teeth.','Only teeth whose roots touch the nerve on X-ray or 3D scan, with no decay or infection in the roots.']]],
+es:[['¿Qué se hace?',['Se saca todo el diente, con las raíces.','Se quita la parte de arriba del diente. Las raíces se quedan en el hueso, lejos del nervio.']],
+ ['¿Adormecimiento del labio o la barbilla?',['En estudios de dientes cerca del nervio, unas 8 de cada 100 personas tuvieron algo de adormecimiento. La mayoría mejora; unas pocas personas lo conservan.','Alrededor de 1 de cada 100 tuvo algo de adormecimiento.']],
+ ['¿Necesitaré otra cirugía?',['No. El diente ya no está.','Unas 4 de cada 100 personas necesitan una segunda cirugía para sacar las raíces, casi siempre en el primer o segundo año.']],
+ ['¿Se mueven las raíces?',['No aplica.','A veces. Suelen subir unos milímetros, alejándose del nervio, y por lo general se quedan quietas en un año.']],
+ ['¿Dolor, infección, alveolitis seca?',['El dolor y la alveolitis seca fueron un poco más frecuentes (alveolitis seca en unas 4 de cada 100).','La infección fue más o menos igual (unas 3–4 de cada 100); alveolitis seca en 1 de cada 100.']],
+ ['¿Controles?',['El control normal después de la cirugía.','Controles con radiografía durante el año siguiente o más.']],
+ ['¿Para quién es?',['La mayoría de las muelas del juicio.','Solo dientes cuyas raíces tocan el nervio en la radiografía o el escáner 3D, sin caries ni infección en las raíces.']]],
+kea:[['Kuze ki ta fazedu?',['Ta tira denti interu, ku raís.','Ta tira párti di riba di denti. Raís ta fika na osu, lonji di nérvu.']],
+ ['Lábiu o kexu ta fika dromidu?',['Na studu di denti pertu di nérvu, más o menus 8 na kada 100 algen tevi un bokadu di dormênsia. Má párti ta midjora; uns pouku ta fika ku el.','Más o menus 1 na kada 100 tevi un bokadu di dormênsia.']],
+ ['N ta mesté otu sirurjia?',['Nau. Denti dja ka sta la.','Más o menus 4 na kada 100 ta mesté un sugundu sirurjia pa tira raís, má párti na purmeru o sugundu anu.']],
+ ['Raís ta move?',['Ka ta aplika.','Às bes. Es ta subi uns milímetru, pa lonji di nérvu, i normalmenti es ta para dentu di un anu.']],
+ ['Dor, infeson, alvéolu seku?',['Dor i alvéolu seku kontise un bokadu más (alvéolu seku más o menus 4 na kada 100).','Infeson é más o menus igual (más o menus 3–4 na kada 100); alvéolu seku más o menus 1 na kada 100.']],
+ ['Konsulta di kontrolu?',['Kontrolu normal dipôs di sirurjia.','Kontrolu ku raio-X duranti un anu o más.']],
+ ['É pa kenha?',['Má párti di denti di juízu.','Só denti ki raís ta toka nérvu na raio-X o na skaner 3D, sen kári nen infeson na raís.']]],
+zh:[['做什么？',['连同牙根把整颗牙拔出。','去除牙齿上半部分（牙冠），牙根留在骨头里，远离神经。']],
+ ['嘴唇或下巴会麻木吗？',['在靠近神经的牙齿的研究中，每100人约有8人出现一些麻木。大多数会好转；少数人会一直存在。','每100人约有1人出现一些麻木。']],
+ ['需要再做手术吗？',['不需要，牙齿已经拔掉了。','每100人约有4人需要第二次手术取出牙根，多数在头一两年内。']],
+ ['牙根会移动吗？',['不适用。','有时会。通常向上移动几毫米，远离神经，一般一年内稳定。']],
+ ['疼痛、感染、干槽症？',['疼痛和干槽症稍多一些（干槽症每100人约4人）。','感染差不多（每100人约3–4人）；干槽症每100人约1人。']],
+ ['复查？',['术后常规复查。','在之后一年或更长时间内拍X光复查。']],
+ ['适合谁？',['大多数智齿。','只适用于X光或3D扫描显示牙根接触神经、且牙根没有蛀牙或感染的牙齿。']]]}},
+{id:'ogimp',src:['pjet07','overer'],
+t:{en:'Replacing a missing tooth: implant, bridge, or leave the space?',es:'Reemplazar un diente perdido: ¿implante, puente o dejar el espacio?',kea:'Substitui un denti ki falta: implanti, ponti, o dexa spasu?',zh:'缺了一颗牙：种植牙、牙桥，还是留着空隙？'},
+o:{en:['Implant','Bridge','Leave the space'],es:['Implante','Puente','Dejar el espacio'],kea:['Implanti','Ponti','Dexa spasu'],zh:['种植牙','牙桥','留着空隙']},
+r:{en:[['What is it?',['A titanium post in the bone, with a crown on top.','A false tooth held by crowns on the teeth next to the gap.','Nothing is placed.']],
+ ['What happens to the teeth next to the gap?',['They are not touched.','They are shaped for crowns. Decay or a root canal under a crown can happen later.','They are not touched. Over years, nearby or opposite teeth may shift or grow into the space; many people see little change.']],
+ ['How long does it last?',['About 9 in 10 implant crowns are still in place after 10 years.','About 9 in 10 bridges are still in place after 10 years.','Not applicable.']],
+ ['Is surgery needed?',['Yes, minor surgery. Sometimes bone grafting first.','No.','No.']],
+ ['Upkeep?',['Brush, floss and regular checkups. Screws or crowns sometimes need repair.','Brush, and floss under the false tooth with a threader. Regular checkups.','Regular checkups.']],
+ ['Cost?',['Usually the highest. Insurance coverage varies.','Usually less than an implant. Insurance coverage varies.','No cost now. Treatment later may be harder if the bone shrinks.']]],
+es:[['¿Qué es?',['Un tornillo de titanio en el hueso, con una corona encima.','Un diente falso sostenido por coronas en los dientes de al lado del espacio.','No se coloca nada.']],
+ ['¿Qué pasa con los dientes de al lado?',['No se tocan.','Se tallan para ponerles coronas. Más adelante puede haber caries o un tratamiento de conducto debajo de una corona.','No se tocan. Con los años, los dientes cercanos u opuestos pueden moverse o crecer hacia el espacio; muchas personas notan poco cambio.']],
+ ['¿Cuánto dura?',['Unas 9 de cada 10 coronas sobre implante siguen en su lugar a los 10 años.','Unos 9 de cada 10 puentes siguen en su lugar a los 10 años.','No aplica.']],
+ ['¿Se necesita cirugía?',['Sí, una cirugía menor. A veces primero un injerto de hueso.','No.','No.']],
+ ['¿Cuidados?',['Cepillado, hilo dental y controles regulares. A veces hay que reparar tornillos o coronas.','Cepillado, e hilo dental por debajo del diente falso con un enhebrador. Controles regulares.','Controles regulares.']],
+ ['¿Costo?',['Por lo general, el más alto. La cobertura del seguro varía.','Por lo general, menos que un implante. La cobertura del seguro varía.','Sin costo ahora. Un tratamiento más adelante puede ser más difícil si el hueso se reduce.']]],
+kea:[['Kuze ki é?',['Un pinu di titániu na osu, ku un koroa na riba.','Un denti falsu siguradu pa koroa na denti di ladu di spasu.','Ka ta poi nada.']],
+ ['Kuze ki ta kontise ku denti di ladu?',['Ka ta mexe na es.','Es ta limadu pa poi koroa. Más tardi pode ten kári o mesté tratamentu di kanal dibaxu di koroa.','Ka ta mexe na es. Ku anu, denti pertu o di frenti pode muda o kresi pa spasu; txeu genti ta nota pouku mudansa.']],
+ ['Kantu tenpu ta dura?',['Más o menus 9 na kada 10 koroa di implanti inda sta na lugar dipôs di 10 anu.','Más o menus 9 na kada 10 ponti inda sta na lugar dipôs di 10 anu.','Ka ta aplika.']],
+ ['Ta mesté sirurjia?',['Sin, un sirurjia pikinoti. Às bes primeru un enxertu di osu.','Nau.','Nau.']],
+ ['Kuidadu?',['Skova, fiu dental i konsulta di kontrolu regular. Às bes parafuzu o koroa ta mesté konsertu.','Skova, i pasa fiu dental dibaxu di denti falsu ku un pasador. Konsulta di kontrolu regular.','Konsulta di kontrolu regular.']],
+ ['Kustu?',['Normalmenti é más karu. Kubertura di seguru ta varia.','Normalmenti más baratu ki implanti. Kubertura di seguru ta varia.','Nada gosi. Tratamentu más tardi pode ser más difísil si osu diminui.']]],
+zh:[['这是什么？',['在骨头里放一根钛钉，上面装牙冠。','一颗假牙，由缺牙两侧牙齿上的牙冠固定。','不放任何东西。']],
+ ['缺牙旁边的牙齿会怎样？',['不动它们。','需要磨小以套上牙冠。以后牙冠下面可能蛀牙或需要根管治疗。','不动它们。多年后，附近或对面的牙齿可能移动或长进空隙；很多人变化不大。']],
+ ['能用多久？',['10年后，每10个种植牙冠约有9个仍在。','10年后，每10个牙桥约有9个仍在。','不适用。']],
+ ['需要手术吗？',['需要，是小手术。有时需要先植骨。','不需要。','不需要。']],
+ ['日常维护？',['刷牙、用牙线并定期复查。螺丝或牙冠有时需要修理。','刷牙，并用穿线器在假牙下方使用牙线。定期复查。','定期复查。']],
+ ['费用？',['通常最高。保险报销情况不一。','通常比种植牙便宜。保险报销情况不一。','现在不花钱。如果骨头萎缩，以后治疗可能更难。']]]}},
+{id:'oggraft',src:['tan12','avila19','cousoq22'],
+t:{en:'After a tooth is removed: bone graft in the socket, or let it heal on its own?',es:'Después de sacar un diente: ¿injerto de hueso en el alvéolo o dejar que sane solo?',kea:'Dipôs di tira un denti: enxertu di osu na alvéolu, o dexa-l kura sozinhu?',zh:'拔牙后：在牙槽窝里植骨，还是让它自然愈合？'},
+o:{en:['Graft the socket','Let it heal on its own'],es:['Injerto en el alvéolo','Dejar que sane solo'],kea:['Enxertu na alvéolu','Dexa kura sozinhu'],zh:['牙槽窝植骨','自然愈合']},
+r:{en:[['What is done?',['Bone graft material is placed in the socket, often under a thin cover.','The socket fills in with your own bone and gum.']],
+ ['What happens to the bone?',['The graft keeps about 2 mm more width than healing on its own.','In 6 months the ridge loses about 3–4 mm of width and about 1 mm of height.']],
+ ['Will I need more bone work when the implant goes in?',['Less likely. In one study of front and premolar teeth, about 1 in 9 grafted sites needed more bone.','More likely. In the same study, about 6 in 10 sites needed more bone.']],
+ ['Best when…',['You plan an implant in that spot.','You do not plan an implant there.']],
+ ['Downsides?',['Added cost. A small chance of graft infection, or a few graft grains coming out.','None beyond the extraction itself.']]],
+es:[['¿Qué se hace?',['Se coloca material de injerto de hueso en el alvéolo, a menudo bajo una cubierta delgada.','El alvéolo se llena con su propio hueso y encía.']],
+ ['¿Qué pasa con el hueso?',['El injerto conserva unos 2 mm más de ancho que sanar solo.','En 6 meses, el reborde pierde unos 3–4 mm de ancho y alrededor de 1 mm de altura.']],
+ ['¿Necesitaré más hueso cuando se coloque el implante?',['Es menos probable. En un estudio de dientes delanteros y premolares, alrededor de 1 de cada 9 sitios con injerto necesitó más hueso.','Es más probable. En el mismo estudio, unos 6 de cada 10 sitios necesitaron más hueso.']],
+ ['Conviene cuando…',['Planea un implante en ese lugar.','No planea un implante ahí.']],
+ ['¿Desventajas?',['Costo adicional. Una pequeña probabilidad de infección del injerto, o de que salgan algunos granitos del injerto.','Ninguna, aparte de la extracción misma.']]],
+kea:[['Kuze ki ta fazedu?',['Ta poi material di enxertu di osu na alvéolu, txeu bes dibaxu di un kubértura fininhu.','Alvéolu ta intxi ku bu própi osu i jenjiva.']],
+ ['Kuze ki ta kontise ku osu?',['Enxertu ta manti más o menus 2 mm más di largura ki kura sozinhu.','Na 6 mês, osu ta perde más o menus 3–4 mm di largura i más o menus 1 mm di altura.']],
+ ['N ta mesté más osu ora ki ta poi implanti?',['Ménus provável. Na un studu di denti di frenti i pré-molar, más o menus 1 na kada 9 lugar ku enxertu mesté más osu.','Más provável. Na mesmu studu, más o menus 6 na kada 10 lugar mesté más osu.']],
+ ['Midjór ora ki…',['Bu sta planeia un implanti na kel lugar.','Bu ka sta planeia un implanti la.']],
+ ['Dizvantajen?',['Kustu más. Un xansi pikinoti di infeson di enxertu, o di sai uns graunzinhu.','Nenhun, fora di tira denti.']]],
+zh:[['做什么？',['在牙槽窝里放入植骨材料，通常上面盖一层薄膜。','牙槽窝由您自己的骨头和牙龈长满。']],
+ ['骨头会怎样？',['植骨比自然愈合多保留约2毫米宽度。','6个月内，牙槽嵴宽度减少约3–4毫米，高度减少约1毫米。']],
+ ['种植时还需要再补骨吗？',['可能性较小。在一项前牙和前磨牙的研究中，每9个植骨部位约有1个需要再补骨。','可能性较大。在同一项研究中，每10个部位约有6个需要再补骨。']],
+ ['适合的情况…',['您计划在这个位置做种植牙。','您不打算在那里做种植牙。']],
+ ['缺点？',['额外费用。有少许植骨感染的风险，或有几颗植骨颗粒掉出来。','除了拔牙本身外，没有其他缺点。']]]}}];
+const OG_UI={en:{h:'Choosing a treatment',c:'Numbers are averages from studies, not a promise for you. Your surgeon will help you choose.'},es:{h:'Elegir un tratamiento',c:'Los números son promedios de estudios, no una promesa para usted. Su cirujano le ayudará a decidir.'},kea:{h:'Skodje un tratamentu',c:'Numeru é média di studu, ka é un promésa pa bo. Bu sirurjion ta djuda-bu skodje.'},zh:{h:'选择治疗方案',c:'数字是研究中的平均值，并不代表对您个人的保证。您的医生会帮助您做决定。'}};
+const FAQ_LANGS=['en','es','kea','zh'],faqL=l=>FAQ_LANGS.includes(l)?l:'en',ALL=[...HO,...FAQ,...OG];
 const LANGS=[['en','English'],['es','Español'],['kea','Kriolu'],['zh','中文']];
 const UI={en:{title:'Patient information',pick:'Choose your procedure',secHo:'After surgery',secProc:'About your procedure',secDx:'About your diagnosis',faqOnly:'',call:'Call the office',back:'‹ All topics',share:'Share',print:'Print',copied:'Link copied',rev:'{biz} would love your feedback. Post a review to our profile.',revBtn:'Leave a Google review',note:'General instructions. If your surgeon told you something different, follow your surgeon. Emergencies: call 911.'},
 es:{title:'Información para pacientes',pick:'Elija su procedimiento',secHo:'Después de la cirugía',secProc:'Sobre su procedimiento',secDx:'Sobre su diagnóstico',faqOnly:'',call:'Llamar a la oficina',back:'‹ Todos los temas',share:'Compartir',print:'Imprimir',copied:'Enlace copiado',rev:'A {biz} le encantaría conocer su opinión. Publique una reseña en nuestro perfil.',revBtn:'Dejar una reseña en Google',note:'Instrucciones generales. Si su cirujano le indicó algo diferente, siga sus indicaciones. Emergencias: llame al 911.'},
@@ -177,7 +261,9 @@ function render(){const id=parse(),u=UI[lang];document.documentElement.lang=lang
  const call=`<a class="call" href="tel:${TEL}">📞 ${u.call} · ${PHONE}</a>`;
  const rev=`<p class="revs"><a href="${esc(SITE.u)}" target="_blank" rel="noopener">★ ${esc(u.revBtn)} ↗</a></p>`;
  const L=faqL(lang),cards=(xs,l)=>`<div class="list">${xs.map(h=>`<a class="card" href="#${h.id}-${lang}"${l!==lang?` lang="${l}"`:''}>${esc(h.t[l])}<span>›</span></a>`).join('')}</div>`,only=L!==lang?`<p class="note" style="margin:0 0 8px">${u.faqOnly}</p>`:'';
- if(!id){document.title=u.title;app.innerHTML=`${top}<h3 class="sec">${u.secHo}</h3>${cards(HO,lang)}<h3 class="sec">${u.secProc}</h3>${only}${cards(FAQ.filter(f=>f.k==='proc'),L)}<h3 class="sec">${u.secDx}</h3>${only}${cards(FAQ.filter(f=>f.k==='dx'),L)}${call}<p class="note">${u.note}</p>${rev}`;return}
+ if(!id){document.title=u.title;app.innerHTML=`${top}<h3 class="sec">${u.secHo}</h3>${cards(HO,lang)}<h3 class="sec">${u.secProc}</h3>${only}${cards(FAQ.filter(f=>f.k==='proc'),L)}<h3 class="sec">${u.secDx}</h3>${only}${cards(FAQ.filter(f=>f.k==='dx'),L)}<h3 class="sec">${OG_UI[lang].h}</h3>${cards(OG,lang)}${call}<p class="note">${u.note}</p>${rev}`;return}
+ const g=OG.find(x=>x.id===id);
+ if(g){document.title=g.t[lang];app.innerHTML=`${top}<button class="back" data-home>${u.back}</button><h2>${esc(g.t[lang])}</h2><div class="og">${g.r[lang].map(([q,a])=>`<h3>${esc(q)}</h3>${g.o[lang].map((o,k)=>`<p><b class="ogl ogl${k}">${esc(o)}</b> ${esc(a[k])}</p>`).join('')}`).join('')}</div><p class="note">${esc(OG_UI[lang].c)}</p>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div><p class="note">${u.note}</p>`;window.scrollTo(0,0);return}
  const f=FAQ.find(x=>x.id===id);
  if(f){document.title=f.t[L];app.innerHTML=`${top}<button class="back" data-home>${u.back}</button>${only}<h2 lang="${L}">${esc(f.t[L])}</h2><div class="qa" lang="${L}">${f.i[L].map(([q,a])=>`<h3>${esc(q)}</h3><p${/911/.test(a)?' class="warn"':''}>${esc(a)}</p>`).join('')}</div>${call}<div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div><p class="note">${u.note}</p>`;window.scrollTo(0,0);return}
  const h=HO.find(x=>x.id===id);document.title=h.t[lang];

@@ -171,11 +171,14 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await E(page,([q,t])=>{S.refq=q;view('ref');const s=[...document.querySelectorAll('#vbody details.box summary')].map(x=>x.textContent);S.refq='';return s.some(x=>x.includes(t))},[q,t]),`Ref search “${q}” finds ${t}`);
  ok(await E(page,()=>{S.refq='hyaluronidase';view('ref');const t=document.querySelector('#vbody details.box summary').textContent;S.refq='';return/Unverified draft/.test(t)}),'Ref card with a verify line is labelled Unverified draft');
  // Standalone patient page (/handouts/) mirrors Compass text
- const cmp=await E(page,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i}))}));
+ const cmp=await E(page,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i})),OG:OG.map(({id,t,o,r})=>({id,t,o,r}))}));
  const hp=await ctx.newPage();hp.on('pageerror',e=>{fail++;fails.push('handouts pageerror: '+e.message)});await hp.route(/^https?:\/\//,r=>r.abort());
  await hp.goto(FILE.replace(/index\.html$/,'handouts/index.html')+'#-en');await hp.waitForSelector('.card');
- ok(await E(hp,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i}))}))===cmp,'Handouts page: post-op and FAQ text identical to Compass');
- ok(await hp.locator('.card').count()===20&&await hp.locator('h3.sec').count()===3,'Handouts page home lists 5 instructions + 15 FAQs in 3 sections');
+ ok(await E(hp,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i})),OG:OG.map(({id,t,o,r})=>({id,t,o,r}))}))===cmp,'Handouts page: post-op, FAQ and option-grid text identical to Compass');
+ ok(await hp.locator('.card').count()===23&&await hp.locator('h3.sec').count()===4,'Handouts page home lists 5 instructions + 15 FAQs + 3 option grids in 4 sections');
+ await E(hp,()=>{location.hash='#ogimp-es'});await hp.waitForFunction(()=>/Reemplazar/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.og h3').count()===6&&/promedios/.test(await hp.locator('#app').innerText()),'Handouts page: #ogimp-es opens the Spanish implant/bridge grid with the caveat');
+ await E(hp,()=>{location.hash='#oggraft-zh'});await hp.waitForFunction(()=>/拔牙后/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.og h3').count()===5,'Handouts page: 中文 graft grid');
+ await E(hp,()=>{location.hash='#ogcoro-kea'});await hp.waitForFunction(()=>/juízu/.test(document.querySelector('h2')?.textContent||''));ok(await E(hp,()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Handouts page: Kriolu coronectomy grid, no horizontal scroll');await E(hp,()=>{location.hash='#-en'});await hp.waitForSelector('.card');
  await E(hp,()=>{location.hash='#fao-es'});await hp.waitForSelector('.qa');ok(/Alveolitis seca/.test(await hp.locator('h2').innerText())&&await hp.locator('.qa h3').count()===5,'Handouts page: FAQ link #fao-es opens Spanish dry socket FAQ');
  await E(hp,()=>{location.hash='#finf-zh'});await hp.waitForFunction(()=>/牙齿感染/.test(document.querySelector('h2')?.textContent||''));ok(!/英文和西班牙文/.test(await hp.locator('#app').innerText())&&await hp.locator('.qa p.warn').count()===1,'Handouts page: 中文 FAQ in Chinese, no fallback note; 911 answer highlighted');
  await E(hp,()=>{location.hash='#fao-kea'});await hp.waitForFunction(()=>/Alvéolu seku/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.qa h3').count()===5,'Handouts page: Kriolu dry socket FAQ link works');
@@ -781,9 +784,10 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await p.locator('#vbody .tb').count()===5,'Teach-back under each of the 5 post-op handouts');
   ok(await X(()=>!/Teach-back|explained it well/.test(hoText(HO[0],'en'))),'Teach-back is not in shared handout text');
   ok(await p.locator('#vbody #ho-ogcoro').count()===1&&await p.locator('#vbody #ho-ogimp').count()===1&&await p.locator('#vbody #ho-oggraft').count()===1,'Three option grids on the Patient tab');
-  ok(await X(()=>OG.every(g=>g.r.every(([q,a])=>a.length===g.o.length&&a.every(x=>x&&x.length<220)))),'Option grids: every row answers every option, briefly');
+  ok(await X(()=>OG.every(g=>['en','es','kea','zh'].every(l=>g.r[l].length===g.r.en.length&&g.r[l].every(([q,a])=>q&&a.length===g.o[l].length&&a.every(x=>x&&x.length<260))))),'Option grids: all 4 languages complete, every row answers every option');
   ok(await X(()=>OG.every(g=>g.src.every(k=>SRC[k]))),'Option grids cite known sources');
-  ok(await X(()=>/Numbers are averages/.test(ogText(OG[0]))),'Option grid share text carries the averages caveat');
+  ok(await X(()=>/Numbers are averages/.test(ogText(OG[0],'en'))&&/promedios/.test(ogText(OG[0],'es'))&&/平均值/.test(ogText(OG[0],'zh'))),'Option grid share text carries the caveat in its language');
+  ok(await X(()=>{S.lang='kea';view('handouts');const t=document.getElementById('ho-ogimp').textContent;S.lang='en';view('handouts');return/Implanti/.test(t)&&/Dexa spasu/.test(t)}),'Patient tab shows grids in the selected language (Kriolu)');
   ok(await p.locator('#vbody #ho-d7').count()===1&&/g\.page\/r\//.test(await X(()=>d7Text('en'))),'Day-7 message with review link (Author mode)');
   ok(await X(()=>{S.site='bayside';const t=d7Text('es');S.site='young';return/Bayside/.test(t)&&/508/.test(t)&&/Hola/.test(t)}),'Day-7 message follows site and language');
   ok(await X(()=>{const was=pmode();setPmode('colleague');view('handouts');const n=document.querySelectorAll('#vbody #ho-d7').length;setPmode('author');view('handouts');const m=document.querySelectorAll('#vbody #ho-d7').length;setPmode(was);return n===0&&m===1}),'Colleague mode hides the day-7 message');
