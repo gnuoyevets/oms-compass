@@ -721,6 +721,51 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(small===0,'v3.10 controls are at least 44 px ('+small+' smaller)');
   await c17.close()}
 
+ console.log('18. v3.11 fast path — pinned row, Today’s plan, equal Yes/No, step-1 chips, More fold');
+ {const c18=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c18.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c18),X=f=>p.evaluate(f);
+  ok(await p.locator('#pins .pin').count()===5,'Pinned row has 5 entries');
+  ok(await X(()=>[...document.querySelectorAll('#pins .pin')].map(b=>b.dataset.open||b.dataset.view).join()==='preop,sed,implant,extraction,handouts'),'Pinned: pre-op, sedation, implants, extractions, handouts');
+  ok(await X(()=>{const m=[...document.querySelectorAll('#groups .mods')].pop(),s=document.getElementById('settings');return !!(m.compareDocumentPosition(s)&Node.DOCUMENT_POSITION_FOLLOWING)}),'Settings sit below the module list');
+  await p.fill('#in-q','Eliquis');ok(await X(()=>document.getElementById('pins').hidden),'Pinned row hides while searching');await p.fill('#in-q','');
+  ok(await X(()=>{home();return document.getElementById('pins').hidden===false}),'Pinned row returns when search clears');
+  await p.click('.pin[data-open="preop"]');
+  const st=await X(()=>{const a=getComputedStyle(document.querySelector('.fx-a')),b=getComputedStyle(document.querySelector('.fx-b'));return a.backgroundColor===b.backgroundColor&&a.color===b.color});
+  ok(st,'Yes and No have equal visual weight');
+  ok(/Photo triage/.test(await p.locator('#fxchips').innerText()),'Photo triage chip on the first question');
+  await p.click('.fx-b');
+  ok(!/Photo triage|Data inputs/.test(await p.locator('#fxchips').innerText()),'Triage and inputs chips hidden after the first answer');
+  ok(await p.locator('#sec-tri').count()===1&&await p.locator('#sec-inputs').count()===1,'Triage and inputs remain in the drawer');
+  for(let i=0;i<5;i++)await p.click('.fx-b');
+  ok(await p.locator('#today').count()===1,'Healthy local path ends on Today’s plan');
+  ok(await X(()=>!!document.querySelector('.plan details.more .rev')&&!document.querySelector('.plan details.more').open),'Review status folded under More');
+  ok(/Ibuprofen 400 mg/.test(await p.locator('#today').innerText()),'No antithrombotic: NSAID-first analgesia');
+  ok(/Enter weight/.test(await p.locator('#today-la').innerText()),'LA maximum asks for weight');
+  await p.fill('#in-wtt','70');
+  ok(await X(()=>document.activeElement&&document.activeElement.id==='in-wtt'),'Typing weight keeps focus');
+  const la=await p.locator('#today-la').innerText();
+  ok(/Lidocaine 2% \+ epi: 490 mg · 14\.4 carps/.test(la),'70 kg lidocaine maximum matches Calc (490 mg, 14.4 carps)');
+  ok(await X(()=>{view('calc');const t=document.body.innerText;S.mod=null;return /490 mg/.test(t)}),'Calc shows the same weight-based maximum');
+  await X(()=>open('preop'));
+  await p.click('[data-tasa="2"]');
+  ok(await X(()=>S.today.asa===2&&S.asa==='12'),'ASA II recorded and Calc sedation card set to ASA I–II');
+  const note=await X(()=>{const m=M('preop');return planText(m,walk(m))});
+  ok(/ASA class: ASA II/.test(note)&&/LA maximum \(70 kg/.test(note)&&/Analgesia: Ibuprofen/.test(note),'Copy note carries ASA, LA maximum and analgesia');
+  await p.click('[data-tasa="4"]');ok(/not an office sedation case/.test(await p.locator('#today').innerText()),'ASA IV shows the office-sedation exclusion');
+  await p.click('[data-tasa="4"]');ok(await X(()=>S.today.asa===undefined),'Tapping the selected ASA clears it');
+  await X(()=>newPatient());ok(await X(()=>S.today===undefined&&!S.wt),'New patient clears Today’s plan and weight');
+  await X(()=>open('preop'));await p.click('.fx-b');await p.click('.fx-b');await p.click('.fx-a');for(let i=0;i<3;i++)await p.click('.fx-b');
+  const t2=await p.locator('#today').innerText();
+  ok(/^Acetaminophen 1000 mg/m.test(t2)&&!/Ibuprofen/.test(t2),'Anticoagulant/antiplatelet: acetaminophen, no NSAID');
+  await X(()=>newPatient());await X(()=>open('preop'));for(let i=0;i<5;i++)await p.click('.fx-b');await p.click('.fx-a');
+  ok(/Data inputs/.test(await p.locator('#fxchips').innerText()),'Inputs chip returns on the STOP-Bang step (reads entered data)');
+  await p.click('.fx-b');await p.click('.fx-b');
+  ok(/Before sedation/.test(await p.locator('#today .hob').innerText()),'Sedation path offers sedation handouts');
+  await X(()=>newPatient());await X(()=>open('preop'));await p.click('.fx-a');
+  ok(await p.locator('#today').count()===0,'Defer outcome shows no Today’s plan');
+  await c18.close()}
+
 
  await browser.close();
  
