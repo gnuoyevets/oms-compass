@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.14.0 — Oct 31, 2026 (preview; awaiting Steven's approval; builds on v3.13.1)
+## v3.14.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 Two features prompted by DSN (AI phone agent; nerve detection), adapted to Compass: no server, no patient data.
 
@@ -11,7 +11,7 @@ Two features prompted by DSN (AI phone agent; nerve detection), adapted to Compa
 - **Post-op call triage pinned** on Decide, between Extractions and Post-op handouts (six pins, two columns).
 - Tests: 480 browser checks (10 new; module count 36 → 37); reconciliation 75. Software checks only; not clinical validation.
 
-## v3.13.1 — Oct 31, 2026 (fix; awaiting Steven's approval)
+## v3.13.1 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 - **Fix:** "Log to outcomes registry" did nothing when tapped (the click check read the button's empty data value as "no"). It now copies the CR1 line and shows the registry link. The v3.12 test only checked that the button existed; two new tests tap it.
 
