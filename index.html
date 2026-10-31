@@ -419,6 +419,8 @@ html[data-contrast="high"] .fx-sheet{box-shadow:none;border:2px solid #000;borde
 <script>
 /* ===== Sources (checked Oct 21, 2026) ===== */
 const SRC={
+su17:{n:'Su 2017 · Panoramic signs predicting IAN injury (meta-analysis, EBD summary)',v:'Evid Based Dent 2017',u:'https://www.nature.com/articles/6401259.pdf'},
+joms08:{n:'JOMS 2008 · Panoramic signs vs CT: criteria for CT before third molar removal',v:'J Oral Maxillofac Surg 2008',u:'https://pubmed.ncbi.nlm.nih.gov/18940497/'},
 tan12:{n:'Tan 2012 · Ridge changes after extraction (systematic review)',v:'Clin Oral Implants Res 2012',u:'https://pubmed.ncbi.nlm.nih.gov/22211303/'},
 avila19:{n:'Avila-Ortiz 2019 · Alveolar ridge preservation (systematic review)',v:'J Clin Periodontol 2019',u:'https://pubmed.ncbi.nlm.nih.gov/30623987/'},
 cousoq22:{n:'Couso-Queiruga 2022 · Ridge preservation and later bone augmentation',v:'J Periodontol 2022',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9322559/'},
@@ -725,6 +727,32 @@ const MODS=[
  oOp:{out:'Keep the NSAID; add acetaminophen 325 mg plus one hydrocodone 5–7.5 mg or oxycodone 5 mg/acetaminophen 325 mg tablet.',tone:'action',src:'ada24',ex:'Lowest dose, fewest tablets, rarely >3 days. Informed consent; counsel on storage and disposal.'}
  }},
 
+{id:'calltri',g:'Post-op & complications',title:'Post-op phone call triage',d:'Staff script · 911, come in now, same day, or reassure',
+ start:'a',refs:['mcgill','hsdm','secrets','andersson'],
+ caveat:'For the person taking the call. Ask each question as written. Any doubt: the surgeon calls back. Document time, symptoms, advice given and who called back.',
+ nodes:{
+ a:{q:'Trouble breathing or swallowing, swelling spreading under the jaw, into the neck or to the eye, chest pain, cannot be woken, or hives with lip, tongue or throat swelling?',h:['Ask: “Are you having any trouble breathing or swallowing?”','Ask: “Is the swelling moving down your neck or up to your eye?”','After IV sedation: very hard to wake = emergency'],yes:'o911',no:'b'},
+ o911:{out:'Call 911 now, or go to the nearest emergency room. Then tell the surgeon.',tone:'urgent',src:'secrets',ex:'Stay on the line until help is arranged. Do not wait for a callback.'},
+ b:{q:'Bleeding that keeps going after 30 minutes of firm pressure?',h:['Coach first: sit upright, wipe out clots, bite firmly on fresh folded gauze or a moist black tea bag for 30 minutes, no peeking','Oozing or pink saliva for 1–2 days is normal'],yes:'b2',no:'c'},
+ b2:{q:'Heavy (mouth filling, repeated large clots), on a blood thinner, or a bleeding disorder?',yes:'oBleedNow',no:'oBleedCall'},
+ oBleedNow:{out:'Surgeon now. Come in now; after hours or no answer in 15 minutes, go to the emergency room.',tone:'urgent',src:'andersson',go:'bleed',ex:'Keep firm pressure on the way. Bring the medication list.'},
+ oBleedCall:{out:'Surgeon calls back within the hour. Repeat 30 minutes of firm pressure (gauze or tea bag) meanwhile.',tone:'action',src:'mcgill',go:'bleed',ex:'Still bleeding after the second 30 minutes: come in, or the emergency room after hours.'},
+ c:{q:'Fever over 100.4°F (38°C), swelling getting bigger after day 3, pus, or a bad taste with swelling?',yes:'oInf',no:'d'},
+ oInf:{out:'Same-day visit for an infection check. Surgeon reviews before any antibiotic is called in.',tone:'action',src:'mcgill',go:'infection',ex:'Worse while waiting, trouble swallowing or opening, or swelling spreading: emergency room.'},
+ d:{q:'After an extraction: pain getting worse after day 2–3, or throbbing toward the ear?',yes:'oDry',no:'e'},
+ oDry:{out:'Visit within 24 hours (dry socket check).',tone:'action',src:'mcgill',go:'ao',ex:'Meanwhile: pain medicines as on the handout, unless the patient was told otherwise.'},
+ e:{q:'Lip, chin or tongue still numb the day after surgery (local anesthetic worn off)?',yes:'oNum',no:'f'},
+ oNum:{out:'Surgeon calls back today; exam this week to map the numb area.',tone:'action',src:'mcgill',go:'nerve',ex:'Tell the patient: avoid biting or burning the numb area. Early assessment matters; some injuries are repaired.'},
+ f:{q:'After an upper tooth removal or sinus lift: liquid coming out of the nose, air through the socket, or a nosebleed?',yes:'oOac',no:'g'},
+ oOac:{out:'Visit within 1–2 days (sinus opening check). Sinus precautions now.',tone:'action',src:'mcgill',go:'oac',ex:'No nose blowing, sneeze with the mouth open, no straws or smoking. A steady nosebleed that pressure does not stop: emergency room.'},
+ g:{q:'Full-arch: bridge loose, cracked or moving, or the bite feels uneven?',yes:'oArch',no:'h'},
+ oArch:{out:'Visit within 1–2 days. Liquids and soft food only; do not remove the bridge.',tone:'action',src:'mcgill'},
+ h:{q:'Rash or itching after starting a medicine, or vomiting and unable to keep fluids down?',h:['Rash with lip, tongue or throat swelling, or trouble breathing: that is the first question (911)'],yes:'oMed',no:'oOk'},
+ oMed:{out:'Surgeon calls back today. Rash: stop the antibiotic now. Vomiting: sips of clear fluids; stop the opioid if taking one.',tone:'action',src:'hsdm',ex:'Unable to keep fluids down for more than 24 hours, dizzy, or not passing urine: come in or the emergency room.'},
+ oOk:{out:'Expected healing. Reassure and review the handout.',src:'mcgill',ex:'Normal: swelling peaking on day 2–3, bruising, jaw stiffness, sore throat, mild oozing. Call back if anything gets worse or a new symptom appears.'}
+ },
+ look:[['Say at the start',['“I’m going to ask a few quick questions. Tell me yes or no.”','Confirm the procedure and date, and whether sedation was used.']],['Document',['Time of call, symptoms, advice given, who called back, follow-up booked.']]]},
+
 {id:'ao',g:'Post-op & complications',title:'Dry socket',d:'Alveolar osteitis vs infection · treatment · prevention',
  start:'a',refs:['secrets','andersson','aotx','aoprev'],
  caveat:'Antibiotics do not treat alveolar osteitis.',
@@ -868,15 +896,15 @@ const MODS=[
  },
  look:[['History',['Time of injury and extraoral dry time; storage medium','Tetanus status; head injury or LOC','Previous trauma to the same teeth']],['Exam',['Mobility (single tooth vs segment), percussion note, displacement','Pulp tests baseline (often negative early)','Soft-tissue lacerations: radiograph lips for fragments']]]},
 
-{id:'extraction',g:'Dentoalveolar & acute',title:'Third molars & extractions',d:'Remove, coronectomy, or surveil',
- start:'a',refs:['third','rood','sdcep'],
+{id:'extraction',g:'Dentoalveolar & acute',title:'Third molars & extractions',d:'Remove, coronectomy, or surveil · nerve-risk X-ray signs',
+ inputs:['rood'],start:'a',refs:['third','rood','su17','joms08','sdcep'],
  caveat:'Disease-free third molars need an individualized removal-vs-surveillance discussion.',
  nodes:{
  a:{q:'Any Pre-op flag still open (medical, antithrombotic, MRONJ/radiation)?',yes:'o0',no:'b'},
  o0:{out:'Finish Pre-op clearance before choosing the approach.',tone:'action',go:'preop'},
  b:{q:'Disease or symptoms linked to the tooth?',h:['Caries, pericoronitis, distal caries or bone loss on the second molar','Cyst/follicle enlargement, resorption of the adjacent root','Non-restorable or periodontally hopeless'],yes:'c',no:'oSurv'},
  oSurv:{out:'Discuss removal vs active surveillance.',src:'third',ex:'Absence of pain is not absence of disease. If retained: periodic clinical and radiographic review.'},
- c:{q:'Panoramic sign of close IAN relationship?',h:['Darkening of the root','Interruption of the canal white line','Diversion of the canal (Rood & Shehab)'],yes:'d',no:'oRem'},
+ c:{q:'Panoramic sign of close IAN relationship?',auto:r=>r.rsStrong>0?true:undefined,ah:r=>r.rsMsg||'',h:['Strongest signs: darkening of the root, interruption of the canal white line, diversion of the canal (Rood & Shehab; Su 2017)','Weaker signs: root deflection or narrowing, dark/bifid apex, canal narrowing','Root overlapping the canal with no sign does not rule out contact','Tick signs in “Nerve-risk X-ray signs” (Data inputs) to answer automatically'],yes:'d',no:'oRem'},
  oRem:{out:'Removal.',ex:'Plan access, sectioning, hemostasis, and a specimen if pericoronal tissue looks abnormal.'},
  d:{q:'Tooth vital, caries-free, and without pericoronal pathology?',h:['These make coronectomy an option'],yes:'oCor',no:'oRemN'},
  oCor:{out:'Offer coronectomy vs removal.',src:'rood',ex:'CBCT if it would change the approach. Document baseline lip, chin and tongue sensation. Consent for root migration and possible later retrieval.'},
@@ -1157,8 +1185,16 @@ const S={mod:null,ans:{},inp:{},pf:{},asmt:[]};
 const SB=[['s','Snores loudly'],['t','Tired in daytime'],['o','Observed apnea/choking'],['p','Hypertension'],['b','BMI >35'],['a','Age >50'],['n','Neck ≥43 cm ♂ / ≥41 cm ♀'],['g','Male']];
 const PHQ=['Nervous, anxious, on edge','Can’t stop or control worrying','Little interest or pleasure','Down, depressed, hopeless'];
 const num=v=>v===''||v==null||isNaN(+v)?null:+v;
+const RS=[['rs_dark','Darkening of the root',1],['rs_int','Interruption of the canal white line',1],['rs_div','Diversion of the canal',1],['rs_defl','Root deflection',0],['rs_narr','Root narrowing',0],['rs_apex','Dark, bifid apex',0],['rs_narc','Canal narrowing',0],['rs_sup','Root overlaps the canal, no sign',0]];
+function rsCalc(i){const on=RS.filter(([k])=>i[k]),st=on.filter(x=>x[2]),wk=on.filter(x=>!x[2]&&x[0]!=='rs_sup');if(!on.length)return{};
+ const n=st.length+wk.length;let msg;
+ if(st.length)msg=`${n} sign${n===1?'':'s'} incl. ${st.map(x=>x[1].toLowerCase()).join(', ')}: high-risk relationship. CBCT if it would change the approach; discuss coronectomy.`;
+ else if(wk.length)msg=`Weaker sign${wk.length===1?'':'s'} only (${wk.map(x=>x[1].toLowerCase()).join(', ')}): answer by judgment; CBCT if it would change the approach.`;
+ else msg='Overlap without a sign does not rule out contact; answer by judgment.';
+ return{rsStrong:st.length,rsN:n,rsMsg:msg}}
 function R(id){
  const i=S.inp[id]||{},r={};
+ Object.assign(r,rsCalc(i));
  if(i.sbTouched){const on=SB.filter(([k])=>i['sb_'+k]).map(([k])=>k);r.sb=on.length;const stop=['s','t','o','p'].filter(k=>on.includes(k)).length;
   r.sbCat=r.sb>=5?'high':r.sb>=3?((stop>=2&&['g','b','n'].some(k=>on.includes(k)))?'high':'intermediate'):'low'}
  r.rbh=num(i.rbh);r.wall=num(i.wall);r.mem=num(i.mem);r.septum=i.septum||'';
@@ -1656,8 +1692,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.13.1';
+const VER='3.14.0';
 const CHANGES=[
+{v:'3.14.0',d:'Oct 31, 2026',i:['New module: Post-op phone call triage (Post-op & complications). A staff script, emergencies first: 911, come in now, same day, within 1–2 days, or reassure, with what to say meanwhile and links to the matching modules.','Third molars & extractions: “Nerve-risk X-ray signs” checklist (Rood & Shehab). Any of the three strongest signs (darkening, interruption, diversion) answers the panoramic-sign step Yes and suggests CBCT if it would change the approach; weaker signs or overlap alone leave the step to your judgment.']},
 {v:'3.13.1',d:'Oct 31, 2026',i:['Fix: “Log to outcomes registry” did nothing when tapped. It now copies the CR1 line and shows the registry link.','On-call and Author/Colleague switches are back at the top of Decide, above the pinned row (one tap each). Full Settings stays at the bottom.']},
 {v:'3.13.0',d:'Oct 31, 2026',i:['Option grids in Español, Kriolu and 中文 (machine-drafted; pending native-speaker review). They follow the Patient tab language and share in it.','Patient page: new “Choosing a treatment” section with the three option grids in all four languages; links like #ogimp-es open one directly.']},
 {v:'3.12.0',d:'Oct 31, 2026',i:['Post-op handouts: “call us” and 911 lines come first, highlighted; each line has a pictogram. Same order in shared text and on the patient page.','Teach-back: 3 questions under each post-op handout, for the clinician (not shared). AHRQ method.','Option grids (English): wisdom tooth near the nerve (remove vs coronectomy), missing tooth (implant vs bridge vs leave the space), after extraction (graft vs heal on its own). On the Patient tab, shareable, and linked from the Extractions, Implants and Ridge augmentation plans.','Day-7 check-in message (English, Español) with the site’s review link. Patient page: review request is now a small link at the very bottom.','Author mode: “Log to outcomes registry” on plan cards copies a de-identified CR1 line for the Surgical Outcomes Registry.']},
@@ -1931,7 +1968,7 @@ const D7={en:(n,ph,u)=>`Hi, this is ${n}, checking in a week after your surgery.
 function d7Text(l){const st=HO_SITES[S.site||'young'];return(D7[l]||D7.en)(st.n,st.ph,st.u)}
 function d7HTML(l){if(colleague())return'';return`<details class="box" id="ho-d7"><summary>Day-7 check-in message <em>${D7[l]?'':'English (Español available)'}</em></summary><div class="inner"><p style="margin:0 0 8px">${esc(d7Text(D7[l]?l:'en'))}</p><button class="go" data-d7>Copy or share ↗</button><p class="small">Send about a week after surgery, by text or email. No patient details are included.</p></div></details>`}
 function teachHTML(id){const q=TEACH[id];if(!q)return'';return`<div class="tb"><b>Teach-back</b> <span class="small">(for you, not shared): “I want to be sure I explained it well. Can you tell me…”</span><ul>${q.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`}
-const HO_FOR={extraction:'ext',ao:'ext',implant:'imp',graft:'imp',sinus:'imp',arch:'arch',sed:'sed'};
+const HO_FOR={calltri:'ext',extraction:'ext',ao:'ext',implant:'imp',graft:'imp',sinus:'imp',arch:'arch',sed:'sed'};
 const FAQ_FOR={extraction:'fwis',canine:'fcan',implant:'fimp',graft:'fgraft',sinus:'fsinus',arch:'farch',sed:'fsed',biopsy:'fbx',lesion:'fbx',ao:'fao',infection:'finf',nerve:'fnerve',oac:'foac',tmd:'ftmd',mronj:'fmronj',periimpl:'fperi'};
 const HO_NEUTRAL='Oral & Maxillofacial Surgery — Patient Instructions';
 function hoText(h,l){if(colleague())return`${HO_NEUTRAL}\n\n${h.t[l]}\n\n${hoItems(h,l).map(x=>(x.ic?x.ic+' ':'• ')+x.t.replace('[office phone]','your surgeon’s office')).join('\n')}`;
@@ -2805,7 +2842,7 @@ function gateHTML(id){if(!GATED.includes(id))return'';const g=gateModel();
  return`<div class="mgate g-${g.tone}" role="status"><div class="lab" style="color:inherit;opacity:.85">Medical gate</div><div class="gt"><span class="dot" aria-hidden="true"></span>${esc(g.t)}</div>${items.length?`<ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${g.tone==='ok'?'<div class="small" style="color:inherit">Screen result · not a clearance.</div>':''}<div class="gb"><button class="go" data-open="preop">${g.tone==='none'?'Run pre-op screen ›':'Pre-op clearance ›'}</button>${am&&am.worst?`<button class="go" data-goasmt>Assessment: ${esc(DISP[am.od][0])} ›</button>`:''}</div></div>`}
 
 /* Hospital on-call: a remembered preference (not patient data). */
-const OC_KEY='omsCompassOnCall',ONCALL=['trauma','lac','mandfx','dentotrauma','infection','dns'];
+const OC_KEY='omsCompassOnCall',ONCALL=['trauma','lac','mandfx','dentotrauma','infection','dns','calltri'];
 function onCall(){try{return localStorage.getItem(OC_KEY)==='1'}catch(e){return!!S.oc}}
 function setOnCall(v){S.oc=v;try{localStorage.setItem(OC_KEY,v?'1':'0')}catch(e){}}
 function homeGroup(m,on){if(on&&ONCALL.includes(m.id))return'Hospital on-call';
@@ -2888,6 +2925,7 @@ function home(){
 function inputsHTML(m){
  const i=S.inp[m.id]||{};
  const out=[];
+ if((m.inputs||[]).includes('rood'))out.push(`<details class="box" open><summary>Nerve-risk X-ray signs <em>panoramic · Rood &amp; Shehab</em></summary><div class="inner"><div class="toggles">${RS.map(([k,t,st])=>`<button class="tg${i[k]?' on':''}" data-flag="${k}" aria-pressed="${!!i[k]}">${st?'● ':''}${esc(t)}</button>`).join('')}</div><div class="calc" id="calc-rood" hidden></div><p class="caveat" style="margin:8px 0 0">● = strongest predictors of nerve injury (diversion, interruption, darkening; Su 2017 meta-analysis). Any one raises the risk about five-fold. No sign does not rule out contact when the root overlaps the canal. ${srcLink('su17')} ${srcLink('joms08')}</p></div></details>`);
  if((m.inputs||[]).includes('stopbang'))out.push(`<details class="box"><summary>STOP-Bang <em>if sedating</em></summary><div class="inner"><div class="toggles">${SB.map(([k,t])=>`<button class="tg${i['sb_'+k]?' on':''}" data-sb="${k}" aria-pressed="${!!i['sb_'+k]}">${esc(t)}</button>`).join('')}</div><div class="calc" id="calc-sb"></div></div></details>`);
  if((m.inputs||[]).includes('cbct'))out.push(`<details class="box" open><summary>CBCT at the site <em>answers bone-height steps</em></summary><div class="inner"><div class="grid3">
   <label class="fld" for="in-rbh">Residual bone height, mm<input id="in-rbh" data-in="rbh" inputmode="decimal" value="${esc(i.rbh??'')}"></label>
@@ -2991,6 +3029,7 @@ function backStep(){const id=S.mod;if(!id||S.view!=='mod')return false;const m=M
 function calcs(m){
  const r=R(m.id);const sb=document.getElementById('calc-sb');
  if(sb){sb.hidden=r.sb==null;sb.textContent=r.sb!=null?`STOP-Bang ${r.sb}/8 · ${r.sbCat} OSA risk`:''}
+ const rc=document.getElementById('calc-rood');if(rc){rc.hidden=!r.rsMsg;rc.textContent=r.rsMsg||''}
  const t=document.getElementById('calc-tmd');
  if(t){const bits=[];if(r.cpi!=null)bits.push(`CPI ${r.cpi}`);if(r.grade)bits.push(`GCPS grade ${r.grade}`);if(r.phq!=null)bits.push(`PHQ-4 ${r.phq} (${r.phqBand})`);if(r.joint)bits.push('severe joint limitation');t.hidden=!bits.length;t.textContent=bits.join(' · ')}
 }
