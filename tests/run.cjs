@@ -222,15 +222,15 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(await page.locator('#groups [data-open="trauma"]').count()===0&&await page.locator('#groups [data-open="mandfx"]').count()===0,'On-call off hides trauma triage and mandible fracture');
  ok(await page.locator('#groups [data-open="lac"]').count()===0,'On-call off hides facial laceration');
  ok(await page.locator('#groups [data-open="dentotrauma"]').count()===1&&await page.locator('#groups [data-open="infection"]').count()===1,'On-call off keeps dentoalveolar trauma and infection');
- await openSet(page);await page.click('[data-oncall]');
- ok(await page.locator('[data-oncall][aria-checked="true"]').count()===1,'On-call switch turns on');
+ await openSet(page);await page.click('#settings [data-oncall]');
+ ok(await page.locator('#settings [data-oncall][aria-checked="true"]').count()===1,'On-call switch turns on');
  ok(await E(page,()=>document.querySelector('#groups .lab.group').textContent==='Hospital on-call'),'On-call group listed first');
  ok(await E(page,()=>{const g=[...document.querySelectorAll('#groups .lab.group')].find(x=>x.textContent==='Hospital on-call');return !!g&&!!g.nextElementSibling.querySelector('[data-open="lac"]')}),'On-call on: facial laceration listed under Hospital on-call');
  ok(await page.locator('#groups [data-open]').count()===await E(page,()=>MODS.length),'On-call on: every module listed exactly once');
  ok(await E(page,()=>localStorage.getItem('omsCompassOnCall')==='1'),'On-call preference remembered');
  await E(page,()=>{delete S.oc;home()});/* re-read from storage (file:// reloads in headless Chromium can drop unflushed storage) */
- ok(await page.locator('[data-oncall][aria-checked="true"]').count()===1,'On-call preference re-read from storage');
- await openSet(page);await page.click('[data-oncall]');
+ ok(await page.locator('#settings [data-oncall][aria-checked="true"]').count()===1,'On-call preference re-read from storage');
+ await openSet(page);await page.click('#settings [data-oncall]');
  await E(page,()=>open('extraction'));
  ok(await page.locator('#fxsheet [data-atab="io"]').count()===1,'Intraop button in the module reference drawer (v3.6 focus mode replaces the bottom bar inside modules)');
  await page.click('#fxsheet .fx-handle');await page.click('#fxsheet [data-atab="io"]');
@@ -800,6 +800,13 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(/^CR1;proc=(Implant%20placement|Immediate%20implant);anes=IV%20sedation;asa=II;age=45%E2%80%9364;rf=ac;plan=/.test(line),'Registry line: procedure, anesthesia, ASA, age band, anticoagulant, plan ('+line.slice(0,90)+')');
   ok(!/[A-Za-z]+%20\d{1,2}%2C|\d{4}-\d{2}-\d{2}/.test(line),'Registry line carries no dates');
   ok(await p.locator('.plan [data-reg]').count()===1,'Author mode: registry button on the plan');
+  await p.click('.plan [data-reg]');await p.waitForTimeout(200);
+  ok(await p.locator('#regl a[href*="CYcfCKQHUD67fTtnb9GF3g"]').count()===1,'Tapping the registry button shows the registry link');
+  ok(await X(()=>{const b=document.querySelector('.plan [data-reg]'),x=document.getElementById('copybox');return /Copied/.test(b.textContent)||(x&&!x.hidden&&/^CR1;/.test(x.value))}),'Tapping the registry button copies the CR1 line (or shows it to copy)');
+  await X(()=>home());
+  ok(await p.locator('#pins .qset [data-oncall]').count()===1&&await p.locator('#pins .qset [data-pm]').count()===1,'Quick settings: on-call and mode switches above the pinned row');
+  const oc0=await X(()=>onCall());await p.click('#pins .qset [data-oncall]');ok(await X(()=>onCall())!==oc0&&/On-call · (On|Off)/.test(await p.locator('#pins .qset [data-oncall]').innerText()),'Quick on-call switch toggles');await p.click('#pins .qset [data-oncall]');
+  const m0=await X(()=>pmode());await p.click('#pins .qset [data-pm]');ok(await X(()=>pmode())!==m0,'Quick mode switch toggles Author/Colleague');await p.click('#pins .qset [data-pm]');ok(await X(()=>pmode())===m0,'and back');
   await c19.close()}
 
  await browser.close();
