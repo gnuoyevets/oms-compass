@@ -148,7 +148,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  page=await fresh(ctx);
  const r8=await E(page,()=>{const bad=[];for(const m of MODS){try{open(m.id);if(!document.getElementById('flow').innerHTML)bad.push(m.id)}catch(e){bad.push(m.id+':'+e.message)}}
   for(const v of ['emergency','calc','ref','handouts','new']){try{view(v);if(!document.getElementById('vbody').innerHTML.length)bad.push(v)}catch(e){bad.push(v+':'+e.message)}}return{n:MODS.length,bad}});
- ok(r8.bad.length===0&&r8.n===36,`All ${r8.n} modules and 5 tabs render (bad: ${r8.bad})`);
+ ok(r8.bad.length===0&&r8.n===37,`All ${r8.n} modules and 5 tabs render (bad: ${r8.bad})`);
  await E(page,()=>home());await page.fill('#in-q','Dantrium');ok(await page.locator('#hits [data-em]').count()>0,'Search still reaches SOS (Dantrium)');
  await page.fill('#in-q','avulsion');ok(await page.locator('#hits [data-open="dentotrauma"]').count()>0,'Search still reaches modules (avulsion)');
  await page.fill('#in-q','laceration');ok(await page.locator('#hits [data-open="lac"]').count()>0,'Search reaches facial laceration');
@@ -728,8 +728,8 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  {const c18=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
   await c18.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
   const p=await fresh(c18),X=f=>p.evaluate(f);
-  ok(await p.locator('#pins .pin').count()===5,'Pinned row has 5 entries');
-  ok(await X(()=>[...document.querySelectorAll('#pins .pin')].map(b=>b.dataset.open||b.dataset.view).join()==='preop,sed,implant,extraction,handouts'),'Pinned: pre-op, sedation, implants, extractions, handouts');
+  ok(await p.locator('#pins .pin').count()===6,'Pinned row has 6 entries');
+  ok(await X(()=>[...document.querySelectorAll('#pins .pin')].map(b=>b.dataset.open||b.dataset.view).join()==='preop,sed,implant,extraction,calltri,handouts'),'Pinned: pre-op, sedation, implants, extractions, call triage, handouts');
   ok(await X(()=>{const m=[...document.querySelectorAll('#groups .mods')].pop(),s=document.getElementById('settings');return !!(m.compareDocumentPosition(s)&Node.DOCUMENT_POSITION_FOLLOWING)}),'Settings sit below the module list');
   await p.fill('#in-q','Eliquis');ok(await X(()=>document.getElementById('pins').hidden),'Pinned row hides while searching');await p.fill('#in-q','');
   ok(await X(()=>{home();return document.getElementById('pins').hidden===false}),'Pinned row returns when search clears');
@@ -807,6 +807,20 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await p.locator('#pins .qset [data-oncall]').count()===1&&await p.locator('#pins .qset [data-pm]').count()===1,'Quick settings: on-call and mode switches above the pinned row');
   const oc0=await X(()=>onCall());await p.click('#pins .qset [data-oncall]');ok(await X(()=>onCall())!==oc0&&/On-call · (On|Off)/.test(await p.locator('#pins .qset [data-oncall]').innerText()),'Quick on-call switch toggles');await p.click('#pins .qset [data-oncall]');
   const m0=await X(()=>pmode());await p.click('#pins .qset [data-pm]');ok(await X(()=>pmode())!==m0,'Quick mode switch toggles Author/Colleague');await p.click('#pins .qset [data-pm]');ok(await X(()=>pmode())===m0,'and back');
+  // v3.14 nerve-risk signs and phone triage
+  await X(()=>{newPatient();open('extraction');S.ans.extraction={a:false,b:true};refresh()});
+  ok(/Panoramic sign/.test(await p.locator('.cur').innerText()),'Extraction reaches the panoramic-sign step');
+  await X(()=>{S.inp.extraction={rs_narr:true};refresh()});ok(/Panoramic sign/.test(await p.locator('.cur').innerText())&&/Weaker sign/.test(await X(()=>R('extraction').rsMsg)),'Weaker sign only: step left to judgment');
+  await X(()=>{S.inp.extraction={rs_div:true};refresh()});ok(await X(()=>{const w=walk(M('extraction'));return w.steps.some(s=>s.id==='c'&&s.val===true&&s.auto)}),'Diversion of the canal answers the step Yes automatically');
+  ok(/high-risk/.test(await X(()=>R('extraction').rsMsg))&&/CBCT/.test(await X(()=>R('extraction').rsMsg)),'Strong sign message suggests CBCT');
+  await X(()=>{S.inp.extraction={rs_sup:true};refresh()});ok(await X(()=>!walk(M('extraction')).steps.some(s=>s.id==='c'&&s.auto))&&/does not rule out/.test(await X(()=>R('extraction').rsMsg)),'Overlap without a sign never auto-answers No');
+  await X(()=>{newPatient();open('calltri')});
+  ok(/breathing or swallowing/.test(await p.locator('.cur').innerText()),'Phone triage asks the emergency question first');
+  await p.click('.fx-a');ok(/Call 911/.test(await p.locator('.plan').innerText()),'Emergency answer goes straight to 911');
+  await X(()=>{newPatient();open('calltri');S.ans.calltri={a:false,b:true,b2:true};refresh()});ok(/Come in now/.test(await p.locator('.plan').innerText())&&await p.locator('.plan [data-open="bleed"]').count()===1,'Heavy bleeding or blood thinner: come in now, links Post-op bleeding');
+  await X(()=>{newPatient();open('calltri');const m=M('calltri');S.ans.calltri={};let w=walk(m),n=0;while(w.cur&&n<20){S.ans.calltri[w.cur.id]=false;w=walk(m);n++}refresh()});
+  ok(/Expected healing/.test(await p.locator('.plan').innerText())&&await p.locator('.plan [data-ho="ext"]').count()===1,'All No: reassure, with the handout button');
+  ok(await X(()=>{setOnCall(true);home();const g=[...document.querySelectorAll('#groups .lab.group')].find(x=>x.textContent==='Hospital on-call');let n=g.nextElementSibling;const ok=!!n.querySelector('[data-open="calltri"]');setOnCall(false);home();return ok}),'Phone triage listed under Hospital on-call when on-call is on');
   await c19.close()}
 
  await browser.close();

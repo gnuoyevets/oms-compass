@@ -68,7 +68,7 @@ test('consultation reflects actual state, not preview',`S.compare='local';const 
 test('consultation has no sending action or identifiers',`const t=consultText(asmtModel());!/@|Patient name:|DOB:|MRN:/.test(t)&&t.includes('does not send')`);
 test('section model deduplicates exact instructions',`setup(['doac','antiplatelet'],{proc:'low',doacAg:'api',ap:'y',apReg:'asp'});const m=asmtModel();const texts=Object.values(m.sections).flat().map(x=>x.text);new Set(texts).size===texts.length`);
 test('copy retains four original EMR blocks',`['HISTORY:','FINDINGS & RISK:','ANESTHESIA & LIMITS:','PLAN & ALERTS:'].every(x=>asmtText().includes(x))`);
-test('all 36 pathways and legacy tabs generate',`newPatient();MODS.length===36&&MODS.every(m=>flowHTML(m).length>0)&&['emergency','calc','ref','handouts','new'].every(v=>{view(v);return app.innerHTML.includes('vbody')})`);
+test('all 37 pathways and legacy tabs generate',`newPatient();MODS.length===37&&MODS.every(m=>flowHTML(m).length>0)&&['emergency','calc','ref','handouts','new'].every(v=>{view(v);return app.innerHTML.includes('vbody')})`);
 test('all 18 finding views generate',`newPatient();FIND.length===18&&FIND.every(f=>{openFind(f.id);return app.innerHTML.includes('fdyn')})`);
 test('reset clears comparisons history and all clinical inputs',`S.compare='local';S.compareEligible=true;S.changes=[{}];S.asmt=['bupe'];S.pf.age='12';S.io={cnt:true};S.wt=45;newPatient();!hasPatient()&&!S.compare&&!S.compareEligible&&!S.changes.length&&!Object.keys(S.pf).length&&!S.wt`);
 assert.ok([...storage.keys()].every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode'].includes(k)));n++;
