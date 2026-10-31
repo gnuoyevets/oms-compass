@@ -728,8 +728,8 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  {const c18=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
   await c18.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
   const p=await fresh(c18),X=f=>p.evaluate(f);
-  ok(await p.locator('#pins .pin').count()===5,'Pinned row has 5 entries');
-  ok(await X(()=>[...document.querySelectorAll('#pins .pin')].map(b=>b.dataset.open||b.dataset.view).join()==='preop,sed,implant,extraction,handouts'),'Pinned: pre-op, sedation, implants, extractions, handouts');
+  ok(await p.locator('#pins .pin').count()===6,'Pinned row has 6 entries');
+  ok(await X(()=>[...document.querySelectorAll('#pins .pin')].map(b=>b.dataset.open||b.dataset.view).join()==='preop,sed,implant,extraction,calltri,handouts'),'Pinned: pre-op, sedation, implants, extractions, call triage, handouts');
   ok(await X(()=>{const m=[...document.querySelectorAll('#groups .mods')].pop(),s=document.getElementById('settings');return !!(m.compareDocumentPosition(s)&Node.DOCUMENT_POSITION_FOLLOWING)}),'Settings sit below the module list');
   await p.fill('#in-q','Eliquis');ok(await X(()=>document.getElementById('pins').hidden),'Pinned row hides while searching');await p.fill('#in-q','');
   ok(await X(()=>{home();return document.getElementById('pins').hidden===false}),'Pinned row returns when search clears');
