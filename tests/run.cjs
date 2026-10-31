@@ -800,6 +800,9 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(/^CR1;proc=(Implant%20placement|Immediate%20implant);anes=IV%20sedation;asa=II;age=45%E2%80%9364;rf=ac;plan=/.test(line),'Registry line: procedure, anesthesia, ASA, age band, anticoagulant, plan ('+line.slice(0,90)+')');
   ok(!/[A-Za-z]+%20\d{1,2}%2C|\d{4}-\d{2}-\d{2}/.test(line),'Registry line carries no dates');
   ok(await p.locator('.plan [data-reg]').count()===1,'Author mode: registry button on the plan');
+  await p.click('.plan [data-reg]');await p.waitForTimeout(200);
+  ok(await p.locator('#regl a[href*="CYcfCKQHUD67fTtnb9GF3g"]').count()===1,'Tapping the registry button shows the registry link');
+  ok(await X(()=>{const b=document.querySelector('.plan [data-reg]'),x=document.getElementById('copybox');return /Copied/.test(b.textContent)||(x&&!x.hidden&&/^CR1;/.test(x.value))}),'Tapping the registry button copies the CR1 line (or shows it to copy)');
   await c19.close()}
 
  await browser.close();

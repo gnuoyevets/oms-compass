@@ -1655,8 +1655,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.13.0';
+const VER='3.13.1';
 const CHANGES=[
+{v:'3.13.1',d:'Oct 31, 2026',i:['Fix: “Log to outcomes registry” did nothing when tapped. It now copies the CR1 line and shows the registry link.']},
 {v:'3.13.0',d:'Oct 31, 2026',i:['Option grids in Español, Kriolu and 中文 (machine-drafted; pending native-speaker review). They follow the Patient tab language and share in it.','Patient page: new “Choosing a treatment” section with the three option grids in all four languages; links like #ogimp-es open one directly.']},
 {v:'3.12.0',d:'Oct 31, 2026',i:['Post-op handouts: “call us” and 911 lines come first, highlighted; each line has a pictogram. Same order in shared text and on the patient page.','Teach-back: 3 questions under each post-op handout, for the clinician (not shared). AHRQ method.','Option grids (English): wisdom tooth near the nerve (remove vs coronectomy), missing tooth (implant vs bridge vs leave the space), after extraction (graft vs heal on its own). On the Patient tab, shareable, and linked from the Extractions, Implants and Ridge augmentation plans.','Day-7 check-in message (English, Español) with the site’s review link. Patient page: review request is now a small link at the very bottom.','Author mode: “Log to outcomes registry” on plan cards copies a de-identified CR1 line for the Surgical Outcomes Registry.']},
 {v:'3.11.0',d:'Oct 31, 2026',i:['Pinned row on Decide: Pre-op clearance, Sedation plan, Implants, Extractions, Post-op handouts. Settings moved to the bottom.','Pre-op clearance ends on one Today’s plan panel: ASA class (one tap), local anesthetic maximum for the entered weight, analgesic plan (acetaminophen first when an anticoagulant or antiplatelet is entered), patient handout buttons. All of it goes into Copy note. No new dose or threshold; content is reused from Calc and Post-op analgesia.','Yes and No buttons now carry equal weight (Yes was filled).','Photo triage and Data inputs chips show on the first question only, unless triage is loaded, inputs are set, or the current step reads entered data. Both stay in the drawer.','Plan cards: sources and review status folded under More.']},
@@ -3082,7 +3083,7 @@ app.addEventListener('click',e=>{
  if(b.dataset.share)return shareHO(b.dataset.share,b);
  if(b.dataset.ogshare){const g=OG.find(x=>x.id===b.dataset.ogshare);const l=S.lang||'en';return shareTxt(g.t[l]||g.t.en,ogText(g,l),b)}
  if(b.hasAttribute('data-d7')){const l=S.lang||'en';return shareTxt('Check-in',d7Text(D7[l]?l:'en'),b)}
- if(b.dataset.reg)return regCopy(b);
+ if(b.hasAttribute('data-reg'))return regCopy(b);
  if(b.hasAttribute('data-home')){try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}return home()}
  if(b.hasAttribute('data-triload')){const x=document.getElementById('in-tri');loadTri(x&&x.value);return open('preop')}
  if(b.hasAttribute('data-triclear')){S.tri=null;S.triErr='';TRI_MODS.forEach(k=>{S.ans[k]={}});return open(S.mod||'preop')}

@@ -2,6 +2,10 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.13.1 — Oct 31, 2026 (fix; awaiting Steven's approval)
+
+- **Fix:** "Log to outcomes registry" did nothing when tapped (the click check read the button's empty data value as "no"). It now copies the CR1 line and shows the registry link. The v3.12 test only checked that the button existed; two new tests tap it.
+
 ## v3.13.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 - **Option grids translated** into Español, Kriolu and 中文 (machine-drafted by Claude; pending native-speaker review, like the other translations). Same rows, numbers and sources as English. On the Patient tab they follow the selected language, and Share sends that language.
