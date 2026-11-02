@@ -19,6 +19,7 @@ Two bridges prompted by a market comparison: free-text input and imaging AI outp
   - Compass does not read images and connects to no vendor; vendor names are search terms only.
   - Carotid: refer to the physician with the image; panoramic films are not vascular screening tools. Source: a case-based review (PMC12614913). The look-alike list is marked [verify].
   - Other flag types are labelled Unverified draft until reviewed.
+- **Automated tests on GitHub.** A GitHub Actions workflow (`.github/workflows/tests.yml`) runs both suites on every pull request and push to main, so a failing change can be blocked from merging.
 - Tests: 511 browser checks (31 new); reconciliation 78 (3 new), with the 720 combined cases now including the imaging finding. Software checks only; not clinical validation.
 
 ## v3.14.1 — Nov 2, 2026 (awaiting Steven's review)
