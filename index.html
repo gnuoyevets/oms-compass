@@ -2688,11 +2688,13 @@ function recordLab(){const r=parseLab(S.q);if(!r||!r.L)return;const st=labState(
 /* ===== v3.15 Read typed text as a case ("72M on Eliquis, INR 2.6, 3 extractions under IV sedation").
    Fixed rules on this phone: no AI service, nothing sent or stored. Every item is a proposal; nothing is recorded
    until the clinician ticks it and taps Add. The typed text itself never enters the assessment or copied notes. ===== */
+/* An answer that describes another answer is cleared when that answer changes (a read belongs to one flag). */
+const PF_RESET={iaType:['iaRead']};
 const CASE_NEG=/\b(no|not|denies|denied|negative for|without|never|nil)\b/;
 const CASE_PAST=/\b(stopped|discontinued|held|holding|quit|former|formerly|previously|was on|d\/c|dc d)\b/;
 const CASE_PASTOK=['antires','rad'];
 const CASE_LABFID={inr:['inr','warfarin'],plt:['plt'],a1c:['a1c'],egfr:['renal']};
-const CASE_KNOWN=/^(\d+|pt|pts|patient|yo|y|o|yr|yrs|year|years|old|male|female|m|f|hx|history|of|on|for|with|w|and|the|a|an|to|in|at|is|are|was|has|had|have|needs?|planned|plan|plans|takes?|taking|today|here|wants|presents?|presenting|due|also|now|currently|current|mg|mcg|daily|bid|tid|qid|qd|prn|dose|s|p|status|post|scheduled|sched|consult|under|iv|ivs|sed|sedation|moderate|deep|ga|general|anesthesia|anaesthesia|local|la|only|alone|intubated|intubation|nasotracheal|simple|surgical|extractions?|exts?|exo|teeth|tooth|implants?|bone|grafts?|grafting|biopsy|biopsies|flaps?|sinus|lift|ridge|augmentation|alveoloplasty|full|arch|mouth|all|orthognathic|le|fort|bsso|resection|mandibulectomy|maxillectomy|orif|open|reduction|third|3rd|molars?|wisdom|urgent|urgently|emergency|emergent|elective|abscess|cellulitis|swelling|infection|infected|trismus|pain|inr|pt\/inr|platelets?|plts?|count|hba1c|a1c|hgb|egfr|gfr|crcl|cr|cl|k|ul|µl|ml|min|mmol|mol|age|aged|flagged|flag|ai|shows?|showed|noted|reports?|reported|tooth|#\d+|ok|okay|stable|recent|last|week|weeks|month|months|days?|ago|but|or|no|not|denies|without|never)$/;
+const CASE_KNOWN=/^(\d+|pt|pts|patient|yo|y|o|yr|yrs|year|years|old|male|female|m|f|hx|history|of|on|for|with|w|and|the|a|an|to|in|at|is|are|was|has|had|have|needs?|planned|plan|plans|takes?|taking|today|here|wants|presents?|presenting|due|also|now|currently|current|mg|mcg|daily|bid|tid|qid|qd|prn|dose|s|p|status|post|scheduled|sched|consult|under|iv|ivs|sed|sedation|moderate|deep|ga|general|anesthesia|anaesthesia|local|la|only|alone|intubated|intubation|nasotracheal|simple|surgical|extractions?|exts?|exo|teeth|tooth|implants?|bone|grafts?|grafting|biopsy|biopsies|flaps?|sinus|lift|ridge|augmentation|alveoloplasty|full|arch|mouth|all|orthognathic|le|fort|bsso|resection|mandibulectomy|maxillectomy|orif|open|reduction|third|3rd|molars?|wisdom|urgent|urgently|emergency|emergent|elective|abscess|cellulitis|swelling|infection|infected|trismus|pain|inr|pt\/inr|platelets?|plts?|count|hba1c|a1c|hgb|egfr|gfr|crcl|cr|cl|k|ul|µl|ml|min|mmol|mol|age|aged|flagged|flag|ai|shows?|showed|noted|reports?|reported|tooth|#\d+|ok|okay|stable|recent|last|week|weeks|took|prior|years|for|stopped|discontinued|held|hold|holding|quit|former|formerly|previously|denied|negative|nil|how|long|before|after|when|what|should|can|stop|continue|does|do|head|neck|pano|panoramic|cbct|radiograph|radiographs|xray|x-ray|film|dob|month|months|days?|ago|but|or|no|not|denies|without|never)$/;
 function caseParse(q){const raw=String(q||'');const t=raw.toLowerCase();if(t.length<8)return null;
  const items=[],hints=[],unrec=[],info=[];
  const idw=/\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b|\b\d{7,}\b|\b(mrn|dob|d\.o\.b|ssn|mr#)\b/.test(t);
@@ -2716,8 +2718,9 @@ function caseParse(q){const raw=String(q||'');const t=raw.toLowerCase();if(t.len
  const ag=t.match(/\b(\d{1,3})\s*(?:yo|y\/o|y\.o\.?|yrs? old|years? old|-year-old|year-old)\b/)||t.match(/\bage[d]?\s*:?\s*(\d{1,3})\b/)||t.match(/(?:^|\s)(\d{1,3})\s?(?:m|f)\b/);
  if(ag&&+ag[1]<=110)ctx('age',String(+ag[1]),ag[0],true);
  /* Labs: same parser and rules as single-lab capture. Units are never assumed. */
- const labK=new Set(),labRe=/\b(pt ?\/ ?inr|inr|platelet count|platelets?|plts?|hba1c|hb a1c|hgb ?a1c|a1c|e ?gfr|crcl|cr cl)\s*(?:[:=]|of|was|is)?\s*(\d+(?:\.\d+)?|\.\d+)(\s*(?:k ?\/ ?[uµ]l|x ?10\^?3 ?\/ ?[uµ]l|x ?10\^?9 ?\/ ?l|k|\/ ?[uµ]l|%|mmol ?\/ ?mol|ml ?\/ ?min(?: ?\/ ?1\.73 ?m(?:2|²|\^2))?)(?![a-z]))?/g;
- let m;while((m=labRe.exec(t))){const r=parseLab(`${m[1]} ${m[2]}${m[3]||''}`);if(!r)continue;
+ const labK=new Set(),labRe=/\b(pt ?\/ ?inr|inr|platelet count|platelets?|plts?|hba1c|hb a1c|hgb ?a1c|a1c|e ?gfr|crcl|cr cl)\s*(?:[:=]|of|was|is)?\s*(\d[\d.,]*\d|\d|\.\d+)(\s*(?:k ?\/ ?[uµ]l|x ?10\^?3 ?\/ ?[uµ]l|x ?10\^?9 ?\/ ?l|k|\/ ?[uµ]l|%|mmol ?\/ ?mol|ml ?\/ ?min(?: ?\/ ?1\.73 ?m(?:2|²|\^2))?)(?![a-z]))?/g;
+ let m;while((m=labRe.exec(t))){if(!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(m[2])){info.push(`${m[1].toUpperCase()} “${m[2]}” not recorded: the number is unclear. Type it without commas (e.g., 3.8).`);continue}
+  const r=parseLab(`${m[1]} ${m[2]}${m[3]||''}`);if(!r)continue;
   if(r.crcl){info.push(`CrCl ${r.crcl} not recorded: Compass has no CrCl field and never converts CrCl to or from eGFR.`);continue}
   if(!r.L||r.bad||labK.has(r.L.k))continue;labK.add(r.L.k);const L=r.L;
   if(L.unitSel&&!r.unit){items.push({kind:'f',id:L.fid(),hit:L.name,def:true,label:FX[L.fid()].t,note:`${L.name} ${r.v} not recorded: unit not stated. Enter it on the finding.`});continue}
@@ -2731,8 +2734,9 @@ function caseParse(q){const raw=String(q||'');const t=raw.toLowerCase();if(t.len
    const neg=CASE_NEG.test(pre),past=!neg&&CASE_PAST.test(cl),inA=(S.asmt||[]).includes(f.id);
    items.push({kind:'f',id:f.id,hit,def:inA?false:neg?false:past?CASE_PASTOK.includes(f.id):true,label:f.t,
     note:[`matched “${hit}”`,inA?'already in assessment':'',neg?'reads as negated — not added unless ticked':'',past?(CASE_PASTOK.includes(f.id)?'past exposure still counts for this finding':'past or held — tick only if current'):''].filter(Boolean).join('; ')})});
-  if(!hits.length){const left=cl.replace(/[()\[\]:=]/g,' ').split(/\s+/).filter(w=>w&&!CASE_KNOWN.test(w)&&!/^[\d.]+$/.test(w)&&!/^#?\d/.test(w)&&w.length>2);
-   if(left.length)unrec.push(left.join(' '))}});
+  const hs=hits.map(h=>String(h.hit).toLowerCase());
+  const left=cl.replace(/[()\[\]:=\/]/g,' ').split(/\s+/).filter(w=>w&&w.length>2&&!CASE_KNOWN.test(w)&&!/^#?\d/.test(w)&&!hs.some(h=>h.split(' ').some(x=>x===w||x===w.replace(/s$/,'')))&&!findHits(w).length);
+  if(left.length)unrec.push(left.join(' '))});
  const n=items.length,words=t.split(/\s+/).length;
  if(!(n>=2||(n>=1&&(unrec.length||hints.length))||(words>=5&&(n||hints.length)))||(n===1&&items[0].kind==='lab'&&words<5))return null;
  return{items,hints,unrec:[...new Set(unrec)].slice(0,6),info,idw}}
@@ -3225,7 +3229,7 @@ app.addEventListener('click',e=>{
  if(b.hasAttribute('data-ioclear')){S.io={};S.ioSig={};delete S.ioReset;document.getElementById('iobody').innerHTML=ioHTML();return updBar()}
  if(b.dataset.open)return open(b.dataset.open);
  if(b.dataset.find)return openFind(b.dataset.find,b.dataset.hit);
- if(b.dataset.pf){const before=planBeforeEdit();const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;if(S.lkc)delete S.lkc[k];recordPlanEdit(before,k);return redraw()}
+ if(b.dataset.pf){const before=planBeforeEdit();const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;if(S.lkc)delete S.lkc[k];const cl=(PF_RESET[k]||[]).filter(x=>S.pf[x]!==undefined);cl.forEach(x=>delete S.pf[x]);recordPlanEdit(before,k,cl);return redraw()}
  if(b.dataset.addf){const before=planBeforeEdit();if(!S.asmt.includes(b.dataset.addf))S.asmt.push(b.dataset.addf);recordPlanEdit(before,'finding:'+b.dataset.addf);b.textContent='✓ In assessment';b.disabled=true;return updBar()}
  if(b.dataset.rmf){const before=planBeforeEdit();S.asmt=S.asmt.filter(x=>x!==b.dataset.rmf);recordPlanEdit(before,'finding:'+b.dataset.rmf);return redraw()}
  if(b.hasAttribute('data-acopy')){const t=asmtText();try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}

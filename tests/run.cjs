@@ -875,6 +875,11 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await X(()=>{S.pf.iaType='cac';S.pf.iaRead='conf';const x=fPlan(FX.imgai);return x.d==='modify'&&/physician/.test(x.act)&&x.src.includes('cacRev')}),'Confirmed carotid flag: refer with the image, cited');
   ok(await X(()=>{S.pf.iaType='ian';return FX.imgai.link.some(l=>l[0]==='extraction'&&l[1]==='c')&&M('extraction').nodes.c}),'IAN flag links to the panoramic-sign step');
   ok(await X(()=>{const c=caseParse('INR 2.6, platelets 45 k, a1c 8 %, egfr 28');return new Set(c.items.map(caseKey)).size===c.items.length}),'Each proposed item has its own tick box');
+  ok(await X(()=>{const c=caseParse('warfarin, INR 3,8, 2 simple extractions');return!c.items.some(i=>i.kind==='lab')&&c.info.some(x=>/unclear/.test(x))}),'Codex P1: “INR 3,8” is not recorded as INR 3');
+  ok(await X(()=>{const c=caseParse('on eliquis metformin, 2 simple extractions');return c.unrec.some(u=>/metformin/.test(u))}),'Codex P2: unknown drug beside a known one is still listed');
+  ok(await X(()=>{const c=caseParse('on eliquis/metformin, 2 simple extractions');return c.unrec.some(u=>/metformin/.test(u))}),'Codex P2: slash-separated unknown drug is listed');
+  await X(()=>{newPatient();S.pf.iaType='pa';S.pf.iaRead='not';openFind('imgai')});await p.click('[data-pf="iaType"][data-pv="les"]');
+  ok(await X(()=>S.pf.iaType==='les'&&S.pf.iaRead===undefined&&fPlan(FX.imgai).d==='investigate'),'Codex P2: changing the flag type clears the previous read');
   ok(await X(()=>{S.pf.iaType='les';S.pf.iaRead='uns';return fPlan(FX.imgai).d==='investigate'}),'Unsure: verify first');
   await c20.close()}
 
