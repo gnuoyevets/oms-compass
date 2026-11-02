@@ -2,6 +2,30 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.15.0 — Nov 2, 2026 (approved by Steven Nov 2, 2026; merged to main)
+
+Two bridges prompted by a market comparison: free-text input and imaging AI output.
+
+- **Read as a case.** Type or paste a short history in search, e.g. "72M on Eliquis, INR 2.6, 3 simple extractions under IV sedation". Compass proposes each finding, lab and context item as a tick box. Nothing is recorded until you tap Add, and only ticked items are recorded.
+  - Fixed rules on the phone, not AI: nothing is sent anywhere. The typed text is never stored in the assessment or copied into notes.
+  - Negated drugs ("denies blood thinners") and held drugs ("stopped Plavix") start unticked. Past antiresorptive or radiation exposure stays ticked, because it still counts.
+  - Lab units are never assumed; a platelet count without a unit is not recorded. Replacing a lab clears answers about the old result, as in v3.10.
+  - An existing answer is never overwritten unless you tick the replacement. An extraction count without "simple" is not ticked.
+  - Unrecognized drugs are listed ("No Compass entry for: metformin"), not silently ignored. Dates and long numbers trigger an identifier warning.
+- **Free-text questions.** When no module matches every word, the closest modules are shown instead of "no entry".
+- **Imaging AI flag finding.** Record what radiograph or CBCT software flagged: periapical radiolucency, impaction, IAN proximity, sinus change, possible carotid calcification, TMJ change or other lesion.
+  - The plan waits for your own read: "I see it too", "I do not see it" or "Unsure".
+  - Each flag links to the matching module (Third molars panoramic-sign step, Odontogenic infection, Jaw radiolucency, Sinus lift, TMD and others).
+  - Compass does not read images and connects to no vendor; vendor names are search terms only.
+  - Carotid: refer to the physician with the image; panoramic films are not vascular screening tools. Source: a case-based review (PMC12614913). The look-alike list is marked [verify].
+  - Other flag types are labelled Unverified draft until reviewed.
+- **Automated tests on GitHub.** A GitHub Actions workflow (`.github/workflows/tests.yml`) runs both suites on every pull request and push to main, so a failing change can be blocked from merging.
+- Tests: 515 browser checks (35 new); reconciliation 78 (3 new), with the 720 combined cases now including the imaging finding. Software checks only; not clinical validation.
+
+## v3.14.1 — Nov 2, 2026 (approved by Steven Nov 2, 2026; merged to main)
+
+- **Bottom bar fits narrow phones.** At 400 px and below the three buttons use 14 px text and tighter padding, so “Assessment” is no longer cut off at 320 px. A count (e.g. “· 12”) wraps to a second line instead of clipping. Layout only; no clinical content changed.
+
 ## v3.14.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 Two features prompted by DSN (AI phone agent; nerve detection), adapted to Compass: no server, no patient data.

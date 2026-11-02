@@ -513,7 +513,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(/Author’s protocol/.test(await page.locator('.reconciled').innerText()),'Author protocol shown in the reconciled plan');
  // Accessibility across findings
  const fa=[];for(const id of await E(page,()=>FIND.map(f=>f.id))){await E(page,id=>{newPatient();openFind(id)},id);const d=await dupIds(),u=await unnamed();if(d.length||u.length)fa.push(id+':'+d.join(',')+u.join(','))}
- ok(fa.length===0,'All 18 finding pages: unique IDs, every visible control named '+fa.slice(0,3).join(' | '));
+ ok(fa.length===0,'All 19 finding pages: unique IDs, every visible control named '+fa.slice(0,3).join(' | '));
  await E(page,()=>{newPatient();S.asmt=['doac','renal','glp1'];Object.assign(S.pf,{proc:'high',anes:'sed'});asmtView()});
  ok((await unnamed()).length===0,'Assessment: every visible control has an accessible name');
  // Age field keeps focus while typing two digits
@@ -822,6 +822,67 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(/Expected healing/.test(await p.locator('.plan').innerText())&&await p.locator('.plan [data-ho="ext"]').count()===1,'All No: reassure, with the handout button');
   ok(await X(()=>{setOnCall(true);home();const g=[...document.querySelectorAll('#groups .lab.group')].find(x=>x.textContent==='Hospital on-call');let n=g.nextElementSibling;const ok=!!n.querySelector('[data-open="calltri"]');setOnCall(false);home();return ok}),'Phone triage listed under Hospital on-call when on-call is on');
   await c19.close()}
+
+ console.log('20. v3.15 read as a case (typed text) and imaging AI flags');
+ {const c20=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c20.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c20),X=(f,a)=>p.evaluate(f,a);
+  const card=async q=>{await p.fill('#in-q',q);await p.waitForTimeout(30);return X(()=>{const c=document.querySelector('#hits .casecard');return c?{items:[...c.querySelectorAll('.caseb')].map(b=>({on:b.getAttribute('aria-pressed')==='true',t:b.innerText})),txt:c.innerText}:null})};
+  let c=await card('72M on Eliquis, INR 2.6, 3 simple extractions under IV sedation, metformin');
+  const has=(c,re)=>c.items.find(i=>re.test(i.t));
+  ok(c&&has(c,/Planned procedure: low/)?.on&&has(c,/Anesthesia: IV sedation/)?.on&&has(c,/Age 72/)?.on&&has(c,/INR 2\.6/)?.on&&has(c,/DOAC/)?.on,'Typed case: procedure, anesthesia, age, INR and DOAC proposed and ticked');
+  ok(await X(()=>!(S.asmt||[]).length&&!Object.keys(S.pf).length),'Nothing is recorded before Add');
+  ok(/No Compass entry for:.*metformin/.test(c.txt)&&/not the same as no surgical implications/.test(c.txt),'Unrecognized drug listed, not read as harmless');
+  ok(/not AI/.test(c.txt)&&/not saved or copied into notes/.test(c.txt),'Card says fixed rules, nothing sent, text not saved');
+  ok(await p.locator('#hits .labcap:not(.casecard)').count()===0,'Single-lab card is not duplicated under the case card');
+  await p.click('#hits .caseb >> nth=3');ok(/Add 4 items/.test(await p.locator('[data-caseadd]').innerText()),'Unticking an item updates the count');
+  await p.click('[data-caseadd]');await p.waitForTimeout(50);
+  let st=await X(()=>({v:S.view,a:S.asmt,pf:S.pf,q:S.q,ch:S.changes.at(-1)?.label}));
+  ok(st.v==='asmt'&&st.a.includes('doac')&&st.pf.proc==='low'&&st.pf.anes==='sed'&&st.pf.age==='72'&&st.pf.inr===undefined&&st.q==='','Add records only ticked items and opens the assessment');
+  ok(st.pf.doacAg==='api','Brand name presets the agent, as from search');
+  ok(st.ch==='Read as a case','Change notice names the source');
+  ok(await X(()=>{const t=asmtText(asmtModel(S.asmt));return!/metformin|Eliquis,|simple extractions under/i.test(t)}),'Copied note holds structured facts only, never the typed text');
+  await X(()=>{newPatient();home()});
+  c=await card('pt denies blood thinners, on alendronate, implants planned');
+  ok(!has(c,/DOAC/).on&&/negated/.test(has(c,/DOAC/).t)&&has(c,/Antiresorptives/).on&&has(c,/higher bleeding risk/).on,'Negated drug unticked; others ticked');
+  c=await card('stopped plavix last week, took fosamax for 5 years, 4 extractions');
+  ok(!has(c,/Antiplatelets/).on&&/past or held/.test(has(c,/Antiplatelets/).t)&&has(c,/Antiresorptives/).on&&has(c,/higher bleeding risk/).on,'Held drug unticked; past antiresorptive still counts; >3 extractions = higher risk');
+  c=await card('platelets 45, a1c 8.2 %, dob 01/02/1950');
+  ok(/unit not stated/.test(has(c,/Platelet/).t)&&has(c,/HbA1c 8\.2 %/)&&/looks like an identifier/.test(c.txt),'Missing unit not recorded; unit as typed kept; identifier warning');
+  c=await card('on eliquis, 2 extractions');ok(!has(c,/Planned procedure/).on&&/simple or surgical not stated/.test(has(c,/Planned procedure/).t),'Extraction count without “simple” is not ticked');
+  await X(()=>{S.pf.anes='la'});c=await card('on eliquis under iv sedation, elective');
+  ok(!has(c,/Anesthesia/).on&&/replaces current: local only/.test(has(c,/Anesthesia/).t),'Existing answer is not overwritten unless ticked');
+  await X(()=>{newPatient();S.asmt=['warfarin'];Object.assign(S.pf,{inr:'2.0',inrAge:'d1',stable:'y'});home()});
+  c=await card('warfarin, INR 3.1, 2 simple extractions');await p.click('[data-caseadd]');await p.waitForTimeout(30);
+  st=await X(()=>({pf:S.pf,a:S.asmt,ch:S.changes.at(-1)}));
+  ok(st.pf.inr==='3.1'&&st.pf.inrAge===undefined&&st.pf.stable===undefined&&st.ch.cleared.length===2,'Replacing a lab clears answers about the old result');
+  await X(()=>{newPatient();home()});
+  ok(await card('INR 2.6')===null&&await p.locator('#hits .labcap').count()===1,'Single lab still uses the lab card');
+  ok(await card('eliquis')===null,'Single drug: ordinary search, no case card');
+  await p.fill('#in-q','how long to hold eliquis before extraction');await p.waitForTimeout(30);
+  ok(await p.locator('#hits .lab.group:has-text("Closest modules")').count()===1&&await p.locator('#hits .nomatch').count()===0,'Free-text question: closest modules shown instead of no match');
+  await p.fill('#in-q','72M on Eliquis, INR 2.6, 3 simple extractions under IV sedation');await p.waitForTimeout(30);
+  ok(await X(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),'Case card: no horizontal scroll');
+  await X(()=>{S.casePick={q:S.q,t:{}};newPatient()});ok(await X(()=>S.casePick===undefined),'New patient clears case ticks');
+  // Imaging AI flags
+  await p.fill('#in-q','parl');await p.waitForTimeout(30);ok(await p.locator('#hits [data-find="imgai"]').count()===1,'“parl” finds the imaging AI flag');
+  await p.fill('#in-q','overjet');await p.waitForTimeout(30);ok(await p.locator('#hits [data-find="imgai"]').count()===1,'Vendor name is a search term');
+  await X(()=>{newPatient();openFind('imgai','parl')});
+  ok(await X(()=>S.pf.iaType==='pa'&&fPlan(FX.imgai).d==='investigate'),'Flag type preset; plan waits for your own read');
+  ok(/does not read images/.test(await p.locator('#app').innerText()),'Finding says Compass does not read images');
+  ok(await X(()=>{delete S.pf.iaType;return fPlan(FX.imgai).d!=='defer'}),'Empty imaging flag never defers');
+  ok(await X(()=>{S.pf.iaType='pa';S.pf.iaRead='not';return fPlan(FX.imgai).d==='proceed'}),'Not seen on your read: plan unchanged');
+  ok(await X(()=>{S.pf.iaType='cac';S.pf.iaRead='conf';const x=fPlan(FX.imgai);return x.d==='modify'&&/physician/.test(x.act)&&x.src.includes('cacRev')}),'Confirmed carotid flag: refer with the image, cited');
+  ok(await X(()=>{S.pf.iaType='ian';return FX.imgai.link.some(l=>l[0]==='extraction'&&l[1]==='c')&&M('extraction').nodes.c}),'IAN flag links to the panoramic-sign step');
+  ok(await X(()=>{const c=caseParse('INR 2.6, platelets 45 k, a1c 8 %, egfr 28');return new Set(c.items.map(caseKey)).size===c.items.length}),'Each proposed item has its own tick box');
+  ok(await X(()=>{const c=caseParse('warfarin, INR 3,8, 2 simple extractions');return!c.items.some(i=>i.kind==='lab')&&c.info.some(x=>/unclear/.test(x))}),'Codex P1: “INR 3,8” is not recorded as INR 3');
+  ok(await X(()=>{const c=caseParse('on eliquis metformin, 2 simple extractions');return c.unrec.some(u=>/metformin/.test(u))}),'Codex P2: unknown drug beside a known one is still listed');
+  ok(await X(()=>{const c=caseParse('on eliquis/metformin, 2 simple extractions');return c.unrec.some(u=>/metformin/.test(u))}),'Codex P2: slash-separated unknown drug is listed');
+  await X(()=>{newPatient();S.pf.iaType='pa';S.pf.iaRead='not';openFind('imgai')});await p.click('[data-pf="iaType"][data-pv="les"]');
+  ok(await X(()=>S.pf.iaType==='les'&&S.pf.iaRead===undefined&&fPlan(FX.imgai).d==='investigate'),'Codex P2: changing the flag type clears the previous read');
+  ok(await X(()=>{S.pf.iaType='les';S.pf.iaRead='uns';return fPlan(FX.imgai).d==='investigate'}),'Unsure: verify first');
+  await c20.close()}
+
 
  await browser.close();
  

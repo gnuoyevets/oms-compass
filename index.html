@@ -263,6 +263,7 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .oncall[aria-checked="true"] .sw::after{left:23px}
 .lab.group.oc{color:var(--red-ink)}
 .abar.three{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+@media (max-width:400px){.abar.three{gap:6px;padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}.abar.three .abtn{padding:0 4px;font-size:14px;line-height:1.15}}
 .atabs{margin-bottom:10px}
 .io{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
 .io h3{display:flex;justify-content:space-between;gap:8px;font-size:15px;padding:11px 14px;margin:0;background:var(--soft)}
@@ -322,6 +323,13 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .labcap p{margin:6px 0}
 .labcap .chips{margin:8px 0}
 .labcap .gobtn[disabled]{opacity:.45}
+.caseit{display:grid;gap:6px;margin:8px 0}
+.caseb{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.caseb.on{border-color:var(--accent)}
+.caseb .cbx{font-size:20px;line-height:1.1;color:var(--accent)}
+.caseb b{font-weight:700}
+.warnt{color:var(--red-ink)}
+.partial{font-size:13px;color:var(--muted,inherit)}
 .mbar{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;line-height:1.35;margin:0 0 10px;padding:4px 4px 4px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
 .mbar .tg{color:var(--ink);white-space:nowrap}
 .ioit{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;border-top:1px solid var(--line)}
@@ -419,6 +427,7 @@ html[data-contrast="high"] .fx-sheet{box-shadow:none;border:2px solid #000;borde
 <script>
 /* ===== Sources (checked Oct 21, 2026) ===== */
 const SRC={
+cacRev:{n:'Case-based review · Panoramic radiographs as opportunistic screening for carotid calcifications',v:'PMC12614913 (publication year not recorded)',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12614913/',chk:'Nov 2, 2026'},
 su17:{n:'Su 2017 · Panoramic signs predicting IAN injury (meta-analysis, EBD summary)',v:'Evid Based Dent 2017',u:'https://www.nature.com/articles/6401259.pdf'},
 joms08:{n:'JOMS 2008 · Panoramic signs vs CT: criteria for CT before third molar removal',v:'J Oral Maxillofac Surg 2008',u:'https://pubmed.ncbi.nlm.nih.gov/18940497/'},
 tan12:{n:'Tan 2012 · Ridge changes after extraction (systematic review)',v:'Clin Oral Implants Res 2012',u:'https://pubmed.ncbi.nlm.nih.gov/22211303/'},
@@ -1692,8 +1701,10 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.14.0';
+const VER='3.15.0';
 const CHANGES=[
+{v:'3.15.0',d:'Nov 2, 2026',i:['Read as a case: type or paste a short history in search (e.g., “72M on Eliquis, INR 2.6, 3 simple extractions under IV sedation”). Compass proposes findings, labs and context as tick boxes; nothing is recorded until you tap Add. Fixed rules on this phone, not AI; nothing is sent, and the typed text never enters notes. Negated (“denies”) and held (“stopped”) drugs start unticked; unrecognized drugs are listed, not ignored; units are never assumed.','Free-text questions: when no module matches every word, the closest modules are shown instead of “no entry”.','Imaging AI flag finding: record what radiograph or CBCT software flagged (periapical radiolucency, impaction, IAN proximity, sinus change, possible carotid calcification, TMJ change, other lesion). Nothing changes the plan until your own read confirms it; each flag links to the matching module. Compass does not read images and connects to no vendor.']},
+{v:'3.14.1',d:'Nov 2, 2026',i:['Bottom bar fits on 320 px phones: “Assessment” no longer cut off; a count wraps to a second line when needed.']},
 {v:'3.14.0',d:'Oct 31, 2026',i:['Post-op call triage pinned on Decide (six pins, two columns).','New module: Post-op phone call triage (Post-op & complications). A staff script, emergencies first: 911, come in now, same day, within 1–2 days, or reassure, with what to say meanwhile and links to the matching modules.','Third molars & extractions: “Nerve-risk X-ray signs” checklist (Rood & Shehab). Any of the three strongest signs (darkening, interruption, diversion) answers the panoramic-sign step Yes and suggests CBCT if it would change the approach; weaker signs or overlap alone leave the step to your judgment.']},
 {v:'3.13.1',d:'Oct 31, 2026',i:['Fix: “Log to outcomes registry” did nothing when tapped. It now copies the CR1 line and shows the registry link.','On-call and Author/Colleague switches are back at the top of Decide, above the pinned row (one tap each). Full Settings stays at the bottom.']},
 {v:'3.13.0',d:'Oct 31, 2026',i:['Option grids in Español, Kriolu and 中文 (machine-drafted; pending native-speaker review). They follow the Patient tab language and share in it.','Patient page: new “Choosing a treatment” section with the three option grids in all four languages; links like #ogimp-es open one directly.']},
@@ -2001,10 +2012,14 @@ function idx(){if(IDX)return IDX;const strip=t=>String(t).replace(/<[^>]+>/g,' '
   ...REF.map(r=>({k:'ref',id:r.t,t:r.t,sub:'Ref',x:[r.t,r.k,r.i.join(' ')].join(' ').toLowerCase()})),
   ...(HANDOUTS_LIVE?HO.map(h=>({k:'ho',id:h.id,t:h.t.en,sub:'Patient handout',x:(h.t.en+' '+h.i.en.join(' ')).toLowerCase()})):[]),
   ...(HANDOUTS_LIVE?FAQ.map(f=>({k:'ho',id:f.id,t:f.t.en,sub:f.k==='proc'?'Patient FAQ · procedure':'Patient FAQ · diagnosis',x:(f.t.en+' '+f.i.en.flat().join(' ')).toLowerCase()})):[])];return IDX}
-function hitsHTML(q){return labCapHTML(q)+searchHitsHTML(q)}
+function hitsHTML(q){const c=caseHTML(q);return(c||labCapHTML(q))+searchHitsHTML(q)}
 function searchHitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boolean);const fh=findHitsHTML(q);
  const hits=idx().filter(e=>terms.every(t=>e.x.includes(t))).sort((a,b)=>(terms.every(t=>b.t.toLowerCase().includes(t))-terms.every(t=>a.t.toLowerCase().includes(t))));
- if(!hits.length)return fh||NOMATCH(q);
+ if(!hits.length){const QSTOP=new Set(['what','when','where','which','should','could','would','does','doing','have','with','without','after','before','patient','patients','about','that','this','there','their','them','they','from','into','your','need','needs','make','much','many','long','take','taking','dose','okay']);
+  const ct=[...new Set(terms.map(t=>t.replace(/[^a-z0-9\/-]/g,'')).filter(t=>t.length>=4&&!QSTOP.has(t)))];
+  const part=ct.length>=2?idx().map(e=>({e,n:ct.filter(t=>e.x.includes(t)).length})).filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,5).map(x=>x.e):[];
+  if(part.length)return`${fh}<div class="lab group">Closest modules · not every word matched</div><div class="mods">${part.map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`;
+  return fh||NOMATCH(q)}
  return`${fh}${fh?'<div class="lab group">Modules · SOS · reference</div>':''}<div class="mods">${hits.slice(0,25).map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`}
 /* ===== Basis labels (descriptive, not evidence grades) ===== */
 const BASIS={gl:'Guideline / label',ev:'Evidence-informed',au:'Author’s practice',un:'Unverified draft'};
@@ -2413,7 +2428,34 @@ const FIND=[
   if(!has(c.txRecent)){p.d='investigate';p.prov=true;p.miss.push('Time since transplant / rejection');p.act='Confirm stability with the transplant team before elective surgery.';return p}
   p.d='modify';p.act='Proceed after confirming with the transplant team; current CBC, and renal or liver function as relevant.';
   p.steps.push('Antibiotic prophylaxis: per the transplant team.','Interactions: clarithromycin, erythromycin and azole antifungals raise tacrolimus, cyclosporine and sirolimus levels; NSAIDs add kidney injury with calcineurin inhibitors — prefer acetaminophen. [verify: check a drug-interaction reference]','Treat infection early; cyclosporine often causes gingival overgrowth.');
-  return p}}
+  return p}},
+/* v3.15 Imaging AI bridge. Compass never reads images and integrates with no vendor; vendor names are search terms only.
+   An AI flag is a prompt to look, not a finding: nothing changes the plan until the clinician's own read confirms it. */
+{id:'imgai',kind:'Imaging AI flag',t:'Imaging AI flag (radiograph or CBCT)',cls:'AI-detected area of interest · confirm on the image',
+ syn:['periapical radiolucency','parl','apical radiolucency','carotid calcification','carotid artery calcification','opacified sinus','antral opacity','mucosal thickening','canal proximity','close to the canal','condylar change','condyle flattening','imaging ai','ai flag','ai flagged','ai finding','ai detected','radiograph ai','xray ai','x ray ai','cbct ai','pearl','second opinion','overjet','videa','videahealth','diagnocat','denti ai'],
+ preset:{'periapical radiolucency':{iaType:'pa'},parl:{iaType:'pa'},'apical radiolucency':{iaType:'pa'},'carotid calcification':{iaType:'cac'},'carotid artery calcification':{iaType:'cac'},'opacified sinus':{iaType:'sinus'},'antral opacity':{iaType:'sinus'},'mucosal thickening':{iaType:'sinus'},'canal proximity':{iaType:'ian'},'close to the canal':{iaType:'ian'},'condylar change':{iaType:'tmj'},'condyle flattening':{iaType:'tmj'}},
+ what:['Compass does not read images. An AI flag marks an area to look at; it is not a diagnosis, and the absence of a flag is not a negative.','Nothing here changes the plan until your own read confirms the flag. Record your read in the chart, not the software’s.','Vendor names are search terms only. Compass has no connection to any imaging product.'],
+ ctx:[],
+ qs:[{k:'iaType',q:'What did the software flag?',opts:[['pa','Periapical radiolucency'],['imp','Impacted tooth'],['ian','Third molar near the IAN canal'],['sinus','Sinus opacity or mucosal thickening'],['cac','Possible carotid calcification'],['tmj','Condylar or TMJ change'],['les','Other radiolucent or radiopaque lesion']],help:'One flag per entry. For several flags, record the one that most changes today’s plan and note the rest in the chart.'},
+  {k:'iaRead',q:'Your own read of the image',opts:[['conf','I see it too'],['not','I do not see it'],['uns','Unsure']],when:()=>has(S.pf.iaType)}],
+ get link(){return({pa:[['infection',null],['rl',null]],imp:[['extraction',null],['canine',null]],ian:[['extraction','c'],['nerve',null]],sinus:[['sinus',null],['oac',null]],cac:[['preop',null]],tmj:[['tmd',null]],les:[['rl',null],['jaw',null],['biopsy',null]]})[S.pf.iaType]||[]},
+ plan(c){const p=mk();p.basis='un';p.src=[];const t=c.iaType;
+  if(!has(t)){p.d='investigate';p.prov=true;p.miss.push('What the software flagged');p.act='Choose the flag type, then confirm it on the image yourself.';return p}
+  if(t==='cac')p.src=['cacRev'];if(t==='ian')p.src=['rood','su17','joms08'];if(['cac','ian'].includes(t))p.basis='ev';
+  if(!has(c.iaRead)){p.d='investigate';p.prov=true;p.miss.push('Your own read of the image');p.act='Look at the flagged area yourself before the flag changes anything.';
+   p.steps=['Open the original image at full resolution; for CBCT, scroll the axial and cross-sectional slices, not only the rendering.'];return p}
+  if(c.iaRead==='not'){p.act='Not seen on your read: the flag does not change the plan. Record your read.';p.steps=['If the area is clinically suspicious anyway (symptoms, swelling, a non-vital tooth), get another view or a radiologist read.'];return p}
+  if(c.iaRead==='uns'){p.d='investigate';p.act=({pa:'Unsure: take a periapical at a second angle and correlate with pulp testing, percussion and probing.',imp:'Unsure: confirm position on another view before planning removal.',ian:'Unsure: CBCT if it would change the approach (removal, coronectomy, consent).',sinus:'Unsure: review CBCT slices or get a radiologist read before sinus or posterior maxillary surgery.',cac:'Unsure: ask a radiologist to read the image; panoramic films are not vascular screening tools.',tmj:'Unsure: correlate with a TMJ exam; get a radiologist read if it would change care.',les:'Unsure: radiologist read; do not treat into an undiagnosed lesion.'})[t];p.steps=['Record the AI flag and your uncertainty in the chart.'];return p}
+  const A={
+   pa:['modify','Confirmed radiolucency: establish the source before surgery near it.',['Pulp testing, percussion, palpation and probing of the involved and adjacent teeth.','Vital tooth or atypical appearance: not presumed endodontic; open Jaw radiolucency differential.','Swelling, fever or trismus: open Odontogenic infection.']],
+   imp:['modify','Confirmed impaction: plan from your own read of position and depth.',['Third molar: open Third molars & extractions and check the panoramic nerve-risk signs yourself; an impaction flag does not assess the nerve.','Canine: open Impacted canine.']],
+   ian:['modify','Confirmed close relationship to the IAN canal: plan and consent for nerve risk.',['Check the seven panoramic signs yourself in Third molars & extractions (Rood & Shehab; Su 2017).','CBCT if it would change the approach; trace the canal yourself on cross-sections — automated canal tracing can be wrong.','Document baseline lip, chin and tongue sensation.']],
+   sinus:['modify','Confirmed sinus change: account for it before sinus lift, posterior maxillary extraction or implant.',['Look for an odontogenic source (adjacent periapical or periodontal disease).','Sinus symptoms, or before a sinus lift: open Sinus lift; consider ENT input.','Opening risk: open Oroantral communication for precautions.']],
+   cac:['modify','Possible carotid calcification confirmed on your read: refer to the patient’s physician with the image. Dental care need not wait.',['Panoramic radiographs are not vascular screening tools; the finding prompts a medical evaluation, not a diagnosis.','Exclude look-alikes on your read (hyoid, triticeous cartilage, calcified stylohyoid ligament, lymph nodes). [verify]','Document the referral and send the image with a request for evaluation.']],
+   tmj:['proceed','Confirmed condylar change: correlate with the exam; imaging change alone is not a TMD diagnosis.',['Pain, limited opening or deviation: open TMD & orofacial pain.','Before long procedures or wide opening: note it in consent and plan bite blocks and breaks.']],
+   les:['investigate','Confirmed lesion: diagnose before treating in that area.',['Open Jaw radiolucency differential or Jaw lesion.','Biopsy or radiologist read as indicated; do not place implants or graft into an undiagnosed lesion.']]}[t];
+  p.d=A[0];p.act=A[1];p.steps=A[2].slice();p.steps.push('Record your own read in the chart; the AI flag is not the diagnosis.');return p}}
+
 
 ];
 const FX=Object.fromEntries(FIND.map(f=>[f.id,f]));
@@ -2643,6 +2685,81 @@ function recordLab(){const r=parseLab(S.q);if(!r||!r.L)return;const st=labState(
  if(!st.same){cleared=L.stale.filter(k=>S.pf[k]!==undefined);S.pf[L.k]=r.v;if(L.unitSel)S.pf[L.unitSel]=st.unit;cleared.forEach(k=>delete S.pf[k]);if(S.lkc)delete S.lkc[L.k]}
  S.q='';delete S.labPick;openFind(fid);if(!st.same)recordPlanEdit(before,L.k,cleared);redraw()}
 
+/* ===== v3.15 Read typed text as a case ("72M on Eliquis, INR 2.6, 3 extractions under IV sedation").
+   Fixed rules on this phone: no AI service, nothing sent or stored. Every item is a proposal; nothing is recorded
+   until the clinician ticks it and taps Add. The typed text itself never enters the assessment or copied notes. ===== */
+/* An answer that describes another answer is cleared when that answer changes (a read belongs to one flag). */
+const PF_RESET={iaType:['iaRead']};
+const CASE_NEG=/\b(no|not|denies|denied|negative for|without|never|nil)\b/;
+const CASE_PAST=/\b(stopped|discontinued|held|holding|quit|former|formerly|previously|was on|d\/c|dc d)\b/;
+const CASE_PASTOK=['antires','rad'];
+const CASE_LABFID={inr:['inr','warfarin'],plt:['plt'],a1c:['a1c'],egfr:['renal']};
+const CASE_KNOWN=/^(\d+|pt|pts|patient|yo|y|o|yr|yrs|year|years|old|male|female|m|f|hx|history|of|on|for|with|w|and|the|a|an|to|in|at|is|are|was|has|had|have|needs?|planned|plan|plans|takes?|taking|today|here|wants|presents?|presenting|due|also|now|currently|current|mg|mcg|daily|bid|tid|qid|qd|prn|dose|s|p|status|post|scheduled|sched|consult|under|iv|ivs|sed|sedation|moderate|deep|ga|general|anesthesia|anaesthesia|local|la|only|alone|intubated|intubation|nasotracheal|simple|surgical|extractions?|exts?|exo|teeth|tooth|implants?|bone|grafts?|grafting|biopsy|biopsies|flaps?|sinus|lift|ridge|augmentation|alveoloplasty|full|arch|mouth|all|orthognathic|le|fort|bsso|resection|mandibulectomy|maxillectomy|orif|open|reduction|third|3rd|molars?|wisdom|urgent|urgently|emergency|emergent|elective|abscess|cellulitis|swelling|infection|infected|trismus|pain|inr|pt\/inr|platelets?|plts?|count|hba1c|a1c|hgb|egfr|gfr|crcl|cr|cl|k|ul|µl|ml|min|mmol|mol|age|aged|flagged|flag|ai|shows?|showed|noted|reports?|reported|tooth|#\d+|ok|okay|stable|recent|last|week|weeks|took|prior|years|for|stopped|discontinued|held|hold|holding|quit|former|formerly|previously|denied|negative|nil|how|long|before|after|when|what|should|can|stop|continue|does|do|head|neck|pano|panoramic|cbct|radiograph|radiographs|xray|x-ray|film|dob|month|months|days?|ago|but|or|no|not|denies|without|never)$/;
+function caseParse(q){const raw=String(q||'');const t=raw.toLowerCase();if(t.length<8)return null;
+ const items=[],hints=[],unrec=[],info=[];
+ const idw=/\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b|\b\d{7,}\b|\b(mrn|dob|d\.o\.b|ssn|mr#)\b/.test(t);
+ /* Context proposals: only unambiguous phrases; never overwrites an existing answer unless ticked. */
+ const ctx=(k,v,ev,def,note)=>{const cur=S.pf[k];if(cur===v)return;const L=k==='age'?null:CTXL[k];
+  const rep=cur!==undefined&&cur!==''&&cur!=='u';items.push({kind:'ctx',k,v,ev,def:rep?false:def,
+   label:k==='age'?`Age ${v}`:`${CTXQ[k].q}: ${L[v]}`,note:[note,rep?`replaces current: ${k==='age'?cur:(CTXL[k][cur]||cur)}`:''].filter(Boolean).join('; ')})};
+ const maj=t.match(/\b(orthognathic|le ?fort|bsso|resection|mandibulectomy|maxillectomy|orif|open reduction)\b/);
+ const hi=t.match(/\b(implants?|bone grafts?|grafts?|grafting|biops(?:y|ies)|flaps?|sinus lift|ridge augmentation|surgical extractions?|alveoloplasty|full[- ]arch|full[- ]mouth extractions?|all[- ]on[- ]\d)\b/);
+ const ex=t.match(/\b(\d{1,2})\s*(simple\s+)?(?:extractions?|exts?|exo)\b/);
+ if(maj)ctx('proc','major',maj[0],true);else if(hi)ctx('proc','high',hi[0],true);
+ else if(ex){const n=+ex[1];if(n>3)ctx('proc','high',ex[0],true);else if(n>=1)ctx('proc','low',ex[0],!!ex[2],ex[2]?'':'simple or surgical not stated — tick only if simple')}
+ if(!maj&&!hi&&!ex&&/\b(third molars?|3rd molars?|wisdom teeth|extractions?)\b/.test(t))hints.push('Procedure mentioned without a tier: choose it on the assessment (simple 1–3 extractions vs surgical or more than 3).');
+ const an=[];if(/\b(iv sedation|ivs|iv sed|moderate sedation|deep sedation|sedation)\b/.test(t))an.push('sed');
+ if(/\b(general anesthesia|general anaesthesia|under ga|ga|intubated|intubation|nasotracheal)\b/.test(t))an.push('ga');
+ if(/\b(local only|la only|local anesthesia|local anaesthesia|under local|local alone)\b/.test(t))an.push('la');
+ if(an.length===1)ctx('anes',an[0],'',true);else if(an.length>1)hints.push('More than one anesthesia type mentioned: choose it on the assessment.');
+ if(/\b(urgent|urgently|emergency|emergent)\b/.test(t))ctx('urg','urg','',true);
+ else if(/\belective\b/.test(t))ctx('urg','el','',true);
+ else if(/\b(abscess|cellulitis|swelling|infection|infected|trismus)\b/.test(t))ctx('urg','urg','',false,'suggested by infection words — tick if urgent');
+ const ag=t.match(/\b(\d{1,3})\s*(?:yo|y\/o|y\.o\.?|yrs? old|years? old|-year-old|year-old)\b/)||t.match(/\bage[d]?\s*:?\s*(\d{1,3})\b/)||t.match(/(?:^|\s)(\d{1,3})\s?(?:m|f)\b/);
+ if(ag&&+ag[1]<=110)ctx('age',String(+ag[1]),ag[0],true);
+ /* Labs: same parser and rules as single-lab capture. Units are never assumed. */
+ const labK=new Set(),labRe=/\b(pt ?\/ ?inr|inr|platelet count|platelets?|plts?|hba1c|hb a1c|hgb ?a1c|a1c|e ?gfr|crcl|cr cl)\s*(?:[:=]|of|was|is)?\s*(\d[\d.,]*\d|\d|\.\d+)(\s*(?:k ?\/ ?[uµ]l|x ?10\^?3 ?\/ ?[uµ]l|x ?10\^?9 ?\/ ?l|k|\/ ?[uµ]l|%|mmol ?\/ ?mol|ml ?\/ ?min(?: ?\/ ?1\.73 ?m(?:2|²|\^2))?)(?![a-z]))?/g;
+ let m;while((m=labRe.exec(t))){if(!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(m[2])){info.push(`${m[1].toUpperCase()} “${m[2]}” not recorded: the number is unclear. Type it without commas (e.g., 3.8).`);continue}
+  const r=parseLab(`${m[1]} ${m[2]}${m[3]||''}`);if(!r)continue;
+  if(r.crcl){info.push(`CrCl ${r.crcl} not recorded: Compass has no CrCl field and never converts CrCl to or from eGFR.`);continue}
+  if(!r.L||r.bad||labK.has(r.L.k))continue;labK.add(r.L.k);const L=r.L;
+  if(L.unitSel&&!r.unit){items.push({kind:'f',id:L.fid(),hit:L.name,def:true,label:FX[L.fid()].t,note:`${L.name} ${r.v} not recorded: unit not stated. Enter it on the finding.`});continue}
+  const st=labState(r);if(st.same)continue;
+  items.push({kind:'lab',k:L.k,r,def:true,label:`${L.name} ${r.v}${r.unit?' '+unitName(L,r.unit):''}`,note:[st.prev?`replaces ${st.prev}`:'',st.stale.length?'clears: '+st.stale.join('; '):'','result date not recorded'].filter(Boolean).join('; ')})}
+ /* Findings, clause by clause, with negation and past-use checks. */
+ const seen=new Set(items.filter(i=>i.kind==='f').map(i=>i.id));
+ t.replace(/\bhead (?:and|&) neck\b|\bh ?& ?n\b/g,'head neck').split(/[,;\n]|\s\+\s|\band\b|\. /).map(x=>x.trim()).filter(Boolean).forEach(cl=>{
+  const hits=findHits(cl).filter(({f,hit})=>!(Object.entries(CASE_LABFID).some(([k,ids])=>labK.has(k)&&ids.includes(f.id)&&/inr|platelet|plt|a1c|gfr/.test(hit))));
+  hits.forEach(({f,hit})=>{if(seen.has(f.id))return;seen.add(f.id);const i=cl.indexOf(String(hit).toLowerCase()),pre=i>=0?cl.slice(0,i):cl;
+   const neg=CASE_NEG.test(pre),past=!neg&&CASE_PAST.test(cl),inA=(S.asmt||[]).includes(f.id);
+   items.push({kind:'f',id:f.id,hit,def:inA?false:neg?false:past?CASE_PASTOK.includes(f.id):true,label:f.t,
+    note:[`matched “${hit}”`,inA?'already in assessment':'',neg?'reads as negated — not added unless ticked':'',past?(CASE_PASTOK.includes(f.id)?'past exposure still counts for this finding':'past or held — tick only if current'):''].filter(Boolean).join('; ')})});
+  const hs=hits.map(h=>String(h.hit).toLowerCase());
+  const left=cl.replace(/[()\[\]:=\/]/g,' ').split(/\s+/).filter(w=>w&&w.length>2&&!CASE_KNOWN.test(w)&&!/^#?\d/.test(w)&&!hs.some(h=>h.split(' ').some(x=>x===w||x===w.replace(/s$/,'')))&&!findHits(w).length);
+  if(left.length)unrec.push(left.join(' '))});
+ const n=items.length,words=t.split(/\s+/).length;
+ if(!(n>=2||(n>=1&&(unrec.length||hints.length))||(words>=5&&(n||hints.length)))||(n===1&&items[0].kind==='lab'&&words<5))return null;
+ return{items,hints,unrec:[...new Set(unrec)].slice(0,6),info,idw}}
+const caseKey=it=>it.kind+':'+(it.id||it.k);
+function casePicked(it){const o=S.casePick&&S.casePick.q===S.q?S.casePick.t:{};const v=o[caseKey(it)];return v===undefined?it.def:v}
+function caseHTML(q){const c=caseParse(q);if(!c)return'';const on=c.items.filter(casePicked).length;
+ return`<div class="labcap casecard" role="group" aria-label="Read as a case"><div class="lab">Read as a case · nothing recorded yet</div>
+ <p class="small">Read by fixed rules on this phone, not AI; nothing is sent anywhere. Check every item: negation, timing and doses can be misread. Your typed text is not saved or copied into notes.</p>
+ ${c.idw?'<p class="small warnt"><b>This looks like an identifier (a date or long number).</b> Delete it — Compass does not need it.</p>':''}
+ <div class="caseit">${c.items.map(it=>{const p=casePicked(it);return`<button class="caseb${p?' on':''}" data-casek="${esc(caseKey(it))}" aria-pressed="${p}"><span class="cbx" aria-hidden="true">${p?'☑':'☐'}</span><span><b>${esc(it.label)}</b>${it.note?`<br><span class="small">${esc(it.note)}</span>`:''}</span></button>`}).join('')}</div>
+ ${[...c.hints,...c.info].map(h=>`<p class="small">${esc(h)}</p>`).join('')}
+ ${c.unrec.length?`<p class="small"><b>No Compass entry for:</b> ${c.unrec.map(u=>'“'+esc(u)+'”').join(', ')}. That is not the same as no surgical implications.</p>`:''}
+ <button class="gobtn" data-caseadd${on?'':' disabled'}>${on?`Add ${on} item${on>1?'s':''} to the assessment`:'Tick at least one item'}</button></div>`}
+function applyPreset(id,hit){const f=FX[id],pre=f&&f.preset&&hit&&f.preset[String(hit).toLowerCase()];if(!pre)return;
+ Object.entries(pre).forEach(([k,v])=>{if(S.pf[k]===undefined||S.pf[k]==='u')S.pf[k]=v;
+  else if(S.pf[k]!==v){const q=f.qs.find(x=>x.k===k),L=x=>q?((q.opts.find(o=>o[0]===x)||[])[1]||x):x;S.lkc=S.lkc||{};S.lkc[k]={fid:id,k,prev:S.pf[k],next:v,hit:String(hit),prevL:L(S.pf[k]),nextL:L(v)}}})}
+function caseApply(){const c=caseParse(S.q);if(!c)return;const sel=c.items.filter(casePicked);if(!sel.length)return;
+ const before=planBeforeEdit(),cleared=[];S.asmt=S.asmt||[];const addF=id=>{if(!S.asmt.includes(id))S.asmt.push(id)};
+ sel.filter(i=>i.kind==='ctx').forEach(i=>{S.pf[i.k]=i.v});
+ sel.filter(i=>i.kind==='f').forEach(i=>{addF(i.id);applyPreset(i.id,i.hit)});
+ sel.filter(i=>i.kind==='lab').forEach(i=>{const r=i.r,L=r.L,st=labState(r);if(!st.same){const cl=L.stale.filter(k=>S.pf[k]!==undefined);cl.forEach(k=>{delete S.pf[k];cleared.push(k)});S.pf[L.k]=r.v;if(L.unitSel)S.pf[L.unitSel]=r.unit;if(S.lkc)delete S.lkc[L.k]}addF(L.fid())});
+ S.q='';delete S.casePick;delete S.labPick;recordPlanEdit(before,'case text',cleared);S.atab='find';asmtView()}
+
 /* Comparisons clone and restore every clinical state object. They never edit the real assessment. */
 function comparisonPatch(){
  if(S.compare==='local')return{anes:'la'};
@@ -2658,7 +2775,7 @@ function comparisonHTML(m){const patch=comparisonPatch(),hyp=comparisonModel();
 }
 function applyComparison(){const patch=comparisonPatch();if(!patch)return false;const before=planBeforeEdit();Object.assign(S.pf,patch);delete S.compare;delete S.compareEligible;prune();recordPlanEdit(before,'comparison applied');return true}
 
-function fieldLabel(k){if(k.startsWith('finding:'))return'Finding: '+(FX[k.slice(8)]?.t||'updated');if(k.startsWith('screen:'))return'Pre-op / pathway answer';if(CTXQ[k])return CTXQ[k].q;for(const f of FIND){const q=f.qs.find(q=>q.k===k||q.unitSel===k);if(q)return q.q+(q.unitSel===k?' unit':'')}return k==='comparison applied'?'Approach comparison applied':k==='mode'?'Practice mode':'Clinical context'}
+function fieldLabel(k){if(k.startsWith('finding:'))return'Finding: '+(FX[k.slice(8)]?.t||'updated');if(k.startsWith('screen:'))return'Pre-op / pathway answer';if(CTXQ[k])return CTXQ[k].q;for(const f of FIND){const q=f.qs.find(q=>q.k===k||q.unitSel===k);if(q)return q.q+(q.unitSel===k?' unit':'')}return k==='comparison applied'?'Approach comparison applied':k==='mode'?'Practice mode':k==='case text'?'Read as a case':'Clinical context'}
 function planBeforeEdit(){const ids=[...new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])])];return{ids,m:modelFor(ids)}}
 function recordPlanEdit(before,k,cleared){if(!before)return;prune();const ids=[...new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])])],m=modelFor(ids),old=before.m;
  const changed=m.P.filter(x=>{const o=old.P.find(y=>y.f.id===x.f.id);return!o||JSON.stringify([o.p.d,o.p.act,o.p.steps])!==JSON.stringify([x.p.d,x.p.act,x.p.steps])}).map(x=>x.f.t.split(' (')[0]);
@@ -2699,9 +2816,7 @@ function findHTML(f){
  return`<div class="bar"><button class="icon-btn back" data-home aria-label="Back to search">‹</button><h2>${esc(f.t)}<span id="fmini">${miniHTML(fPlan(f))}</span></h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button></div>
  <div class="fcls">${esc(f.kind)} · ${esc(f.cls)}${S.fhit?` · matched “${esc(S.fhit)}”`:''}</div>
  <div id="fdyn">${fDynHTML(f)}</div>${fbHTML(f.t)}`}
-function openFind(id,hit){const f=FX[id];if(!f)return home();S.mod=null;S.view='find';S.fid=id;S.fhit=hit||'';
- const pre=f.preset&&hit&&f.preset[String(hit).toLowerCase()];if(pre)Object.entries(pre).forEach(([k,v])=>{if(S.pf[k]===undefined||S.pf[k]==='u')S.pf[k]=v;
-  else if(S.pf[k]!==v){const q=f.qs.find(x=>x.k===k),L=x=>q?((q.opts.find(o=>o[0]===x)||[])[1]||x):x;S.lkc=S.lkc||{};S.lkc[k]={fid:id,k,prev:S.pf[k],next:v,hit:String(hit),prevL:L(S.pf[k]),nextL:L(v)}}});
+function openFind(id,hit){const f=FX[id];if(!f)return home();S.mod=null;S.view='find';S.fid=id;S.fhit=hit||'';applyPreset(id,hit);
  prune();app.innerHTML=findHTML(f);window.scrollTo(0,0);try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}updBar()}
 function redraw(){const a=document.activeElement,id=a&&a.id,pos=a&&a.selectionStart;prune();
  if(S.view==='find'){const f=FX[S.fid],w=document.getElementById('fwhy'),wo=w&&w.open,qs=document.getElementById('fqs');
@@ -2805,7 +2920,7 @@ function asmtView(){S.mod=null;S.view='asmt';S.fid=null;
 function newPatient(){
  S.changes=[];delete S.compare;delete S.compareEligible;document.body.classList.remove('kb');
  ['pf','ans','inp','rcri','io'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
- ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','emOpen','hoOpen','mod','ioSig','ioReset','labPick'].forEach(k=>{delete S[k]});
+ ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','emOpen','hoOpen','mod','ioSig','ioReset','labPick','casePick'].forEach(k=>{delete S[k]});
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
@@ -3089,6 +3204,8 @@ app.addEventListener('click',e=>{
  if(b.hasAttribute('data-cmpapply')){applyComparison();return redraw()}
  if(b.dataset.labu){S.labPick={q:S.q,u:b.dataset.labu};document.getElementById('hits').innerHTML=hitsHTML(S.q);return}
  if(b.hasAttribute('data-labrec'))return recordLab();
+ if(b.dataset.casek){S.casePick=S.casePick&&S.casePick.q===S.q?S.casePick:{q:S.q,t:{}};const c=caseParse(S.q),it=c&&c.items.find(x=>caseKey(x)===b.dataset.casek);if(it)S.casePick.t[b.dataset.casek]=!casePicked(it);document.getElementById('hits').innerHTML=hitsHTML(S.q);return}
+ if(b.hasAttribute('data-caseadd'))return caseApply();
  if(b.hasAttribute('data-pmsw')){const before=planBeforeEdit();setPmode(colleague()?'author':'colleague');recordPlanEdit(before,'mode');return redraw()}
  if(b.dataset.ctxq){S.ctxOpen=true;S.atab='find';asmtView();const d=document.getElementById('actxd');if(d){d.open=true;document.getElementById('question-'+b.dataset.ctxq)?.scrollIntoView({block:'start',behavior:'smooth'})}return}
  if(b.dataset.qscroll){document.getElementById(b.dataset.qscroll==='fqs'?'fqs':'question-'+b.dataset.qscroll)?.scrollIntoView({block:'start',behavior:'smooth'});return}
@@ -3112,7 +3229,7 @@ app.addEventListener('click',e=>{
  if(b.hasAttribute('data-ioclear')){S.io={};S.ioSig={};delete S.ioReset;document.getElementById('iobody').innerHTML=ioHTML();return updBar()}
  if(b.dataset.open)return open(b.dataset.open);
  if(b.dataset.find)return openFind(b.dataset.find,b.dataset.hit);
- if(b.dataset.pf){const before=planBeforeEdit();const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;if(S.lkc)delete S.lkc[k];recordPlanEdit(before,k);return redraw()}
+ if(b.dataset.pf){const before=planBeforeEdit();const k=b.dataset.pf,v=b.dataset.pv;if(S.pf[k]===v)delete S.pf[k];else S.pf[k]=v;if(S.lkc)delete S.lkc[k];const cl=(PF_RESET[k]||[]).filter(x=>S.pf[x]!==undefined);cl.forEach(x=>delete S.pf[x]);recordPlanEdit(before,k,cl);return redraw()}
  if(b.dataset.addf){const before=planBeforeEdit();if(!S.asmt.includes(b.dataset.addf))S.asmt.push(b.dataset.addf);recordPlanEdit(before,'finding:'+b.dataset.addf);b.textContent='✓ In assessment';b.disabled=true;return updBar()}
  if(b.dataset.rmf){const before=planBeforeEdit();S.asmt=S.asmt.filter(x=>x!==b.dataset.rmf);recordPlanEdit(before,'finding:'+b.dataset.rmf);return redraw()}
  if(b.hasAttribute('data-acopy')){const t=asmtText();try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied'},()=>showCopy(t))}catch(x){showCopy(t)}return}

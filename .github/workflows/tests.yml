@@ -1,0 +1,29 @@
+# Runs both test suites on every pull request and push to main.
+# Software checks only; they do not establish clinical validity.
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Reconciliation checks (no dependencies)
+        run: node tests/reconciliation.cjs
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Browser checks (iPhone 13 emulation)
+        run: node tests/run.cjs
