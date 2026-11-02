@@ -2,6 +2,10 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.14.1 — Nov 2, 2026 (awaiting Steven's review)
+
+- **Bottom bar fits narrow phones.** At 400 px and below the three buttons use 14 px text and tighter padding, so “Assessment” is no longer cut off at 320 px. A count (e.g. “· 12”) wraps to a second line instead of clipping. Layout only; no clinical content changed.
+
 ## v3.14.0 — Oct 31, 2026 (approved by Steven Oct 31, 2026; merged to main)
 
 Two features prompted by DSN (AI phone agent; nerve detection), adapted to Compass: no server, no patient data.

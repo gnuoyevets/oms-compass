@@ -263,6 +263,7 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .oncall[aria-checked="true"] .sw::after{left:23px}
 .lab.group.oc{color:var(--red-ink)}
 .abar.three{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+@media (max-width:400px){.abar.three{gap:6px;padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}.abar.three .abtn{padding:0 4px;font-size:14px;line-height:1.15}}
 .atabs{margin-bottom:10px}
 .io{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
 .io h3{display:flex;justify-content:space-between;gap:8px;font-size:15px;padding:11px 14px;margin:0;background:var(--soft)}
@@ -1692,8 +1693,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.14.0';
+const VER='3.14.1';
 const CHANGES=[
+{v:'3.14.1',d:'Nov 2, 2026',i:['Bottom bar fits on 320 px phones: “Assessment” no longer cut off; a count wraps to a second line when needed.']},
 {v:'3.14.0',d:'Oct 31, 2026',i:['Post-op call triage pinned on Decide (six pins, two columns).','New module: Post-op phone call triage (Post-op & complications). A staff script, emergencies first: 911, come in now, same day, within 1–2 days, or reassure, with what to say meanwhile and links to the matching modules.','Third molars & extractions: “Nerve-risk X-ray signs” checklist (Rood & Shehab). Any of the three strongest signs (darkening, interruption, diversion) answers the panoramic-sign step Yes and suggests CBCT if it would change the approach; weaker signs or overlap alone leave the step to your judgment.']},
 {v:'3.13.1',d:'Oct 31, 2026',i:['Fix: “Log to outcomes registry” did nothing when tapped. It now copies the CR1 line and shows the registry link.','On-call and Author/Colleague switches are back at the top of Decide, above the pinned row (one tap each). Full Settings stays at the bottom.']},
 {v:'3.13.0',d:'Oct 31, 2026',i:['Option grids in Español, Kriolu and 中文 (machine-drafted; pending native-speaker review). They follow the Patient tab language and share in it.','Patient page: new “Choosing a treatment” section with the three option grids in all four languages; links like #ogimp-es open one directly.']},
