@@ -2,6 +2,17 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.16.0 — Nov 2, 2026 (approved by Steven Nov 2, 2026)
+
+- Acetaminophen: recommend 3,000 mg/day; absolute adult ceiling 4,000 mg/day from all products, lower individual limits apply. All four patient languages and standalone page synchronized.
+- Fasting insulin guidance now separates basal analogs from NPH, retains type 1 basal safeguards and avoids automatic fasting reductions under local anesthesia with normal eating. Primary ADA 2026 source review recorded.
+- GLP-1 escalation, GI symptoms and maintenance risk use consistent policy text across pre-op, sedation and findings; unknown risk remains unresolved.
+- Case parser leaves negated/past context unticked and presents competing lab values for explicit single-result selection with date verification.
+- First acknowledgment no longer changes Colleague to Author on reload; explicit saved modes remain intact.
+- Patient exports preview current text, carry medication precautions/version/translation status, and withhold generic adult analgesic schedules when recorded risks apply.
+- Decision criteria shown inline; redundant criteria control removed. Sedation instructions use elapsed 24 hours; unreachable opioid-step wording removed.
+- Validation: 78 reconciliation checks (720 combined cases), 34 clinical-workflow checks, 532 browser checks; all passed. Software checks, not clinical validation. See CLINICAL-WORKFLOW-REVIEW.md for sources, limits and remaining review.
+
 ## v3.15.0 — Nov 2, 2026 (approved by Steven Nov 2, 2026; merged to main)
 
 Two bridges prompted by a market comparison: free-text input and imaging AI output.

@@ -36,3 +36,7 @@ Run `node tests/reconciliation.cjs` for dependency-free reconciliation and state
 See `RECONCILIATION-REVIEW.md` for scope, source checks and limitations.
 The existing browser suite remains `node tests/run.cjs` (requires Playwright Chromium).
 Software tests do not establish clinical validity.
+
+## v3.16.0 clinical workflow repair
+
+See `CLINICAL-WORKFLOW-REVIEW.md` for the approved changes, primary sources and validation. Run `node tests/clinical-workflow.cjs` in addition to the existing suites. Set `COMPASS_REVIEW_OUTPUT` to an artifact directory to save the two mobile review screenshots during the browser suite. No patient data is included.

@@ -15,7 +15,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
 (async()=>{
  const browser=await chromium.launch();
  const ctx=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
- await ctx.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+ await ctx.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1');localStorage.setItem('oms_compass_practice_mode','author')}catch(e){}});
  let page=await fresh(ctx);
 
  console.log('1. Brand and generic searches reach the same guidance');
@@ -160,7 +160,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(fq.n===15&&fq.dom===15&&fq.proc===8&&fq.dx===7&&fq.heads,`Patient tab shows 8 procedure + 7 diagnosis FAQs (got ${fq.proc}+${fq.dx}, rendered ${fq.dom})`);
  ok(fq.par&&fq.src&&fq.uniq,'FAQs: EN/ES question counts match, sources resolve, ids unique');
  await E(page,()=>home());await page.fill('#in-q','dry socket');ok(await page.locator('#hits [data-ho="fao"]').count()===1,'Search reaches the dry socket FAQ');
- const ft=await E(page,()=>{S.site='young';return faqText(FAQ.find(f=>f.id==='fwis'),'es')});ok(/^Extracción de muelas del juicio/.test(ft)&&/Teléfono: \(401\) 273-7802$/.test(ft),'FAQ share text in Spanish with office phone');
+ const ft=await E(page,()=>{S.site='young';return faqText(FAQ.find(f=>f.id==='fwis'),'es')});ok(/^Extracción de muelas del juicio/.test(ft)&&/Teléfono: \(401\) 273-7802\n/.test(ft),'FAQ share text in Spanish with office phone');
  ok(await E(page,()=>Object.entries(FAQ_FOR).every(([m,f])=>M(m)&&FAQ.some(x=>x.id===f))&&FAQ.every(f=>Object.values(FAQ_FOR).includes(f.id))),'Every FAQ is linked from a real module');
  await E(page,()=>{newPatient();S.ans.ao={};open('ao');for(let i=0;i<12&&!document.querySelector('.plan');i++){const b=document.querySelector('.cur [data-a]');if(!b)break;b.click()}});
  const fb=page.locator('.plan [data-ho="fao"]');if(await fb.count()){await fb.click();ok(await E(page,()=>S.view==='handouts'&&document.getElementById('ho-fao').open),'Dry socket plan “Patient FAQ” opens the FAQ on the Patient tab')}else ok(false,'Dry socket plan shows a Patient FAQ button');
@@ -380,7 +380,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  await page.fill('#pf-plt','40');ok(await E(page,()=>S.pf.plt==='40'),'Typing a value replaces Unknown');
  // R7 combined assessment
  const ca=await E(page,()=>{const o={};newPatient();S.asmt=['doac','renal'];Object.assign(S.pf,{proc:'high',doacAg:'api',ap:'n',dial:'hd'});let m=asmtModel();o.dr={od:m.od,prov:m.prov,miss:m.miss.some(x=>/^Resolve conflict/.test(x))};
-  newPatient();S.asmt=['glp1','sglt2'];Object.assign(S.pf,{anes:'sed',glpGi:'n',glpEsc:'n'});m=asmtModel();o.gs=m.od;
+  newPatient();S.asmt=['glp1','sglt2'];Object.assign(S.pf,{anes:'sed',glpGi:'n',glpEsc:'n',glpRisk:'n'});m=asmtModel();o.gs=m.od;
   newPatient();S.asmt=['doac','renal'];Object.assign(S.pf,{proc:'high',doacAg:'api',ap:'n',dial:'hd'});S.wt=70;const t=asmtText();o.note={unres:/UNRESOLVED - Resolve conflict/.test(t),steps:/Local hemostatic bundle/.test(t),esc:/Escalate if/.test(t)};
   newPatient();S.asmt=['doac'];Object.assign(S.pf,{proc:'high',doacAg:'api',ap:'n'});m=asmtModel();o.single={od:m.od,res:m.miss.some(x=>/^Resolve/.test(x))};newPatient();return o});
  ok(ca.dr.od==='investigate'&&ca.dr.prov&&ca.dr.miss,'Antithrombotic + renal: overall raised to Verify first, conflict listed as unresolved');
@@ -613,7 +613,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await fp.locator('#fxbody #fxpath').count()===1&&await fp.locator('#fxbody [data-reset]').count()===1&&await fp.locator('#fxbody details.box').count()>=1,'Drawer holds answers, sources/look-fors and reset');
   await fp.keyboard.press('Escape');ok(await fp.evaluate(()=>!S.drOpen),'Escape closes the drawer');
   const crit=await fp.evaluate(()=>{for(const m of MODS)for(const [id,n] of Object.entries(m.nodes))if(n.h&&m.start===id)return m.id;return null});
-  if(crit){await fp.evaluate(id=>{newPatient();open(id)},crit);await fp.click('.cur .fx-crit');ok(await fp.evaluate(()=>S.drOpen&&document.querySelectorAll('#fxcrit .h li').length>0),'Criteria button opens the drawer at this step’s criteria')}
+  if(crit){await fp.evaluate(id=>{newPatient();open(id)},crit);ok(await fp.locator('.cur .fx-inline-criteria').isVisible(),'Criteria are visible inline without a drawer tap');await fp.click('.fx-handle');ok(await fp.evaluate(()=>S.drOpen&&document.querySelectorAll('#fxcrit .h li').length>0),'Reference drawer retains current-step criteria')}
   ok(await fp.evaluate(()=>{const m=MODS.find(x=>x.inputs&&x.inputs.includes('cbct'));newPatient();open(m.id);return!!document.querySelector('.fx-chip[data-drawer="inputs"]')&&!!document.querySelector('#fxbody #in-rbh')}),'Data inputs (e.g. CBCT) live in the drawer, reached from a chip');
   // SOS from a module and back
   await fp.evaluate(()=>{newPatient();open('preop')});await fp.click('.cur [data-a="a"][data-v="0"]');await fp.click('.fx-sos');
@@ -687,9 +687,9 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await X(()=>{newPatient();open('extraction');return/Practice mode: (Author|Colleague)/.test(planText(M('extraction'),walk(M('extraction'))))}),'Module plan note names the practice mode');
   ok(await X(()=>{newPatient();setPmode('author');S.asmt=['doac'];S.pf.proc='high';const c=consultText(asmtModel());return/Practice mode: Author/.test(c)}),'Consultation draft names the practice mode');
   {const cn=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});const q=await cn.newPage();await q.route(/^https?:\/\//,r=>r.abort());await q.goto(FILE);
-   const r=await q.evaluate(()=>({m:pmode(),ls:localStorage.getItem('oms_compass_practice_mode')}));ok(r.m==='colleague'&&r.ls===null,'New user (no prior use) starts in Colleague mode');await cn.close()}
+   const r=await q.evaluate(()=>({m:pmode(),ls:localStorage.getItem('oms_compass_practice_mode')}));ok(r.m==='colleague'&&r.ls==='colleague','New user (no prior use) starts in Colleague mode');await cn.close()}
   {const cn=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await cn.addInitScript(()=>{try{if(!sessionStorage.getItem('x')){localStorage.setItem('omsCompassAck','1');sessionStorage.setItem('x','1')}}catch(e){}});const q=await cn.newPage();await q.route(/^https?:\/\//,r=>r.abort());await q.goto(FILE);await q.waitForSelector('#in-q');
-   ok(await q.evaluate(()=>pmode()==='author'&&localStorage.getItem('oms_compass_practice_mode')==='author'),'Existing user without a stored mode keeps Author (migrated)');
+   ok(await q.evaluate(()=>pmode()==='colleague'&&localStorage.getItem('oms_compass_practice_mode')==='colleague'),'Acknowledgment without a stored choice stays Colleague');
    ok(await q.evaluate(()=>{setPmode('colleague');migratePmode();return pmode()==='colleague'&&localStorage.getItem('oms_compass_practice_mode')==='colleague'}),'A stored Colleague choice is preserved (migration never overrides it)');await cn.close()}
   // D. Encounter checklist
   const io=await X(()=>{newPatient();setPmode('author');S.asmt=['warfarin','renal'];Object.assign(S.pf,{proc:'high',anes:'sed'});S.atab='io';asmtView();
@@ -883,6 +883,43 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await X(()=>{S.pf.iaType='les';S.pf.iaRead='uns';return fPlan(FX.imgai).d==='investigate'}),'Unsure: verify first');
   await c20.close()}
 
+
+
+ console.log('21. Clinical workflow fixes — negation, result selection, first-use mode, patient export preview');
+ {const cn=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  const p=await cn.newPage();await p.route(/^https?:\/\//,r=>r.abort());await p.goto(FILE);
+  await p.click('[data-ack]');await p.waitForSelector('#in-q');
+  ok(await p.evaluate(()=>pmode()==='colleague'),'First acknowledgment starts Colleague');
+  await p.reload();await p.waitForSelector('#in-q');
+  ok(await p.evaluate(()=>pmode()==='colleague'),'Reload after first acknowledgment stays Colleague');
+  await p.evaluate(()=>setPmode('author'));await p.reload();await p.waitForSelector('#in-q');
+  ok(await p.evaluate(()=>pmode()==='author'),'Explicit Author choice survives reload');
+  await p.fill('#in-q','72M, no IV sedation, 2 simple extractions');
+  ok(await p.locator('[data-casek="ctx:anes"]').getAttribute('aria-pressed')==='false','Negated sedation is unticked in the actual UI');
+  await p.fill('#in-q','72M, INR 2.1 last month, INR 4.8 today, 2 simple extractions');
+  ok(await p.locator('[data-casek="lab:inr:0"]').getAttribute('aria-pressed')==='false'&&await p.locator('[data-casek="lab:inr:1"]').getAttribute('aria-pressed')==='false','Competing INR values both start unticked');
+  await p.click('[data-casek="lab:inr:0"]');await p.click('[data-casek="lab:inr:1"]');
+  ok(await p.locator('[data-casek="lab:inr:0"]').getAttribute('aria-pressed')==='false'&&await p.locator('[data-casek="lab:inr:1"]').getAttribute('aria-pressed')==='true','Selecting the second result deselects the first');
+  await p.click('[data-caseadd]');
+  ok(await p.evaluate(()=>S.pf.inr==='4.8'&&!S.pf.inrAge),'Only explicitly selected INR imported; date still unconfirmed');
+  await p.evaluate(()=>{newPatient();open('preop')});
+  ok(await p.locator('.fx-inline-criteria').isVisible()&&/BP ≥180\/110/.test(await p.locator('.fx-inline-criteria').innerText()),'Pre-op criteria visible before an answer without opening drawer');
+  if(process.env.COMPASS_REVIEW_OUTPUT)await p.screenshot({path:require('path').join(process.env.COMPASS_REVIEW_OUTPUT,'oms-compass-decision-preview.png')});
+  await p.evaluate(()=>{newPatient();S.asmt=['renal'];S.pf={dial:'no',esrd:'n'};S.hoOpen='ext';view('handouts');window.auditShares=[];Object.defineProperty(navigator,'share',{configurable:true,value:async x=>window.auditShares.push(x.text)})});
+  await p.click('#ho-ext [data-share]');
+  ok(await p.locator('#patient-export-preview').isVisible()&&await p.evaluate(()=>window.auditShares.length===0),'Review opens before sharing; no transfer on preview');
+  if(process.env.COMPASS_REVIEW_OUTPUT)await p.screenshot({path:require('path').join(process.env.COMPASS_REVIEW_OUTPUT,'oms-compass-patient-preview.png')});
+  const preview=await p.locator('[aria-label="Patient export text"]').inputValue();
+  ok(!/500–1,000/.test(preview)&&/individual written plan/.test(preview)&&/Do not take ibuprofen/.test(preview),'Preview carries medication precaution and withholds generic adult dose');
+  await p.click('[data-patient-confirm]');
+  ok(await p.evaluate(()=>window.auditShares.length===1&&window.auditShares[0]===patientPreviewText()),'Confirmation shares exactly the current reviewed preview');
+  await p.click('[data-lang="es"]');
+  ok(/Traducción en borrador/.test(await p.locator('[aria-label="Patient export text"]').inputValue()),'Language change updates preview and carries translation review status');
+  for(const width of [320,390]){await p.setViewportSize({width,height:844});ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`Patient preview fits ${width}px`)}
+  await p.click('[data-patient-cancel]');
+  ok(await p.locator('#patient-export-preview').count()===0,'Preview closes without sending');
+  await p.evaluate(()=>newPatient());ok(await p.evaluate(()=>!S.hoExport),'New patient removes previous export selection');
+  await cn.close()}
 
  await browser.close();
  

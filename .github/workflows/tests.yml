@@ -1,4 +1,4 @@
-# Runs both test suites on every pull request and push to main.
+# Runs all test suites on every pull request and push to main.
 # Software checks only; they do not establish clinical validity.
 name: Tests
 
@@ -21,6 +21,8 @@ jobs:
           node-version: 22
       - name: Reconciliation checks (no dependencies)
         run: node tests/reconciliation.cjs
+      - name: Clinical workflow regressions (no dependencies)
+        run: node tests/clinical-workflow.cjs
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save --no-package-lock playwright@1.63.0
