@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.15.0 — Nov 2, 2026 (awaiting Steven's review)
+## v3.15.0 — Nov 2, 2026 (approved by Steven Nov 2, 2026; merged to main)
 
 Two bridges prompted by a market comparison: free-text input and imaging AI output.
 
@@ -22,7 +22,7 @@ Two bridges prompted by a market comparison: free-text input and imaging AI outp
 - **Automated tests on GitHub.** A GitHub Actions workflow (`.github/workflows/tests.yml`) runs both suites on every pull request and push to main, so a failing change can be blocked from merging.
 - Tests: 511 browser checks (31 new); reconciliation 78 (3 new), with the 720 combined cases now including the imaging finding. Software checks only; not clinical validation.
 
-## v3.14.1 — Nov 2, 2026 (awaiting Steven's review)
+## v3.14.1 — Nov 2, 2026 (approved by Steven Nov 2, 2026; merged to main)
 
 - **Bottom bar fits narrow phones.** At 400 px and below the three buttons use 14 px text and tighter padding, so “Assessment” is no longer cut off at 320 px. A count (e.g. “· 12”) wraps to a second line instead of clipping. Layout only; no clinical content changed.
 
