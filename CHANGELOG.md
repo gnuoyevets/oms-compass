@@ -2,6 +2,24 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.18.0 — Nov 3, 2026 (pending Steven's review)
+
+Handoff items: one chairside decision, fewer taps.
+
+- **One disposition everywhere.** The pre-op screen is now a disposition source like any finding. Assessment, the procedure view (chip and gate box) and the copied note show the same overall disposition, the reason ("most restrictive source") and a "Next action" line.
+  - Unstable or unoptimized condition + elective → Defer elective care. + urgent → Refer / change setting (monitored or hospital setting; do not defer). Urgency unknown → Defer, provisional, with the urgency question listed.
+  - Unknown or incomplete pre-op screen → Verify first. Gate findings (IE prophylaxis, antithrombotic, airway) → Proceed with changes, with the items named.
+  - Fixed: with no findings, a STOP on the pre-op screen gave no disposition on Assessment; urgent cases were told to defer.
+- **SGLT2 readiness.** New inputs: fasting under local; dose-free days before the procedure day (an interval, not a date); timing confirmed.
+  - Hold needed for sedation/GA, major surgery or fasting: confirmed ≥3 dose-free days (≥4 ertugliflozin) → Proceed (ADA 2026, FDA labeling).
+  - Missed hold, elective → Defer and reschedule; any exception agreed with anesthesia and the prescriber (missed-hold handling is not settled: APSF 2025).
+  - Missed hold, urgent → Proceed; monitor closely for ketoacidosis after surgery, including with normal glucose (ADA 2026). Pre-op ketone check marked [verify].
+  - Unconfirmed or unknown timing → Verify first. Agent unknown with exactly 3 days → identify the agent.
+  - Local anesthesia with normal eating: ADA 2026 and FDA labeling address scheduled surgery, not minor local-only care; stated as a guidance gap (SPAQI 2026 consensus reportedly suggests continuing; [verify]).
+- **Top open question in the procedure view.** One line ("Changes the plan: …") that expands to answer the highest-ranked open question in place, with what each answer changes. Reuses the existing ranking.
+- **Biopsy result follow-up.** Copy-ready EHR block: result owner (role), expected turnaround in days, overdue action (suggested workflow), patient told, discordant-result step. Unset fields are flagged. New patient clears it.
+- Tests: 579 browser checks (19 new); reconciliation 78. Software checks only; not clinical validation.
+
 ## v3.17.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Wider drug coverage, chosen by how common a drug is and how much harm it can do in oral surgery. Three new findings (22 total).

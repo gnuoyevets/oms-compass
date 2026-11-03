@@ -975,6 +975,45 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   for(const id of ['cnsdep','rxint','dmrx']){await p.setViewportSize({width:320,height:700});await X(i=>{newPatient();openFind(i)},id);ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),`${id} page fits 320px`)}
   await c23.close()}
 
+ console.log('24. Unified disposition, SGLT2 readiness, top open question, biopsy follow-up');
+ {const c24=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c24.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c24),X=(f,a)=>p.evaluate(f,a);
+  const same=async(label,ids,pf,pre,mod)=>{const r=await X(([ids,pf,pre,mod])=>{newPatient();S.asmt=ids;S.pf=pf;S.ans.preop=pre;const m=asmtModel();
+    const note=asmtText(),ov=(note.match(/Overall: ([A-Z /]+?) \(/)||[])[1];open(mod);const chip=document.getElementById('fxchips').innerText;const gate=gateHTML(mod).replace(/<[^>]+>/g,' ');
+    return{od:m.od,label:DISP[m.od]?.[0],ov,chip,gate,act:m.act,note}},[ids,pf,pre,mod]);
+   return r};
+  let r=await same('stop-elective',[],{urg:'el'},{a:true},'extraction');
+  ok(r.od==='defer'&&r.ov==='DEFER ELECTIVE CARE'&&/Overall: Defer elective care/.test(r.chip)&&/Defer elective care/.test(r.gate)&&/Next action: Defer elective surgery/.test(r.note),'Gate STOP with no findings: Assessment, procedure chip, gate box and note all say Defer, with the next action');
+  r=await same('stop-urgent',[],{urg:'urg'},{a:true},'extraction');
+  ok(r.od==='refer'&&/REFER/.test(r.ov)&&/Overall: Refer/.test(r.chip)&&/urgent need: monitored or hospital setting/.test(r.gate)&&/do not defer/.test(r.note),'Gate STOP with an urgent need escalates (refer / change setting), not defer, everywhere');
+  r=await same('stop-urg-unknown',['a1c'],{a1c:'6.5',a1cU:'pct',a1cAge:'r3'},{a:true},'extraction');
+  ok(r.od==='defer'&&/provisional/.test(r.chip)&&/If the need is urgent, set Urgency/.test(r.note),'Gate STOP with unknown urgency: defer, provisional, asks elective vs urgent');
+  r=await same('incomplete',['a1c'],{a1c:'6.5',a1cU:'pct',a1cAge:'r3',urg:'el'},{a:false},'extraction');
+  ok(r.od==='investigate'&&/Finish the pre-op screen/.test(r.note)&&/Verify first/.test(r.chip),'Incomplete pre-op screen keeps the overall result at Verify first in all views');
+  r=await same('mod-hit',['a1c'],{a1c:'6.5',a1cU:'pct',a1cAge:'r3',urg:'el'},{a:false,b:true,c:false,d:false,d2:false,e:false},'extraction');
+  ok(r.od==='modify'&&/Endocarditis prophylaxis indicated/.test(r.act),'Gate finding (IE prophylaxis) makes Proceed into Proceed with changes, with the reason');
+  const sg=pf=>X(pf=>{newPatient();S.asmt=['sglt2'];S.pf=pf;const m=asmtModel();return{od:m.od,act:m.P[0].p.act,note:asmtText()}},pf);
+  let q=await sg({anes:'sed',proc:'low',sgAg:'std',sgDays:'3',sgVer:'y',urg:'el'});ok(q.od==='proceed'&&/Hold met/.test(q.act),'SGLT2: confirmed 3 dose-free days before sedation → proceed');
+  q=await sg({anes:'sed',proc:'low',sgAg:'ertu',sgDays:'3',sgVer:'y',urg:'el'});ok(q.od==='defer'&&/3 of 4/.test(q.act)&&/DEFER/.test(q.note),'SGLT2: ertugliflozin with 3 days is a missed hold → elective defer, in the note too');
+  q=await sg({anes:'sed',proc:'low',sgAg:'std',sgDays:'1',sgVer:'y',urg:'urg'});ok(q.od==='modify'&&/do not delay/.test(q.act)&&/ketoacidosis/.test(q.act),'SGLT2: missed hold, urgent → proceed with ketoacidosis monitoring');
+  q=await sg({anes:'sed',proc:'low',sgAg:'std',sgDays:'5',sgVer:'n',urg:'el'});ok(q.od==='investigate'&&/not read as a completed hold/.test(q.act),'SGLT2: unconfirmed timing is not read as a completed hold');
+  q=await sg({anes:'la',proc:'low',sgAg:'std',sgFast:'n',urg:'el'});ok(q.od==='modify'&&/not minor local-only dental care/.test(q.act),'SGLT2: local with normal eating → guidance gap stated, no hold rule applied');
+  q=await sg({anes:'sed',proc:'low',sgDays:'3',sgVer:'y',urg:'el'});ok(q.od==='investigate'&&/Identify the agent/.test(q.act),'SGLT2: unknown agent with 3 days asks for the agent instead of deferring');
+  ok(await X(()=>!/\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{2,4}/.test(JSON.stringify(FX.sglt2.qs.map(x=>x.q)))),'SGLT2 readiness asks for an interval, never a calendar date');
+  await X(()=>{newPatient();S.asmt=['doac'];S.pf={doacAg:'api'};S.topqOpen=false;open('extraction')});
+  ok(/Changes the plan:\s*Planned procedure/.test(await p.locator('#fxtopq').innerText()),'Procedure view shows the top open question from the assessment');
+  await p.click('#fxtopq summary');await p.locator('#fxtopq [data-pf="proc"][data-pv="low"]').click();
+  ok(await X(()=>S.pf.proc==='low')&&!/Planned procedure/.test(await p.locator('#fxtopq').innerText()),'Answering it in place records the answer and moves to the next decisive question');
+  ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),'Procedure view with the top question fits the phone width');
+  await X(()=>{newPatient();S.ans.biopsy={a:false,b:false,c:true};open('biopsy');refresh()});
+  ok(await p.locator('.bx').count()===1,'Biopsy plan shows the result follow-up block');
+  let t=await X(()=>bxText());ok(/Result owner: NOT ASSIGNED/.test(t)&&/turnaround NOT SET/.test(t),'Unset owner and turnaround are flagged, not left blank');
+  await p.selectOption('#bx-own','staff');await p.fill('#bx-days','10');await p.selectOption('#bx-told','n');
+  t=await X(()=>bxText());ok(/Designated result tracker/.test(t)&&/within 10 days/.test(t)&&/NO - tell the patient/.test(t)&&/Overdue action/.test(t)&&!/\d{4}-\d{2}-\d{2}/.test(t),'Follow-up block: owner role, interval due date, overdue action, no calendar date');
+  await X(()=>newPatient());ok(await X(()=>Object.keys(S.bx).length===0),'New patient clears the follow-up block');
+  await c24.close()}
+
  await browser.close();
  
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
