@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.18.0 — Nov 3, 2026 (pending Steven's review)
+## v3.18.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Handoff items: one chairside decision, fewer taps.
 
