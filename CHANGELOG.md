@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.18.1 — Nov 3, 2026 (pending Steven's review)
+## v3.18.1 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Safety fix found by the code review of v3.18.0 after merge.
 
