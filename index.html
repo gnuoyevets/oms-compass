@@ -203,6 +203,10 @@ ul.hol li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:v
 .disp.big .pt{font-size:16.5px}
 .dtag{display:inline-block;font:800 12px var(--display);letter-spacing:.3px;text-transform:uppercase;border:1.5px solid currentColor;border-radius:6px;padding:1px 6px;margin-right:4px;vertical-align:1px}
 .dtag.sm{font-size:10.5px;margin-right:6px}
+.condr{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px}
+.condr li{display:flex;flex-wrap:wrap;gap:2px 6px;align-items:baseline;font-size:13px;line-height:1.35}
+.condr li>span:last-child{min-width:0;overflow-wrap:anywhere}
+.condr .dtag{flex:none;white-space:nowrap}
 .dtag.d-ok{color:var(--ok-ink)}.dtag.d-mod,.dtag.d-inv{color:var(--warn-ink)}.dtag.d-ref,.dtag.d-def{color:var(--red-ink)}
 .fsec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:10px}
 .fsec ul,.fsec ol{margin:6px 0 0;padding-left:20px;font-size:14px;line-height:1.5}
@@ -231,7 +235,8 @@ ul.hol li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:v
 .alink b{display:block;font:700 14.5px var(--display)}
 .alink span.dtag{display:inline-block}
 .bar h2 #fmini{display:block;line-height:1}
-.bar h2 #fmini .dtag{font-size:12px;margin-top:3px}
+.bar h2 #fmini .dtag{font-size:12px;margin-top:3px;white-space:normal}
+.bar h2 .ft{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;line-height:1.25}
 .ctxsum{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px}
 .alink span{display:block;font-size:13px;color:var(--muted);line-height:1.45;margin-top:2px}
 body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
@@ -1700,7 +1705,8 @@ function pmode(){if(S.pmOv)return S.pmOv;try{const v=localStorage.getItem(PM_KEY
 function setPmode(v){S.pm=v==='author'?'author':'colleague';try{localStorage.setItem(PM_KEY,S.pm)}catch(e){}}
 const colleague=()=>pmode()==='colleague';
 function inOtherMode(fn){const o=S.pmOv;S.pmOv=colleague()?'author':'colleague';try{return fn()}finally{if(o)S.pmOv=o;else delete S.pmOv}}
-function modeBarHTML(){const c=colleague();return`<div class="mbar" role="group" aria-label="Practice mode"><span>Mode: <b>${c?'Colleague':'Author'}</b><span class="small"> · ${c?'guideline rules':'author protocols, labeled'}</span></span><button class="tg" data-pmsw aria-label="Switch to ${c?'Author':'Colleague'} mode">Switch to ${c?'Author':'Colleague'}</button></div>`}
+function modeMatters(ids){const sig=()=>JSON.stringify(ids.map(id=>{const f=FX[id],p=fPlan(f);return[p.d,p.act,p.steps,p.author||null,fQs(f).map(q=>q.k)]}));return sig()!==inOtherMode(sig)}
+function modeBarHTML(ids){if(ids&&!modeMatters(ids))return'';const c=colleague();return`<div class="mbar" role="group" aria-label="Practice mode"><span>Mode: <b>${c?'Colleague':'Author'}</b><span class="small"> · ${c?'guideline rules':'author protocols, labeled'}</span></span><button class="tg" data-pmsw aria-label="Switch to ${c?'Author':'Colleague'} mode">Switch to ${c?'Author':'Colleague'}</button></div>`}
 function modeLines(P){const au=P.filter(({p})=>p.author).map(({p})=>authorText(p.author)),ap=P.filter(({p})=>!p.author&&p.basis==='au').map(({f})=>`${f.t}: author's practice (no guideline equivalent)`);
  return[`Practice mode: ${colleague()?'Colleague - guideline thresholds where guidance exists':'Author - author protocols applied where marked'}`,...(au.length||ap.length?['Departures from guidelines: '+[...au,...ap].join(' | ')]:['Departures from guidelines: none flagged in the included findings'])]}
 function pmodeHTML(){const m=pmode();return`<div class="pmode" role="group" aria-label="Practice mode"><span class="pl">Mode</span>${[['author','Author'],['colleague','Colleague (Standard)']].map(([v,l])=>`<button class="tg${m===v?' on':''}" data-pm="${v}" aria-pressed="${m===v}">${l}</button>`).join('')}</div><p class="small pmdesc" id="pmdesc">${m==='colleague'?'<b>Colleague:</b> guideline rules where a guideline exists (warfarin INR &lt;4 and DOAC dose timing per SDCEP 2022). Author-only content with no guideline equivalent (no-pump sedation card, personal Ref notes) is folded and labeled, not replaced. Handouts are neutral.':'<b>Author:</b> applies the author’s protocols — warfarin INR &lt;3.5 and uninterrupted DOACs for dentoalveolar surgery, the no-pump sedation card — each labeled with where it differs from guidance.'}</p>`}
@@ -1714,8 +1720,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.16.0';
+const VER='3.16.1';
 const CHANGES=[
+{v:'3.16.1',d:'Nov 3, 2026',i:['Finding pages: the title and status no longer get cut off at the top on phones.','Unresolved panel: each answer’s outcome shows as its own row with a colored disposition; the panel note is one short line.','The practice-mode bar shows only where switching Author/Colleague changes the plan; Home keeps the switch.']},
 {v:'3.16.0',d:'Nov 2, 2026 · approved for publication',i:['Clinical workflow review: separate insulin formulations and fasting context; synchronize GLP-1 escalation and maintenance risk; acetaminophen recommended 3000 mg/day, absolute 4000 mg/day ceiling from all products.','Negated/past context stays unticked. Multiple lab results remain visible and unselected until one is chosen. Acknowledgment no longer switches to Author mode.','Patient sharing now previews current text and carries medication precautions, version and translation draft status. Decision criteria are visible beside each question.']},
 {v:'3.15.0',d:'Nov 2, 2026',i:['Read as a case: type or paste a short history in search (e.g., “72M on Eliquis, INR 2.6, 3 simple extractions under IV sedation”). Compass proposes findings, labs and context as tick boxes; nothing is recorded until you tap Add. Fixed rules on this phone, not AI; nothing is sent, and the typed text never enters notes. Negated (“denies”) and held (“stopped”) drugs start unticked; unrecognized drugs are listed, not ignored; units are never assumed.','Free-text questions: when no module matches every word, the closest modules are shown instead of “no entry”.','Imaging AI flag finding: record what radiograph or CBCT software flagged (periapical radiolucency, impaction, IAN proximity, sinus change, possible carotid calcification, TMJ change, other lesion). Nothing changes the plan until your own read confirms it; each flag links to the matching module. Compass does not read images and connects to no vendor.']},
 {v:'3.14.1',d:'Nov 2, 2026',i:['Bottom bar fits on 320 px phones: “Assessment” no longer cut off; a count wraps to a second line when needed.']},
@@ -2668,6 +2675,10 @@ function openItems(ids,miss,ranked){ranked=ranked||rankQuestions(ids);const rk=n
  items.forEach(it=>{if(it.dec)return;const g=items.find(d=>d.dec&&d.fids.some(id=>it.fids.includes(id)));if(g){it.dec=true;it.after=itemLab(g)}});
  return{dec:[...other,...items.filter(x=>x.dec)],fin:items.filter(x=>!x.dec)}}
 /* What the plan is conditional on: the existing branch outcomes for each answer, never a prediction. */
+function condGroups(it){const r=it.r;if(!it.q||!r||it.after||it.q.type==='num'||!r.choices.length)return null;const g=new Map();
+ r.choices.forEach(c=>{const ds=it.fids.map(id=>c.pd&&c.pd[id]).filter(Boolean),d=ds.length?ds.reduce((a,b)=>DRANK[b]>DRANK[a]?b:a):c.d||'';g.set(d,[...(g.get(d)||[]),c.label.split(' (')[0].split(' · ')[0]])});return g.size>1?[...g]:null}
+function condHTML(it){const g=condGroups(it);if(!g)return condText(it)?`<span class="cond">${esc(condText(it))}</span>`:'';
+ return`<ul class="condr">${g.map(([d,ls])=>`<li>${d?`<span class="dtag sm d-${DISP[d][1]}">${esc(DISP[d][0])}</span>`:'<span class="dtag sm">No finding action</span>'}<span>${esc(ls.join(' / '))}</span></li>`).join('')}</ul>`}
 function condText(it){const r=it.r;if(!it.q||!r)return'';
  if(it.after)return`Can change the plan once “${it.after}” is known; no answer is assumed.`;
  if(it.q.type==='num')return'No value is assumed; the reported result'+(it.q.unitSel?' and unit set':' sets')+' the plan.';
@@ -2680,8 +2691,8 @@ const actChip=a=>`<span class="nact">${esc(NACT[a[0]])}${a[1]?' · '+esc(a[1]):'
 function itemText(it){return`${NACT[it.act[0]]}${it.act[1]?' ('+it.act[1]+')':''}: ${itemLab(it)}${it.unk?' [marked unknown]':''}${it.dec&&condText(it)?' - '+condText(it):''}`}
 function uncHTML(ids,miss,where,ranked){const o=openItems(ids,miss,ranked);if(!o.dec.length&&!o.fin.length)return'';
  const inline=where==='asmt'&&o.dec.find(it=>it.q&&!['proc','anes','urg'].includes(it.k));
- const li=it=>`<li>${actChip(it.act)}${it===inline?`<span class="small">${esc(itemCtx(it))}</span>${qHTML(it.q).replace(/ (id|for)="(question|pf)-/g,' $1="next-$2-')}`:`<b>${esc(itemLab(it))}</b>${it.unk?' <span class="small">(marked Unknown)</span>':''}${itemCtx(it)?` <span class="small">· ${esc(itemCtx(it))}</span>`:''}`}${it.dec&&condText(it)?`<span class="cond">${esc(condText(it))}</span>`:''}${it.q&&where==='asmt'?((['proc','anes','urg'].includes(it.k)?`<button class="go" data-ctxq="${it.k}">Answer under Context ›</button>`:`<button class="go" data-question="${it.k}" data-qfid="${it.fids[0]}">${it===inline?'Open finding':'Answer'} ›</button>`)):''}</li>`;
- return`<div class="fsec warn unc" id="unc"><div class="lab">Before finalizing · unresolved</div><p class="small" style="margin:4px 0 0">The plan shown stays visible and copyable, but it is provisional until these are resolved. Unknown is never read as normal.</p>${o.dec.length?`<h4>Changes the plan · ${o.dec.length}</h4><ul class="unl">${o.dec.map(li).join('')}</ul>`:''}${o.fin.length?`<h4>Also needed to finalize · ${o.fin.length}</h4><ul class="unl">${o.fin.map(li).join('')}</ul>`:''}${where==='find'&&[...o.dec,...o.fin].some(it=>it.q)?'<button class="go" data-qscroll="fqs">Answer below ›</button>':''}</div>`}
+ const li=it=>`<li>${actChip(it.act)}${it===inline?`<span class="small">${esc(itemCtx(it))}</span>${qHTML(it.q).replace(/ (id|for)="(question|pf)-/g,' $1="next-$2-')}`:`<b>${esc(itemLab(it))}</b>${it.unk?' <span class="small">(marked Unknown)</span>':''}${itemCtx(it)?` <span class="small">· ${esc(itemCtx(it))}</span>`:''}`}${it.dec?condHTML(it):''}${it.q&&where==='asmt'?((['proc','anes','urg'].includes(it.k)?`<button class="go" data-ctxq="${it.k}">Answer under Context ›</button>`:`<button class="go" data-question="${it.k}" data-qfid="${it.fids[0]}">${it===inline?'Open finding':'Answer'} ›</button>`)):''}</li>`;
+ return`<div class="fsec warn unc" id="unc"><div class="lab">Before finalizing · unresolved</div><p class="small" style="margin:4px 0 0">Provisional until these are answered. Unknown is never read as normal.</p>${o.dec.length?`<h4>Changes the plan · ${o.dec.length}</h4><ul class="unl">${o.dec.map(li).join('')}</ul>`:''}${o.fin.length?`<h4>Also needed to finalize · ${o.fin.length}</h4><ul class="unl">${o.fin.map(li).join('')}</ul>`:''}${where==='find'&&[...o.dec,...o.fin].some(it=>it.q)?'<button class="go" data-qscroll="fqs">Answer below ›</button>':''}</div>`}
 
 /* ===== v3.10 Lab capture from search ("INR 2.6", "eGFR 28"). Recorded only after the clinician confirms.
    Units, dates and trends are never inferred; replacing a value clears answers that described the old result. ===== */
@@ -2846,7 +2857,7 @@ function fQsHTML(f){const ranked=rankQuestions([f.id]),order=new Map(ranked.map(
 function lkcHTML(f){const c=Object.values(S.lkc||{}).filter(x=>x.fid===f.id);return c.map(x=>`<div class="fsec lkc" role="alert"><div class="lab">Lookup conflict · unresolved</div><p style="margin:4px 0 8px">You looked up <b>${esc(x.hit)}</b> (${esc(x.nextL)}), but <b>${esc(x.prevL)}</b> is already selected. Confirm which the patient takes.</p><div class="chips"><button class="tg" data-lkuse="${x.k}">Use ${esc(x.nextL.split(' (')[0])}</button><button class="tg" data-lkkeep="${x.k}">Keep ${esc(x.prevL.split(' (')[0])}</button></div></div>`).join('')}
 function addBtnHTML(f){const inA=(S.asmt||[]).includes(f.id);return`<div class="fact top"><button class="gobtn" data-addf="${f.id}"${inA?' disabled':''}>${inA?'✓ In assessment':'＋ Add to assessment'}</button></div>`}
 function fTopHTML(f,p){
- return lkcHTML(f)+dispHTML(p,1)+changeNoticeHTML()+addBtnHTML(f)+uncHTML([f.id],p.miss,'find')+modeBarHTML()+(p.author?authorHTML(p.author):'')+
+ return lkcHTML(f)+dispHTML(p,1)+changeNoticeHTML()+addBtnHTML(f)+uncHTML([f.id],p.miss,'find')+modeBarHTML([f.id])+(p.author?authorHTML(p.author):'')+
   `<div class="fsec"><div class="lab">What changes</div><ul>${f.what.map(x=>`<li>${escV(x)}</li>`).join('')}</ul></div>`+
   (p.assume.length?`<div class="fsec warn"><div class="lab">Assumed</div><ul>${p.assume.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'')}
 function fNextHTML(f,p){return(p.steps.length||p.esc.length?`<div class="fsec"><div class="lab">Next steps</div>${p.steps.length?`<ol>${p.steps.map(x=>`<li>${escV(x)}</li>`).join('')}</ol>`:''}${p.esc.length?`<div class="lab" style="margin-top:8px">Escalate if</div><ul>${p.esc.map(x=>`<li>${escV(x)}</li>`).join('')}</ul>`:''}</div>`:'')+
@@ -2857,7 +2868,7 @@ function fNextHTML(f,p){return(p.steps.length||p.esc.length?`<div class="fsec"><
   <p class="small">Basis labels describe where a recommendation comes from — they are not evidence grades. Finding cards drafted Oct 23, 2026 by Claude from the sources above; independent clinician review not recorded. UK guidance (SDCEP) is used where US guidance lacks dental detail.</p></div></details>`}
 function miniHTML(p){return`<span class="dtag sm d-${DISP[p.d][1]}">${esc(DISP[p.d][0])}${p.prov?' · provisional':''}</span>`}
 function findHTML(f){
- return`<div class="bar"><button class="icon-btn back" data-home aria-label="Back to search">‹</button><h2>${esc(f.t)}<span id="fmini">${miniHTML(fPlan(f))}</span></h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button></div>
+ return`<div class="bar"><button class="icon-btn back" data-home aria-label="Back to search">‹</button><h2><span class="ft">${esc(f.t)}</span><span id="fmini">${miniHTML(fPlan(f))}</span></h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button></div>
  <div class="fcls">${esc(f.kind)} · ${esc(f.cls)}${S.fhit?` · matched “${esc(S.fhit)}”`:''}</div>
  <div id="fdyn">${fDynHTML(f)}</div>${fbHTML(f.t)}`}
 function openFind(id,hit){const f=FX[id];if(!f)return home();S.mod=null;S.view='find';S.fid=id;S.fhit=hit||'';applyPreset(id,hit);
@@ -2907,7 +2918,7 @@ function asmtCtxHTML(){const ctxQ=['proc','anes','urg'].map(k=>chipRow({k,...CTX
  return`<details class="box" id="actxd"${S.ctxOpen?' open':''}><summary><span>Context <span class="ctxsum">${esc(ctxShort())}</span></span><em>Edit</em></summary><div class="inner">
   <div class="grid3">${ptFields('2')}</div>${S.wt?`<div class="small" id="wtx2" style="margin:6px 0 2px">${esc(wtLine())}${pedsLock()?' · pediatric sedation lockout':''}</div>`:''}${ctxQ}</div></details>`}
 function asmtRestHTML(){const m=asmtModel(),ranked=m.A.length?rankQuestions(m.A):[];return`${changeNoticeHTML()}${m.A.length?`${m.worst?dispHTML({...m.worst.p,d:m.od,act:m.conf.some(c=>c.raise)?'Resolve the listed conflicts before finalizing the plan.':m.worst.p.act,prov:m.prov,basis:m.P.reduce((b,x)=>BASIS_RANK[x.p.basis]>BASIS_RANK[b]?x.p.basis:b,'gl')}):''}
-  ${modeBarHTML()}${uncHTML(m.A,m.miss,'asmt',ranked)}
+  ${modeBarHTML(m.A)}${uncHTML(m.A,m.miss,'asmt',ranked)}
   <div class="fsec"><div class="lab">Conflicts · overlapping precautions</div>${m.conf.length?`<ul>${m.conf.map(c=>`<li>${esc(c.t)}${c.src?` ${srcLink(c.src)}`:''}</li>`).join('')}</ul>`:'<p class="small" style="margin:4px 0">None of the checked pairs apply.</p>'}<p class="small" style="margin:6px 0 0">Only listed pairs are checked. No listed conflict is not proof there is none.</p></div>
   ${m.conf.some(c=>/screen/.test(c.t))?'<button class="go" data-open="preop">Reconcile pre-op screen ›</button>':''}${unifiedPlanHTML(m)}${decisionToolsHTML(m,ranked)}
   <details class="box"><summary>Individual findings · basis and details</summary><div class="inner"><div class="lab">Findings</div>${m.P.map(({f,p})=>`<div class="arow"><button class="alink" data-find="${f.id}"><b>${esc(f.t)}</b><span><span class="dtag sm d-${DISP[p.d][1]}">${esc(DISP[p.d][0])}</span>${p.prov?' provisional · ':' '}${escV(p.act)}</span></button><button class="icon-btn" data-rmf="${f.id}" aria-label="Remove ${esc(f.t)}">✕</button></div>${p.steps.length||p.esc.length||p.author?`<div class="asteps">${p.author?`<div class="small"><b>Author’s protocol:</b> ${esc(AUTHOR[p.author].rule)} — guidance: ${esc(AUTHOR[p.author].guide)}</div>`:''}${p.steps.length?`<ul>${p.steps.map(x=>`<li>${escV(x)}</li>`).join('')}</ul>`:''}${p.esc.length?`<div class="small"><b>Follow-up / escalate if:</b> ${p.esc.map(x=>escV(x)).join(' ')}</div>`:''}</div>`:''}`).join('')}</div></details>

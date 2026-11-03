@@ -921,6 +921,22 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await p.evaluate(()=>newPatient());ok(await p.evaluate(()=>!S.hoExport),'New patient removes previous export selection');
   await cn.close()}
 
+ console.log('22. v3.16.1 app audit: header wraps, outcome rows, mode bar only where it matters');
+ {const c21=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c21.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c21),X=(f,a)=>p.evaluate(f,a);
+  await p.setViewportSize({width:400,height:844});
+  await X(()=>{setPmode('colleague');newPatient();openFind('doac','eliquis')});
+  ok(await X(()=>{const t=document.querySelector('.bar h2 .ft'),d=document.querySelector('#fmini .dtag');return t&&getComputedStyle(t).whiteSpace!=='nowrap'&&d&&d.scrollWidth<=d.clientWidth+1}),'Finding header: title and disposition wrap instead of being cut off');
+  ok(await X(()=>document.querySelectorAll('#unc .condr li .dtag').length>=2),'Each answer outcome shows as its own row with a disposition pill');
+  ok(await X(()=>/Provisional until these are answered\. Unknown is never read as normal\./.test(document.getElementById('unc').innerText)),'Panel keeps the safety rule in one short line');
+  ok(await X(()=>{const it=openItems(['doac'],fPlan(FX.doac).miss).dec.find(x=>x.k==='proc');return/→ Proceed/.test(condText(it))}),'Copied note still carries the outcome text');
+  await X(()=>{newPatient();openFind('cied')});ok(await p.locator('.mbar').count()===0,'Mode bar hidden where the mode changes nothing (pacemaker)');
+  await X(()=>{newPatient();Object.assign(S.pf,{proc:'low',inr:'3.7',inrAge:'d1',ap:'n'});openFind('warfarin')});ok(await p.locator('.mbar').count()===1,'Mode bar shown where the mode changes the plan (warfarin INR 3.7)');
+  await X(()=>{setPmode('author');redraw()});ok(await p.locator('.mbar').count()===1,'… in either mode');
+  await X(()=>{setPmode('colleague');home()});ok(await p.locator('[data-pm]').count()>=1,'Home keeps the mode switch');
+  await c21.close()}
+
  await browser.close();
  
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
