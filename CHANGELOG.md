@@ -2,9 +2,9 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.19.0 — Nov 3, 2026 (pending Steven's review)
+## v3.19.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
-Four new decision pathways (41 total), from an external patch built on v3.16.0 and reconciled onto v3.18.0. Topic selection informed by the Laskin & Abubaker table of contents; chapters not consulted.
+Four new decision pathways (41 total), from an external patch built on v3.16.0 and reconciled onto v3.18.1. Topic selection informed by the Laskin & Abubaker table of contents; chapters not consulted.
 
 - **Salivary and submandibular swelling:** airway/deep-space/systemic → emergency (EMS for threatened airway); discrete or persistent mass, fixation or facial weakness → expedited head-and-neck assessment and imaging; dental source → Odontogenic infection pathway (linked); acute tender gland with duct pus → same-day assessment for suppurative sialadenitis; meal-related recurrent swelling → evaluate for duct obstruction, consider ultrasound and specialist referral; otherwise focused evaluation. Source: NSW Health adult salivary referral criteria.
 - **Suspected jaw osteomyelitis:** deep-space spread, airway or instability → emergency; prior radiation or antiresorptive exposure → evaluate for ORN/MRONJ (MRONJ pathway linked); unexplained sensory loss, mass or atypical destructive lesion → expedited lesion workup with imaging and tissue diagnosis; drainage, nonhealing socket or bone changes → dental source and extent of bone involvement, cross-sectional imaging, deep tissue or bone for culture and histopathology when indicated. Sources: SABR adult chronic nonspinal osteomyelitis consensus (general, not jaw-specific), AAOMS 2022, ISOO-MASCC-ASCO 2024.
@@ -17,7 +17,14 @@ Four new decision pathways (41 total), from an external patch built on v3.16.0 a
   - Odontogenic sinusitis: new branch for a recent sinus opening, graft or implant → Oroantral communication. Dental-first sequencing allowed when the source is clear and symptoms mild, ENT first when severe or foreign material is present [verify].
   - Sources: citation details added (AASM 2017; sinusitis consensus 2020 and 2021); all five marked not checked from this environment, with no check date.
 - Reconciliation: test counts updated to 41 pathways and 22 findings; links to Odontogenic infection, MRONJ staging and Oroantral communication.
-- Tests: reconciliation 78; clinical workflow 34; browser checks below. Software checks only; not clinical validation.
+- Tests: 612 browser checks (29 new, section 25); reconciliation 78; clinical workflow 34. Software checks only; not clinical validation.
+
+## v3.18.1 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
+
+Safety fix found by the code review of v3.18.0 after merge.
+
+- **Top open question, number entry:** each keystroke re-rendered the panel, so the field vanished after the first digit. Typing an INR of 3.6 recorded 3 (in Author mode: Proceed instead of Defer). The field now stays while typing; the panel advances when the entry is finished. The overall chip still updates live.
+- Tests: 2 new browser checks.
 
 ## v3.18.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
