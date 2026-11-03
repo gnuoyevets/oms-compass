@@ -2,6 +2,13 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.18.1 — Nov 3, 2026 (pending Steven's review)
+
+Safety fix found by the code review of v3.18.0 after merge.
+
+- **Top open question, number entry:** each keystroke re-rendered the panel, so the field vanished after the first digit. Typing an INR of 3.6 recorded 3 (in Author mode: Proceed instead of Defer). The field now stays while typing; the panel advances when the entry is finished. The overall chip still updates live.
+- Tests: 2 new browser checks.
+
 ## v3.18.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Handoff items: one chairside decision, fewer taps.

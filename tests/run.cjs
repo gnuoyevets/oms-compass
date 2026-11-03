@@ -1006,6 +1006,12 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await p.click('#fxtopq summary');await p.locator('#fxtopq [data-pf="proc"][data-pv="low"]').click();
   ok(await X(()=>S.pf.proc==='low')&&!/Planned procedure/.test(await p.locator('#fxtopq').innerText()),'Answering it in place records the answer and moves to the next decisive question');
   ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),'Procedure view with the top question fits the phone width');
+  await X(()=>{setPmode('author');newPatient();S.asmt=['warfarin'];S.pf={proc:'low',ap:'n'};S.topqOpen=true;open('extraction')});
+  await p.locator('#fxtopq input[data-pfn="inr"]').click();await p.keyboard.type('3.6',{delay:40});
+  ok(await X(()=>S.pf.inr==='3.6')&&await p.locator('#fxtopq input[data-pfn="inr"]').count()===1,'Top question keeps a number field mounted while typing (INR 3.6, not 3)');
+  await p.locator('.fx-hd h2').click();await p.waitForTimeout(50);
+  ok(!/Most recent INR/.test(await p.locator('#fxtopq').innerText())&&/Defer/.test(await p.locator('#fxchips').innerText()),'Finishing the entry advances the top question; overall follows the full value');
+  await X(()=>setPmode('colleague'));
   await X(()=>{newPatient();S.ans.biopsy={a:false,b:false,c:true};open('biopsy');refresh()});
   ok(await p.locator('.bx').count()===1,'Biopsy plan shows the result follow-up block');
   let t=await X(()=>bxText());ok(/Result owner: NOT ASSIGNED/.test(t)&&/turnaround NOT SET/.test(t),'Unset owner and turnaround are flagged, not left blank');
