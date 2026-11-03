@@ -1018,7 +1018,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  {const c25=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
   await c25.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
   const p=await fresh(c25),X=(f,a)=>p.evaluate(f,a);
-  const P={salivary:['submandibular swelling',[1],[0,0,0,0,1],/duct obstruction/],jawom:['osteomyelitis',[1],[0,0,0,1],/extent of bone involvement/],ods:['odontogenic sinusitis',[1],[0,0,1],/ENT assessment/],osaref:['sleep apnea',null,[0,1,0],/Refer for sleep evaluation/]};
+  const P={salivary:['submandibular swelling',[1],[0,0,0,0,0,1],/duct obstruction/],jawom:['osteomyelitis',[1],[0,0,0,1],/extent of bone involvement/],ods:['odontogenic sinusitis',[1],[0,0,0,1],/ENT assessment/],osaref:['sleep apnea',null,[0,1,0],/Refer for sleep evaluation/]};
   for(const [id,[q,urg,rout,rx]] of Object.entries(P)){
    await X(()=>{newPatient();home()});await p.fill('#in-q',q);ok(await p.locator(`#hits [data-open="${id}"]`).count()>0,`Search "${q}" reaches ${id}`);
    const go=async ans=>{await X(i=>{newPatient();open(i)},id);for(const a of ans)await p.locator(`.cur [data-v="${a}"]`).click();return X(i=>{const m=M(i);return{flow:document.getElementById('flow').innerText,note:planText(m,walk(m))}},id)};
@@ -1027,8 +1027,15 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
    const r=await go(rout);ok(rx.test(r.flow)&&rx.test(r.note),`${id}: routine branch plan matches screen and note`);
    for(const w of [320,390]){await p.setViewportSize({width:w,height:700});ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),`${id} fits ${w}px`)}
    await p.setViewportSize({width:390,height:844})}
-  await X(()=>{newPatient();open('salivary');S.ans.salivary={a:false,b:false,c:true};refresh()});ok(await p.locator('#flow [data-open="infection"]').count()===1,'Salivary dental source links to Odontogenic infection');
-  await X(()=>{newPatient();open('jawom');S.ans.jawom={a:false,b:true};refresh()});ok(await p.locator('#flow [data-open="mronj"]').count()===1,'Osteomyelitis ORN/MRONJ outcome links to MRONJ staging');
+  await X(()=>{newPatient();open('salivary');S.ans.salivary={a:false,b:false,b2:false,c:true};refresh()});ok(await p.locator('#flow [data-open="infection"]').count()===1,'Salivary dental source links to Odontogenic infection');
+  await X(()=>{newPatient();open('jawom');S.ans.jawom={a:false,c:false,b:true};refresh()});ok(await p.locator('#flow [data-open="mronj"]').count()===1,'Osteomyelitis ORN/MRONJ outcome links to MRONJ staging');
+  await X(()=>{newPatient();open('jawom');S.ans.jawom={a:false,c:true};refresh()});
+  ok(await X(()=>{const w=walk(M('jawom'));return w.out&&w.out.tone==='action'&&/possible malignancy/.test(w.out.out)})&&!/Stop · act now/i.test(await p.locator('#flow').innerText()),'Osteomyelitis: atypical lesion is asked first and is expedited (amber), not the emergency box');
+  ok(await X(()=>M('jawom').nodes.a.no==='c'&&M('jawom').nodes.c.no==='b'),'Osteomyelitis: lesion question precedes radiation/antiresorptive history');
+  ok(await X(()=>/author’s practice/.test(M('jawom').nodes.oWork.ex)&&/before antibiotics/.test(M('jawom').nodes.oWork.ex)&&/diabetes/.test(M('jawom').nodes.oWork.ex)),'Osteomyelitis workup names imaging (author’s practice), host factors and antibiotic timing');
+  await X(()=>{newPatient();open('jawom');S.ans.jawom={a:false,c:false,b:false,d:true};refresh()});ok(/Imaging \(author’s practice\)/.test(await p.locator('#flow').innerText()),'Osteomyelitis workup labels the imaging line as author’s practice and stays visible in Colleague mode');
+  await X(()=>{newPatient();open('salivary');S.ans.salivary={a:false,b:false,b2:true};refresh()});ok(/Medical evaluation/.test(await p.locator('#flow').innerText()),'Salivary: bilateral, viral or systemic swelling routes to medical evaluation');
+  await X(()=>{newPatient();open('ods');S.ans.ods={a:false,a2:true};refresh()});ok(await p.locator('#flow [data-open="oac"]').count()===1,'Odontogenic sinusitis: recent sinus opening, graft or implant links to Oroantral communication');
   await c25.close()}
 
  await browser.close();
