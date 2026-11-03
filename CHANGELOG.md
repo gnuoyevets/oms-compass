@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.16.1 — Nov 3, 2026 (awaiting Steven's review)
+## v3.16.1 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Layout fixes from an audit against a page-design checklist, limited to what helps at the chair. No clinical content or rule changed.
 
