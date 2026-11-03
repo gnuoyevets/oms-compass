@@ -1921,7 +1921,9 @@ const PATIENT_UI={
 };
 const HO_PAIN_INDEX={ext:6,imp:9,arch:5};
 function patientMedicationRisk(){const ids=new Set([...(S.asmt||[]),...(S.fid?[S.fid]:[])]),a=ageNum();
- const nsaid=['renal','tx','bleeddx','doac','warfarin','antiplatelet'].some(id=>ids.has(id))||S.ans.preop?.c===true||S.ans.pain?.a===true;
+ /* Lithium or methotrexate on the prescribing check (or not yet answered No) withholds routine NSAID dosing, as in the clinician plan. */
+ const rxN=ids.has('rxint')&&(S.pf.rxLi!=='n'||S.pf.rxMtx!=='n');
+ const nsaid=['renal','tx','bleeddx','doac','warfarin','antiplatelet'].some(id=>ids.has(id))||rxN||S.ans.preop?.c===true||S.ans.pain?.a===true;
  return{nsaid,withhold:nsaid||ids.has('bupe')||(a!=null&&a<18)||(S.wt!=null&&S.wt<50)}
 }
 function hoItems(h,l){const risk=patientMedicationRisk(),u=PATIENT_UI[l]||PATIENT_UI.en;
@@ -2508,6 +2510,7 @@ const FIND=[
  link:[['pain',null]],
  plan(c){const p=mk();p.basis='ev';const on=[],off=[];
   [['rxSsri','SSRI/SNRI'],['rxLi','lithium'],['rxMtx','methotrexate']].forEach(([k,l])=>c[k]==='y'?on.push(k):!has(c[k])&&off.push(l));
+  if(!on.length&&!off.length){p.src=['tramLbl','liNsaid','mtxLbl'];p.act='None of these: no change from this check.';return p}
   if(!on.length){p.d='investigate';p.prov=true;p.miss.push(...off.map(l=>'On '+l+'?'));p.act='Confirm which of these the patient takes before prescribing.';p.src=['tramLbl','liNsaid','mtxLbl'];return p}
   p.d='modify';const acts=[];
   if(on.includes('rxSsri')){acts.push('no tramadol');p.src.push('tramLbl','ssriDx','ssriOp');

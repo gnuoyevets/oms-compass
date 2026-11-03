@@ -957,6 +957,9 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(m.sup.some(t=>/ibuprofen/.test(t))&&m.od==='investigate','Lithium suppresses routine ibuprofen advice from another finding and raises a conflict');
   m=await plan(['rxint'],{rxSsri:'y'});
   ok(/no tramadol/.test(m.P[0].act)&&m.P[0].steps.some(t=>/Not checked: lithium, methotrexate/.test(t)),'SSRI: no tramadol; unanswered drugs listed as not checked');
+  m=await plan(['rxint'],{rxSsri:'n',rxLi:'n',rxMtx:'n'});
+  ok(m.od==='proceed'&&!m.prov,'Prescribing check answered No to all three resolves');
+  ok(await X(()=>{newPatient();S.asmt=['rxint'];S.pf={age:'40',rxLi:'y'};const r=patientMedicationRisk();S.pf={age:'40',rxSsri:'n',rxLi:'n',rxMtx:'n'};const r2=patientMedicationRisk();return r.nsaid&&r.withhold&&!r2.nsaid}),'Lithium on the prescribing check withholds NSAID dosing from patient handouts; all-No does not');
   m=await plan(['rxint'],{});
   ok(m.od==='investigate'&&m.prov,'Post-op check with nothing answered stays unresolved');
   m=await plan(['dmrx'],{anes:'sed',dmAg:'bb',dmT1:'y',dmHypo:'n'});
