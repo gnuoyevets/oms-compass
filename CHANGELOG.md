@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.17.0 — Nov 3, 2026 (pending Steven's review)
+## v3.17.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Wider drug coverage, chosen by how common a drug is and how much harm it can do in oral surgery. Three new findings (22 total).
 
