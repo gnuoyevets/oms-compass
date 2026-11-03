@@ -513,7 +513,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(/Author’s protocol/.test(await page.locator('.reconciled').innerText()),'Author protocol shown in the reconciled plan');
  // Accessibility across findings
  const fa=[];for(const id of await E(page,()=>FIND.map(f=>f.id))){await E(page,id=>{newPatient();openFind(id)},id);const d=await dupIds(),u=await unnamed();if(d.length||u.length)fa.push(id+':'+d.join(',')+u.join(','))}
- ok(fa.length===0,'All 19 finding pages: unique IDs, every visible control named '+fa.slice(0,3).join(' | '));
+ ok(fa.length===0,'All 22 finding pages: unique IDs, every visible control named '+fa.slice(0,3).join(' | '));
  await E(page,()=>{newPatient();S.asmt=['doac','renal','glp1'];Object.assign(S.pf,{proc:'high',anes:'sed'});asmtView()});
  ok((await unnamed()).length===0,'Assessment: every visible control has an accessible name');
  // Age field keeps focus while typing two digits
@@ -936,6 +936,44 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{setPmode('author');redraw()});ok(await p.locator('.mbar').count()===1,'… in either mode');
   await X(()=>{setPmode('colleague');home()});ok(await p.locator('[data-pm]').count()>=1,'Home keeps the mode switch');
   await c21.close()}
+
+ console.log('23. v3.17 drug coverage: sedation interactions, post-op prescribing check, insulin & sulfonylureas');
+ {const c23=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c23.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c23),X=(f,a)=>p.evaluate(f,a);
+  const plan=(ids,pf)=>X(([ids,pf])=>{newPatient();S.asmt=ids;S.pf=pf;const m=asmtModel();return{od:m.od,prov:m.prov,P:m.P.map(x=>({id:x.f.id,d:x.p.d,act:x.p.act,steps:x.p.steps})),sup:m.suppressed.map(x=>x.text)}},[ids,pf]);
+  ok(await X(()=>['gabapentin','xanax','oxycodone','tramadol','paxlovid'].every(q=>findHits(q)[0]?.f?.id==='cnsdep'||findHits(q)[0]?.id==='cnsdep')),'Opioid, benzodiazepine, gabapentinoid and Paxlovid searches reach the sedation-interaction finding');
+  ok(await X(()=>['zoloft','lithium','methotrexate'].every(q=>(findHits(q)[0]?.f?.id||findHits(q)[0]?.id)==='rxint')&&['lantus','glipizide','insulin'].every(q=>(findHits(q)[0]?.f?.id||findHits(q)[0]?.id)==='dmrx')),'SSRI, lithium, methotrexate, insulin and sulfonylurea searches reach their findings');
+  ok(await X(()=>JSON.stringify(FX.cnsdep.preset.xanax)==='{"cdAg":"bz"}'&&FX.rxint.preset.lithium.rxLi==='y'&&FX.dmrx.preset.glipizide.dmAg==='su'),'Brand presets fill the drug answer');
+  let m=await plan(['cnsdep'],{anes:'sed',cdAg:'multi',cdResp:'n',cdCyp:'n'});
+  ok(m.od==='modify'&&/Higher breathing risk/.test(m.P[0].act),'Two sedating drugs under sedation: higher-risk plan');
+  m=await plan(['cnsdep'],{anes:'sed',cdAg:'gb'});
+  ok(m.od==='investigate'&&m.prov,'Unknown breathing risk under sedation is not read as normal');
+  m=await plan(['cnsdep'],{anes:'sed',cdAg:'none',cdCyp:'y'});
+  ok(/no oral midazolam/.test(m.P[0].act)&&/verify/.test(m.P[0].act),'Paxlovid alone: midazolam caution, marked for verification');
+  m=await plan(['cnsdep'],{anes:'la',cdAg:'op'});
+  ok(m.P[0].steps.some(t=>/boxed warning/.test(t))&&m.P[0].steps.some(t=>/Do not stop/.test(t)),'Local only: continue the drug; post-op opioid caution kept');
+  m=await plan(['rxint','bupe'],{rxLi:'y'});
+  ok(m.sup.some(t=>/ibuprofen/.test(t))&&m.od==='investigate','Lithium suppresses routine ibuprofen advice from another finding and raises a conflict');
+  m=await plan(['rxint'],{rxSsri:'y'});
+  ok(/no tramadol/.test(m.P[0].act)&&m.P[0].steps.some(t=>/Not checked: lithium, methotrexate/.test(t)),'SSRI: no tramadol; unanswered drugs listed as not checked');
+  m=await plan(['rxint'],{rxSsri:'n',rxLi:'n',rxMtx:'n'});
+  ok(m.od==='proceed'&&!m.prov,'Prescribing check answered No to all three resolves');
+  ok(await X(()=>{newPatient();S.asmt=['rxint'];S.pf={age:'40',rxLi:'y'};const r=patientMedicationRisk();S.pf={age:'40',rxSsri:'n',rxLi:'n',rxMtx:'n'};const r2=patientMedicationRisk();return r.nsaid&&r.withhold&&!r2.nsaid}),'Lithium on the prescribing check withholds NSAID dosing from patient handouts; all-No does not');
+  m=await plan(['rxint'],{});
+  ok(m.od==='investigate'&&m.prov,'Post-op check with nothing answered stays unresolved');
+  m=await plan(['dmrx'],{anes:'sed',dmAg:'bb',dmT1:'y',dmHypo:'n'});
+  ok(m.od==='modify'&&m.P[0].steps.some(t=>/never omit basal/.test(t))&&m.P[0].steps.some(t=>/Mealtime insulin.*verify/.test(t)),'Fasting basal-bolus type 1: keep basal, mealtime line marked for verification');
+  m=await plan(['dmrx'],{anes:'la',dmAg:'su',dmHypo:'n'});
+  ok(m.od==='proceed'&&/usual doses/.test(m.P[0].act),'Local with normal eating: usual doses');
+  m=await plan(['dmrx'],{anes:'sed',dmAg:'pump',dmHypo:'n'});
+  ok(m.od==='investigate','Pump while fasting: individualized plan first');
+  m=await plan(['dmrx'],{anes:'sed',dmAg:'basal',dmT1:'n',dmHypo:'y'});
+  ok(m.od==='investigate','Recurrent hypoglycemia: individualized plan first');
+  await X(()=>{newPatient();openFind('pain')}).catch(()=>{});
+  ok(await X(()=>{const n=MODS.find(x=>x.id==='pain').nodes;return n.a.h.some(t=>/Lithium or methotrexate/.test(t))&&/not tramadol/.test(n.oOp.ex)}),'Post-op analgesia pathway lists lithium/methotrexate and tramadol cautions');
+  for(const id of ['cnsdep','rxint','dmrx']){await p.setViewportSize({width:320,height:700});await X(i=>{newPatient();openFind(i)},id);ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),`${id} page fits 320px`)}
+  await c23.close()}
 
  await browser.close();
  

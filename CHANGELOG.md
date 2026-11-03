@@ -2,6 +2,17 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.17.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
+
+Wider drug coverage, chosen by how common a drug is and how much harm it can do in oral surgery. Three new findings (22 total).
+
+- **Sedation interactions:** daily opioids, benzodiazepines and gabapentin/pregabalin stack with sedation (FDA 2016 boxed warning; FDA 2019 gabapentinoid warning). Unknown breathing risk keeps the plan unresolved. Paxlovid or another strong CYP3A4 inhibitor: no oral midazolam; IV midazolam only with close monitoring and a lower dose (UK label; US label marked [verify]).
+- **Post-op prescribing check:** SSRI/SNRI → no tramadol (serotonin syndrome, seizures; label). Lithium → no NSAIDs (NHS safety notice). Methotrexate → NSAIDs and penicillins only with the prescriber (label; [verify] US wording). Lithium or methotrexate now suppresses routine ibuprofen advice from other findings and raises a conflict; patient handouts also withhold NSAID dosing unless both are answered No. All three answered No resolves the check.
+- **Insulin & sulfonylureas:** local with normal eating → usual doses; fasting → written plan from the diabetes prescriber, with the ADA 2026 dose ranges already in the Diabetes module. Pump, premixed/concentrated insulin or recurrent hypoglycemia → individualized plan first. "Mealtime insulin not taken while fasting" is marked [verify].
+- **Post-op analgesia pathway:** lithium/methotrexate added to "NSAID contraindicated?"; tramadol caution with SSRIs/SNRIs.
+- **Source limits:** this environment could not open DailyMed, FDA, PubMed or ADA journal pages. New sources record that in their check note. Please review every [verify] line before approving.
+- Tests: 560 browser checks (20 new); reconciliation 78. Software checks only; not clinical validation.
+
 ## v3.16.1 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Layout fixes from an audit against a page-design checklist, limited to what helps at the chair. No clinical content or rule changed.
