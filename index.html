@@ -451,6 +451,15 @@ sux:{n:'Succinylcholine chloride (Anectine) prescribing information',v:'IM 3–4
 lipid70:{n:'ASRA lipid emulsion dosing for LAST (>70 kg vs ≤70 kg), summarized',v:'Oral Health Group review',chk:'2026-10-24',u:'https://www.oralhealthgroup.com/features/lipid-emulsion-treatment-for-local-anesthetic-systemic-toxicity/'},
 wfhdent:{n:'WFH · Guidelines for dental treatment of patients with inherited bleeding disorders (Brewer & Correa)',v:'Treatment of Hemophilia Monograph 40 · 2006',chk:'2026-10-24',u:'https://www1.wfh.org/publications/files/pdf-1190.pdf'},
 apsfcied:{n:'APSF · Perioperative management of CIEDs (Neelankavil, Thompson & Mahajan; summarizes ASA 2020 advisory)',v:'APSF Newsletter 2020;35(3)',chk:'2026-10-24',u:'https://www.apsf.org/article/change-of-pace-an-update-on-the-perioperative-management-of-cardiovascular-implantable-electronic-devices-cieds/'},
+fdaGaba:{n:'FDA Drug Safety Communication · Serious breathing problems with gabapentin and pregabalin',v:'Dec 19, 2019 · risk factors: opioids, other CNS depressants, lung disease, older age',chk:'2026-11-03 (search summary of the FDA page; page not opened)',u:'https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-about-serious-breathing-problems-seizure-and-nerve-pain-medicines-gabapentin-neurontin'},
+fdaOpBz:{n:'FDA · Boxed warning on combined opioids and benzodiazepines',v:'Aug 2016 · respiratory depression, coma, death; limit dose and duration',chk:'2026-11-03 (secondary summaries; primary not opened)',u:'https://fda.gov/media/99679/download'},
+paxSpc:{n:'Paxlovid (nirmatrelvir/ritonavir) · UK Summary of Product Characteristics',v:'Oral midazolam contraindicated; parenteral midazolam only with close monitoring (US label not opened)',chk:'2026-11-03',u:'https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1045762/Reg_SPC_PX_2_0_GB.pdf'},
+tramLbl:{n:'Tramadol hydrochloride · US label text (serotonin syndrome; seizure risk with SSRIs)',v:'Label reproduction on NDC List; DailyMed not opened',chk:'2026-11-03',u:'https://ndclist.com/ndc/45865-469/label'},
+ssriDx:{n:'Systematic review · Antidepressant use and bleeding after dental extraction',v:'J Clin Med 2025 · one retrospective study found; ~1% bleeding complications',chk:'2026-11-03',u:'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12429071/'},
+ssriOp:{n:'Review · SSRIs and operative bleeding risk',v:'J Clin Psychopharmacol 2016 · general surgery; stopping risks discontinuation and relapse',chk:'2026-11-03',u:'https://pubmed.ncbi.nlm.nih.gov/27684291/'},
+liNsaid:{n:'NHS (TEWV) safety notice · Lithium and NSAIDs',v:'Dec 2021 · potentially fatal; extra lithium monitoring until 4 weeks after the NSAID stops',chk:'2026-11-03',u:'https://www.tewv.nhs.uk/content/uploads/2021/12/SBARD-Lithium-NSAIDs.pdf'},
+mtxLbl:{n:'Pfizer (Canada) · Methotrexate drug interactions',v:'NSAIDs: caution at low doses; penicillins may reduce methotrexate clearance (US label not opened)',chk:'2026-11-03',u:'https://pfizermedicalinformation.ca/methotrexate/drug-interactions'},
+imidRev:{n:'Review · Tooth extraction in patients on immunosuppressants for immune-mediated disease',v:'BMC Oral Health 2025 · no dental-specific perioperative guidance',chk:'2026-11-03',u:'https://rcastoragev2.blob.core.windows.net/215b157002df40e6fceef7968b7ba94e/12903_2024_Article_5414.PMC11948965.pdf'},
 kohan:{n:'Kohan et al. · Buprenorphine management in the perioperative period (multisociety expert panel)',v:'Reg Anesth Pain Med 2021;46:840–859',chk:'2026-10-24',u:'https://doi.org/10.1136/rapm-2021-103007'},
 cobo:{n:'Cobo-Vázquez et al. · Solid organ transplant patients undergoing oral surgery: literature review',v:'J Stomatol 2024;77:205–209',chk:'2026-10-24',u:'https://doi.org/10.5114/jos.2024.143590'},
 ludwig:{n:'Long, Bridwell, Gottlieb & Koyfman · Diagnosis and management of Ludwig’s angina: an evidence-based review',v:'Am J Emerg Med 2021;41:1–5',chk:'2026-10-23',u:'https://doi.org/10.1016/j.ajem.2020.12.030'},
@@ -742,16 +751,16 @@ const MODS=[
  }},
 
 {id:'pain',g:'Post-op & complications',title:'Post-op analgesia',d:'NSAID first · when an opioid is allowed',
- start:'a',refs:['ada24','apapFDA','nsaidpreg','dialysis'],
+ start:'a',refs:['ada24','apapFDA','nsaidpreg','dialysis','liNsaid','mtxLbl','tramLbl'],
  caveat:'ADA 2024 suggests against adding corticosteroids for pain after surgical extraction. Daily max: ibuprofen 2400 mg, naproxen sodium 1100 mg, acetaminophen 4000 mg (all sources).',
  nodes:{
- a:{q:'NSAID contraindicated?',h:['Pregnancy ≥20 weeks (FDA)','Kidney disease or dialysis','Anticoagulant or antiplatelet: SDCEP advises acetaminophen rather than NSAIDs','NSAID allergy, active GI bleed or ulcer, or prescriber advice to avoid'],yes:'oApap',no:'b'},
+ a:{q:'NSAID contraindicated?',h:['Pregnancy ≥20 weeks (FDA)','Kidney disease or dialysis','Anticoagulant or antiplatelet: SDCEP advises acetaminophen rather than NSAIDs','Lithium or methotrexate: NSAIDs raise their levels — acetaminophen, or an NSAID only as agreed with the prescriber','NSAID allergy, active GI bleed or ulcer, or prescriber advice to avoid'],yes:'oApap',no:'b'},
  oApap:{out:'Acetaminophen 1000 mg per dose maximum; recommend ≤3000 mg/day, absolute ceiling 4000 mg/day from all products (lower if clinically indicated).',src:'ada24',ex:'If inadequate, reassess the cause and confirm opioid eligibility separately: do not use this pathway to bypass CNS-medication, existing-opioid or other contraindication checks.'},
  b:{q:'NSAID + acetaminophen expected to fail, or already failed?',h:['e.g., difficult surgical extraction','Severe pain at 72 h: examine for a complication first'],yes:'c',no:'oFirst'},
  oFirst:{out:'Ibuprofen 400 mg or naproxen sodium 440 mg, alone or with acetaminophen 500 mg.',src:'ada24',ex:'Scheduled dosing for the first days. No “just in case” opioid.'},
  c:{q:'On a benzodiazepine, gabapentinoid, other CNS-active drug, or opioids already?',yes:'oNoOp',no:'oOp'},
  oNoOp:{out:'No opioid. Maximize NSAID + acetaminophen and re-examine for a complication.',tone:'action',src:'ada24'},
- oOp:{out:'Keep the NSAID; add acetaminophen 325 mg plus one hydrocodone 5–7.5 mg or oxycodone 5 mg/acetaminophen 325 mg tablet.',tone:'action',src:'ada24',ex:'Lowest dose, fewest tablets, rarely >3 days. Informed consent; counsel on storage and disposal.'}
+ oOp:{out:'Keep the NSAID; add acetaminophen 325 mg plus one hydrocodone 5–7.5 mg or oxycodone 5 mg/acetaminophen 325 mg tablet.',tone:'action',src:'ada24',ex:'Lowest dose, fewest tablets, rarely >3 days. Informed consent; counsel on storage and disposal. On an SSRI or SNRI: not tramadol (serotonin syndrome, seizures; label).'}
  }},
 
 {id:'calltri',g:'Post-op & complications',title:'Post-op phone call triage',d:'Staff script · 911, come in now, same day, or reassure',
@@ -1720,8 +1729,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.16.1';
+const VER='3.17.0';
 const CHANGES=[
+{v:'3.17.0',d:'Nov 3, 2026',i:['Three new findings (22 total). Sedation interactions: daily opioids, benzodiazepines, gabapentin/pregabalin (FDA boxed warning and 2019 breathing warning) and Paxlovid or other strong CYP3A4 inhibitors with midazolam.','Post-op prescribing check: SSRI/SNRI → no tramadol (label); lithium or methotrexate → acetaminophen first, NSAIDs only with the prescriber. Lithium or methotrexate now suppresses routine ibuprofen advice from other findings, as kidney and antithrombotic precautions already did.','Insulin & sulfonylureas: usual doses under local with normal eating; fasting needs a written plan from the prescriber (ADA 2026). Pump, premixed or concentrated insulin, or recurrent low blood sugar: individualized plan first.','Post-op analgesia pathway lists lithium/methotrexate under “NSAID contraindicated?” and warns against tramadol with SSRIs/SNRIs.','Lines checked only against secondary sources are marked [verify]: the US Paxlovid, methotrexate and tramadol labels and the ADA mealtime-insulin wording could not be opened from this environment.']},
 {v:'3.16.1',d:'Nov 3, 2026',i:['Finding pages: the title and status no longer get cut off at the top on phones.','Unresolved panel: each answer’s outcome shows as its own row with a colored disposition; the panel note is one short line.','The practice-mode bar shows only where switching Author/Colleague changes the plan; Home keeps the switch.']},
 {v:'3.16.0',d:'Nov 2, 2026 · approved for publication',i:['Clinical workflow review: separate insulin formulations and fasting context; synchronize GLP-1 escalation and maintenance risk; acetaminophen recommended 3000 mg/day, absolute 4000 mg/day ceiling from all products.','Negated/past context stays unticked. Multiple lab results remain visible and unselected until one is chosen. Acknowledgment no longer switches to Author mode.','Patient sharing now previews current text and carries medication precautions, version and translation draft status. Decision criteria are visible beside each question.']},
 {v:'3.15.0',d:'Nov 2, 2026',i:['Read as a case: type or paste a short history in search (e.g., “72M on Eliquis, INR 2.6, 3 simple extractions under IV sedation”). Compass proposes findings, labs and context as tick boxes; nothing is recorded until you tap Add. Fixed rules on this phone, not AI; nothing is sent, and the typed text never enters notes. Negated (“denies”) and held (“stopped”) drugs start unticked; unrecognized drugs are listed, not ignored; units are never assumed.','Free-text questions: when no module matches every word, the closest modules are shown instead of “no entry”.','Imaging AI flag finding: record what radiograph or CBCT software flagged (periapical radiolucency, impaction, IAN proximity, sinus change, possible carotid calcification, TMJ change, other lesion). Nothing changes the plan until your own read confirms it; each flag links to the matching module. Compass does not read images and connects to no vendor.']},
@@ -2459,6 +2469,83 @@ const FIND=[
   p.act='Nonselective β-blocker: epinephrine can cause hypertension with reflex bradycardia. Smallest effective dose, aspirate, inject slowly, BP and HR after each cartridge.';
   p.steps=['Anaphylaxis may resist epinephrine: glucagon is on the SOS Anaphylaxis card.'];return p}},
 
+{id:'cnsdep',kind:'Medication',t:'Sedation interactions: opioids, benzodiazepines, gabapentinoids, Paxlovid',cls:'CNS depressants · CYP3A4 inhibitors',
+ syn:['oxycodone','oxycontin','percocet','hydrocodone','norco','vicodin','morphine','ms contin','hydromorphone','dilaudid','methadone','fentanyl patch','tapentadol','nucynta','tramadol','ultram','chronic opioid','chronic opioids','alprazolam','xanax','lorazepam','ativan','clonazepam','klonopin','diazepam','valium','temazepam','restoril','benzodiazepine','benzo','gabapentin','neurontin','gralise','horizant','pregabalin','lyrica','gabapentinoid','paxlovid','nirmatrelvir','clarithromycin','ketoconazole','itraconazole'],
+ preset:Object.fromEntries([...['oxycodone','oxycontin','percocet','hydrocodone','norco','vicodin','morphine','ms contin','hydromorphone','dilaudid','methadone','fentanyl patch','tapentadol','nucynta','tramadol','ultram','chronic opioid','chronic opioids'].map(k=>[k,{cdAg:'op'}]),...['alprazolam','xanax','lorazepam','ativan','clonazepam','klonopin','diazepam','valium','temazepam','restoril','benzodiazepine','benzo'].map(k=>[k,{cdAg:'bz'}]),...['gabapentin','neurontin','gralise','horizant','pregabalin','lyrica','gabapentinoid'].map(k=>[k,{cdAg:'gb'}]),...['paxlovid','nirmatrelvir','clarithromycin','ketoconazole','itraconazole'].map(k=>[k,{cdCyp:'y'}])]),
+ what:['Sedatives stack: opioids with benzodiazepines carry an FDA boxed warning (breathing suppression, death).','Gabapentin and pregabalin can cause serious breathing problems with opioids, other sedatives, lung disease or older age (FDA 2019).','Paxlovid and other strong CYP3A4 inhibitors make midazolam stronger and longer-acting.','Continue the daily drug; the risk is in what you add for sedation and after surgery.'],
+ ctx:['anes'],
+ qs:[{k:'cdAg',q:'Which daily sedating drug?',opts:[['op','Opioid (not buprenorphine)'],['bz','Benzodiazepine'],['gb','Gabapentin or pregabalin'],['multi','Two or more of these'],['none','None of these']]},
+  {k:'cdResp',q:'Breathing risk: sleep apnea or STOP-Bang ≥3, COPD or other lung disease, or older age?',opts:YN,when:()=>['sed','ga'].includes(S.pf.anes)&&S.pf.cdAg!=='none'},
+  {k:'cdCyp',q:'Paxlovid now or in the last few days, or another strong CYP3A4 inhibitor (clarithromycin, ketoconazole, itraconazole)?',opts:YN,when:()=>['sed','ga'].includes(S.pf.anes)}],
+ link:[['sed',null],['pain','c']],
+ plan(c){const p=mk();p.src=['fdaOpBz','fdaGaba'];p.basis='ev';
+  const rx='After surgery: avoid adding an opioid to a benzodiazepine or gabapentinoid; if no alternative, lowest dose and shortest course (FDA boxed warning). Use the Post-op analgesia pathway.';
+  const keep='Do not stop the daily drug for surgery; gabapentinoids are tapered, not stopped (FDA 2019). Benzodiazepine withdrawal can cause seizures [verify]. Changes are the prescriber’s call.';
+  const cyp='Strong CYP3A4 inhibitor: midazolam effect is larger and longer. Paxlovid label: no oral midazolam; IV midazolam only with close monitoring and a lower dose. Ask when the course ended [verify against the US label].';
+  if(!has(c.cdAg)){p.miss.push('Which sedating drug');p.prov=true}
+  if(c.cdAg==='none'){p.src=['paxSpc'];
+   if(!needCtx(p,c,'anes','matters only if sedating')){p.d='modify';p.act='Matters only if sedating with midazolam.';return p}
+   if(c.anes==='la'){p.act='Local only: no sedation interaction.';return p}
+   if(c.cdCyp==='y'){p.d='modify';p.act=cyp;return p}
+   if(!has(c.cdCyp)){p.d='investigate';p.prov=true;p.miss.push('Paxlovid or other strong CYP3A4 inhibitor');p.act='Confirm CYP3A4 inhibitor use before midazolam.';return p}
+   p.act='No sedation interaction found by this check.';return p}
+  if(!needCtx(p,c,'anes','sedation changes the plan')){p.d='modify';p.act='Continue the drug. If sedating, plan for additive breathing suppression.';p.steps=[keep,rx];return p}
+  if(c.anes==='la'){p.d='modify';p.act='Local only: continue the drug. Plan post-op pain relief without adding sedatives.';p.steps=[keep,rx];return p}
+  if(!has(c.cdAg)||!has(c.cdResp)){p.d='investigate';p.prov=true;if(!has(c.cdResp))p.miss.push('Breathing risk factors');p.act='Identify the drug and breathing risks before sedating.';p.steps=[keep,rx];return p}
+  p.d='modify';
+  p.act=c.cdAg==='multi'||c.cdResp==='y'?'Higher breathing risk: lighter sedation or local only, slow titration, capnography; consider a monitored or hospital setting with anesthesia [verify: judgment, no dental-specific guideline].':'Expect additive sedation and some tolerance: titrate slowly to effect, with capnography.';
+  p.steps=['Reversal drugs ready. Flumazenil can trigger seizures in chronic benzodiazepine users (Emergency → oversedation).',keep,rx];
+  if(c.cdCyp==='y'){p.src.push('paxSpc');p.steps.unshift(cyp)}
+  else if(!has(c.cdCyp)){p.miss.push('Paxlovid or other strong CYP3A4 inhibitor');p.prov=true}
+  return p}},
+
+{id:'rxint',kind:'Medication',t:'Post-op prescribing check: SSRIs/SNRIs, lithium, methotrexate',cls:'Interacts with post-op analgesics or antibiotics',
+ syn:['sertraline','zoloft','fluoxetine','prozac','citalopram','celexa','escitalopram','lexapro','paroxetine','paxil','venlafaxine','effexor','duloxetine','cymbalta','desvenlafaxine','pristiq','ssri','snri','lithium','lithobid','methotrexate','trexall','otrexup','rasuvo','xatmep'],
+ preset:Object.fromEntries([...['sertraline','zoloft','fluoxetine','prozac','citalopram','celexa','escitalopram','lexapro','paroxetine','paxil','venlafaxine','effexor','duloxetine','cymbalta','desvenlafaxine','pristiq','ssri','snri'].map(k=>[k,{rxSsri:'y'}]),...['lithium','lithobid'].map(k=>[k,{rxLi:'y'}]),...['methotrexate','trexall','otrexup','rasuvo','xatmep'].map(k=>[k,{rxMtx:'y'}])]),
+ what:['These drugs are usually continued; the risk is in what you prescribe.','SSRI/SNRI + tramadol: serotonin syndrome and seizures (tramadol label).','Lithium or methotrexate + NSAIDs: higher drug levels and toxicity.'],
+ ctx:[],
+ qs:[{k:'rxSsri',q:'On an SSRI or SNRI?',opts:YN},{k:'rxLi',q:'On lithium?',opts:YN},{k:'rxMtx',q:'On methotrexate?',opts:YN}],
+ link:[['pain',null]],
+ plan(c){const p=mk();p.basis='ev';const on=[],off=[];
+  [['rxSsri','SSRI/SNRI'],['rxLi','lithium'],['rxMtx','methotrexate']].forEach(([k,l])=>c[k]==='y'?on.push(k):!has(c[k])&&off.push(l));
+  if(!on.length){p.d='investigate';p.prov=true;p.miss.push(...off.map(l=>'On '+l+'?'));p.act='Confirm which of these the patient takes before prescribing.';p.src=['tramLbl','liNsaid','mtxLbl'];return p}
+  p.d='modify';const acts=[];
+  if(on.includes('rxSsri')){acts.push('no tramadol');p.src.push('tramLbl','ssriDx','ssriOp');
+   p.steps.push('SSRI/SNRI: avoid tramadol. Label: serotonin syndrome (often after the first dose) and higher seizure risk with SSRIs.','SSRI/SNRI: continue it; stopping risks discontinuation symptoms and relapse. Dental bleeding evidence is thin (one retrospective study, ~1%); routine local hemostasis.')}
+  if(on.includes('rxLi')){acts.push('no NSAIDs (lithium)');p.src.push('liNsaid');
+   p.steps.push('Lithium: avoid NSAIDs, including over-the-counter ibuprofen and naproxen; they raise lithium levels, potentially fatally. Use acetaminophen. If an NSAID is essential: agree it with the prescriber, with lithium levels checked until 4 weeks after it stops.')}
+  if(on.includes('rxMtx')){acts.push('NSAIDs and penicillins only with the prescriber (methotrexate)');p.src.push('mtxLbl','imidRev');
+   p.steps.push('Methotrexate: NSAIDs and penicillins (amoxicillin) can reduce its clearance and raise toxicity (label). Prefer acetaminophen; if either is needed, tell the prescriber and watch for mouth ulcers or infection [verify against the US label].','Methotrexate: infection and healing risk; no dental-specific guidance. Do not hold it yourself; ask the rheumatologist.')}
+  p.act='Post-op prescribing: '+acts.join('; ')+'. Acetaminophen first.';
+  if(off.length)p.steps.push('Not checked: '+off.join(', ')+'.');
+  return p}},
+
+{id:'dmrx',kind:'Medication',t:'Insulin & sulfonylureas',cls:'Hypoglycemia risk while fasting',
+ syn:['insulin','lantus','basaglar','toujeo','semglee','glargine','levemir','detemir','tresiba','degludec','nph insulin','humulin','novolin','humalog','lispro','novolog','aspart','fiasp','apidra','admelog','lyumjev','insulin pump','omnipod','glipizide','glucotrol','glyburide','glynase','glimepiride','amaryl','sulfonylurea'],
+ preset:Object.fromEntries([...['glipizide','glucotrol','glyburide','glynase','glimepiride','amaryl','sulfonylurea'].map(k=>[k,{dmAg:'su'}]),...['insulin pump','omnipod'].map(k=>[k,{dmAg:'pump'}])]),
+ what:['Fasting for sedation or GA is the danger: low blood sugar.','Local anesthesia with normal eating: usual doses; do not apply fasting reductions automatically (ADA 2026).','The dose plan is the diabetes prescriber’s call.'],
+ ctx:['anes'],
+ qs:[{k:'dmAg',q:'Which?',opts:[['basal','Basal insulin only (glargine, detemir, degludec, NPH)'],['bb','Basal plus mealtime insulin'],['pump','Insulin pump'],['mix','Premixed or concentrated insulin (70/30, U-500)'],['su','Sulfonylurea, no insulin (glipizide, glyburide, glimepiride)']]},
+  {k:'dmT1',q:'Type 1 diabetes?',opts:YN,when:()=>S.pf.dmAg&&S.pf.dmAg!=='su'},
+  {k:'dmHypo',q:'Recurrent or severe low blood sugar recently?',opts:YN}],
+ link:[['dm','nMed']],
+ plan(c){const p=mk();p.src=['ada16','adahypo'];p.esc=['Glucose <70 mg/dL, or sweaty, shaky or confused: treat now (Emergency → Hypoglycemia).'];
+  const mon='Check glucose on arrival (ADA target 100–180 mg/dL); while fasting, at least every 2–4 h. Do not rely on CGM alone during surgery.';
+  if(!has(c.dmAg)){p.miss.push('Which insulin or sulfonylurea');p.prov=true}
+  if(c.dmHypo==='y'){p.d='investigate';p.act='Recurrent low blood sugar: get an individualized written plan from the diabetes prescriber before surgery.';p.steps=[mon];return p}
+  if(!has(c.dmHypo)){p.miss.push('Recent low blood sugar');p.prov=true}
+  if(!needCtx(p,c,'anes','fasting changes the plan')){p.d='investigate';p.act='Fasting for sedation/GA needs a written dose plan from the prescriber; local with normal eating does not.';p.steps=[mon];return p}
+  if(c.anes==='la'){p.d='proceed';p.act='Local with normal eating: usual doses; eat as usual. Glucose checked on arrival; hypoglycemia kit ready.';p.steps=[mon];return p}
+  if(['pump','mix'].includes(c.dmAg)){p.d='investigate';p.act='Pump, premixed or concentrated insulin: individualized written plan from the diabetes prescriber before fasting (ADA 2026).';p.steps=[mon];return p}
+  if(!has(c.dmAg)){p.d='investigate';p.act='Identify the drug; fasting needs a written dose plan from the prescriber.';p.steps=[mon];return p}
+  p.d='modify';p.act='Fasting: written dose plan from the diabetes prescriber.';
+  if(c.dmAg==='su')p.steps.push('Sulfonylurea: held on the day of fasting surgery, per the prescriber (ADA 2026).');
+  else{p.steps.push('Basal analog commonly 75–80% of usual; evening-before dose about 25% lower; NPH about half (ADA 2026). The prescriber confirms.');
+   if(c.dmAg==='bb')p.steps.push('Mealtime insulin: not taken while fasting [verify against ADA 2026 text].');
+   if(c.dmT1==='y')p.steps.push('Type 1: never omit basal insulin.');else if(!has(c.dmT1)){p.miss.push('Type 1 diabetes?');p.prov=true}}
+  p.steps.push(mon,'Resume usual doses when eating normally, per the prescriber.');
+  return p}},
+
 {id:'tx',kind:'Medical history',t:'Organ transplant · immunosuppressants',cls:'Solid organ transplant',
  syn:['organ transplant','kidney transplant','renal transplant','liver transplant','heart transplant','lung transplant','transplant recipient','tacrolimus','prograf','cyclosporine','ciclosporin','neoral','sandimmune','sirolimus','rapamune','mycophenolate','cellcept','myfortic','azathioprine','immunosuppressed','immunosuppression','immunosuppressant'],
  what:['Higher infection risk and slower healing; coordinate with the transplant team.','No established recommendation on antibiotic prophylaxis (2024 review) — the transplant team decides.','Drug interactions and steroid cover are the common traps.'],
@@ -2572,13 +2659,14 @@ function disposition(m){return m.od?DISP[m.od][0]:'No findings selected'}
 /* An exclusion suppresses advice; it does not invent a replacement prescription. */
 function reconcilePlans(raw,A){
  const P=raw.map(({f,p})=>({f,p:{...p,steps:[...p.steps],miss:[...p.miss],src:[...p.src]}})),suppressed=[],miss=[],conf=[];
- const nsaid=A.includes('renal')||A.includes('tx')||A.includes('bleeddx')||A.some(id=>ANTITHROMB.includes(id));
- const reason=nsaid?'Existing kidney, transplant, bleeding-disorder or antithrombotic precautions take precedence over routine NSAID advice.':'';
+ const rxN=A.includes('rxint')&&(S.pf.rxLi==='y'||S.pf.rxMtx==='y');
+ const nsaid=A.includes('renal')||A.includes('tx')||A.includes('bleeddx')||A.some(id=>ANTITHROMB.includes(id))||rxN;
+ const reason=nsaid?'Existing kidney, transplant, bleeding-disorder, antithrombotic, lithium or methotrexate precautions take precedence over routine NSAID advice.':'';
  const a=ageNum(),bupiRestricted=a==null||a<12,artRestricted=a==null||a<4;
  for(const row of P){
   const keep=(text,part)=>{
    let why='',src=[],raise=false;
-   if(nsaid&&/scheduled ibuprofen|ibuprofen \+|NSAID first.line/i.test(text)&&!/avoid|rather than|no aspirin|only if/i.test(text)){why=reason;src=A.includes('renal')?['nkfpain']:A.includes('bleeddx')?['wfhdent']:['sdcepFull'];raise=true}
+   if(nsaid&&/scheduled ibuprofen|ibuprofen \+|NSAID first.line/i.test(text)&&!/avoid|rather than|no aspirin|only if/i.test(text)){why=reason;src=A.includes('renal')?['nkfpain']:A.includes('bleeddx')?['wfhdent']:rxN&&!A.some(id=>ANTITHROMB.includes(id))&&!A.includes('tx')?[S.pf.rxLi==='y'?'liNsaid':'mtxLbl']:['sdcepFull'];raise=true}
    /* Label age limits only withhold the restricted drug; the remaining steps stand, so no disposition change. */
    if(/bupivacaine/i.test(text)&&bupiRestricted){why=a==null?'Age not entered; bupivacaine option withheld (label: not under age 12). Enter age to show it.':'Existing local-anesthetic age restriction excludes dental bupivacaine below age 12.';src=['aapdla']}
    if(/articaine/i.test(text)&&artRestricted){why=a==null?'Age not entered; articaine option withheld (label: not under age 4). Enter age to show it.':'Existing local-anesthetic age restriction excludes articaine below age 4.';src=['aapdla']}
