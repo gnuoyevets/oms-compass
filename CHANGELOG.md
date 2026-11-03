@@ -2,6 +2,17 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.19.0 — Nov 3, 2026 (pending Steven's review)
+
+Four new decision pathways (41 total), from an external patch built on v3.16.0 and reconciled onto v3.18.0. Topic selection informed by the Laskin & Abubaker table of contents; chapters not consulted.
+
+- **Salivary and submandibular swelling:** airway/deep-space/systemic → emergency (EMS for threatened airway); discrete or persistent mass, fixation or facial weakness → expedited head-and-neck assessment and imaging; dental source → Odontogenic infection pathway (linked); acute tender gland with duct pus → same-day assessment for suppurative sialadenitis; meal-related recurrent swelling → evaluate for duct obstruction, consider ultrasound and specialist referral; otherwise focused evaluation. Source: NSW Health adult salivary referral criteria.
+- **Suspected jaw osteomyelitis:** deep-space spread, airway or instability → emergency; prior radiation or antiresorptive exposure → evaluate for ORN/MRONJ (MRONJ pathway linked); unexplained sensory loss, mass or atypical destructive lesion → expedited lesion workup with imaging and tissue diagnosis; drainage, nonhealing socket or bone changes → dental source and extent of bone involvement, cross-sectional imaging, deep tissue or bone for culture and histopathology when indicated. Sources: SABR adult chronic nonspinal osteomyelitis consensus (general, not jaw-specific), AAOMS 2022, ISOO-MASCC-ASCO 2024.
+- **Suspected odontogenic sinusitis:** vision change, diplopia, painful eye movement or neurologic signs → emergency; ENT-confirmed sinusitis + confirmed ipsilateral dental source → coordinated source control and sinus management; unilateral purulence, foul smell or maxillary symptoms with a plausible dental source → dental evaluation and ENT confirmation (typically nasal endoscopy); otherwise other causes (mucosal thickening alone is insufficient). Sources: international consensus statements on diagnosis and management.
+- **Adult OSA referral:** known OSA → obtain study and treatment history; suspected → sleep referral; prior negative/inadequate home study or complicating condition → in-lab polysomnography. Kept separate from Office sedation plan. Source: AASM adult diagnostic testing guideline.
+- Reconciliation: test counts updated to 41 pathways and 22 findings; two navigation links added. Patch sources have no publication year or check date.
+- Tests: reconciliation 78; clinical workflow 34; browser checks below. Software checks only; not clinical validation.
+
 ## v3.18.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Handoff items: one chairside decision, fewer taps.
