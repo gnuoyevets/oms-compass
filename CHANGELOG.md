@@ -2,6 +2,16 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.16.1 — Nov 3, 2026 (awaiting Steven's review)
+
+Layout fixes from an audit against a page-design checklist, limited to what helps at the chair. No clinical content or rule changed.
+
+- **Finding header:** the title wraps to two lines and the status pill wraps, instead of both being cut off at phone width.
+- **Unresolved panel:** each answer's outcome is its own row with a colored disposition pill, replacing one run-on line. The panel note is shortened to "Provisional until these are answered. Unknown is never read as normal." Copied notes keep the same outcome text.
+- **Practice-mode bar:** shown on a finding or the assessment only when switching Author/Colleague changes a plan or a question there. Home keeps the switch.
+- Not changed, on purpose: the many small type sizes, the all-caps badges (each carries distinct safety information), the module subtitles on Home and the app's own colors.
+- Tests: 540 browser checks (8 new); reconciliation 78. Software checks only; not clinical validation.
+
 ## v3.16.0 — Nov 2, 2026 (approved by Steven Nov 2, 2026)
 
 - Acetaminophen: recommend 3,000 mg/day; absolute adult ceiling 4,000 mg/day from all products, lower individual limits apply. All four patient languages and standalone page synchronized.
