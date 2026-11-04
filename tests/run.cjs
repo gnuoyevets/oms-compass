@@ -1085,6 +1085,27 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{newPatient();home()});await p.fill('#in-q','dysplasia');ok(await p.locator('#hits [data-open="dysplasia"]').count()===0&&await p.locator('#hits [data-open="lesion"]').count()>0,'Search reaches the combined pathway, not the hidden one');
   await c27.close()}
 
+ console.log('28. Calc tab: typing age and weight keeps the field (phone keyboard stays open)');
+ {const c28=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c28.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c28),X=(f,a)=>p.evaluate(f,a);
+  await X(()=>{newPatient();view('calc')});
+  await p.locator('#in-wt').click();await X(()=>{window.__wt=document.getElementById('in-wt')});
+  await p.keyboard.type('80,5',{delay:40});
+  ok(await X(()=>document.getElementById('in-wt')===window.__wt&&document.activeElement===window.__wt),'Weight field is the same element and keeps focus while typing');
+  ok(await X(()=>S.wt===80.5),'Comma decimal accepted for weight (80,5 → 80.5 kg)');
+  ok(/mL\/h/.test(await p.locator('#mfluid').textContent()),'Maintenance fluids updates while typing weight');
+  await p.locator('#in-age').click();await X(()=>{window.__ag=document.getElementById('in-age')});await p.keyboard.type('70',{delay:40});
+  ok(await X(()=>document.getElementById('in-age')===window.__ag&&S.pf.age==='70'),'Age field keeps focus; age recorded');
+  await X(()=>document.querySelectorAll('#vbody details').forEach(d=>d.open=true));
+  await p.locator('[data-cxb="sex"][data-cxv="m"]').first().click();await p.locator('#cx-scr').click();await p.keyboard.type('1,0',{delay:40});
+  ok(/CrCl ≈ 78 mL\/min/.test(await p.locator('#cxo-crcl').innerText()),'CrCl appears from bar age and weight with comma creatinine (70 y, 80.5 kg, male, 1,0 → 78)');
+  await p.locator('#cx-ht').click();await p.keyboard.type('175',{delay:40});ok(/BMI 26\.3/.test(await p.locator('#cxo-bw').innerText()),'Body weight result appears');
+  await X(()=>{newPatient();view('calc')});ok(/bar at top/.test(await X(()=>cxBody().crcl)),'Missing inputs point to the bar at the top');
+  await X(()=>{newPatient();view('emergency')});
+  const inp=p.locator('#vbody #in-wt');if(await inp.count()){await inp.click();await X(()=>{window.__e=document.querySelector('#vbody #in-wt')});await p.keyboard.type('25',{delay:40});ok(await X(()=>document.querySelector('#vbody #in-wt')===window.__e&&S.wt===25),'SOS weight field also keeps focus while typing')}
+  await c28.close()}
+
  await browser.close();
  
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
