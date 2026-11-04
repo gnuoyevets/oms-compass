@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.20.0 — Nov 4, 2026 (pending Steven's review)
+## v3.20.0 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
 
 - **Keyword search:** a new "Keyword matches" list shows the sentence that matched (module questions, plans and notes; SOS steps; Ref items; handouts) with the words highlighted, each opening its topic. Topic results and the "No Compass entry" message are unchanged.
 - **Starts on Decide:** opening the app with a leftover module address (#extraction etc.) goes to Decide and clears it. Deliberate tab links (#handouts, #emergency, #calc, #ref) and old triage links still work.
