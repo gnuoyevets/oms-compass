@@ -250,6 +250,8 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .seg button{min-height:44px}
 /* v3.1: medical gate, on-call switch, drawer tabs, intraop checklist */
 .gov{margin:8px 0 4px;display:grid;gap:4px}
+.kw mark{background:var(--soft);color:inherit;font-weight:700;padding:0 1px;border-radius:3px}
+.kw .mod span{white-space:normal}
 .bx{display:grid;gap:6px}.bx select,.bx input{font:inherit;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
 .gtq summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .gtq{margin:8px 0;padding:4px 10px;border-radius:10px;background:var(--surface,transparent);color:var(--ink,inherit);border:1px solid var(--line)}
@@ -545,6 +547,12 @@ tetcdc:{n:'CDC · Clinical guidance for wound management to prevent tetanus',v:'
 bitewk:{n:'WikEM · Mammalian bites (antibiotics, facial closure, rabies)',v:'Secondary summary; cites IDSA 2014 SSTI',chk:'2026-10-25',u:'https://www.wikem.org/wiki/Mammalian_bites'},
 fn72:{n:'Extratemporal facial nerve injury review (PubMed 11951222)',v:'Abstract only: repair within 72 h; graft at 9–12 months',chk:'2026-10-25',u:'https://pubmed.ncbi.nlm.nih.gov/11951222/'},
 fxabx:{n:'Harryman et al. · Prophylactic antibiotics in mandible fractures (TRIO Best Practice)',v:'Laryngoscope 2023',u:'https://www.enttoday.org/article/prophylactic-antibiotics-should-be-used-conservatively-in-setting-mandibular-fractures/'},
+apnotes:{n:'Your Surgical pearls notes (Apple Notes, exported to Drive)',v:'Oct 2026 · personal study notes',u:'https://drive.google.com/file/d/1eL3lAqwXZN1AgLigA4wfm-e63RfTnZVs/view'},
+pathimg:{n:'Your Oral pathology & diagnostic imaging notes (Drive)',v:'Jul 2026 · personal study notes',u:'https://drive.google.com/file/d/1TUuHVJcFk1G4kN9ujLLNSJVUS4x1Nmmf/view'},
+rwax:{n:'Your All-on-X and micromotion notes (Readwise)',v:'Personal protocol notes',u:'https://read.readwise.io/'},
+cg:{n:'Cockcroft & Gault · Creatinine clearance from serum creatinine',v:'Nephron 1976 · standard formula',u:'https://pubmed.ncbi.nlm.nih.gov/1244564/'},
+devine:{n:'Devine ideal body weight; Janmahasatian lean body weight',v:'Drug Intell Clin Pharm 1974; Clin Pharmacokinet 2005 · standard formulas',u:'https://pubmed.ncbi.nlm.nih.gov/16176118/'},
+padss:{n:'Chung · Modified Post-Anesthetic Discharge Scoring System (PADSS)',v:'J Clin Anesth 1995 · item wording not checked from this environment',u:'https://pubmed.ncbi.nlm.nih.gov/8519409/'},
 lect:{n:'Your OMS Lecture Pearls (Drive)',v:'Jun 2026 · lecture notes',u:'https://drive.google.com/file/d/1KKI7X5dwrOVV1oFIWOo5q__TgCMON8UP/view'},
 board:{n:'Your OMS Clinical Protocols — Board Review (Readwise)',v:'Board-review notes; textbook-derived',u:'https://read.readwise.io/'},
 dysp:{n:'AAOMS · Position paper on oral mucosal dysplasia (Carlson et al.)',v:'J Oral Maxillofac Surg 2023;81:1042',u:'https://read.readwise.io/read/01h769fmrm3d2wt17f4vk2jjbb'},
@@ -1518,6 +1526,89 @@ function emHTML(){const kid=sosKid();
  <p class="caveat">Rebuilt from 2025 AHA guidelines and cited sources. Every dose is checked against a guideline or FDA label (Oct 23, 2026); items tagged verify are not. Confirm against your crash-cart concentrations.</p>`;
 }
 const REF=[
+{t:'Asthma & COPD around surgery',k:'asthma copd bronchospasm wheeze inhaler smoking pulmonary lung',src:['lect','apnotes'],i:[
+ 'Pulmonary patients often look better than they are; most asthmatics are not optimally controlled — check control before surgery',
+ 'Office vs hospital: severity of last exacerbation, hospitalizations, current medications, FEV1 (>80% mild, 60–80% moderate, <60% severe). COPD stage 3–4 or recent pneumonia admission → hospital; delay elective care and re-optimize',
+ 'Continue β2-agonists and steroid inhalers through surgery; systemic steroids in the last 6 months → consider stress dosing',
+ 'No upper or lower respiratory infection for 4–6 weeks (especially children). Smoking cessation: longer is better; ≥2 months ideal, a recent stop may briefly increase secretions',
+ 'Bronchospasm kit: IV access, albuterol MDI with spacer or nebulizer ready; fentanyl preferred (no histamine release); avoid β-blockers',
+ 'Intraoperative wheeze: deepen anesthesia first (light anesthesia and airway stimulation are common triggers). Propofol for stable asthmatics; ketamine if hemodynamically unstable',
+ 'Silent chest during an attack = life-threatening → SOS',
+ 'Your notes; doses and thresholds not label-verified']},
+{t:'Pediatric & geriatric anesthesia',k:'pediatric child infant geriatric elderly airway ketamine laryngospasm ett fluids delirium',src:['lect','apnotes'],i:[
+ 'Children: small FRC → desaturate fast; larynx higher; cricoid is the narrowest point; obligate nasal breathers (infants)',
+ 'Pediatric bradycardia = hypoxia until proven otherwise; cardiac output is rate-dependent',
+ '<6 months: hyper-responders (immature clearance and BBB); 6–12 months: higher mg/kg needs',
+ 'IM ketamine 3 mg/kg (onset 3–5 min); warn parents the eyes stay open. Always place an IV after IM induction',
+ 'Laryngospasm without IV: succinylcholine 4 mg/kg IM + atropine 0.02 mg/kg IM (min 0.1 mg); bag-mask ready. Lay out sux, atropine, BVM and airways before every pediatric case',
+ 'ETT: ID (mm) = age/4 + 4; oral length (cm) = age/2 + 12; cuff ≤25 cmH₂O',
+ 'Fluids 4-2-1 rule (Calc → Maintenance fluids); 500 mL bag + micro-drip set',
+ 'Older adults: start low, go slow (3–5 min between doses); midazolam duration ~2×, fentanyl up to ~3×; propofol hypotension → phenylephrine/ephedrine ready',
+ 'Plan for postoperative delirium and orthostatic hypotension; warm fluids and forced air',
+ 'Office sedation in this app is adult-only. Your notes; doses not label-verified']},
+{t:'Sedation pharmacology pearls',k:'propofol midazolam fentanyl ketamine remifentanil antiemetic ondansetron reversal flumazenil naloxone wpw',src:['lect','apnotes'],i:[
+ 'Propofol: fast, clean recovery, antiemetic; potent respiratory depressant; drops BP in older patients',
+ 'Midazolam: amnesia; paradoxical agitation in children and older adults',
+ 'Fentanyl: chest-wall rigidity if pushed fast; context-sensitive half-time rises with long infusions — remifentanil is the better infusion opioid',
+ 'Ketamine: keeps respiratory drive and BP; emergence reactions → pair with a benzodiazepine; salivation',
+ 'Midazolam + fentanyl are synergistic ("1 + 1 = 3"): titrate and wait for effect-site equilibration',
+ 'Reversal agents often wear off before the drug → re-sedation risk; keep monitoring',
+ 'Antiemetics: ondansetron 4 mg IV at end of case; dexamethasone raises glucose; metoclopramide → extrapyramidal effects; propofol TIVA reduces PONV',
+ 'Nasal cannula ≤3–4 L/min keeps the capnography waveform readable; loss of waveform = apnea, obstruction or misplacement',
+ 'WPW (delta wave): avoid adenosine, β-blockers, calcium-channel blockers and digoxin',
+ 'Your notes; doses not label-verified']},
+{t:'Neuromodulators & Kybella',k:'botox dysport xeomin botulinum toxin neuromodulator glabella frontalis crows feet ptosis kybella deoxycholic masseter',src:['lect'],i:[
+ 'Conversion: 1 U Botox ≈ 1 U Xeomin ≈ 2.5–3 U Dysport. Onset 1–2 days, peak 1–2 weeks, lasts 3–4 months',
+ 'After reconstitution: Botox/Xeomin within 24 h; Dysport within 4 h. Xeomin is stable unrefrigerated',
+ 'Glabella ~20 U Botox/Xeomin; aspirate. Frontalis: stay ≥1 cm above the brow and above the lowest active fold; your notes: never cross the mid-pupillary line. Crow’s feet: ≥1 cm outside the orbital rim',
+ 'Ptosis prevention: stay above the orbital septum; treat with apraclonidine or phenylephrine 2.5% eye drops',
+ 'Brow asymmetry: ~5 U to the higher brow’s frontalis',
+ 'Kybella: mark the inferior mandibular border to protect the marginal mandibular nerve; sessions 1 month apart',
+ 'Filler vascular events: see Filler complications & vision loss. Your notes; doses not label-verified']},
+{t:'Radiograph interpretation pearls',k:'radiograph panoramic cbct radiolucency sinus halo stafne pdl osteosarcoma vincent numb chin rule of 7 print biopsy',src:['pathimg','apnotes'],i:[
+ 'Rule of 7s: ~7 days = inflammatory; 7 weeks–7 months = suspect neoplasia; ≥7 years = developmental',
+ 'Unexplained mucosal lesion >10–14 days without signs of resolution → biopsy',
+ 'PRINT screen — Paresthesia, Rapid growth, Induration, Non-healing >14 days, Tethered: any one → biopsy, even without risk factors (27% of oral cancers have none)',
+ 'Three questions for any lesion: attenuation, margins (corticated = slow; wide transition = aggressive), relation to teeth',
+ 'Benign: corticated, expands with intact cortex, displaces roots. Malignant: moth-eaten, cortical destruction, loose teeth, widened PDL',
+ 'Symmetrically widened PDL around one tooth: early osteosarcoma sign',
+ 'Sinus halo (periosteal elevation of the floor) → pulp-test the adjacent teeth; antral wall destruction = malignancy red flag. A clean film does not exclude sinusitis if the ostium is closed',
+ 'Scalloping between roots without resorption = simple bone cyst; root resorption → think ameloblastoma',
+ 'Stafne defect: lingual, below the IAN canal at the angle — no treatment',
+ 'Vincent’s sign (numb lip/chin, no dental cause) with a lytic lesion: urgent — metastasis or myeloma',
+ 'Your notes']},
+{t:'Non-odontogenic jaw lesions',k:'traumatic bone cyst aneurysmal stafne nasopalatine nasolabial fibrous dysplasia ossifying fibroma cemento-osseous cgcg giant cell langerhans gardner mccune albright',src:['lect'],i:[
+ 'Simple (traumatic) bone cyst: vital teeth, scalloped; surgical exploration is diagnostic and curative (curettage, induce bleeding)',
+ 'Aneurysmal bone cyst: fluid–fluid levels on T2 MRI; curettage recurs more, en bloc less',
+ 'Nasopalatine duct cyst: most common non-odontogenic cyst; normal canal up to ~6 mm; enucleation (large: marsupialize first)',
+ 'Nasolabial cyst: not seen on plain films — CT/MRI; sublabial excision',
+ 'Fibrous dysplasia (young, maxilla, ground glass, burns out) vs ossifying fibroma (30s–40s, mandible, well defined, keeps growing). No radiation for fibrous dysplasia; recontour after growth',
+ 'Cemento-osseous dysplasia: vital teeth, no treatment; florid form can become infected',
+ 'CGCG: check serum calcium and PTH before surgery (brown tumor); aggressive features → medical therapy options (intralesional steroid, calcitonin, denosumab)',
+ 'Multiple osteomas → screen for Gardner syndrome (GI referral). Sunray pattern → biopsy for osteosarcoma',
+ 'Langerhans cell histiocytosis: "floating teeth", punched-out lesions',
+ 'See also Jaw radiolucency differential and Jaw lesion modules. Your notes']},
+{t:'Oral cancer workup & neck',k:'oral cancer scc squamous cell carcinoma neck mass lymph node neck dissection depth of invasion surveillance',src:['lect','pathimg'],i:[
+ 'Painless adult neck mass = cancer until proven otherwise. Also: unknown primary, lymphoma, carotid body tumor, branchial cleft cyst',
+ 'Biopsy any suspicious lesion present >2–3 weeks, regardless of risk factors',
+ 'After an SCC diagnosis: review pathology (depth of invasion, grade, perineural/perivascular invasion); panoramic; CT skull base–clavicles with contrast (check creatinine); MRI for soft tissue; chest imaging; PET for stage III–IV or unknown primary',
+ 'Malignant node on CT: central lucency with rim enhancement, round shape, poorly defined, >1 cm (jugulodigastric >1.5 cm)',
+ 'Depth of invasion >3.5–4 mm → high occult metastasis risk; elective supraomohyoid (levels I–III) dissection for N0 oral cavity',
+ 'Margins: ≥1 cm gross (tongue ~1.5 cm) with frozen sections',
+ 'Post-op radiation: >1 positive node, extranodal extension, close/positive margin, perineural invasion. Chemoradiation: extranodal extension or positive margin',
+ 'Second primary 4–7% per year → close surveillance ≥3 years; dental clearance before radiation',
+ 'Notes cite AJCC 7th edition; current staging (AJCC 8th) adds depth of invasion [verify]. Your notes']},
+{t:'Full-arch & digital workflow',k:'all-on-x all on 4 full arch hybrid zirconia ap spread cantilever conversion shell temporary dual scan photogrammetry micromotion soft diet',src:['lect','rwax','apnotes'],i:[
+ 'Measure interarch space in the plan before surgery: ≥13–15 mm acrylic hybrid with titanium bar; ~8–10 mm monolithic zirconia; <7 mm crown and bridge',
+ 'Hybrid–ridge junction must hide under the lip at rest and in function; evaluate the smile line with the patient’s eyes closed',
+ 'Cantilever ≤1.5× AP spread; tilt posterior implants (17°/30°) to widen AP spread. Posterior implants ≥4 mm diameter; ~7 mm ridge width for a 4 mm implant',
+ 'Denture conversion: one arch at a time; healing caps on as soon as the denture is off; leave the palate on the maxillary transitional during pickup',
+ 'Edentulous dual scan: radiographic markers on the denture (not the intaglio), CBCT with and without the patient, merge',
+ 'Maxillary implants often diverge → check parallelism; shell or conversion must fit the printed model before surgery',
+ 'Low sinus exposed by reduction: ceramic bur near the sinus, or outline and elevate with a hand instrument',
+ 'Micromotion is the silent killer: soft diet ~3 months, no clenching; high-risk patients (infection, poor bone, uncontrolled diabetes, heavy smoking) → consider staging instead of immediate load',
+ 'CPAP during early healing has been linked to full-arch failure — flag CPAP users',
+ 'Intraop: Assessment → Intraop checklist → "If All-on-X". Your notes']},
 {t:'Immediate implant placement',k:'implant esthetic socket buccal',src:['mynotes','board'],i:[
  'Buccal wall <1 mm on CBCT: do not place immediately — stage with GBR',
  'Thin biotype: add a connective tissue graft',
@@ -1690,6 +1781,7 @@ function calcHTML(){
  <p class="caveat" style="margin:10px 0 0">Combining agents: doses add; stay under the lower ceiling. Cardiac patients: the classic 0.04 mg epinephrine cap (≈2 carps 1:100k) lacks research support; a systematic review found up to 4 carps 1:100k well tolerated with monitoring. Recent MI, decompensated heart failure or significant arrhythmia: physician consult first. ${srcLink('epicat')} Reduce for elderly, liver disease, and children.${lk?` <b>Under 18:</b> AAPD pediatric maximums used (lidocaine and mepivacaine 4.4 mg/kg, max 300 mg; articaine 7 mg/kg, max 500 mg; bupivacaine 1.3 mg/kg, max 90 mg); prilocaine is not in the AAPD table, label value shown. Articaine is not recommended under age 4; dental bupivacaine not under age 12 (labels) — those rows are blocked when age is entered. ${srcLink('aapdla')}`:''} ${srcLink('malamed')}</p></div></details>
  <details class="box"><summary>Revised Cardiac Risk Index <em>${rn}/6</em></summary><div class="inner"><div class="chk">${RCRI.map((t,k)=>`<button class="tg${rc[k]?' on':''}" data-rc="${k}" aria-pressed="${!!rc[k]}" style="text-align:left">${esc(t)}</button>`).join('')}</div>
  <div class="calc">RCRI ${rn} · major cardiac event ≈ ${rr} (Lee 1999)</div><p class="caveat" style="margin:10px 0 0">Most OMS cases are low-risk surgery. Testing only when poor functional capacity and elevated risk would change management (2024 AHA/ACC). ${srcLink('lee')} ${srcLink('acc')}</p></div></details>
+ ${cxHTML()}
  <details class="box"><summary>Maintenance fluids <em>4-2-1</em></summary><div class="inner"><div class="calc" id="mfluid">${mf!=null?`${mf} mL/h`:'Enter weight'}</div><p class="caveat" style="margin:10px 0 0">Holliday–Segar: 4 mL/kg/h for the first 10 kg, 2 for the next 10, 1 per kg after. NPO deficit ≈ rate × hours fasting.</p></div></details>`;
 }
 function tabsHTML(v){return`<div class="tabs" role="tablist"><button class="${v==='decide'?'on':''}" data-view="decide">Decide</button><button class="em${v==='emergency'?' on':''}" data-view="emergency">SOS</button><button class="${v==='calc'?'on':''}" data-view="calc">Calc</button><button class="${v==='ref'?'on':''}" data-view="ref">Ref</button>${HANDOUTS_LIVE?`<button class="${v==='handouts'?'on':''}" data-view="handouts" aria-label="Patient info: post-op instructions and FAQs">Patient</button>`:''}</div>`}
@@ -1699,6 +1791,37 @@ function view(v){
  app.innerHTML=`${topHTML(1)}${tabsHTML(v)}${S.retMod&&M(S.retMod)?`<button class="go fx-ret" data-open="${S.retMod}">‹ Back to ${esc(M(S.retMod).title)}</button>`:''}<div id="vbody">${v==='emergency'?emHTML():v==='ref'?refHTML():v==='new'?newHTML():v==='handouts'?hoHTML():calcHTML()}</div>${fbHTML(v==='emergency'?'SOS':v==='handouts'?'Handouts':v)}`;
  window.scrollTo(0,0);try{history.replaceState(null,'','#'+v)}catch(e){}updBar();
 }
+/* ===== Calculators (memory only; New patient clears). Age and weight come from the shared patient bar. ===== */
+const cxN=k=>{const v=String((S.cx||{})[k]??'').trim();return /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(v)?+v:null};
+const cxV=k=>(S.cx||{})[k];
+function cxIn(k,label,unit,ph){return`<label class="small" for="cx-${k}">${esc(label)}</label><div class="numrow"><input id="cx-${k}" data-cx="${k}" inputmode="decimal" autocomplete="off" value="${esc(cxV(k)||'')}" placeholder="${esc(ph||'')}">${unit?`<span class="small">${esc(unit)}</span>`:''}</div>`}
+function cxCh(k,opts){return`<div class="chips">${opts.map(([v,l])=>`<button class="tg${cxV(k)===v?' on':''}" data-cxb="${k}" data-cxv="${v}" aria-pressed="${cxV(k)===v}">${esc(l)}</button>`).join('')}</div>`}
+function cxBody(){S.cx=S.cx||{};const a=ageNum(),w=S.wt,sex=cxV('sex'),cr=cxN('scr'),h=cxN('ht');
+ const ibw=h&&sex?Math.max(0,(sex==='m'?50:45.5)+2.3*(h/2.54-60)):null,bmi=h&&w?w/((h/100)**2):null;
+ const lbw=bmi&&w&&sex?(sex==='m'?9270*w/(6680+216*bmi):9270*w/(8780+244*bmi)):null,abw=ibw&&w&&w>ibw?ibw+0.4*(w-ibw):null;
+ const cc=a!=null&&w&&cr&&sex&&cr>0?((140-a)*w/(72*cr))*(sex==='f'?0.85:1):null,ccI=cc&&ibw&&w>ibw*1.2?((140-a)*(abw||ibw)/(72*cr))*(sex==='f'?0.85:1):null;
+ const r1=x=>Math.round(x*10)/10,r0=Math.round;
+ const out={};
+ out.crcl=cc==null?`Needs ${[a==null?'age':'',!w?'weight':'',!sex?'sex':'',!cr?'creatinine':''].filter(Boolean).join(', ')}`:`CrCl ≈ <b>${r0(cc)} mL/min</b> (actual weight)${ccI?` · ≈ ${r0(ccI)} mL/min with adjusted body weight (weight >120% of ideal)`:''}${cc<30?' · <b>severe impairment</b>':cc<50?' · moderate impairment':''}`;
+ out.bw=!h||!w||!sex?'Needs height, weight and sex':`BMI ${r1(bmi)} · ideal ${r1(ibw)} kg · lean ${r1(lbw)} kg${abw?` · adjusted ${r1(abw)} kg`:''}`;
+ const P=['pv','pa','pn','pp','pb'].map(k=>cxV(k)),ps=P.every(x=>x!=null)?P.reduce((t,x)=>t+(+x),0):null;
+ out.padss=ps==null?`Score ${P.filter(x=>x!=null).reduce((t,x)=>t+(+x),0)}/10 · ${P.filter(x=>x==null).length} item(s) left`:`PADSS <b>${ps}/10</b> · ${ps>=9?'meets the discharge score (≥9) — escort and written instructions still required':'below 9: not discharge-ready by score'}`;
+ const ag=cxV('dag'),hr=cxN('dhr'),HL={api:[12,12,'apixaban ~12 h'],riv:[5,13,'rivaroxaban 5–9 h, 11–13 h in older adults'],dab:[12,17,'dabigatran 12–17 h; longer if CrCl <50'],edo:[10,14,'edoxaban 10–14 h']}[ag];
+ out.doac=!ag||hr==null?'Needs agent and hours since the last dose':`${hr} h since the last dose · ${HL[2]} → about ${HL[0]===HL[1]?r1(hr/HL[0]):r1(hr/HL[1])+'–'+r1(hr/HL[0])} half-lives (≈${HL[0]===HL[1]?r0(100*Math.pow(.5,hr/HL[0])):r0(100*Math.pow(.5,hr/HL[0]))+'–'+r0(100*Math.pow(.5,hr/HL[1]))}% of the drug left) [verify half-lives against the label]. Timing rule: DOAC finding.`;
+ const asa=['a4','a3','a2'].find(k=>Object.keys(S.cx.asa||{}).some(x=>x.startsWith(k+'_')&&S.cx.asa[x]));
+ out.asa=`Suggested ASA <b>${asa==='a4'?'IV':asa==='a3'?'III':asa==='a2'?'II':'I'}${cxV('asaE')==='y'?'E':''}</b> · a suggestion from the listed examples; the clinician assigns the class`;
+ const u=cxN('ins'),it=cxV('ityp');
+ out.ins=!u||!it?'Needs usual dose and insulin type':it==='nph'?`NPH: about ${r0(u*0.5)} units (one-half of ${u}) — for the prescriber conversation`:`Long-acting analog on the fasting day: about ${r0(u*0.75)}–${r0(u*0.8)} units (75–80% of ${u}); evening-before dose about ${r0(u*0.75)} units (≈25% lower) — the prescriber confirms`;
+ return out}
+const ASA_EX={a2:['Well-controlled diabetes or hypertension','Current smoker; social alcohol use','Pregnancy','BMI 30–40','Mild lung disease'],a3:['Poorly controlled diabetes or hypertension','COPD','BMI ≥40','Active hepatitis; alcohol dependence','Pacemaker','ESRD on regular dialysis','MI, stroke, TIA or stents >3 months ago'],a4:['MI, stroke, TIA or stents <3 months ago','Ongoing cardiac ischemia or severe valve dysfunction','Severely reduced ejection fraction','Sepsis, DIC or ESRD not on dialysis']};
+function cxHTML(){const o=cxBody(),asa=(S.cx||{}).asa||{};
+ return`<details class="box"><summary>Creatinine clearance <em>Cockcroft-Gault</em></summary><div class="inner">${cxCh('sex',[['m','Male'],['f','Female']])}${cxIn('scr','Serum creatinine','mg/dL','e.g. 1.1')}<div class="calc" id="cxo-crcl">${o.crcl}</div><p class="caveat" style="margin:10px 0 0">Uses age and weight from the bar above. eGFR is not CrCl; use CrCl where a label or protocol asks for it. Unstable kidney function makes any estimate unreliable. ${srcLink('cg')}</p></div></details>
+ <details class="box"><summary>Body weight for dosing <em>BMI · ideal · lean</em></summary><div class="inner">${cxCh('sex',[['m','Male'],['f','Female']])}${cxIn('ht','Height','cm','e.g. 170')}<div class="calc" id="cxo-bw">${o.bw}</div><p class="caveat" style="margin:10px 0 0">Obese patients: many sedatives are dosed on lean or ideal weight, not total weight — check each drug. ${srcLink('devine')}</p></div></details>
+ <details class="box"><summary>Discharge readiness <em>modified PADSS</em></summary><div class="inner">${[['pv','Vital signs',[['2','Within 20% of pre-op'],['1','20–40%'],['0','>40%']]],['pa','Activity',[['2','Steady gait, no dizziness'],['1','Needs help'],['0','Unable to walk']]],['pn','Nausea / vomiting',[['2','Minimal'],['1','Moderate'],['0','Severe']]],['pp','Pain',[['2','Acceptable on oral analgesics'],['1','Not acceptable']]],['pb','Surgical bleeding',[['2','Minimal'],['1','Moderate'],['0','Severe']]]].map(([k,l,op])=>`<div class="small" style="margin-top:6px"><b>${esc(l)}</b></div>${cxCh(k,op)}`).join('')}<div class="calc" id="cxo-padss">${o.padss}</div><p class="caveat" style="margin:10px 0 0">Score ≥9 of 10 supports discharge with a responsible escort. Item wording not checked against the original paper [verify]. ${srcLink('padss')}</p></div></details>
+ <details class="box"><summary>DOAC last dose <em>time elapsed</em></summary><div class="inner">${cxCh('dag',[['api','Apixaban'],['riv','Rivaroxaban'],['dab','Dabigatran'],['edo','Edoxaban']])}${cxIn('dhr','Hours since the last dose','h','e.g. 14')}<div class="calc" id="cxo-doac">${o.doac}</div><p class="caveat" style="margin:10px 0 0">Shows elapsed time only; it does not decide timing. Search the DOAC finding for the guideline timing rule and CrCl adjustments.</p></div></details>
+ <details class="box"><summary>ASA class helper <em>suggestion</em></summary><div class="inner">${['a2','a3','a4'].map(k=>`<div class="small" style="margin-top:6px"><b>ASA ${k==='a2'?'II':k==='a3'?'III':'IV'} examples</b></div><div class="chk">${ASA_EX[k].map((t,i)=>`<button class="tg${asa[k+'_'+i]?' on':''}" data-asah="${k}_${i}" aria-pressed="${!!asa[k+'_'+i]}" style="text-align:left">${esc(t)}</button>`).join('')}</div>`).join('')}<div class="small" style="margin-top:6px"><b>Emergency (E)?</b></div>${cxCh('asaE',[['y','Yes'],['n','No']])}<div class="calc" id="cxo-asa">${o.asa}</div><p class="caveat" style="margin:10px 0 0">Examples from the ASA Physical Status definitions; the list is not exhaustive. ${srcLink('asaps')}</p></div></details>
+ <details class="box"><summary>Fasting insulin dose <em>ADA 2026</em></summary><div class="inner">${cxCh('ityp',[['ana','Long-acting analog'],['nph','NPH']])}${cxIn('ins','Usual basal dose','units','e.g. 40')}<div class="calc" id="cxo-ins">${o.ins}</div><p class="caveat" style="margin:10px 0 0">Fasting surgery only. Never omit basal insulin in type 1 diabetes. Pumps, premixed or concentrated insulin need an individualized plan. The dose is the prescriber’s decision. ${srcLink('ada16')}</p></div></details>`}
+function cxSync(){const o=cxBody();Object.entries(o).forEach(([k,v])=>{const e=document.getElementById('cxo-'+k);if(e)e.innerHTML=v})}
 function rebody(){const b=document.getElementById('vbody');if(!b)return;
  const open=[...b.querySelectorAll('details[open]')].map(d=>d.id||d.querySelector('summary').textContent);
  const shown=[...b.querySelectorAll('.audisc[aria-expanded="true"]')].length;
@@ -1713,10 +1836,10 @@ function auToggle(btn,on){const t=document.getElementById(btn.dataset.audisc);if
    The step ids below must match the preop and sed module nodes (checked by tests). */
 const TRI_STEPS={preop:[['a','unstable or unoptimized condition (recent MI, stroke or stent; decompensated heart failure; BP ≥180/110; uncontrolled diabetes; bleeding disorder)'],['b','high-risk cardiac condition for endocarditis (prosthetic valve, prior endocarditis, transplant with valve disease, specified congenital heart disease)'],['c','anticoagulant or antiplatelet'],['d','antiresorptive or antiangiogenic drug, or head and neck radiation'],['d2','SGLT2 inhibitor or GLP-1 receptor agonist'],['e','IV sedation or general anesthesia planned'],['f','STOP-Bang 3 or more'],['g','difficult-airway signs (Mallampati III–IV, limited opening or neck extension, prior difficult airway)']],
  sed:[['a','ASA IV or higher'],['b','ASA III'],['c','STOP-Bang 3 or more, or difficult-airway signs']]};
-const TRIAGE_PROMPT=['Pre-op triage for an oral and maxillofacial surgery patient from the attached photo (H&P, medication list or radiograph). If you have a pre-op triage skill, use it; otherwise follow these instructions.',
+const TRIAGE_PROMPT=['Pre-op triage for an oral and maxillofacial surgery patient from the attached photo (H&P, medication list or radiograph). You may use a pre-op triage skill if you have one, but the output below is required either way.',
  'Use age, sex and clinical facts only. Never repeat a name, date of birth or record number. Assume local anesthesia unless I say sedation or general anesthesia.',
- 'Give: red flags; ASA class; medical optimization steps; an advisory read on whether to proceed (not a clearance). Anything you cannot read is unknown — never assume it is normal.',
- 'Then end with one line, exactly in this format, for my OMS Compass app:',
+ 'Give, in this order: 1) Red flags (or "none found"); 2) ASA class; 3) Recommendations: medical optimization steps and what to verify; 4) An advisory read on whether to proceed (not a clearance). Anything you cannot read is unknown — never assume it is normal.',
+ 'ALWAYS end with the code line below, even when you use a skill, find nothing, or cannot read the photo. It must be the last line, on its own, with no formatting:',
  'CT1;preop:<answers>;sed:<answers>;asa:<1-5>;sb:<0-8>',
  'Each answer is a step id followed by 1 (yes) or 0 (no), comma-separated, no spaces. Leave out any step you cannot determine. Leave out sed if no sedation or general anesthesia is planned, and asa or sb if unknown. If nothing can be determined, write CT1;none.',
  'preop steps: '+TRI_STEPS.preop.map(([k,t])=>k+' = '+t).join('; ')+'.',
@@ -1805,8 +1928,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top"><h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.19.0';
+const VER='3.20.0';
 const CHANGES=[
+{v:'3.20.0',d:'Nov 4, 2026 · pending review',i:['Search shows keyword matches: the matching sentence from any module, SOS card, Ref card or handout, with the words highlighted.','The app opens on Decide; a module left open last time is not reopened.','Photo triage prompt: red flags, ASA, recommendations and proceed read, and the CT1 code line is required even when a triage skill is used or nothing can be read.','Intraop checklist: All-on-X group (fiducials and scans, reduction and restorative space, low sinus, guide, torque, multi-unit abutments, conversion, post-op scans, records and soft diet).','Ref: 8 cards from your notes — asthma and COPD, pediatric and geriatric anesthesia, sedation pharmacology, neuromodulators, radiograph interpretation, non-odontogenic jaw lesions, oral cancer and neck, full-arch and digital workflow.','Calc: creatinine clearance, body weight for dosing (BMI, ideal, lean, adjusted), PADSS discharge score, DOAC time since last dose, ASA class helper, fasting insulin dose (ADA 2026).']},
 {v:'3.19.0',d:'Nov 3, 2026',i:['Four new pathways (41 total): Salivary and submandibular swelling; Suspected jaw osteomyelitis; Suspected odontogenic sinusitis; Adult obstructive sleep apnea referral (separate from sedation screening). Each has an emergency branch, Unknown handling and a copyable note.','Jaw osteomyelitis: atypical lesion or numb lip/chin is asked first and routes to expedited imaging and biopsy (amber, not the emergency box); antiresorptive exposure defined; workup names a jaw imaging sequence (author’s practice), host factors and antibiotic timing.','Salivary: bilateral, viral or systemic swelling routes to medical evaluation; source labeled as referral criteria. Odontogenic sinusitis: recent sinus opening, graft or implant links to Oroantral communication; dental-first sequencing allowed when mild [verify].','Links to Odontogenic infection, MRONJ staging and Oroantral communication. New sources carry citation details marked not checked.']},
 {v:'3.18.1',d:'Nov 3, 2026',i:['Fix: in the procedure view’s top open question, a number field (e.g. INR) no longer disappears after the first digit. Typing 3.6 recorded 3, which could show Proceed instead of Defer. The question now advances only when the entry is finished.']},
 {v:'3.18.0',d:'Nov 3, 2026',i:['One disposition everywhere: the pre-op screen now feeds the overall result, so Assessment, the procedure view and the copied note show the same disposition, reason and next action. An unstable or unoptimized condition defers elective care but escalates urgent care (Refer / change setting: monitored or hospital setting). Unknown urgency stays provisional; an incomplete or Unknown screen keeps the result at Verify first.','SGLT2 readiness: dose-free days before the procedure day and whether the timing is confirmed. Confirmed ≥3 days (4 for ertugliflozin) before sedation, GA, major surgery or fasting → proceed. Missed hold: elective → defer; urgent → proceed with ketoacidosis monitoring (ADA 2026). Unconfirmed timing is not read as a completed hold. Local anesthesia with normal eating: guidance gap stated.','Procedure view: the overall disposition replaces the gate-only chip, and the highest-impact open question from the assessment can be answered in place, with what each answer changes.','Biopsy: copy-ready result follow-up block for the EHR with result owner (role), expected turnaround in days, overdue action and whether the patient was told. No calendar dates.']},
@@ -2137,7 +2261,22 @@ function fbHTML(where){if(!FEEDBACK)return'';const sub=encodeURIComponent(`OMS C
  return`<p class="caveat"><a href="mailto:${FEEDBACK}?subject=${sub}&body=${body}">Report a problem or suggest a change ↗</a></p>`}
 
 /* ===== Search across modules, SOS and Ref ===== */
-let IDX=null;
+let IDX=null,LIDX=null;
+/* Keyword index: one entry per line of content (questions, plans, notes, criteria, SOS steps, Ref items, handouts), so a search shows the matching sentence, not only its topic. */
+function lineIdx(){if(LIDX)return LIDX;const strip=t=>String(t).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),L=[];
+ const add=(k,id,t,line)=>{const x=strip(line);if(x.length>=3)L.push({k,id,t,line:x,lx:x.toLowerCase()})};
+ MODS.forEach(m=>{[m.red,m.caveat].forEach(v=>v&&add('mod',m.id,m.title,v));Object.values(m.nodes||{}).forEach(n=>{['q','out','ex','x','t','scr'].forEach(f=>typeof n[f]==='string'&&add('mod',m.id,m.title,n[f]));(n.h||[]).forEach(h=>add('mod',m.id,m.title,h))});(m.look||[]).forEach(([,l])=>l.forEach(v=>add('mod',m.id,m.title,v)))});
+ EMS.forEach(e=>{try{e.steps().forEach(v=>add('em',e.id,e.t,v))}catch(x){}});
+ REF.forEach(r=>r.i.forEach(v=>add('ref',r.t,r.t,v)));
+ if(HANDOUTS_LIVE)HO.forEach(h=>h.i.en.forEach(v=>add('ho',h.id,h.t.en,v)));
+ return LIDX=L}
+function kwHTML(terms){const ts=terms.map(t=>t.replace(/[^\p{L}\p{N}\/.%-]/gu,'')).filter(t=>t.length>=2);if(!ts.length)return'';
+ const hits=lineIdx().filter(e=>ts.every(t=>e.lx.includes(t)));if(!hits.length)return'';
+ const re=new RegExp('('+ts.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','gi');
+ const snip=l=>{const i=l.toLowerCase().indexOf(ts[0]),a=Math.max(0,i-60),b=Math.min(l.length,i+140);return(a?'… ':'')+l.slice(a,b)+(b<l.length?' …':'')};
+ const attr=h=>h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`;
+ const lab={mod:'Module',em:'SOS',ref:'Ref',ho:'Patient handout'};
+ return`<div class="lab group">Keyword matches · ${hits.length>12?'first 12 of '+hits.length:hits.length}</div><div class="mods kw">${hits.slice(0,12).map(h=>`<button class="mod" ${attr(h)}><div><b>${esc(h.t)}</b><span>${lab[h.k]} · ${esc(snip(h.line)).replace(re,'<mark>$1</mark>')}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`}
 function idx(){if(IDX)return IDX;const strip=t=>String(t).replace(/<[^>]+>/g,' ');
  IDX=[...MODS.map(m=>({k:'mod',id:m.id,t:m.title,sub:m.g,x:[m.title,m.d,m.red||'',m.caveat,JSON.stringify(m.nodes),JSON.stringify(m.look||'')].join(' ').toLowerCase()})),
   ...EMS.map(e=>({k:'em',id:e.id,t:e.t,sub:'SOS',x:[e.t,e.s,strip(e.steps().join(' '))].join(' ').toLowerCase()})),
@@ -2150,14 +2289,14 @@ function searchHitsHTML(q){const terms=q.toLowerCase().split(/\s+/).filter(Boole
  if(!hits.length){const QSTOP=new Set(['what','when','where','which','should','could','would','does','doing','have','with','without','after','before','patient','patients','about','that','this','there','their','them','they','from','into','your','need','needs','make','much','many','long','take','taking','dose','okay']);
   const ct=[...new Set(terms.map(t=>t.replace(/[^a-z0-9\/-]/g,'')).filter(t=>t.length>=4&&!QSTOP.has(t)))];
   const part=ct.length>=2?idx().map(e=>({e,n:ct.filter(t=>e.x.includes(t)).length})).filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,5).map(x=>x.e):[];
-  if(part.length)return`${fh}<div class="lab group">Closest modules · not every word matched</div><div class="mods">${part.map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`;
-  return fh||NOMATCH(q)}
- return`${fh}${fh?'<div class="lab group">Modules · SOS · reference</div>':''}<div class="mods">${hits.slice(0,25).map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`}
+  if(part.length)return`${fh}${kwHTML(terms)}<div class="lab group">Closest modules · not every word matched</div><div class="mods">${part.map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`;
+  return fh||kwHTML(terms)||NOMATCH(q)}
+ return`${fh}${fh?'<div class="lab group">Modules · SOS · reference</div>':''}<div class="mods">${hits.slice(0,25).map(h=>`<button class="mod" ${h.k==='mod'?`data-open="${h.id}"`:h.k==='em'?`data-em="${h.id}"`:h.k==='ho'?`data-ho="${h.id}"`:`data-reff="${esc(h.id)}"`}><div><b>${esc(h.t)}</b><span>${esc(h.sub)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`+kwHTML(terms)}
 /* ===== Basis labels (descriptive, not evidence grades) ===== */
 const BASIS={gl:'Guideline / label',ev:'Evidence-informed',au:'Author’s practice',un:'Unverified draft'};
 const BASIS_RANK={gl:0,ev:1,au:2,un:3};
 const SRC_GL=['acc','chest','glp1','glp1k','aapdsed','aapdla','palsca','palsbr','flumaped','glucaped','bupilabel','giai','parcare','aha25','aha25s','anaph','brady','adahypo','asaps','fast','asamon','preg','nsaidpreg','orn','ada24','atls','dysp','aha','adaPro','sdcep','sdcepFull','sdcepDoac','aaoms','third','iti18','iti13','adaAbx','sdcepAbs','oralca','rcs','bmj','choke','aaem','aha26','efp','aapdav','iadtfx','aae26','dctmd','dcscore','asthma','apsf','nalox','fluma','d50','ntg','dant','epipen','sglt2','ada16','apapFDA','sux','wfhdent','kohan','tetcdc'];
-const SRC_AU=['mysed','fa6','mynotes','lect','board','pathdeck','quickp'];
+const SRC_AU=['apnotes','pathimg','rwax','mysed','fa6','mynotes','lect','board','pathdeck','quickp'];
 const SRC_UN=['binder'];
 function basisOf(keys,text){
  const ks=(keys||[]).filter(Boolean);let b=ks.length?'gl':'un';
@@ -3175,7 +3314,7 @@ function asmtView(){S.mod=null;S.view='asmt';S.fid=null;
 function newPatient(){
  delete S.hoExport;
  S.changes=[];delete S.compare;delete S.compareEligible;document.body.classList.remove('kb');
- ['pf','ans','inp','rcri','io','bx'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
+ ['pf','ans','inp','rcri','io','bx','cx'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
  ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','emOpen','hoOpen','mod','ioSig','ioReset','labPick','casePick'].forEach(k=>{delete S[k]});
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
@@ -3265,12 +3404,22 @@ const IO=[
   ['lot','Implant and graft lot numbers recorded'],
   ['hem','Hemostasis confirmed'],
   ['po','Instructions, prescriptions and after-hours number given'],
-  ['dc','If sedated: discharge criteria met and escort present']]]];
+  ['dc','If sedated: discharge criteria met and escort present']]],
+ ['If All-on-X (full-arch, immediate load)',[
+  ['axplan','Prosthetic plan confirmed before reduction: vertical dimension, midline, smile line and planned prosthesis space',[['arch','Full-arch']]],
+  ['axscan','Fiducial markers placed; photogrammetry or scans captured before surgery'],
+  ['axred','Bone reduction checked against the plan (or reduction guide); restorative space verified before implant placement. Low sinus exposed by reduction: ceramic bur near the sinus, or outline it and push up with a hand instrument'],
+  ['axguide','Surgical guide seated and stable; fixation pins secure; fit verified on the reduced ridge'],
+  ['axtq','Insertion torque recorded per implant; immediate loading only if torque and stability meet the plan, otherwise bury or delay. Posterior implants ≥4 mm diameter'],
+  ['axmua','Multi-unit abutments: angulation chosen, torqued per manufacturer, seating confirmed on radiograph'],
+  ['axconv','Conversion or pickup: passive fit, no soft-tissue blanching, screw channels sealed, occlusion even with no cantilever contact in excursions'],
+  ['axpost','Post-placement scan or photogrammetry captured; sockets grafted or PRF placed as planned; masseter botulinum toxin if planned'],
+  ['axrec','Implant and abutment positions, torques and lot numbers recorded; prosthesis screw torque noted; soft diet and no clenching reviewed with the patient']]]];
 /* v3.10 encounter checklist. Status per item: done / pend / na (legacy true = done). Items that do not apply to the
    entered procedure or anesthesia fold away (never removed); unset context shows everything. Each status remembers
    the plan facts it depended on and resets when they change. Statuses never feed back into the clinical model. */
-const IO_DEP={id:['proc'],cons:['proc','anes','plan'],gate:['plan'],img:['proc'],kit:['proc'],em:['anes'],mon:['anes'],iv:['anes'],npo:['anes','plan'],la:['wt'],vit:['anes'],stop:['proc'],spec:['proc'],lot:['proc'],frag:['proc'],hem:['plan'],po:['plan'],dc:['anes']};
-const IO_FOLD={mon:'sed',iv:'sed',npo:'sed',vit:'sed',dc:'sed',kit:'impl',lot:'impl',img:'surg',frag:'surg',spec:'surg'};
+const IO_DEP={axscan:['proc'],axpost:['proc'],axplan:['proc'],axred:['proc'],axguide:['proc'],axtq:['proc'],axmua:['proc'],axconv:['proc'],axrec:['proc'],id:['proc'],cons:['proc','anes','plan'],gate:['plan'],img:['proc'],kit:['proc'],em:['anes'],mon:['anes'],iv:['anes'],npo:['anes','plan'],la:['wt'],vit:['anes'],stop:['proc'],spec:['proc'],lot:['proc'],frag:['proc'],hem:['plan'],po:['plan'],dc:['anes']};
+const IO_FOLD={mon:'sed',iv:'sed',npo:'sed',vit:'sed',dc:'sed',kit:'impl',lot:'impl',img:'surg',frag:'surg',spec:'surg',axscan:'impl',axpost:'impl',axplan:'impl',axred:'impl',axguide:'impl',axtq:'impl',axmua:'impl',axconv:'impl',axrec:'impl'};
 function ioFold(k){const a=S.pf.anes,p=S.pf.proc,t=IO_FOLD[k];
  if(t==='sed')return a==='la'?'local anesthesia only':null;
  if(t==='impl')return p==='none'||p==='low'?'no implant or graft at the entered procedure tier':null;
@@ -3511,6 +3660,8 @@ app.addEventListener('click',e=>{
  if(b.dataset.view){S.retMod=S.view==='mod'&&S.mod?S.mod:(b.dataset.view==='emergency'||b.dataset.view==='calc')?S.retMod:null;return view(b.dataset.view)}
  if(b.dataset.tasa){const n=+b.dataset.tasa;S.today=S.today||{};S.today.asa=S.today.asa===n?undefined:n;if(S.today.asa)S.asa=n===3?'3':n<3?'12':S.asa;return refresh()}
  if(b.dataset.asa){S.asa=b.dataset.asa==='3'?'3':'12';return rebody()}
+ if(b.dataset.cxb){S.cx=S.cx||{};const k=b.dataset.cxb,v=b.dataset.cxv;if(S.cx[k]===v)delete S.cx[k];else S.cx[k]=v;return rebody()}
+ if(b.dataset.asah){S.cx=S.cx||{};const a=S.cx.asa=S.cx.asa||{};a[b.dataset.asah]=!a[b.dataset.asah];return rebody()}
  if(b.dataset.rc!=null){const rc=S.rcri=S.rcri||{};rc[b.dataset.rc]=!rc[b.dataset.rc];return rebody()}
  if(b.hasAttribute('data-oncall')){setOnCall(!onCall());return home()}
  if(b.hasAttribute('data-goasmt')){S.atab='find';return asmtView()}
@@ -3548,7 +3699,7 @@ app.addEventListener('click',e=>{
  if(b.dataset.flag){const k=b.dataset.flag;i[k]=!i[k];b.classList.toggle('on',i[k]);b.setAttribute('aria-pressed',i[k]);refresh();return}
 });
 app.addEventListener('change',e=>{const el=e.target;if(el.tagName==='SELECT'&&el.hasAttribute('data-bx')&&el.isConnected){S.bx=S.bx||{};S.bx[el.getAttribute('data-bx')]=el.value}});
-app.addEventListener('input',e=>{const el=e.target;if(el.hasAttribute('data-bx')){S.bx=S.bx||{};S.bx[el.getAttribute('data-bx')]=el.value;return}if(el.hasAttribute('data-q')){S.q=el.value.trim();if(S.labPick&&S.labPick.q!==S.q)delete S.labPick;const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;const pn=document.getElementById('pins');if(pn)pn.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){S.wtIn={src:'kg',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return S.view==='asmt'?redraw():S.view==='mod'?todaySync():rebody()}if(el.hasAttribute('data-lb')){S.wtIn={src:'lb',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<880?Math.round(v/LB*10)/10:null;return S.view==='asmt'?redraw():S.view==='mod'?todaySync():rebody()}if(el.dataset.pfn==='age'&&(S.view==='calc'||S.view==='emergency')){const v=el.value.trim();if(v==='')delete S.pf.age;else S.pf.age=v;return rebody()}if(el.dataset.pfn){const before=planBeforeEdit(),k=el.dataset.pfn,v=el.value.trim(),old=S.pf[k];const cleared=has(old)&&old!==v?(LAB_STALE[k]||[]).filter(x=>S.pf[x]!==undefined):[];if(v==='')delete S.pf[k];else S.pf[k]=v;cleared.forEach(x=>delete S.pf[x]);recordPlanEdit(before,k,cleared);return redraw()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
+app.addEventListener('input',e=>{const el=e.target;if(el.dataset&&el.dataset.cx){S.cx=S.cx||{};S.cx[el.dataset.cx]=el.value.trim();return cxSync()}if(el.hasAttribute('data-bx')){S.bx=S.bx||{};S.bx[el.getAttribute('data-bx')]=el.value;return}if(el.hasAttribute('data-q')){S.q=el.value.trim();if(S.labPick&&S.labPick.q!==S.q)delete S.labPick;const h=document.getElementById('hits'),g=document.getElementById('groups');h.innerHTML=S.q?hitsHTML(S.q):'';g.hidden=!!S.q;const pn=document.getElementById('pins');if(pn)pn.hidden=!!S.q;return}if(el.hasAttribute('data-refq')){S.refq=el.value;return rebody()}if(el.hasAttribute('data-wt')){S.wtIn={src:'kg',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<400?v:null;return S.view==='asmt'?redraw():S.view==='mod'?todaySync():rebody()}if(el.hasAttribute('data-lb')){S.wtIn={src:'lb',raw:el.value};const v=num(el.value);S.wt=v&&v>0&&v<880?Math.round(v/LB*10)/10:null;return S.view==='asmt'?redraw():S.view==='mod'?todaySync():rebody()}if(el.dataset.pfn==='age'&&(S.view==='calc'||S.view==='emergency')){const v=el.value.trim();if(v==='')delete S.pf.age;else S.pf.age=v;return rebody()}if(el.dataset.pfn){const before=planBeforeEdit(),k=el.dataset.pfn,v=el.value.trim(),old=S.pf[k];const cleared=has(old)&&old!==v?(LAB_STALE[k]||[]).filter(x=>S.pf[x]!==undefined):[];if(v==='')delete S.pf[k];else S.pf[k]=v;cleared.forEach(x=>delete S.pf[x]);recordPlanEdit(before,k,cleared);return redraw()}if(!el.dataset.in||!S.mod)return;const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()});
 app.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='in-tri'){e.preventDefault();loadTri(e.target.value);open('preop')}});
 app.addEventListener('change',e=>{const el=e.target;if(el.dataset.pfu){const before=planBeforeEdit();if(el.value)S.pf[el.dataset.pfu]=el.value;else delete S.pf[el.dataset.pfu];recordPlanEdit(before,el.dataset.pfu);return redraw()}if(el.tagName==='SELECT'&&el.dataset.in&&S.mod){const i=S.inp[S.mod]=S.inp[S.mod]||{};i[el.dataset.in]=el.value;refresh()}});
 
@@ -3574,6 +3725,8 @@ let start=(location.hash||'').slice(1);
 const TRI_URL_MSG='Triage links no longer carry data (privacy). Copy the CT1 code from the report and paste it here.';
 if(/^triage=/i.test(start)){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}S.triErr=TRI_URL_MSG;start='preop'}
 addEventListener('hashchange',()=>{const h=(location.hash||'').slice(1);if(/^triage=/i.test(h)){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}S.triErr=TRI_URL_MSG;if(acked())open('preop')}});
+/* Start on Decide. A module left open last time (its #id in the address) is not reopened; deliberate tab links (#handouts, #emergency…) and an old triage link still work. */
+if(M(start)&&!S.triErr){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}start=''}
 const go=()=>start==='emergency'||start==='calc'||start==='ref'||start==='new'||start==='handouts'?view(start):M(start)?open(start):home();
 acked()?go():gate(go);
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));

@@ -2,6 +2,17 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.20.0 — Nov 4, 2026 (pending Steven's review)
+
+- **Keyword search:** a new "Keyword matches" list shows the sentence that matched (module questions, plans and notes; SOS steps; Ref items; handouts) with the words highlighted, each opening its topic. Topic results and the "No Compass entry" message are unchanged.
+- **Starts on Decide:** opening the app with a leftover module address (#extraction etc.) goes to Decide and clears it. Deliberate tab links (#handouts, #emergency, #calc, #ref) and old triage links still work.
+- **Photo triage prompt:** asks for red flags, ASA, recommendations and a proceed read, in that order, and requires the CT1 code as the last line even when a triage skill is used, nothing is found, or the photo is unreadable. Your Claude "preop-triage" skill itself was not edited.
+- **Intraop checklist, All-on-X group** (folds for no-bleeding or simple procedures): prosthetic plan; fiducials and pre-op scans; bone reduction and restorative space, with your low-sinus technique; guide seating; insertion torque (bury or delay if inadequate; posterior ≥4 mm diameter); multi-unit abutments; conversion (passive fit, sealed channels, no cantilever contact); post-placement scan, PRF/grafts, masseter toxin if planned; records, soft diet and no clenching. From your Bayside All-on-X protocol, Implant Ninja notes and journal; not a cited guideline.
+- **Ref, 8 new cards** from your Drive notes (OMS Lecture Pearls; Surgical pearls exported from Apple Notes; Oral pathology & imaging) and Readwise (All-on-X, micromotion): asthma & COPD; pediatric & geriatric anesthesia; sedation pharmacology; neuromodulators & Kybella; radiograph interpretation; non-odontogenic jaw lesions; oral cancer workup & neck (notes cite AJCC 7th edition — flagged); full-arch & digital workflow. Labeled as your notes; doses not label-verified.
+- **Calc, 6 new calculators:** creatinine clearance (Cockcroft-Gault, with adjusted weight when >120% of ideal); BMI, ideal, lean and adjusted body weight; modified PADSS (item wording [verify]); DOAC time since last dose (half-lives [verify]; the timing rule stays in the DOAC finding); ASA class helper (suggestion from ASA examples); fasting insulin dose (ADA 2026 ranges already in the app).
+- **Translations:** Google Translate could not be used from this environment (Google returned its automated-traffic page; no API credentials). Instead, every number was compared across English, Spanish, Kriolu and Chinese handouts and FAQs: no dose, time or temperature differs; the only differences are words written as digits.
+- Tests: 628 browser checks (16 new, section 26); reconciliation 78; clinical workflow 34. Software checks only; not clinical validation.
+
 ## v3.19.0 — Nov 3, 2026 (approved by Steven Nov 3, 2026)
 
 Four new decision pathways (41 total), from an external patch built on v3.16.0 and reconciled onto v3.18.1. Topic selection informed by the Laskin & Abubaker table of contents; chapters not consulted.
