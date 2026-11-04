@@ -2,6 +2,15 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.21.0 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
+
+- **Pathology & pain, 8 → 6 entries.** No clinical rule changed; the nodes are copied from the original pathways, so each answer gives the same plan as before.
+  - *Oral mucosal lesion & dysplasia:* new first question "Biopsy report already shows epithelial dysplasia or carcinoma in situ?" No → the mucosal-lesion steps; Yes → the dysplasia steps.
+  - *Jaw lesion & radiolucency:* aggressive signs → established diagnosis → non-vital tooth, then the radiolucency differential, whose outcomes now add "Next: aspirate, then incisional biopsy (or excisional if small)".
+  - The old Jaw radiolucency and Dysplasia pathways still open from old links but no longer appear on Home or in search.
+- **Pinned row:** Photo triage (opens Claude with the triage prompt) replaces Sedation plan, which stays under Anesthesia & medical.
+- Tests: 637 browser checks (9 new, section 27); reconciliation 78; clinical workflow 34.
+
 ## v3.20.0 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
 
 - **Keyword search:** a new "Keyword matches" list shows the sentence that matched (module questions, plans and notes; SOS steps; Ref items; handouts) with the words highlighted, each opening its topic. Topic results and the "No Compass entry" message are unchanged.

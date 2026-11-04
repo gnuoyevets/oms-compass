@@ -226,7 +226,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(await page.locator('#settings [data-oncall][aria-checked="true"]').count()===1,'On-call switch turns on');
  ok(await E(page,()=>document.querySelector('#groups .lab.group').textContent==='Hospital on-call'),'On-call group listed first');
  ok(await E(page,()=>{const g=[...document.querySelectorAll('#groups .lab.group')].find(x=>x.textContent==='Hospital on-call');return !!g&&!!g.nextElementSibling.querySelector('[data-open="lac"]')}),'On-call on: facial laceration listed under Hospital on-call');
- ok(await page.locator('#groups [data-open]').count()===await E(page,()=>MODS.length),'On-call on: every module listed exactly once');
+ ok(await page.locator('#groups [data-open]').count()===await E(page,()=>MODS.filter(m=>!m.hidden).length),'On-call on: every visible module listed exactly once');
  ok(await E(page,()=>localStorage.getItem('omsCompassOnCall')==='1'),'On-call preference remembered');
  await E(page,()=>{delete S.oc;home()});/* re-read from storage (file:// reloads in headless Chromium can drop unflushed storage) */
  ok(await page.locator('#settings [data-oncall][aria-checked="true"]').count()===1,'On-call preference re-read from storage');
@@ -729,7 +729,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await c18.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
   const p=await fresh(c18),X=f=>p.evaluate(f);
   ok(await p.locator('#pins .pin').count()===6,'Pinned row has 6 entries');
-  ok(await X(()=>[...document.querySelectorAll('#pins .pin')].map(b=>b.dataset.open||b.dataset.view).join()==='preop,sed,implant,extraction,calltri,handouts'),'Pinned: pre-op, sedation, implants, extractions, call triage, handouts');
+  ok(await X(()=>[...document.querySelectorAll('#pins .pin')].map(b=>b.dataset.open||b.dataset.view||(b.hasAttribute('data-triage')?'triage':'')).join()==='preop,triage,implant,extraction,calltri,handouts'),'Pinned: pre-op, photo triage, implants, extractions, call triage, handouts');
   ok(await X(()=>{const m=[...document.querySelectorAll('#groups .mods')].pop(),s=document.getElementById('settings');return !!(m.compareDocumentPosition(s)&Node.DOCUMENT_POSITION_FOLLOWING)}),'Settings sit below the module list');
   await p.fill('#in-q','Eliquis');ok(await X(()=>document.getElementById('pins').hidden),'Pinned row hides while searching');await p.fill('#in-q','');
   ok(await X(()=>{home();return document.getElementById('pins').hidden===false}),'Pinned row returns when search clears');
@@ -1068,6 +1068,22 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await X(()=>{newPatient();return Object.keys(S.cx).length===0}),'New patient clears calculator entries');
   for(const w of [320,390]){await p.setViewportSize({width:w,height:800});await X(()=>{view('calc');document.querySelectorAll('#vbody details').forEach(d=>d.open=true)});ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),`Calc tab fits ${w}px with all calculators open`)}
   await c26.close()}
+
+ console.log('27. Home: Pathology & pain consolidated; photo triage pinned');
+ {const c27=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c27.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await fresh(c27),X=(f,a)=>p.evaluate(f,a);
+  ok(await p.locator('.pins a[data-triage]').count()===1&&await p.locator('.pins [data-open="sed"]').count()===0,'Pinned row: photo triage replaces the sedation plan');
+  ok(await X(()=>/^https:\/\/claude\.ai\/new\?q=/.test(document.querySelector('.pins a[data-triage]').href)),'Photo triage pin opens Claude with the prompt');
+  ok(await X(()=>['rl','dysplasia'].every(id=>!document.querySelector(`#groups [data-open="${id}"]`))&&!!document.querySelector('#groups [data-open="lesion"]')&&!!document.querySelector('#groups [data-open="jaw"]')),'Home lists the combined pathways only');
+  const run=async(id,ans)=>{await X(i=>{newPatient();open(i)},id);for(const a of ans)await p.locator(`.cur [data-v="${a}"]`).click();return X(i=>{const m=M(i);return planText(m,walk(m))},id)};
+  ok(/Biopsy now/.test(await run('lesion',[0,1])),'Mucosal lesion: new suspicious lesion → biopsy now');
+  ok(/Scalpel or laser excision with margins/.test(await run('lesion',[1,1])),'Mucosal lesion: dysplasia report, high grade → excision');
+  ok(/Specialist workup before intervention/.test(await run('jaw',[1])),'Jaw lesion: aggressive signs checked first');
+  const jd=await run('jaw',[0,0,0,1,1]);ok(/Ameloblastoma/.test(jd)&&/Next: Aspirate, then incisional biopsy/.test(jd),'Jaw lesion: differential then biopsy plan in one note');
+  ok(await X(()=>{open('rl');return !!document.getElementById('flow').innerHTML}),'Old Jaw radiolucency link still opens');
+  await X(()=>{newPatient();home()});await p.fill('#in-q','dysplasia');ok(await p.locator('#hits [data-open="dysplasia"]').count()===0&&await p.locator('#hits [data-open="lesion"]').count()>0,'Search reaches the combined pathway, not the hidden one');
+  await c27.close()}
 
  await browser.close();
  
