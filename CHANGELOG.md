@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.21.1 — Nov 4, 2026 (pending Steven's review)
+## v3.21.1 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
 
 Fix for "some calculators don't work" (ideal body weight, maintenance fluids, creatinine clearance: result never appeared).
 
