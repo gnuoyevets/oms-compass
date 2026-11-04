@@ -166,7 +166,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  const fb=page.locator('.plan [data-ho="fao"]');if(await fb.count()){await fb.click();ok(await E(page,()=>S.view==='handouts'&&document.getElementById('ho-fao').open),'Dry socket plan “Patient FAQ” opens the FAQ on the Patient tab')}else ok(false,'Dry socket plan shows a Patient FAQ button');
  // v3.8 Ref cards
  const rf=await E(page,()=>({n:REF.length,src:REF.every(r=>r.src.every(k=>SRC[k])),bad:REF.filter(r=>!r.t||!r.i.length).length}));
- ok(rf.n===17&&rf.src&&rf.bad===0,`Ref: 17 cards, every source resolves (got ${rf.n})`);
+ ok(rf.n===25&&rf.src&&rf.bad===0,`Ref: 25 cards, every source resolves (got ${rf.n})`);
  for(const [q,t] of [['Nikolsky','Oral pathology chairside framework'],['hyaluronidase','Filler complications & vision loss'],['ameloblastoma','Odontogenic cysts & tumors: management'],['narrow ridge','GBR & narrow ridge'],['external hex','Implant biomechanics & restorative space'],['trigeminal','Orofacial pain red flags'],['amoxicillin','Implant antibiotic prophylaxis']])
   ok(await E(page,([q,t])=>{S.refq=q;view('ref');const s=[...document.querySelectorAll('#vbody details.box summary')].map(x=>x.textContent);S.refq='';return s.some(x=>x.includes(t))},[q,t]),`Ref search “${q}” finds ${t}`);
  ok(await E(page,()=>{S.refq='hyaluronidase';view('ref');const t=document.querySelector('#vbody details.box summary').textContent;S.refq='';return/Unverified draft/.test(t)}),'Ref card with a verify line is labelled Unverified draft');
@@ -249,7 +249,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  console.log('11b. Photo triage works without the author’s skill');
  const tp=await E(page,()=>({p:TRIAGE_PROMPT,ok:['preop','sed'].every(m=>TRI_STEPS[m].every(([k])=>M(m).nodes[k]&&M(m).nodes[k].q)),url:('https://claude.ai/new?q='+encodeURIComponent(TRIAGE_PROMPT)).length}));
  ok(tp.ok,'Every step id in the prompt is a real question in Pre-op clearance / Office sedation');
- ok(/If you have a pre-op triage skill, use it; otherwise/.test(tp.p)&&/CT1;preop:<answers>/.test(tp.p)&&/Never repeat a name/.test(tp.p)&&/never assume it is normal/.test(tp.p),'Prompt is self-contained: output format, de-identification, unknown ≠ normal');
+ ok(/You may use a pre-op triage skill if you have one, but the output below is required either way/.test(tp.p)&&/CT1;preop:<answers>/.test(tp.p)&&/Never repeat a name/.test(tp.p)&&/never assume it is normal/.test(tp.p),'Prompt is self-contained: output format, de-identification, unknown ≠ normal');
  ok(tp.url<8000,'Hand-off link stays under 8,000 characters ('+tp.url+')');
  const rep='**Red flags:** apixaban; prosthetic aortic valve.\nASA III.\n\n```\nCT1;preop:a0,b1,c1,d0,d20,e1,f1,g0;sed:a0,b1,c1;asa:3;sb:4\n```\nAdvisory only — not a clearance.';
  const pr=await E(page,r=>{const t=parseTri(r);return{err:t.err||'',asa:t.asa,sb:t.sb,b:t.mods&&t.mods.preop&&t.mods.preop.b,d2:t.mods&&t.mods.preop&&t.mods.preop.d2,sb3:t.mods&&t.mods.sed&&t.mods.sed.c}},rep);
@@ -1043,6 +1043,31 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{newPatient();open('salivary');S.ans.salivary={a:false,b:false,b2:true};refresh()});ok(/Medical evaluation/.test(await p.locator('#flow').innerText()),'Salivary: bilateral, viral or systemic swelling routes to medical evaluation');
   await X(()=>{newPatient();open('ods');S.ans.ods={a:false,a2:true};refresh()});ok(await p.locator('#flow [data-open="oac"]').count()===1,'Odontogenic sinusitis: recent sinus opening, graft or implant links to Oroantral communication');
   await c25.close()}
+
+ console.log('26. Keyword search, Decide start, triage output, All-on-X checkpoints, new Ref cards, calculators');
+ {const c26=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c26.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const p=await c26.newPage();await p.route(/^https?:\/\//,r=>r.abort());await p.goto(FILE+'#extraction');await p.waitForTimeout(300);const X=(f,a)=>p.evaluate(f,a);
+  ok(await X(()=>S.view==='decide'&&!location.hash),'Opening with a leftover module address starts on Decide and clears it');
+  await X(()=>{newPatient();home()});await p.fill('#in-q','tranexamic');
+  ok(await p.locator('#hits .kw mark').count()>0&&/Keyword matches/i.test(await p.locator('#hits').innerText()),'Search shows keyword matches with the matching sentence highlighted');
+  await p.fill('#in-q','ondansetron');ok(/Sedation pharmacology pearls/.test(await p.locator('#hits .kw').innerText()),'Keyword match reaches a sentence inside a Ref card');
+  await p.fill('#in-q','zzqqxx');ok(/No Compass entry/.test(await p.locator('#hits').innerText()),'No match still says No Compass entry');
+  ok(await X(()=>/ALWAYS end with the code line/.test(TRIAGE_PROMPT)&&/Red flags/.test(TRIAGE_PROMPT)&&/Recommendations/.test(TRIAGE_PROMPT)&&/even when you use a skill/.test(TRIAGE_PROMPT)),'Triage prompt requires the CT1 line even with a skill, plus red flags and recommendations');
+  ok(await X(()=>IO.some(([h,items])=>/All-on-X/.test(h)&&items.length>=8&&items.every(([k])=>IO_FOLD[k]==='impl'&&IO_DEP[k]))),'Intraop checklist has an All-on-X group that folds for low-tier procedures');
+  ok(await X(()=>['Asthma & COPD around surgery','Pediatric & geriatric anesthesia','Sedation pharmacology pearls','Neuromodulators & Kybella','Radiograph interpretation pearls','Non-odontogenic jaw lesions','Oral cancer workup & neck','Full-arch & digital workflow'].every(t=>REF.some(r=>r.t===t&&r.src.every(k=>SRC[k])))),'Eight new Ref cards with valid sources');
+  await X(()=>{newPatient();S.pf.age='70';S.wt=80;view('calc');document.querySelectorAll('#vbody details').forEach(d=>d.open=true)});
+  await p.locator('[data-cxb="sex"][data-cxv="f"]').first().click();await X(()=>document.querySelectorAll('#vbody details').forEach(d=>d.open=true));
+  await p.locator('#cx-scr').fill('1.2');ok(/CrCl ≈ 55 mL\/min/.test(await p.locator('#cxo-crcl').innerText()),'Cockcroft-Gault: 70 y, 80 kg, female, Cr 1.2 → 55 mL/min');
+  await p.locator('#cx-ht').fill('160');ok(/BMI 31\.2 · ideal 52\.4 kg · lean 45\.2 kg/.test(await p.locator('#cxo-bw').innerText()),'BMI, ideal and lean body weight computed');
+  await X(()=>{S.cx.dag='dab';S.cx.dhr='12';S.cx.ityp='nph';S.cx.ins='30';cxSync()});
+  ok(/0\.7–1 half-lives/.test(await p.locator('#cxo-doac').innerText())&&/verify/.test(await p.locator('#cxo-doac').innerText()),'DOAC timer shows elapsed half-lives and defers the rule to the finding');
+  ok(/about 15 units/.test(await p.locator('#cxo-ins').innerText()),'NPH dose is one-half');
+  ok(await X(()=>{S.cx.asa={a2_0:true,a4_1:true};return /ASA <b>IV<\/b>/.test(cxBody().asa)}),'ASA helper suggests the highest checked class');
+  ok(await X(()=>{['pv','pa','pn','pp'].forEach(k=>S.cx[k]='2');S.cx.pb='0';return /8\/10/.test(cxBody().padss)&&/below 9/.test(cxBody().padss)}),'PADSS below 9 is not discharge-ready');
+  ok(await X(()=>{newPatient();return Object.keys(S.cx).length===0}),'New patient clears calculator entries');
+  for(const w of [320,390]){await p.setViewportSize({width:w,height:800});await X(()=>{view('calc');document.querySelectorAll('#vbody details').forEach(d=>d.open=true)});ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),`Calc tab fits ${w}px with all calculators open`)}
+  await c26.close()}
 
  await browser.close();
  
