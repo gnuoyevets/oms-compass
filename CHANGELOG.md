@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.21.0 — Nov 4, 2026 (pending Steven's review)
+## v3.21.0 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
 
 - **Pathology & pain, 8 → 6 entries.** No clinical rule changed; the nodes are copied from the original pathways, so each answer gives the same plan as before.
   - *Oral mucosal lesion & dysplasia:* new first question "Biopsy report already shows epithelial dysplasia or carcinoma in situ?" No → the mucosal-lesion steps; Yes → the dysplasia steps.
