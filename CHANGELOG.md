@@ -2,6 +2,15 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.21.1 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
+
+Fix for "some calculators don't work" (ideal body weight, maintenance fluids, creatinine clearance: result never appeared).
+
+- **Cause:** every keystroke in the age/weight bar redrew the whole Calc tab, including the field being typed in. On a phone that closes the keyboard. Typing the first digit of a weight (e.g. "8" of 80 kg) also briefly met the under-40 kg pediatric lockout, which changed the layout and forced a full redraw. Weight often never registered, so these calculators kept waiting for it. The same applied to the SOS weight bar.
+- **Fix:** redraws now keep the block being typed in and replace everything around it; the kg/lb pair and the weight line still update live.
+- Comma decimals accepted for weight and calculator numbers (80,5; 1,0). Missing-input messages now say "bar at top" for age and weight.
+- Tests: 645 browser checks (8 new, section 28); reconciliation 78; clinical workflow 34.
+
 ## v3.21.0 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
 
 - **Pathology & pain, 8 → 6 entries.** No clinical rule changed; the nodes are copied from the original pathways, so each answer gives the same plan as before.
