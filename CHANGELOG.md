@@ -2,6 +2,11 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.23.1 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
+
+- Consultation workspace removed at Steven's request: the Consult tab, its Home card, “Return to consultation” and “Review all symptom groups” buttons, `consultation.js`, `consultation.css` and the consultation browser suite. The original post-op call triage is unchanged.
+- Kept from v3.23.0: all audit corrections, the draft gate (now inline in `index.html`), office sedation from age 13 and every earlier feature. The graph/preservation suite is now `tests/graph.cjs` (29 checks; the 29 workspace-only checks were removed with the workspace).
+
 ## v3.23.0 — Nov 6, 2026 (approved by Steven Nov 6, 2026) — consultation workspace and audit corrections
 
 - Add an EMR-neutral consultation workspace for initial evaluation, before-booking readiness and surgery-day confirmation, with reviewed structured/text intake and a concise note/task handoff.

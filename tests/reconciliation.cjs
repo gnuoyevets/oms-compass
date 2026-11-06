@@ -11,6 +11,8 @@ const script=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1
 vm.runInContext(script,sandbox);
 const run=code=>vm.runInContext(code,sandbox);let n=0;
 function test(name,code){try{assert.ok(run("{\n"+code+"\n}"),name);n++;}catch(e){console.error('FAIL:',name);throw e}}
+// Content fixtures select clinician draft mode, as in tests/run.cjs; the draft gate itself is tested in tests/graph.cjs.
+run(`const __newPatient=newPatient;newPatient=function(){__newPatient();S.draftMode=true}`);
 run(`function setup(ids,pf){newPatient();S.asmt=ids;S.pf=pf;return asmtModel()}`);
 test('brand generic abbreviations share canonical findings',`[['Eliquis','apixaban','doac'],['Xarelto','rivaroxaban','doac'],['Coumadin','warfarin','warfarin'],['Plavix','clopidogrel','antiplatelet'],['ASA','Ecotrin','antiplatelet'],['Prolia','denosumab','antires'],['Ozempic','semaglutide','glp1'],['Jardiance','empagliflozin','sglt2'],['HbA1c','A1C','a1c'],['PT/INR','INR','inr'],['platelets','thrombocytopenia','plt']].every(([a,b,id])=>findHits(a)[0]?.f.id===id&&findHits(b)[0]?.f.id===id)`);
 test('platelet raw and scaled units agree',`const a=setup(['plt'],{proc:'high',plt:'45000',pltU:'raw',pltAge:'wk',pltTrend:'st',pltCause:'itp'}).P[0].p;const b=setup(['plt'],{proc:'high',plt:'45',pltU:'k',pltAge:'wk',pltTrend:'st',pltCause:'itp'}).P[0].p;a.d===b.d&&a.act===b.act`);
