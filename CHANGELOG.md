@@ -2,6 +2,23 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.23.0 — Nov 6, 2026 (approved by Steven Nov 6, 2026) — consultation workspace and audit corrections
+
+- Add an EMR-neutral consultation workspace for initial evaluation, before-booking readiness and surgery-day confirmation, with reviewed structured/text intake and a concise note/task handoff.
+- Separate implant/full-arch planning, mucosal/jaw pathology, specific cancer/immunosuppressive therapies and anesthesia suitability. Add surgeon-selected medical/prosthetic requests and a full postoperative symptom review; retain the original quick tools and all v3.22.0 feature IDs.
+- Correct airway/imaging order, analgesic reconciliation, adult sedation scope, unanswered exports, ongoing implant nerve injury, jaw differential/biopsy routing, MRONJ eligibility, avulsion dry time, BMJ attribution, qualifying IE procedure, dialysis scheduling, numeric conflicts and off-anticoagulant INR currency. Keep detailed source-unverified recommendations behind explicit encounter draft selection.
+- Add distinct NY/CT/RI/MA/NH source/verification prompts without claiming compliance. Keep clinical data session-only and EMR continuity vendor-neutral.
+- Preserve current handouts, languages, sharing, QR assets, calculations, SOS, intraoperative records and exports. Version and cache the additive assets; wait for existing clients to close before worker activation.
+- Add full graph/preservation and browser acceptance checks. See IMPLEMENTATION-REVIEW.md for evidence, exact scope and pending independent source/clinical/state/device review. No full-text or clinical validation of all cited books/apps is claimed.
+
+Independent validation before merge (Claude, Nov 6, 2026):
+- **Draft gate narrowed (defect fixed).** As delivered, the gate hid content whenever a cited source had no “checked” date in the source list. That hid 37 of 39 modules by default, all 25 Ref cards and 10 of 22 findings, including the ADA 2024 analgesic guidance, AHA 2021, ITI consensus content and the call-triage 911 script. Now gated: the 12 listed specialty modules, the dysplasia branch, and content the app already labels “Unverified draft” ([verify] text, binder source, or none). Default now: 5 Ref cards, 3 findings and some non-urgent outcomes in those modules.
+- **Urgent outcomes always shown in full**, with the source warning above them (previously replaced by a generic “prompt assessment” line).
+- **Author content keeps its existing handling.** Your sedation card and author Ref cards show in Author mode; Colleague mode folds them behind “Show Author’s Clinical Protocol”, as before. They are not draft-gated.
+- **Office sedation from age 13** (Steven, Nov 6, 2026; was ≥18 in the delivered patch, <12 lockout before). An entered weight under 40 kg still closes the gate. Ages 13–17 show an adolescent note (AAP/AAPD guidance; check fixed doses against weight-based limits).
+- Audit docs (docs/audit-2026-11-06) kept out of the public repo at Steven's request: they hold interview answers and practice context. Inherited public content (office phones, binder link, personal-note Ref cards) approved by Steven to remain.
+- Tests: reconciliation 78; clinical workflow 39; consultation 55 (3 new, 1 retargeted from age 15 to 12); browser 671 (8 new, section 30); consultation browser 31.
+
 ## v3.22.1 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
 
 Patient handouts condensed without losing information.
