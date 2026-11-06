@@ -1,5 +1,7 @@
 # v3.23.0 consultation and audit corrections — review draft
 
+> **v3.23.1:** the consultation workspace described below was removed at Steven's request. The audit corrections, draft gate and age-13 sedation threshold remain. Workspace sections are kept here as a record.
+
 Compass gains an **EMR-neutral** consultation workspace while retaining the existing quick-reference app. Initial consultation identifies a justified next diagnostic/treatment step; before-booking and surgery-day views add their respective prerequisites. A consultation can end with investigation, observation, referral or further discussion. A complete checklist does not mean comprehensive medical clearance.
 
 ## Review scope and preservation
@@ -77,7 +79,7 @@ Separate profiles link official sources and ask for case-specific provider, faci
 
 ## Verification and remaining review
 
-Run `node tests/reconciliation.cjs`, `node tests/clinical-workflow.cjs`, `node tests/consultation.cjs`, `node tests/run.cjs`, and `node tests/consultation-browser.cjs` (Playwright/Chromium required for the last two).
+Run `node tests/reconciliation.cjs`, `node tests/clinical-workflow.cjs`, `node tests/graph.cjs`, `node tests/run.cjs`, and `node tests/consultation-browser.cjs` (Playwright/Chromium required for the last two).
 
 The dependency-free suites cover reconciliation, 720 combined cases, clinical regressions, all graph paths/Unknown stops, baseline preservation, source/draft/age guards, tasks and handoff invalidation. Browser suites exercise existing features and new intake/selection/preview/reset, focus, three widths (320/390/768), storage and offline/update behavior. Existing-content browser fixtures explicitly select draft and confirmed adult age where those are now prerequisites; dedicated new tests cover defaults and restrictions.
 
