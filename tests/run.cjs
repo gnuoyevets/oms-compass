@@ -910,9 +910,10 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await p.locator('#patient-export-preview').isVisible()&&await p.evaluate(()=>window.auditShares.length===0),'Review opens before sharing; no transfer on preview');
   if(process.env.COMPASS_REVIEW_OUTPUT)await p.screenshot({path:require('path').join(process.env.COMPASS_REVIEW_OUTPUT,'oms-compass-patient-preview.png')});
   const preview=await p.locator('[aria-label="Patient export text"]').inputValue();
-  ok(!/500–1,000/.test(preview)&&/individual written plan/.test(preview)&&/Do not take ibuprofen/.test(preview),'Preview carries medication precaution and withholds generic adult dose');
-  await p.click('[data-patient-confirm]');
-  ok(await p.evaluate(()=>window.auditShares.length===1&&window.auditShares[0]===patientPreviewText()),'Confirmation shares exactly the current reviewed preview');
+  ok(!/Extra Strength/.test(preview)&&/individual written plan/.test(preview)&&/Do not take ibuprofen/.test(preview),'Preview carries medication precaution and withholds generic adult dose');
+  ok(await p.locator('#patient-export-preview #qr-held').count()===1&&await p.locator('#patient-export-preview svg.qr').count()===0,'Medication precaution: no QR or link (patient page lists general doses)');
+  await p.click('[data-patient-share]');
+  ok(await p.evaluate(()=>window.auditShares.length===1&&window.auditShares[0]===patientPreviewText()&&!patientPreviewText().includes(HO_URL)),'Share from my phone sends exactly the reviewed text; no link when doses are withheld');
   await p.click('[data-lang="es"]');
   ok(/Traducción en borrador/.test(await p.locator('[aria-label="Patient export text"]').inputValue()),'Language change updates preview and carries translation review status');
   for(const width of [320,390]){await p.setViewportSize({width,height:844});ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`Patient preview fits ${width}px`)}
@@ -1105,6 +1106,40 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{newPatient();view('emergency')});
   const inp=p.locator('#vbody #in-wt');if(await inp.count()){await inp.click();await X(()=>{window.__e=document.querySelector('#vbody #in-wt')});await p.keyboard.type('25',{delay:40});ok(await X(()=>document.querySelector('#vbody #in-wt')===window.__e&&S.wt===25),'SOS weight field also keeps focus while typing')}
   await c28.close()}
+
+ console.log('29. Send to patient: QR card, front-desk text, office phone always, patient page call bar');
+ {const c29=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1,permissions:['clipboard-read','clipboard-write']});
+  await c29.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1');localStorage.setItem('oms_compass_practice_mode','author')}catch(e){}});
+  const p=await fresh(c29),X=(f,a)=>p.evaluate(f,a);
+  await X(()=>{newPatient();S.pmOv='author';S.site='young';S.lang='en';S.hoOpen='ext';view('handouts')});
+  await p.click('#ho-ext [data-share]');
+  ok(await p.locator('#patient-export-preview svg.qr').isVisible(),'Author: QR shown on the card');
+  ok(await p.locator('#patient-export-preview a.pcall[href="tel:+14012737802"]').isVisible(),'Card: tappable Call the office button');
+  ok(await p.locator('#patient-export-preview .pcard li.warn').count()===2,'Card: call-us and 911 lines');
+  ok(!(await p.locator('#patient-export-preview details.more').evaluate(d=>d.open)),'Full text folded under Show full text');
+  await p.click('[data-patient-confirm]');
+  const clip=await p.evaluate(()=>navigator.clipboard.readText());
+  ok(clip===await X(()=>patientShortText())&&clip.includes('#ext-en')&&!/g\.page/.test(clip),'Copy for front desk: short text with link, no review request');
+  for(const width of [320,390]){await p.setViewportSize({width,height:844});ok(await X(()=>document.documentElement.scrollWidth<=innerWidth+1),`Send card fits ${width}px`)}
+  ok(/Pain Medication Instructions[\s\S]*Extra Strength/.test(await p.locator('#ho-ext').innerText())&&await p.locator('#ho-ext li').filter({hasText:'Pain Medication Instructions'}).evaluate(li=>getComputedStyle(li).whiteSpace==='pre-line'),'Pain instructions show as separate lines');
+  // Colleague: asks for office phone, then QR uses ?ph=
+  await X(()=>{S.pmOv='colleague';setOwnPh('');rebody()});
+  ok(await p.locator('#oph-need').isVisible()&&await p.locator('[data-patient-confirm]').count()===0,'Colleague without phone: asks for it before any send');
+  await p.fill('#oph-in','401 555 0100');await p.click('[data-oph-save="oph-in"]');
+  ok(await p.locator('#patient-export-preview svg.qr').isVisible()&&await X(()=>patientPreviewText().includes('?ph=4015550100#ext-en')),'Colleague phone saved: QR and link carry the office number');
+  ok(await X(()=>localStorage.getItem('compass-office-ph')==='4015550100'),'Office phone saved on this device');
+  await X(()=>{setOwnPh('');delete S.pmOv});
+  // Patient page: sticky call bar, ?ph=, no review on post-op handout
+  const hp=await c29.newPage();await hp.route(/^https?:\/\//,r=>r.abort());
+  await hp.goto(FILE.replace(/index\.html$/,'handouts/index.html')+'?ph=4015550100#ext-en');await hp.waitForSelector('h2');
+  ok(await hp.locator('a.call.top[href="tel:+14015550100"]').count()===1&&/\(401\) 555-0100/.test(await hp.locator('a.call.top').innerText()),'Patient page: colleague number from ?ph=');
+  await hp.evaluate(()=>scrollTo(0,document.body.scrollHeight));
+  ok(await hp.locator('a.call.top').evaluate(a=>{const r=a.getBoundingClientRect();return r.top>=0&&r.top<5&&getComputedStyle(a).position==='sticky'}),'Patient page: call bar stays on screen while scrolling');
+  ok(await hp.locator('.revs').count()===0&&await hp.locator('a.all').count()===1,'Patient page post-op: no review link; All instructions and FAQs link at bottom');
+  await hp.click('a.all');await hp.waitForSelector('.card');ok(await hp.locator('.card').count()===23,'All instructions link opens the full list');
+  await hp.goto(FILE.replace(/index\.html$/,'handouts/index.html')+'?site=bayside#ext-es');await hp.waitForSelector('h2');
+  ok(await hp.locator('a.call.top[href="tel:+15084225007"]').count()===1,'Patient page: Bayside number from ?site=bayside');
+  await hp.close();await c29.close()}
 
  await browser.close();
  

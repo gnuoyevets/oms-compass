@@ -2,6 +2,21 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.22.0 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
+
+Send to patient without exposing your number; office phone always; new pain-medication wording.
+
+- **QR on the share card.** The patient scans it chairside; it opens that handout in their language on the patient page (`/handouts/`). No phone number or account is exchanged. The link holds only the practice (`?site=bayside` or a colleague's `?ph=` office number), the handout id and the language; never patient data.
+- **Short text for the front desk.** “Copy text for front desk” copies: title, “📞 Call the office: (number)”, the call-us and 911 lines, and “All instructions and FAQs: link”. About 400 characters. “Share from my phone” remains and is labelled as sending from your own number.
+- **Rendered card instead of a text box.** Big tappable Call button, warning lines, QR; full text folded under “Show full text”.
+- **Medication precaution or age/weight limit:** no QR or link, because the patient page shows the general pain doses. Copy/share use the full text, which withholds them.
+- **Office phone always.** Colleague mode asks once for the office phone (Settings or the card), saved on this device only; until set, the card asks for it and offers no send button. Shared full text now ends with “📞 Phone: (number)” in both modes.
+- **Review request** removed from post-op text and the patient page's post-op view; it stays in the day-7 message and on the patient page home.
+- **Patient page:** sticky “Call the office” bar at the top; “All instructions and FAQs” link at the bottom of each page; `?ph=` support for colleagues.
+- **Pain instructions** (extraction, implant/graft, full-arch; EN/ES/Kriolu/中文) replaced with Steven's wording: “Pain Medication Instructions” — Advil (ibuprofen) 400 mg (two 200 mg tablets) plus Tylenol (acetaminophen) 500 mg (one Extra Strength) together every 6 hours for the first 24–48 hours, with food, before the local wears off; then as needed. Daily maximums: ibuprofen 2,400 mg (only if directed), acetaminophen 3,000 mg (conservative). No extra ibuprofen/NSAID/acetaminophen products without checking. Call if pain worsens after improving or relief is inadequate. Removed from the old line: Tylenol 500–1,000 mg, “never exceed 4,000 mg from all medicines”, “for 2–3 days”, “use a prescribed opioid only if needed”. The separate “Skip ibuprofen with kidney disease…” line is unchanged. Translations machine-drafted, pending native-speaker review.
+- QR codes are made in the app (offline; no library). Output checked module-for-module against the reportlab QR encoder: 112 matrices, all 8 masks, versions 1–10, 0 differences.
+- Tests: 662 browser checks (17 new, section 29); clinical workflow 39 (5 new, 3 updated for the new pain text); reconciliation 78.
+
 ## v3.21.1 — Nov 4, 2026 (approved by Steven Nov 4, 2026)
 
 Fix for "some calculators don't work" (ideal body weight, maintenance fluids, creatinine clearance: result never appeared).
