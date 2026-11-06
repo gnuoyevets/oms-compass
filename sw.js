@@ -1,11 +1,13 @@
 // OMS Compass offline cache.
 // To publish an update: edit index.html, bump VERSION, push. Phones pick it up on next open.
-const VERSION = 'compass-2026-11-06-v3.22.1';
+const VERSION = 'compass-2026-11-06-v3.23.0';
 const CORE = ['./', './index.html', './manifest.webmanifest',
+  './consultation.js?v=3.23.0', './consultation.css?v=3.23.0',
   './apple-touch-icon.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
+  // Let an existing encounter finish under its current worker. Activate after old tabs close.
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)));
 });
 
 self.addEventListener('activate', e => {
@@ -25,7 +27,7 @@ self.addEventListener('fetch', e => {
   if (req.mode === 'navigate' && !isApp) return; // other pages: plain network, browser cache rules
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req, {cache: 'no-cache'})
-      .then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put('./index.html', copy)); return r; })
+      .then(r => { if (!r.ok) throw new Error('App response not usable'); const copy = r.clone(); caches.open(VERSION).then(c => c.put('./index.html', copy)); return r; })
       .catch(() => caches.match('./index.html')));
     return;
   }

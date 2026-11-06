@@ -1,0 +1,1900 @@
+{
+  "version": "3.22.0",
+  "modules": [
+    {
+      "id": "preop",
+      "title": "Pre-op clearance",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oDefer",
+        "b",
+        "nIE",
+        "c",
+        "nBleed",
+        "d",
+        "d2",
+        "nMeds",
+        "nBone",
+        "e",
+        "oLocal",
+        "f",
+        "g",
+        "oAir",
+        "oSed"
+      ]
+    },
+    {
+      "id": "sed",
+      "title": "Office sedation plan",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oHosp",
+        "b",
+        "n3",
+        "c",
+        "oAir",
+        "d",
+        "oNPO",
+        "e",
+        "e1",
+        "oGlpGi",
+        "eEsc",
+        "oGlpEsc",
+        "e2",
+        "oGlp",
+        "oGo"
+      ]
+    },
+    {
+      "id": "dm",
+      "title": "Diabetes",
+      "hidden": false,
+      "start": "nA1c",
+      "nodeIds": [
+        "nA1c",
+        "b",
+        "nMed",
+        "c",
+        "oGlu",
+        "oOk"
+      ]
+    },
+    {
+      "id": "htn",
+      "title": "Hypertension",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oEr",
+        "b",
+        "oDef",
+        "oGo"
+      ]
+    },
+    {
+      "id": "renal",
+      "title": "Kidney disease & dialysis",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oHosp",
+        "b",
+        "nHd",
+        "oHd",
+        "oCkd"
+      ]
+    },
+    {
+      "id": "liver",
+      "title": "Liver disease",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oDec",
+        "oComp"
+      ]
+    },
+    {
+      "id": "preg",
+      "title": "Pregnancy",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oNow",
+        "b",
+        "oDefer",
+        "oRoutine"
+      ]
+    },
+    {
+      "id": "onc",
+      "title": "Radiation & chemotherapy",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oPre",
+        "b",
+        "nOrn",
+        "c",
+        "oChemo",
+        "oGo"
+      ]
+    },
+    {
+      "id": "steroid",
+      "title": "Chronic steroids",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oAI",
+        "b",
+        "oNo",
+        "c",
+        "oRec",
+        "d",
+        "oPar",
+        "oOral"
+      ]
+    },
+    {
+      "id": "pain",
+      "title": "Post-op analgesia",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oApap",
+        "b",
+        "oFirst",
+        "c",
+        "oNoOp",
+        "oOp"
+      ]
+    },
+    {
+      "id": "calltri",
+      "title": "Post-op phone call triage",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o911",
+        "b",
+        "b2",
+        "oBleedNow",
+        "oBleedCall",
+        "c",
+        "oInf",
+        "d",
+        "oDry",
+        "e",
+        "oNum",
+        "f",
+        "oOac",
+        "g",
+        "oArch",
+        "h",
+        "oMed",
+        "oOk"
+      ]
+    },
+    {
+      "id": "ao",
+      "title": "Dry socket",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oInf",
+        "b",
+        "oAo",
+        "oOther"
+      ]
+    },
+    {
+      "id": "bleed",
+      "title": "Post-op bleeding",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oEr",
+        "b",
+        "oOoze",
+        "nLocal",
+        "c",
+        "oLab",
+        "oDone"
+      ]
+    },
+    {
+      "id": "nerve",
+      "title": "Nerve injury (IAN / lingual)",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oNow",
+        "b",
+        "oOne",
+        "c",
+        "oThree",
+        "oObs"
+      ]
+    },
+    {
+      "id": "oac",
+      "title": "Oroantral communication",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oDisp",
+        "b",
+        "oFlap",
+        "c",
+        "oFig",
+        "oNone"
+      ]
+    },
+    {
+      "id": "displaced",
+      "title": "Displaced tooth or root",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oNow",
+        "oLater"
+      ]
+    },
+    {
+      "id": "trauma",
+      "title": "Facial trauma triage",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oAtls",
+        "b",
+        "oCanth",
+        "c",
+        "nSept",
+        "d",
+        "oMand",
+        "oFace"
+      ]
+    },
+    {
+      "id": "mandfx",
+      "title": "Mandible fracture",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oAir",
+        "b",
+        "nAbx",
+        "c",
+        "d",
+        "oCondOrif",
+        "oCondClosed",
+        "e",
+        "oOrif",
+        "oClosed"
+      ]
+    },
+    {
+      "id": "lac",
+      "title": "Facial laceration",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oBig",
+        "b",
+        "oDeep",
+        "c",
+        "nBite",
+        "d",
+        "oDirty",
+        "e",
+        "oSite",
+        "oSimple"
+      ]
+    },
+    {
+      "id": "dentotrauma",
+      "title": "Dentoalveolar trauma",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oFace",
+        "b",
+        "oPrim",
+        "c",
+        "d",
+        "oNoRep",
+        "e",
+        "oRep",
+        "oLate",
+        "f",
+        "oAlv",
+        "g",
+        "h",
+        "oIntr",
+        "oLux",
+        "k",
+        "oRoot",
+        "l",
+        "oPulp",
+        "oMinor"
+      ]
+    },
+    {
+      "id": "extraction",
+      "title": "Third molars & extractions",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o0",
+        "b",
+        "oSurv",
+        "c",
+        "oRem",
+        "d",
+        "oCor",
+        "oRemN"
+      ]
+    },
+    {
+      "id": "canine",
+      "title": "Impacted canine",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oInt",
+        "b",
+        "c",
+        "oExp",
+        "oTrans",
+        "d",
+        "oExt",
+        "oMon"
+      ]
+    },
+    {
+      "id": "implant",
+      "title": "Single & multiple implants",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o1",
+        "b",
+        "o2",
+        "c",
+        "o3",
+        "d",
+        "o4",
+        "o5"
+      ]
+    },
+    {
+      "id": "graft",
+      "title": "Ridge augmentation",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o1",
+        "b",
+        "o2",
+        "c",
+        "o3",
+        "o4"
+      ]
+    },
+    {
+      "id": "sinus",
+      "title": "Sinus lift",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o1",
+        "b",
+        "o2",
+        "c",
+        "d",
+        "e",
+        "f",
+        "h",
+        "oTC",
+        "oTC2",
+        "o6",
+        "nLat",
+        "g",
+        "o4",
+        "o5"
+      ]
+    },
+    {
+      "id": "arch",
+      "title": "Full-arch",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o1",
+        "b",
+        "bx",
+        "nBx",
+        "o2",
+        "c",
+        "o3",
+        "o4"
+      ]
+    },
+    {
+      "id": "infection",
+      "title": "Odontogenic infection",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oER",
+        "b",
+        "c",
+        "nSC",
+        "oNoSC",
+        "d",
+        "oAbx",
+        "oNo"
+      ]
+    },
+    {
+      "id": "dns",
+      "title": "Deep neck space infection",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oAir",
+        "b",
+        "oNoCT",
+        "nWork",
+        "nAbx",
+        "c",
+        "oNec",
+        "d",
+        "oDrain",
+        "e",
+        "oMed"
+      ]
+    },
+    {
+      "id": "periimpl",
+      "title": "Peri-implantitis",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oHealth",
+        "b",
+        "oMuc",
+        "c",
+        "oExp",
+        "nNS",
+        "d",
+        "oStable",
+        "e",
+        "oNoSurg",
+        "f",
+        "oRecon",
+        "oAccess"
+      ]
+    },
+    {
+      "id": "biopsy",
+      "title": "Biopsy & specimens",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oVasc",
+        "b",
+        "oVB",
+        "c",
+        "oInc",
+        "d",
+        "oExc"
+      ]
+    },
+    {
+      "id": "lacx",
+      "title": "Local anesthetic complications",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oNeedle",
+        "b",
+        "oMet",
+        "c",
+        "oLast",
+        "d",
+        "oPalsy",
+        "e",
+        "oHem",
+        "f",
+        "oPar",
+        "oOther"
+      ]
+    },
+    {
+      "id": "jawom",
+      "title": "Suspected jaw osteomyelitis",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oED",
+        "c",
+        "oLesion",
+        "b",
+        "oNec",
+        "d",
+        "oWork",
+        "oReview"
+      ]
+    },
+    {
+      "id": "ods",
+      "title": "Suspected odontogenic sinusitis",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oED",
+        "a2",
+        "oOac",
+        "b",
+        "oPlan",
+        "c",
+        "oWork",
+        "oReview"
+      ]
+    },
+    {
+      "id": "osaref",
+      "title": "Adult obstructive sleep apnea referral",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oKnown",
+        "b",
+        "oReview",
+        "c",
+        "oLab",
+        "oSleep"
+      ]
+    },
+    {
+      "id": "salivary",
+      "title": "Salivary and submandibular swelling",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oED",
+        "b",
+        "oMass",
+        "b2",
+        "oMed",
+        "c",
+        "oDental",
+        "d",
+        "oInfect",
+        "e",
+        "oStone",
+        "oUnclear"
+      ]
+    },
+    {
+      "id": "lesion",
+      "title": "Oral mucosal lesion & dysplasia",
+      "hidden": false,
+      "start": "pre",
+      "nodeIds": [
+        "a",
+        "o1",
+        "b",
+        "o2",
+        "o3",
+        "d_a",
+        "d_oSev",
+        "d_b",
+        "d_oHi",
+        "d_oLo",
+        "pre"
+      ]
+    },
+    {
+      "id": "rl",
+      "title": "Jaw radiolucency differential",
+      "hidden": true,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "b",
+        "oMo",
+        "oMn",
+        "c",
+        "oUo",
+        "oUn"
+      ]
+    },
+    {
+      "id": "dysplasia",
+      "title": "Oral epithelial dysplasia",
+      "hidden": true,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "oSev",
+        "b",
+        "oHi",
+        "oLo"
+      ]
+    },
+    {
+      "id": "mronj",
+      "title": "MRONJ staging & management",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "b",
+        "oRisk",
+        "oS0",
+        "c",
+        "oS3",
+        "d",
+        "oS2",
+        "oS1"
+      ]
+    },
+    {
+      "id": "jaw",
+      "title": "Jaw lesion & radiolucency",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o1",
+        "b",
+        "c",
+        "o4",
+        "o2",
+        "o3",
+        "r_a",
+        "r_b",
+        "r_oMo",
+        "r_oMn",
+        "r_c",
+        "r_oUo",
+        "r_oUn"
+      ]
+    },
+    {
+      "id": "tmd",
+      "title": "TMD & orofacial pain",
+      "hidden": false,
+      "start": "a",
+      "nodeIds": [
+        "a",
+        "o1",
+        "b",
+        "o2",
+        "c",
+        "nPsy",
+        "d",
+        "bx",
+        "oBx",
+        "o3",
+        "e",
+        "o4",
+        "o5"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "doac",
+      "title": "DOAC (apixaban, rivaroxaban, dabigatran, edoxaban)",
+      "questionIds": [
+        "doacAg",
+        "doacTime",
+        "ap"
+      ]
+    },
+    {
+      "id": "warfarin",
+      "title": "Warfarin (Coumadin, Jantoven)",
+      "questionIds": [
+        "inr",
+        "inrAge",
+        "stable",
+        "ap"
+      ]
+    },
+    {
+      "id": "antiplatelet",
+      "title": "Antiplatelets (aspirin, clopidogrel, prasugrel, ticagrelor)",
+      "questionIds": [
+        "apReg",
+        "stent"
+      ]
+    },
+    {
+      "id": "antires",
+      "title": "Antiresorptives & antiangiogenics (MRONJ risk)",
+      "questionIds": [
+        "arInd",
+        "exposed",
+        "arSteroid"
+      ]
+    },
+    {
+      "id": "glp1",
+      "title": "GLP-1 receptor agonists (semaglutide, tirzepatide…)",
+      "questionIds": [
+        "glpGi",
+        "glpEsc",
+        "glpRisk"
+      ]
+    },
+    {
+      "id": "sglt2",
+      "title": "SGLT2 inhibitors (-gliflozins)",
+      "questionIds": [
+        "sgAg",
+        "sgFast",
+        "sgDays",
+        "sgVer"
+      ]
+    },
+    {
+      "id": "steroid",
+      "title": "Chronic corticosteroids",
+      "questionIds": [
+        "stAI",
+        "stRisk",
+        "stRec",
+        "stUnwell"
+      ]
+    },
+    {
+      "id": "rad",
+      "title": "Head & neck radiation · chemotherapy",
+      "questionIds": [
+        "rtWhen",
+        "rtDose",
+        "rtChemo"
+      ]
+    },
+    {
+      "id": "inr",
+      "title": "INR (PT/INR)",
+      "questionIds": [
+        "inr",
+        "inrAge",
+        "inrOn",
+        "stable",
+        "inrRef",
+        "ap"
+      ]
+    },
+    {
+      "id": "plt",
+      "title": "Platelet count (thrombocytopenia)",
+      "questionIds": [
+        "plt",
+        "pltAge",
+        "pltTrend",
+        "pltCause"
+      ]
+    },
+    {
+      "id": "a1c",
+      "title": "HbA1c",
+      "questionIds": [
+        "a1c",
+        "a1cAge"
+      ]
+    },
+    {
+      "id": "renal",
+      "title": "Kidney disease & dialysis (eGFR, creatinine)",
+      "questionIds": [
+        "dial",
+        "esrd",
+        "egfr"
+      ]
+    },
+    {
+      "id": "bleeddx",
+      "title": "Inherited bleeding disorder (hemophilia, von Willebrand)",
+      "questionIds": [
+        "bdType"
+      ]
+    },
+    {
+      "id": "ie",
+      "title": "Heart valve, endocarditis risk, prosthetic joint",
+      "questionIds": [
+        "ieHi"
+      ]
+    },
+    {
+      "id": "cied",
+      "title": "Pacemaker or ICD",
+      "questionIds": [
+        "cdType",
+        "cdDep",
+        "cdMono"
+      ]
+    },
+    {
+      "id": "bupe",
+      "title": "Buprenorphine (Suboxone, Sublocade)",
+      "questionIds": []
+    },
+    {
+      "id": "epix",
+      "title": "Epinephrine interactions (TCAs, nonselective β-blockers, cocaine)",
+      "questionIds": [
+        "epAg",
+        "ep24"
+      ]
+    },
+    {
+      "id": "cnsdep",
+      "title": "Sedation interactions: opioids, benzodiazepines, gabapentinoids, Paxlovid",
+      "questionIds": [
+        "cdAg",
+        "cdResp",
+        "cdCyp"
+      ]
+    },
+    {
+      "id": "rxint",
+      "title": "Post-op prescribing check: SSRIs/SNRIs, lithium, methotrexate",
+      "questionIds": [
+        "rxSsri",
+        "rxLi",
+        "rxMtx"
+      ]
+    },
+    {
+      "id": "dmrx",
+      "title": "Insulin & sulfonylureas",
+      "questionIds": [
+        "dmAg",
+        "dmT1",
+        "dmHypo"
+      ]
+    },
+    {
+      "id": "tx",
+      "title": "Organ transplant · immunosuppressants",
+      "questionIds": [
+        "txRecent",
+        "txSteroid"
+      ]
+    },
+    {
+      "id": "imgai",
+      "title": "Imaging AI flag (radiograph or CBCT)",
+      "questionIds": [
+        "iaType",
+        "iaRead"
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "id": "arrest",
+      "title": "Cardiac arrest"
+    },
+    {
+      "id": "anaph",
+      "title": "Anaphylaxis"
+    },
+    {
+      "id": "angio",
+      "title": "Angioedema"
+    },
+    {
+      "id": "lspasm",
+      "title": "Laryngospasm"
+    },
+    {
+      "id": "bronch",
+      "title": "Bronchospasm / asthma"
+    },
+    {
+      "id": "fba",
+      "title": "Dropped object / aspiration"
+    },
+    {
+      "id": "resp",
+      "title": "Oversedation / apnea"
+    },
+    {
+      "id": "last",
+      "title": "Local anesthetic toxicity (LAST)"
+    },
+    {
+      "id": "seizure",
+      "title": "Seizure"
+    },
+    {
+      "id": "hypo",
+      "title": "Hypoglycemia"
+    },
+    {
+      "id": "adrenal",
+      "title": "Adrenal crisis"
+    },
+    {
+      "id": "chest",
+      "title": "Chest pain / ACS"
+    },
+    {
+      "id": "stroke",
+      "title": "Stroke"
+    },
+    {
+      "id": "htncrisis",
+      "title": "Hypertensive crisis"
+    },
+    {
+      "id": "brady",
+      "title": "Bradycardia / vagal syncope"
+    },
+    {
+      "id": "mh",
+      "title": "Malignant hyperthermia"
+    }
+  ],
+  "pediatricEmergency": [
+    "arrest",
+    "brady",
+    "resp",
+    "hypo",
+    "adrenal",
+    "lspasm",
+    "bronch",
+    "chest",
+    "stroke",
+    "htncrisis"
+  ],
+  "referenceCards": [
+    "Asthma & COPD around surgery",
+    "Pediatric & geriatric anesthesia",
+    "Sedation pharmacology pearls",
+    "Neuromodulators & Kybella",
+    "Radiograph interpretation pearls",
+    "Non-odontogenic jaw lesions",
+    "Oral cancer workup & neck",
+    "Full-arch & digital workflow",
+    "Immediate implant placement",
+    "Socket shield (partial extraction)",
+    "6-mm implant vs sinus lift",
+    "Zygomatic implants (PATZy)",
+    "Implant outcomes & removal",
+    "Cephalometric norms",
+    "Cleft care timing",
+    "Vascular lesions",
+    "Salivary glands",
+    "TMJ arthrocentesis",
+    "Filler complications & vision loss",
+    "Oral pathology chairside framework",
+    "Odontogenic cysts & tumors: management",
+    "GBR & narrow ridge",
+    "Implant biomechanics & restorative space",
+    "Orofacial pain red flags",
+    "Implant antibiotic prophylaxis"
+  ],
+  "handouts": [
+    {
+      "id": "ext",
+      "title": "After tooth removal",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "imp",
+      "title": "After implant, bone graft or sinus lift surgery",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "arch",
+      "title": "After full-arch (fixed teeth same day) surgery",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "presed",
+      "title": "Before IV sedation",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "sed",
+      "title": "After IV sedation",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "id": "fwis",
+      "title": "Wisdom teeth removal",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fimp",
+      "title": "Dental implants",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fgraft",
+      "title": "Bone grafting and socket preservation",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fsinus",
+      "title": "Sinus lift",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "farch",
+      "title": "Full-arch implants (teeth in a day)",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fsed",
+      "title": "IV sedation",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fbx",
+      "title": "Biopsy",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fcan",
+      "title": "Exposure of an impacted canine",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fao",
+      "title": "Dry socket",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "finf",
+      "title": "Tooth infection and facial swelling",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fnerve",
+      "title": "Numbness after surgery",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "foac",
+      "title": "Sinus opening after an upper tooth removal",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "ftmd",
+      "title": "Jaw joint and muscle pain (TMD)",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fmronj",
+      "title": "Bone medicines and jaw bone health (MRONJ)",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "fperi",
+      "title": "Gum disease around implants (peri-implantitis)",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    }
+  ],
+  "optionGrids": [
+    {
+      "id": "ogcoro",
+      "title": "Lower wisdom tooth close to the nerve: remove the whole tooth, or the top only?",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "ogimp",
+      "title": "Replacing a missing tooth: implant, bridge, or leave the space?",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    },
+    {
+      "id": "oggraft",
+      "title": "After a tooth is removed: bone graft in the socket, or let it heal on its own?",
+      "languages": [
+        "en",
+        "es",
+        "kea",
+        "zh"
+      ]
+    }
+  ],
+  "intraop": [
+    {
+      "group": "Time-out · before incision",
+      "items": [
+        {
+          "id": "id",
+          "text": "Patient, procedure, side and tooth numbers confirmed aloud against consent and imaging"
+        },
+        {
+          "id": "cons",
+          "text": "Consent signed, including alternatives and no treatment"
+        },
+        {
+          "id": "alg",
+          "text": "Allergies restated: local anesthetic, latex, chlorhexidine, antibiotics"
+        },
+        {
+          "id": "gate",
+          "text": "Medical gate items done: IE prophylaxis given, antithrombotic plan, SGLT2/GLP-1 timing"
+        },
+        {
+          "id": "img",
+          "text": "Imaging up; nerve and sinus proximity reviewed"
+        },
+        {
+          "id": "kit",
+          "text": "Implants, grafts, instruments and lot labels in the room"
+        },
+        {
+          "id": "em",
+          "text": "Suction, O₂ and emergency kit checked; team roles known"
+        }
+      ]
+    },
+    {
+      "group": "If sedated",
+      "items": [
+        {
+          "id": "mon",
+          "text": "Monitors on and baseline recorded: SpO₂, BP, ECG, capnography"
+        },
+        {
+          "id": "iv",
+          "text": "IV patent; reversal agents and airway equipment at hand"
+        },
+        {
+          "id": "npo",
+          "text": "NPO, escort and GLP-1 status confirmed"
+        }
+      ]
+    },
+    {
+      "group": "During · pause points",
+      "items": [
+        {
+          "id": "la",
+          "text": "Running local anesthetic total checked against weight-based maximum"
+        },
+        {
+          "id": "pack",
+          "text": "Throat pack or gauze screen in place"
+        },
+        {
+          "id": "vit",
+          "text": "Sedation vitals recorded at set intervals"
+        },
+        {
+          "id": "stop",
+          "text": "Stop and re-plan if bleeding is uncontrolled, a root is displaced, the sinus is opened, a nerve is exposed, or vitals change"
+        }
+      ]
+    },
+    {
+      "group": "Sign-out · before the patient leaves the chair",
+      "items": [
+        {
+          "id": "cnt",
+          "text": "Throat pack and gauze removed and counted"
+        },
+        {
+          "id": "frag",
+          "text": "All teeth, roots and fragments accounted for"
+        },
+        {
+          "id": "spec",
+          "text": "Specimen labeled; requisition complete"
+        },
+        {
+          "id": "lot",
+          "text": "Implant and graft lot numbers recorded"
+        },
+        {
+          "id": "hem",
+          "text": "Hemostasis confirmed"
+        },
+        {
+          "id": "po",
+          "text": "Instructions, prescriptions and after-hours number given"
+        },
+        {
+          "id": "dc",
+          "text": "If sedated: discharge criteria met and escort present"
+        }
+      ]
+    },
+    {
+      "group": "If All-on-X (full-arch, immediate load)",
+      "items": [
+        {
+          "id": "axplan",
+          "text": "Prosthetic plan confirmed before reduction: vertical dimension, midline, smile line and planned prosthesis space"
+        },
+        {
+          "id": "axscan",
+          "text": "Fiducial markers placed; photogrammetry or scans captured before surgery"
+        },
+        {
+          "id": "axred",
+          "text": "Bone reduction checked against the plan (or reduction guide); restorative space verified before implant placement. Low sinus exposed by reduction: ceramic bur near the sinus, or outline it and push up with a hand instrument"
+        },
+        {
+          "id": "axguide",
+          "text": "Surgical guide seated and stable; fixation pins secure; fit verified on the reduced ridge"
+        },
+        {
+          "id": "axtq",
+          "text": "Insertion torque recorded per implant; immediate loading only if torque and stability meet the plan, otherwise bury or delay. Posterior implants ≥4 mm diameter"
+        },
+        {
+          "id": "axmua",
+          "text": "Multi-unit abutments: angulation chosen, torqued per manufacturer, seating confirmed on radiograph"
+        },
+        {
+          "id": "axconv",
+          "text": "Conversion or pickup: passive fit, no soft-tissue blanching, screw channels sealed, occlusion even with no cantilever contact in excursions"
+        },
+        {
+          "id": "axpost",
+          "text": "Post-placement scan or photogrammetry captured; sockets grafted or PRF placed as planned; masseter botulinum toxin if planned"
+        },
+        {
+          "id": "axrec",
+          "text": "Implant and abutment positions, torques and lot numbers recorded; prosthesis screw torque noted; soft diet and no clenching reviewed with the patient"
+        }
+      ]
+    }
+  ],
+  "pins": [
+    {
+      "id": "preop",
+      "title": "Pre-op clearance"
+    },
+    {
+      "id": "tri",
+      "title": "Photo triage"
+    },
+    {
+      "id": "implant",
+      "title": "Implants"
+    },
+    {
+      "id": "extraction",
+      "title": "Extractions"
+    },
+    {
+      "id": "calltri",
+      "title": "Post-op call triage"
+    },
+    {
+      "id": "ho",
+      "title": "Post-op handouts"
+    }
+  ],
+  "onCall": [
+    "trauma",
+    "lac",
+    "mandfx",
+    "dentotrauma",
+    "infection",
+    "dns",
+    "calltri"
+  ],
+  "sourceKeys": [
+    "boneDx",
+    "odsDx",
+    "odsTx",
+    "auJaw",
+    "osaDx",
+    "saltri",
+    "apapFDA",
+    "cacRev",
+    "su17",
+    "joms08",
+    "tan12",
+    "avila19",
+    "cousoq22",
+    "pjet07",
+    "overer",
+    "coro22",
+    "coro25",
+    "teachback",
+    "optgrid",
+    "nkfpain",
+    "sux",
+    "lipid70",
+    "wfhdent",
+    "apsfcied",
+    "fdaGaba",
+    "fdaOpBz",
+    "paxSpc",
+    "tramLbl",
+    "ssriDx",
+    "ssriOp",
+    "liNsaid",
+    "mtxLbl",
+    "imidRev",
+    "spaqi",
+    "apsfSglt",
+    "kohan",
+    "cobo",
+    "ludwig",
+    "dnmrad",
+    "who",
+    "sdcepFull",
+    "sdcepDoac",
+    "sglt2",
+    "vandijk",
+    "acc",
+    "chest",
+    "allyn",
+    "glp1",
+    "glp1k",
+    "aapdla",
+    "aapdsed",
+    "parcare",
+    "palsca",
+    "palsbr",
+    "msdres",
+    "flumaped",
+    "glucaped",
+    "hcped",
+    "bupilabel",
+    "aha25",
+    "aha25s",
+    "anaph",
+    "last",
+    "apsf",
+    "aes",
+    "mh",
+    "lspasm",
+    "anaph2",
+    "lsprop",
+    "litfl",
+    "nalox",
+    "fluma",
+    "brady",
+    "adahypo",
+    "d50",
+    "ntg",
+    "merck",
+    "epicat",
+    "asaps",
+    "fast",
+    "asamon",
+    "mysed",
+    "dm26",
+    "ada16",
+    "filippi",
+    "andersson",
+    "dialysis",
+    "liver",
+    "preg",
+    "nsaidpreg",
+    "orn",
+    "steroid",
+    "giai",
+    "spsdent",
+    "ada24",
+    "aoprev",
+    "aotx",
+    "secrets",
+    "txa",
+    "meyer",
+    "atls",
+    "canth",
+    "lacaafp",
+    "tetcdc",
+    "bitewk",
+    "fn72",
+    "fxabx",
+    "apnotes",
+    "pathimg",
+    "rwax",
+    "cg",
+    "devine",
+    "padss",
+    "lect",
+    "board",
+    "dysp",
+    "fa6",
+    "schwarz",
+    "goodson",
+    "kademani",
+    "pathdeck",
+    "quickp",
+    "who22",
+    "prptmj",
+    "fillervo",
+    "fillervis",
+    "cochimp",
+    "eaoelf",
+    "mynotes",
+    "perio6",
+    "binder",
+    "lee",
+    "malamed",
+    "aha",
+    "adaPro",
+    "sdcep",
+    "aaoms",
+    "stopbang",
+    "third",
+    "rood",
+    "iti18",
+    "iti13",
+    "lyu",
+    "yang",
+    "diaz",
+    "pjet",
+    "tan",
+    "delf",
+    "testori",
+    "perio",
+    "adaAbx",
+    "sdcepAbs",
+    "oralca",
+    "dctmd",
+    "dcscore",
+    "rcs",
+    "bmj",
+    "gramp",
+    "asthma",
+    "choke",
+    "fba",
+    "aaem",
+    "aha26",
+    "merckhtn",
+    "adrenal",
+    "coreem",
+    "brux",
+    "mijir",
+    "aapdav",
+    "iadtfx",
+    "oep",
+    "aae26",
+    "efp",
+    "usc",
+    "needle",
+    "methb",
+    "kodsi",
+    "mcgill",
+    "hsdm",
+    "bont",
+    "chen23",
+    "gkioka24",
+    "bontnhs",
+    "dant",
+    "epipen"
+  ],
+  "namedCalculatorHelpers": [
+    "rsCalc",
+    "R",
+    "laRows",
+    "fluids",
+    "cxBody"
+  ],
+  "exportHelpers": [
+    "asmtText",
+    "planText",
+    "consultText",
+    "bxText",
+    "patientPreviewText",
+    "patientFullText",
+    "patientShortText",
+    "regLine",
+    "d7Text"
+  ],
+  "settings": [
+    "Author/Colleague mode",
+    "Hospital on-call",
+    "High contrast",
+    "Patient language",
+    "Practice/office phone"
+  ],
+  "commit": "68b5c33ee3e92dc9b335aa28bf0ab8f67697483f",
+  "sourceSha256": "a02ecb85f34e3a57753a2dffe1c08400a245f7e4dfd7b943191fb98a7801470d",
+  "functionNames": [
+    "rsCalc",
+    "R",
+    "walk",
+    "D",
+    "DR",
+    "F",
+    "sosKid",
+    "pedCard",
+    "emHTML",
+    "refHTML",
+    "sedHTML",
+    "calcHTML",
+    "tabsHTML",
+    "view",
+    "cxIn",
+    "cxCh",
+    "cxBody",
+    "cxHTML",
+    "cxSync",
+    "rebody",
+    "auToggle",
+    "handoffHTML",
+    "parseTri",
+    "triFor",
+    "loadTri",
+    "triBannerHTML",
+    "ageNum",
+    "pedsLock",
+    "kgVal",
+    "lbVal",
+    "wtLine",
+    "ptFields",
+    "ptBar",
+    "lockWhy",
+    "lockHTML",
+    "laKid",
+    "laRows",
+    "fluids",
+    "pmode",
+    "setPmode",
+    "inOtherMode",
+    "modeMatters",
+    "modeBarHTML",
+    "modeLines",
+    "pmodeHTML",
+    "auWrap",
+    "swOK",
+    "offHTML",
+    "topHTML",
+    "newHTML",
+    "acked",
+    "gate",
+    "faqText",
+    "patientMedicationRisk",
+    "hoItems",
+    "patientFooter",
+    "patientStatusHTML",
+    "patientFullText",
+    "patientExport",
+    "patientShortText",
+    "patientPreviewText",
+    "ophFieldHTML",
+    "patientPreviewHTML",
+    "ogText",
+    "ogHTML",
+    "d7Text",
+    "d7HTML",
+    "teachHTML",
+    "phNorm",
+    "phFmt",
+    "ownPh",
+    "setOwnPh",
+    "officePh",
+    "telOf",
+    "patientURL",
+    "qrMatrix",
+    "qrSVG",
+    "hoText",
+    "hoHTML",
+    "shareTxt",
+    "shareHO",
+    "fbHTML",
+    "lineIdx",
+    "kwHTML",
+    "idx",
+    "hitsHTML",
+    "searchHitsHTML",
+    "basisOf",
+    "basisChip",
+    "reviewLine",
+    "needCtx",
+    "egfrNote",
+    "mk",
+    "authorHTML",
+    "authorText",
+    "fQs",
+    "prune",
+    "baseFindingPlan",
+    "fPlan",
+    "lev",
+    "findHits",
+    "findHitsHTML",
+    "withPatientState",
+    "modelFor",
+    "outcomeKey",
+    "disposition",
+    "reconcilePlans",
+    "sectionFor",
+    "planSections",
+    "unifiedPlanHTML",
+    "rankQuestions",
+    "nextQuestionHTML",
+    "changeConditionsHTML",
+    "actOf",
+    "missAct",
+    "openItems",
+    "condGroups",
+    "condHTML",
+    "condText",
+    "itemText",
+    "uncHTML",
+    "labQ",
+    "parseLab",
+    "labState",
+    "labCapHTML",
+    "recordLab",
+    "caseContextUncertain",
+    "caseParse",
+    "casePicked",
+    "caseHTML",
+    "applyPreset",
+    "caseApply",
+    "comparisonPatch",
+    "comparisonModel",
+    "comparisonHTML",
+    "applyComparison",
+    "fieldLabel",
+    "planBeforeEdit",
+    "recordPlanEdit",
+    "changeNoticeHTML",
+    "consultText",
+    "decisionToolsHTML",
+    "chipRow",
+    "numRow",
+    "qHTML",
+    "overallHTML",
+    "dispHTML",
+    "fSig",
+    "fDynHTML",
+    "fQsHTML",
+    "lkcHTML",
+    "addBtnHTML",
+    "fTopHTML",
+    "fNextHTML",
+    "miniHTML",
+    "findHTML",
+    "openFind",
+    "redraw",
+    "asmtModel",
+    "ctxSummary",
+    "ctxShort",
+    "asmtHTML",
+    "asmtCtxHTML",
+    "asmtRestHTML",
+    "asmtText",
+    "asmtView",
+    "newPatient",
+    "hasPatient",
+    "updBar",
+    "absorb",
+    "gateModel",
+    "gateDisp",
+    "topQHTML",
+    "gateHTML",
+    "onCall",
+    "setOnCall",
+    "homeGroup",
+    "oncallHTML",
+    "ioFold",
+    "ioPlanSig",
+    "ioSig",
+    "ioLabel",
+    "ioSync",
+    "ioSet",
+    "ioEncounter",
+    "ioRow",
+    "ioHTML",
+    "atabsHTML",
+    "asmtBody",
+    "qsetHTML",
+    "pinsHTML",
+    "home",
+    "inputsHTML",
+    "srcLink",
+    "pathHTML",
+    "flowHTML",
+    "bxText",
+    "bxHTML",
+    "fxRemain",
+    "fxCount",
+    "fxChips",
+    "critHTML",
+    "hcOn",
+    "applyHC",
+    "toggleHC",
+    "hcHTML",
+    "drawerHTML",
+    "fxSync",
+    "setDrawer",
+    "backStep",
+    "calcs",
+    "refresh",
+    "open",
+    "tdShow",
+    "tdThinner",
+    "tdSed",
+    "tdLA",
+    "tdAnalg",
+    "todayHTML",
+    "todayText",
+    "regProc",
+    "regBand",
+    "regLine",
+    "regCopy",
+    "todaySync",
+    "planText",
+    "showCopy",
+    "migratePmode"
+  ],
+  "contentHashes": {
+    "MODS": "04c0bdf7a0720df57d874d922f34c218916d7060fe92883229fd6fc27b89c589",
+    "FIND": "4633aea14c7ab92f8730e575767e06f5cd7c04708f2a733954ad36f0a0645f87",
+    "EMS": "699a078749a765a0862c949c845adf6ff35e4d650f996fdb27b34f3560ac22cc",
+    "PEDS": "567ce8107edf564063a4713d2476725e3afb8ddfd015411563da26a5ad70a586",
+    "REF": "3c7aa76d98c8cc6f0fd5087e93a11116aa07cd6698cd1c56f6af62e99836a58a",
+    "FAQ": "406612dcff1873427a1008412e9dec7ebcf75dc423d0429771152a2d31dc577f",
+    "OG": "4c960732157243e658855c6573099a61e75ab7882fa80c997b67bc49530e8948",
+    "IO": "510e6523329b57d56c7de98ea57b01d79fb955e9e3d61b5b881a0328856c4151",
+    "SRC": "4a359977ce7f0d4ff7810a53fe62af3c0310838de93bfa3c95993732a311ec12",
+    "HO": "97f68f02c94d40c96542d23c8d3bf1cb2c4912d01bb92a13a8e532c7b5c18fe1"
+  },
+  "namedFunctionHash": "f0cbe57e40bef3e5c2cab1c943ec15159ae109e887c3f42f0614ffe249ee5dfb"
+}

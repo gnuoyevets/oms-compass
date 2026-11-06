@@ -23,9 +23,13 @@ jobs:
         run: node tests/reconciliation.cjs
       - name: Clinical workflow regressions (no dependencies)
         run: node tests/clinical-workflow.cjs
+      - name: Full graph, consultation and feature-preservation checks
+        run: node tests/consultation.cjs
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save --no-package-lock playwright@1.63.0
           npx playwright install --with-deps chromium
       - name: Browser checks (iPhone 13 emulation)
         run: node tests/run.cjs
+      - name: Consultation browser acceptance
+        run: node tests/consultation-browser.cjs
