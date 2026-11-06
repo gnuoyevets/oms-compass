@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.22.0 — Nov 6, 2026 (pending review)
+## v3.22.0 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
 
 Send to patient without exposing your number; office phone always; new pain-medication wording.
 
