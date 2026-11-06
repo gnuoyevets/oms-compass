@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.22.1 — Nov 6, 2026 (pending review)
+## v3.22.1 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
 
 Patient handouts condensed without losing information.
 
@@ -10,7 +10,7 @@ Patient handouts condensed without losing information.
 - **Pain Medication Instructions** (extraction, implant/graft, full-arch; all four languages) about a third shorter. Kept: Advil 400 mg (two 200 mg) + Tylenol 500 mg (one Extra Strength) together every 6 hours for the first 24–48 hours, with food or a snack, ideally before the numbness wears off; then as needed; daily maximums ibuprofen 2,400 mg (only if directed) and acetaminophen 3,000 mg; no other ibuprofen/NSAID/acetaminophen products without asking; call if pain worsens after improving or relief is inadequate. Dropped only “(conservative limit)”.
 - English lines tightened (contractions, merged sentences); same content. Spanish, Kriolu and 中文 changed only in the pain block and the Spanish/中文 bleeding line.
 - Checked by script: every number in each shortened line is still present; every “Call us” and 911 line keeps its flag; item order unchanged (pictograms and medication-precaution swap still line up). Compass and the patient page carry identical text.
-- Not changed: the implant/graft handout still has no “trouble breathing or swallowing: call 911” line (the extraction handout has one). Adding it is a clinical decision for review.
+- **Added:** “Trouble breathing or swallowing: call 911” to the implant, bone graft and sinus lift handout (EN/ES/Kriolu/中文, same wording as the extraction handout), shown first with the call-us line. Steven approved Nov 6, 2026.
 
 ## v3.22.0 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
 
