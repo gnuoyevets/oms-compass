@@ -1167,6 +1167,42 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{newPatient();S.pf.age='15';S.wt=60;open('sed')});ok(await p.locator('#adult-sedation-gate').count()===0&&await p.locator('#teen-sedation-note').count()===1,'Age 15, 60 kg: Office sedation pathway open with adolescent note');
   await c30.close()}
 
+ console.log('31. v3.24.0: obese sedation scaling (adjusted weight for Precedex, ideal for ketamine)');
+ {page=await fresh(ctx);
+  const T=()=>page.locator('#sedtab').innerText();
+  await E(page,()=>{newPatient();S.draftMode=true;S.pf.age='50';S.wt=120;S.asa='12';view('calc')});
+  ok(/0\.5 mcg\/kg|60 mcg/.test(await T())&&/Add height and sex/.test(await T()),'120 kg without height/sex: actual-weight doses plus prompt');
+  await E(page,()=>{S.cx={sex:'m',ht:'170'};view('calc')});let t=await T();
+  ok(/44 mcg/.test(t)&&/16–33 mg/.test(t)&&/Obese \(182% of ideal/.test(t),'170 cm male 120 kg: Precedex 44 mcg (adjusted 87.6 kg), ketamine 16–33 mg (ideal 65.9 kg) — got '+t.slice(0,160));
+  ok(/More/.test(t)&&/60 mcg/.test(await page.locator('#sedtab details').textContent()),'Actual-weight doses kept under More');
+  ok(/21\.9 mcg/.test(t),'Fast load scaled: 0.25 mcg/kg × 87.6 = 21.9 mcg');
+  await E(page,()=>{S.asa='3';view('calc')});t=await T();
+  ok(/26–44 mcg/.test(t)&&/9–18 mcg/.test(t)&&/10–20 mg touches/.test(t),'ASA III obese: load 26–44, re-bolus 9–18 mcg, ketamine touches fixed');
+  await E(page,()=>{S.asa='12';S.wt=68;S.cx={sex:'f',ht:'165'};view('calc')});t=await T();
+  ok(/34 mcg/.test(t)&&/17–34 mg/.test(t)&&!/Obese/.test(t),'Non-obese 68 kg female 165 cm (119% of ideal, BMI 25): actual weight');
+  await E(page,()=>{S.wt=120;S.cx={sex:'m'};view('calc')});await E(page,()=>{document.getElementById('cx-ht').closest('details').open=true});await page.fill('#cx-ht','170');
+  ok(/44 mcg/.test(await T()),'Typing height updates the sedation table live');
+  ok(/8\.3 mg\/mL each/.test(await page.locator('#sedtab').textContent()),'Ketofol 1:1 line present');
+  await page.close()}
+
+ console.log('32. v3.24.0: height in cm or ft/in; Home on every page; pre-sedation smoking 2 days');
+ {page=await fresh(ctx);
+  await E(page,()=>{newPatient();S.draftMode=true;S.pf.age='50';S.wt=120;S.cx={sex:'m'};view('calc')});
+  await E(page,()=>{document.getElementById('cx-ht').closest('details').open=true});
+  await page.fill('#cx-htft','5');await page.fill('#cx-htin','7');
+  ok(await page.inputValue('#cx-ht')==='170.2','5 ft 7 in → 170.2 cm');
+  ok(/ideal 66\.1 kg/.test(await page.locator('#cxo-bw').innerText()),'Body weight card uses converted height');
+  ok(/44 mcg/.test(await page.locator('#sedtab').innerText()),'Sedation table updates from ft/in');
+  await page.fill('#cx-ht','180');ok(await page.inputValue('#cx-htft')==='5'&&await page.inputValue('#cx-htin')==='10.9','180 cm → 5 ft 10.9 in');
+  await page.fill('#in-lb','220');ok(await E(page,()=>S.wt)===99.8,'Weight in lb converts to kg (220 lb → 99.8 kg)');
+  for(const v of ['emergency','calc','ref','new','handouts']){await E(page,v=>view(v),v);
+   const n=await page.locator('[data-home]').count();ok(n>=1,'Home button on '+v);if(v==='ref'){await page.locator('.homebtn').click();ok(await page.locator('#in-q').count()===1,'Home button returns to the search page')}}
+  await E(page,()=>home());ok(await page.locator('.homebtn').count()===0,'No Home button on the home page itself');
+  await E(page,()=>open('sed'));ok(await page.locator('.fx-hd [data-home]').count()===1,'Module page has Home');
+  await E(page,()=>openFind('doac','Eliquis'));ok(await page.locator('.bar [data-home]').count()>=1,'Finding page has Home');
+  const so=await E(page,()=>JSON.stringify(HO));ok(/at least 2 days and no cannabis/.test(so)&&!/No smoking for 12 hours/.test(so),'Before-sedation handout: no smoking ≥2 days');
+  await page.close()}
+
  await browser.close();
  
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
