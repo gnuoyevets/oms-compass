@@ -2,6 +2,17 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.24.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — obese sedation scaling
+
+- Sedation card: when weight >120% of ideal or BMI ≥30 (height and sex from the Body weight card), Precedex load, re-bolus and fast load use adjusted body weight; ASA I–II ketamine uses ideal body weight. Midazolam, propofol touches, Decadron and glycopyrrolate stay fixed. Never above actual weight. Steven's choices, Nov 12, 2026.
+- Actual-weight doses kept under "More", plus a 1:1 ketofol line (propofol 10 mg/mL 10 mL + ketamine 50 mg/mL 2 mL = 12 mL, ≈8.3 mg/mL each).
+- Without height or sex, the card shows actual-weight doses and a one-line prompt. Typing height updates the table live.
+- New source: dexmedetomidine on adjusted weight in obese ICU patients (Atyia 2023; Robertson 2025) — infusion data, not office bolus; ketamine on ideal weight is convention. Tagged verify.
+- Height in cm or feet + inches (Body weight card); the fields mirror each other and feed BMI, ideal/lean weight and the sedation table. Weight already takes kg or lb.
+- Home button (⌂) on every page: top bar of SOS, Calc, Ref, Patient and What's new; module, finding and assessment headers (finding/assessment ‹ now shows ⌂ — same action). The standalone patient page already returns to its topic list on every page.
+- Before-sedation handout: no smoking or vaping for at least 2 days before (was 12 hours); cannabis 3 days unchanged. EN/ES/Kriolu/中文, app and standalone page. Translations pending native-speaker review, as before.
+- Tests: browser 694 (23 new, sections 31–32); graph 29; reconciliation 78; clinical workflow 39.
+
 ## v3.23.1 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
 
 - Consultation workspace removed at Steven's request: the Consult tab, its Home card, “Return to consultation” and “Review all symptom groups” buttons, `consultation.js`, `consultation.css` and the consultation browser suite. The original post-op call triage is unchanged.
