@@ -193,7 +193,9 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  await E(page,()=>{newPatient();S.draftMode=true;open('preop')});for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await page.click(`.cur [data-a="${id}"][data-v="${v}"]`);
  const plan=await page.locator('.plan').innerText();
  ok(/Screen result · not a clearance/i.test(plan)&&/Not covered by this screen/.test(plan),'Short screen labelled “not a clearance” with what it did not cover');
- ok(await page.locator('.plan .bas').count()===1&&await page.locator('.plan .rev').count()===1,'Module plan shows basis chip and review line');
+ ok(await page.locator('.plan .bas').count()===0&&await page.locator('.plan .rev').count()===1,'Uncited screen result: no basis chip (v3.25.0); review line kept');
+ await E(page,()=>{newPatient();S.draftMode=true;S.pf.age='40';S.ans.preop={a:false,b:true};open('preop')});ok(await page.locator('.plan .bas').count()===1||await page.locator('.cur').count()===1,'Cited module plan still shows its basis chip');
+ await E(page,()=>{newPatient();S.draftMode=true;open('preop')});for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await page.click(`.cur [data-a="${id}"][data-v="${v}"]`);
  await E(page,()=>{open('sed');S.pf.age='40';S.ans.sed={a:false,b:true,c:false,d:true,e:false};refresh()});ok(/Author’s practice|Unverified draft/i.test(await page.locator('#flow').innerText()),'Personal sedation note labelled author’s practice / unverified');
  await E(page,()=>{newPatient();S.draftMode=true;openFind('doac','Eliquis')});
  ok(await page.locator('#ftop .bas').count()===1,'Finding shows a basis chip');ok(/Provisional action/i.test(await page.locator('#ftop').innerText()),'Finding with missing context says “Provisional”');
@@ -1217,7 +1219,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   const n1=await X(()=>planText(M('preop'),walk(M('preop'))));
   ok(/ASA class: ASA I|ASA class: I\b|ASA I/.test(n1)&&!/not recorded/.test(n1),'Shortcut note: ASA I recorded');
   ok(!/weight not entered/.test(n1)&&!/generic adult regimen is withheld/.test(n1),'Shortcut note: no empty LA line; age hold on analgesia lifted');
-  ok(/Clinician confirmed in one tap: adult 18 or older/.test(n1)&&/Draft content: source not independently verified\./.test(n1)&&!/DRAFT MODE SELECTED/.test(n1),'Shortcut note: one-tap assertion and one short draft line');
+  ok(/Clinician confirmed in one tap: adult 18 or older/.test(n1)&&!/Draft content|DRAFT MODE SELECTED/.test(n1)&&await p.locator('.plan .b-un').count()===0,'Shortcut note: one-tap assertion; screen result carries no draft label or line');
   ok(await X(()=>Object.values(S.ans.preop).length===6&&Object.values(S.ans.preop).every(v=>v===false)),'Shortcut: exactly the six questions answered No');
   await X(()=>{S.ans.preop.c=true;refresh()});
   ok(await X(()=>!S.fast&&!S.adultOK&&!(S.today&&S.today.asa)),'Changing an answer to Yes clears the shortcut ASA I and adult assertion');
@@ -1231,8 +1233,9 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{setPmode('colleague');newPatient();open('preop')});
   ok(await p.locator('[data-allno]').count()===0,'Colleague: no shortcut');
   for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await p.click(`.cur [data-a="${id}"][data-v="${v}"]`);
-  ok(await p.locator('[data-cw-enable-draft]').count()===1&&await p.locator('.plan').count()===0,'Colleague: draft gate unchanged on the healthy plan');
-  ok(/SOURCE VERIFICATION INCOMPLETE/.test(await X(()=>planText(M('preop'),walk(M('preop'))))),'Colleague: gated note unchanged');
+  ok(await p.locator('[data-cw-enable-draft]').count()===0&&await p.locator('.plan').count()===1&&await p.locator('.plan .b-un').count()===0,'Colleague: healthy screen result shown, no draft label');
+  await X(()=>{newPatient();S.pf.age='40';S.ans.oac={a:false,b:false,c:false};open('oac')});
+  ok(await X(()=>{const m=M('oac'),w=walk(m);return !w.out||(flowHTML(m).includes('Enable draft material')&&/SOURCE VERIFICATION INCOMPLETE/.test(planText(m,w)))}),'Colleague: gate and withheld note unchanged on a listed specialty module');
   await X(()=>{setPmode('author');newPatient();S.pf.age='40';S.ans.oac={a:false,b:false,c:false};open('oac')});
   ok(await X(()=>{const m=M('oac'),w=walk(m);return !w.out||(!flowHTML(m).includes('Enable draft material')&&flowHTML(m).includes('plan'))}),'Author: listed specialty module plan shown without the gate');
   await X(()=>{newPatient();S.pf.age='52';S.wt=80;open('preop')});await p.click('.cur [data-a="a"][data-v="0"]');

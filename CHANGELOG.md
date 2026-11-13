@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.25.0 — Nov 12, 2026 (PREVIEW — awaiting Steven's review; not published) — Author-mode gate, healthy-adult shortcut, Ask-Claude handoff
+## v3.25.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — Author-mode gate, healthy-adult shortcut, Ask-Claude handoff
 
 From the Nov 12 audit. Steven's choices: optimize for himself and office staff; remove the draft gate in Author mode; build the Ask-Claude handoff first; include the "No to all six" shortcut.
 
@@ -12,8 +12,9 @@ From the Nov 12 audit. Steven's choices: optimize for himself and office staff; 
 - Ask Claude: a chip on module screens and a button on plan, finding and Ref card screens. It opens a sheet for the question and copies a prompt holding the module, answers, open question and criteria, age and weight if entered, the Compass text shown, and answer rules (answer first, cite primary sources, do not recalculate doses). Links are https://claude.ai/new and https://chatgpt.com/ with no query string; clinical text travels by clipboard only. Not on SOS.
 - Copied note: the "LA maximum: weight not entered" line is omitted when no weight is entered.
 - Fix (v3.24.0 regression): the module top bar had three grid columns for four buttons after Home was added, so SOS dropped onto the chip row and covered the first chip. Now four columns.
-- Open label question, not changed here: the healthy Pre-op result reads "Unverified draft" only because no source key is attached to that outcome.
-- Tests: browser 719 (25 new: section 33 plus one Ref-gate check split into Author and Colleague; the service-worker update check failed once in four runs and passed on rerun); graph 29; reconciliation 78; clinical workflow 39. Software behavior only, not clinical validation. Not tested on a real iPhone or installed PWA.
+- Label: the two Pre-op results "No exclusion found by this screen" (local anesthesia; office sedation) carried "Unverified draft" only because no source key is attached. They are now labelled Screen result with no draft chip, gate or note line, in both modes (Steven, Nov 12, 2026). Any [verify] text or cited source restores the normal label.
+- Kept at Steven's choice: the analgesic contraindication screen guard after the shortcut.
+- Tests: browser 720 (26 new or changed: section 33 plus one Ref-gate check split into Author and Colleague; the service-worker update check failed once in four runs and passed on rerun); graph 29; reconciliation 78; clinical workflow 39. Software behavior only, not clinical validation. Not tested on a real iPhone or installed PWA.
 
 ## v3.24.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — obese sedation scaling
 
