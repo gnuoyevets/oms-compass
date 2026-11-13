@@ -1293,7 +1293,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await p.click('[data-sr="drill"]');
   ok(await p.locator('.sr-top.drill').count()===1&&await p.locator('#sosrun a[href^="tel:"]').count()===0,'Drill: running, no dialing link anywhere');
   await p.click('.sr-top [data-sr="911"]');await p.waitForSelector('#sr-script');
-  ok(/DRILL/.test(await p.locator('#sr-script').innerText())&&/add the address below/.test(await p.locator('#sr-script').innerText())&&/\(401\) 273-7802/.test(await p.locator('#sr-script').innerText()),'Drill 911: script shown with call-back number; address asked for');
+  ok(/DRILL/.test(await p.locator('#sr-script').innerText())&&/1414 Atwood Ave, Suite 340, Johnston, RI 02919/.test(await p.locator('#sr-script').innerText())&&/\(401\) 273-7802/.test(await p.locator('#sr-script').innerText()),'Drill 911: script shown with the Johnston address and call-back number');
   await p.click('[data-sr-site="bayside"]');ok(/1265 Fall River Ave, Seekonk, MA 02771/.test(await p.locator('#sr-script').innerText())&&/\(508\) 422-5007/.test(await p.locator('#sr-script').innerText()),'Bayside: address and number in the script');
   await p.click('[data-sr-site="young"]');await p.fill('#sr-addr','1 Test Street, Johnston, RI');await p.locator('#sr-addr').dispatchEvent('change');await p.click('[data-sr-log="O₂ on"]');
   ok(/1 Test Street, Johnston, RI/.test(await p.locator('#sr-script').innerText()),'Typed address is saved and shown');
