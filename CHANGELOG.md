@@ -2,6 +2,19 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.26.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — Recent row, Staff view, SOS run mode, Ref card dates
+
+Steven's choices, Nov 12, 2026: staff see call triage, handouts and SOS only; the SOS log stays on the device until cleared; Call 911 dials and shows a script; home gets a Recent row and nothing else moves.
+
+- Home: one-line Recent row above Pinned with the last four modules opened that are not already pinned. Module order is unchanged. Stored on the device as module ids only.
+- Staff view: a switch in Settings. Shows Post-op phone call triage, patient handouts/QR and SOS. Search, decision modules, findings, Calc, Ref, What's new, Assessment, Intraop and Ask Claude are blocked or hidden, including when the app launches on a saved link to one of them. "Clinician view" switches back; there is no passcode. Practice mode (Author or Colleague) is unchanged underneath, so handouts keep the office details.
+- SOS run mode: Start emergency timer, or Start drill (no dialing). A sticky bar shows elapsed time and time since the last entry. One-tap entries (O₂ on, Monitors on, IV access, Epinephrine IM, AED attached, CPR started, Reversal given, Glucose given, EMS arrived), a typed entry for drug, dose and route, and automatic "Opened card" entries. Copy record gives a timestamped text record. End and Clear each need a second tap. The log is saved on the device until cleared; New patient and reload do not clear it. It holds no patient fields; typed entries are the user's responsibility ("No names").
+- Call 911: a tel:911 link that also starts the timer and logs the call, plus a script: nature of the emergency, office address, patient status, call-back number, stay on the line and send someone to the door. In a drill the button shows the script and does not dial. Both office addresses are built in (Johnston: 1414 Atwood Ave, Suite 340, Johnston, RI 02919, given by Steven Nov 12, 2026); either can be overridden on the device. Colleague mode uses the user's own saved phone and typed address.
+- Ref: each card shows "Last checked against sources" or "Not yet checked against sources", with a count at the top (0 of 25 today). No card has been given a date; a date is added only after that card is checked.
+- Saved-data wording updated on the first-use screen and home footer: nothing clinical is saved except the SOS event log.
+- Launch: the first screen is drawn before this section loads, so home is redrawn once at launch when there is a Recent row or Staff view to show.
+- Tests: browser 756 (36 new in section 34, served over local http so storage persists across reloads; three storage checks now allow the recent-module list); graph 29; reconciliation 78; clinical workflow 39. Software behavior only, not clinical validation. Not tested on a real iPhone or the installed app: tel: dialing, clipboard and storage there are unverified.
+
 ## v3.25.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — Author-mode gate, healthy-adult shortcut, Ask-Claude handoff
 
 From the Nov 12 audit. Steven's choices: optimize for himself and office staff; remove the draft gate in Author mode; build the Ask-Claude handoff first; include the "No to all six" shortcut.

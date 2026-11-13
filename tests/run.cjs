@@ -320,7 +320,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  await page.click('#abar [data-newpt]');await page.click('#abar [data-newpt]');
  const st5=await E(page,()=>({wt:S.wt,wtIn:S.wtIn,age:S.pf.age,ls:Object.keys(localStorage).sort()}));
  ok(!st5.wt&&!st5.wtIn&&!st5.age,'New patient clears age, kg and lb');
- ok(st5.ls.every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode'].includes(k)),'Storage holds only device preferences '+st5.ls.join(','));
+ ok(st5.ls.every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','oms_compass_recents'].includes(k)),'Storage holds only device preferences '+st5.ls.join(','));
  await E(page,()=>view('calc'));const small=await E(page,()=>[...document.querySelectorAll('.pmode .tg,.wtbar input,.audisc,.toggles .tg')].filter(b=>b.offsetParent).map(b=>b.getBoundingClientRect().height).filter(h=>h<44).length);
  await E(page,()=>home());const small2=await E(page,()=>[...document.querySelectorAll('.pmode .tg')].filter(b=>b.offsetParent).map(b=>b.getBoundingClientRect().height).filter(h=>h<44).length);
  ok(small===0&&small2===0,'New controls ≥44 px tall');
@@ -531,7 +531,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  // Reset through the bottom bar double tap
  await page.click('.abar [data-newpt]');await page.click('.abar [data-newpt]');
  ok(await E(page,()=>!hasPatient()&&!S.changes.length&&S.compare===undefined&&!document.querySelector('.delta')),'New patient (double tap) clears context, comparison, change history');
- ok(await E(page,()=>{const k=Object.keys(localStorage);return k.every(x=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode'].includes(x))&&sessionStorage.length===0}),'Storage holds settings only, no patient data');
+ ok(await E(page,()=>{const k=Object.keys(localStorage);return k.every(x=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','oms_compass_recents'].includes(x))&&JSON.parse(localStorage.getItem('oms_compass_recents')||'[]').every(x=>!!M(x))&&sessionStorage.length===0}),'Storage holds settings only, no patient data');
 
  // Offline and update behavior via a real service worker over HTTP
  {const fs=require('fs'),os=require('os'),http=require('http');const root=fs.mkdtempSync(path.join(os.tmpdir(),'compass-'));const app=path.join(root,'oms-compass');fs.mkdirSync(app);
@@ -720,7 +720,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(io.resetMsg,'Checklist says which checks were reset');
   ok(io.cleared&&io.sig,'New patient clears checklist statuses and their plan signatures');
   ok(await X(()=>{newPatient();S.draftMode=true;S.atab='io';asmtView();return document.querySelectorAll('.iohid').length===0&&/not entered: all checks shown/.test(document.getElementById('iobody').innerText)}),'Unset context folds nothing and says so (never assumed)');
-  ok(await X(()=>Object.keys(localStorage).every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','omsCompassContrast'].includes(k))&&sessionStorage.length===0),'v3.10 state stays in memory (storage holds settings only)');
+  ok(await X(()=>Object.keys(localStorage).every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','omsCompassContrast','oms_compass_recents'].includes(k))&&JSON.parse(localStorage.getItem('oms_compass_recents')||'[]').every(x=>!!M(x))&&sessionStorage.length===0),'v3.10 state stays in memory (storage holds settings only)');
   // E. Phone layouts
   for(const w of [320,360,390,430]){await p.setViewportSize({width:w,height:780});
    const ov=await X(async()=>{const res=[];const chk=n=>{if(document.documentElement.scrollWidth>innerWidth+1)res.push(n)};
@@ -1243,7 +1243,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(await X(()=>{const h=document.querySelector('.fx-hd').getBoundingClientRect(),b=document.querySelector('.fx-sos').getBoundingClientRect(),c=document.querySelector('.fx-chip').getBoundingClientRect();return b.bottom<=h.bottom+1&&b.top>=h.top-1&&c.top>=b.bottom}),'SOS stays inside the top bar and clear of the chips');
   await p.click('.fx-chip[data-ask]');await p.fill('#askq','Does a drug-eluting stent 4 months ago change this?');
   const prev=await p.inputValue('#askprev');
-  ok(/OMS Compass v3\.25\.0/.test(prev)&&/Pre-op clearance/.test(prev)&&/Unstable or unoptimized medical condition\? No/.test(prev)&&/Open question: High-risk cardiac/.test(prev)&&/age 52, weight 80 kg/.test(prev)&&/drug-eluting stent/.test(prev)&&/Do not recalculate doses/.test(prev),'Handoff prompt: version, module, answers, open question, age/weight, question, dose rule');
+  ok(/OMS Compass v3\.\d+\.\d+/.test(prev)&&/Pre-op clearance/.test(prev)&&/Unstable or unoptimized medical condition\? No/.test(prev)&&/Open question: High-risk cardiac/.test(prev)&&/age 52, weight 80 kg/.test(prev)&&/drug-eluting stent/.test(prev)&&/Do not recalculate doses/.test(prev),'Handoff prompt: version, module, answers, open question, age/weight, question, dose rule');
   const hrefs=await p.locator('#asksheet [data-ask-go]').evaluateAll(a=>a.map(x=>x.getAttribute('href')));
   ok(hrefs.length===2&&hrefs[0]==='https://claude.ai/new'&&hrefs[1]==='https://chatgpt.com/'&&hrefs.every(h=>!/[?#]/.test(h)),'Handoff links carry no query or clinical data');
   await p.locator('#asksheet [data-ask-go]').first().evaluate(a=>{a.addEventListener('click',e=>e.preventDefault());a.click()});
@@ -1257,6 +1257,66 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await p.click('[data-ask-close]');
   await X(()=>{newPatient();view('emergency')});ok(await p.locator('[data-ask]').count()===0,'No Ask Claude on SOS');
   await p.close();await c33.close()}
+
+ console.log('34. v3.26.0: Recent row, Staff view, SOS run mode and 911 script, Ref card dates');
+ {const c34=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c34.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1');if(!localStorage.getItem('oms_compass_practice_mode'))localStorage.setItem('oms_compass_practice_mode','author')}catch(e){};window.__clip='';try{navigator.clipboard.writeText=async t=>{window.__clip=t}}catch(e){}});
+  /* Served over http so device storage persists across reloads, as it does on the installed app. */
+  const http34=require('http'),fs34=require('fs'),root34=path.resolve(__dirname,'..'),T34={html:'text/html',js:'text/javascript',png:'image/png',webmanifest:'application/manifest+json'};
+  const srv34=http34.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const f=path.join(root34,u);if(!f.startsWith(root34)||!fs34.existsSync(f)){r.writeHead(404);return r.end()}r.writeHead(200,{'content-type':T34[f.split('.').pop()]||'application/octet-stream','cache-control':'no-cache'});fs34.createReadStream(f).pipe(r)});
+  await new Promise(r=>srv34.listen(0,'127.0.0.1',r));const URL34=`http://127.0.0.1:${srv34.address().port}/index.html`;
+  const p=await c34.newPage();await p.route(/^https?:\/\//,localOnly);await p.goto(URL34);await p.waitForSelector('#in-q');const X=(f,a)=>p.evaluate(f,a);
+  ok(await p.locator('#recents').count()===0,'No Recent row before anything is opened');
+  await X(()=>{open('preop');home()});ok(await p.locator('#recents').count()===0,'Pinned modules do not repeat in Recent');
+  await X(()=>{for(const id of ['dm','htn','renal','liver','preg'])open(id);home()});
+  const rc=await p.locator('#recents .pin').allInnerTexts();
+  ok(rc.length===4&&/Pregnancy/.test(rc[0])&&/Liver/.test(rc[1])&&!rc.some(x=>/Diabetes/.test(x)),'Recent row: last four opened, newest first');
+  ok(await X(()=>document.getElementById('recents').getBoundingClientRect().height<=60&&document.querySelector('#groups .mod').getBoundingClientRect().top<760),'Recent row is one line; first module still on the first screen');
+  ok(await X(()=>{const a=[...document.querySelectorAll('#groups .mod b')].map(b=>b.textContent);return a[0]==='Pre-op clearance'&&a.indexOf('Diabetes')<a.indexOf('Hypertension')}),'Module list order unchanged');
+  await p.reload();await p.waitForSelector('#recents');ok(await p.locator('#recents .pin').count()===4,'Recent row survives reload');
+  ok(await X(()=>!/eliquis|INR|age/i.test(localStorage.getItem('oms_compass_recents'))&&JSON.parse(localStorage.getItem('oms_compass_recents')).every(x=>typeof x==='string'&&!!M(x))),'Recent list stores module ids only');
+  await X(()=>{S.setOpen=true;home()});await p.click('[data-staff="1"]');
+  ok(await p.locator('.staffhome .mod').count()===3&&await p.locator('#in-q').count()===0&&await p.locator('.tabs button').count()===3,'Staff view: three tools, no search, three tabs');
+  await X(()=>view('calc'));ok(await p.locator('.staffhome').count()===1,'Staff: Calc blocked');
+  await X(()=>view('ref'));ok(await p.locator('.staffhome').count()===1,'Staff: Ref blocked');
+  await X(()=>open('preop'));ok(await p.locator('.staffhome').count()===1,'Staff: decision modules blocked');
+  await X(()=>openFind('doac','Eliquis'));ok(await p.locator('.staffhome').count()===1,'Staff: findings blocked');
+  await p.click('.staffhome [data-open="calltri"]');ok(await p.locator('.cur, .plan').count()>=1&&await p.locator('[data-ask]').count()===0,'Staff: call triage opens; no Ask Claude');
+  ok(await X(()=>{const v=s=>{const e=document.querySelector(s);return !e||getComputedStyle(e).display==='none'};return v('.fx-tools [data-goasmt]')&&v('.fx-tools [data-atab]')}),'Staff: Assessment and Intraop buttons hidden');
+  await X(()=>home());await p.click('.staffhome [data-view="handouts"]');ok(await p.locator('#vbody').count()===1&&/POST-OP|Post-op/i.test(await p.locator('#vbody').innerText()),'Staff: handouts open');
+  await p.reload();await p.waitForSelector('#vbody');ok(await p.locator('.tabs button').count()===3&&await X(()=>document.body.classList.contains('staff')),'Staff view survives reload on an allowed page');
+  await p.goto(URL34+'#calc');await p.reload();await p.waitForSelector('.staffhome');ok(await p.locator('.tabs button').count()===3,'Staff: launching on a blocked page lands on staff home');
+  await p.click('[data-staff="0"]');ok(await p.locator('#in-q').count()===1&&await X(()=>!document.body.classList.contains('staff')),'Clinician view restores the full home');
+  await X(()=>view('emergency'));
+  ok(await p.locator('#sosrun [data-sr="start"]').count()===1&&await p.locator('#sosrun [data-sr="drill"]').count()===1&&await p.locator('#sosrun a[href="tel:911"]').count()===1,'SOS idle: start, drill and Call 911');
+  ok(await p.locator('details.em').count()===16,'SOS: all 16 cards still listed');
+  await p.click('[data-sr="drill"]');
+  ok(await p.locator('.sr-top.drill').count()===1&&await p.locator('#sosrun a[href^="tel:"]').count()===0,'Drill: running, no dialing link anywhere');
+  await p.click('.sr-top [data-sr="911"]');await p.waitForSelector('#sr-script');
+  ok(/DRILL/.test(await p.locator('#sr-script').innerText())&&/1414 Atwood Ave, Suite 340, Johnston, RI 02919/.test(await p.locator('#sr-script').innerText())&&/\(401\) 273-7802/.test(await p.locator('#sr-script').innerText()),'Drill 911: script shown with the Johnston address and call-back number');
+  await p.click('[data-sr-site="bayside"]');ok(/1265 Fall River Ave, Seekonk, MA 02771/.test(await p.locator('#sr-script').innerText())&&/\(508\) 422-5007/.test(await p.locator('#sr-script').innerText()),'Bayside: address and number in the script');
+  await p.click('[data-sr-site="young"]');await p.fill('#sr-addr','1 Test Street, Johnston, RI');await p.locator('#sr-addr').dispatchEvent('change');await p.click('[data-sr-log="O₂ on"]');
+  ok(/1 Test Street, Johnston, RI/.test(await p.locator('#sr-script').innerText()),'Typed address is saved and shown');
+  await p.fill('#sr-note','epinephrine 0.3 mg IM');await p.click('[data-sr="add"]');
+  await p.locator('#em-anaph summary').click();await p.waitForFunction(()=>JSON.parse(localStorage.getItem('oms_compass_sos_run')).ev.some(e=>e[1]==='Opened card: Anaphylaxis'));
+  const log1=await X(()=>JSON.parse(localStorage.getItem('oms_compass_sos_run')).ev.map(e=>e[1]));
+  ok(log1[0]==='DRILL started'&&log1.includes('DRILL: 911 call simulated')&&log1.includes('O₂ on')&&log1.includes('epinephrine 0.3 mg IM')&&log1.some(x=>/^Opened card: /.test(x)),'Log: start, 911, preset, typed entry and opened card');
+  const el1=await p.locator('#sr-el').innerText();await X(()=>new Promise(r=>setTimeout(r,2100)));const el2=await p.locator('#sr-el').innerText();ok(/^\d\d:\d\d$/.test(el2)&&el2>el1,'Elapsed timer runs ('+el1+' → '+el2+')');
+  ok(await p.locator('#em-anaph').evaluate(d=>d.open),'Timer ticks do not close the open card');
+  await X(()=>newPatient());await p.reload();await p.waitForSelector('#in-q');await X(()=>view('emergency'));
+  ok(await p.locator('.sr-top').count()===1&&await X(()=>JSON.parse(localStorage.getItem('oms_compass_sos_run')).ev.length)===log1.length,'Log survives New patient and reload');
+  ok(await X(()=>document.getElementById('sosrun').getBoundingClientRect().height<260),'Run panel stays compact so the cards are near the top');
+  await p.click('.sr-log summary');await p.click('[data-sr="copy"]');const rec=await X(()=>window.__clip);
+  ok(/Emergency event record \(DRILL\) · no patient identifiers/.test(rec)&&/epinephrine 0\.3 mg IM/.test(rec)&&/Still running when copied/.test(rec),'Copied record: header, entries and status');
+  await p.click('[data-sr="end"]');ok(await X(()=>!JSON.parse(localStorage.getItem('oms_compass_sos_run')).end),'End needs a second tap');
+  await p.click('[data-sr="end"]');ok(await X(()=>!!JSON.parse(localStorage.getItem('oms_compass_sos_run')).end)&&await p.locator('[data-sr="clear"]').count()===1,'Second tap ends the run; log kept');
+  await p.click('[data-sr="clear"]');ok(await X(()=>!!localStorage.getItem('oms_compass_sos_run')),'Clear needs a second tap');
+  await p.click('[data-sr="clear"]');ok(await X(()=>!localStorage.getItem('oms_compass_sos_run'))&&await p.locator('[data-sr="start"]').count()===1,'Second tap erases the log');
+  await p.locator('#sosrun a[data-sr="911"]').evaluate(a=>{a.addEventListener('click',e=>e.preventDefault());a.click()});await p.waitForSelector('#sr-script');
+  ok(await X(()=>{const r=JSON.parse(localStorage.getItem('oms_compass_sos_run'));return !r.drill&&r.ev[1][1]==='911 dialed from this phone'})&&await p.locator('.sr-top a[href="tel:911"]').count()===1,'Live Call 911 starts the timer, logs the call and keeps a dial link');
+  await X(()=>{localStorage.removeItem('oms_compass_sos_run');view('ref')});
+  ok(/0 of 25 cards have a last-checked date/.test(await p.locator('#refchk-sum').innerText())&&await p.locator('.refchk').count()===25,'Ref: every card shows its check status; none dated yet');
+  await p.close();await c34.close();await new Promise(r=>srv34.close(r))}
 
  await browser.close();
  
