@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.26.0 — Nov 12, 2026 (PREVIEW — awaiting Steven's review; not published) — Recent row, Staff view, SOS run mode, Ref card dates
+## v3.26.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — Recent row, Staff view, SOS run mode, Ref card dates
 
 Steven's choices, Nov 12, 2026: staff see call triage, handouts and SOS only; the SOS log stays on the device until cleared; Call 911 dials and shows a script; home gets a Recent row and nothing else moves.
 
