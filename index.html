@@ -153,6 +153,22 @@ details.em[open]>summary::after{content:'−'}
 .ctab th{font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);border-top:0}
 .ctab td b{font-size:15px}
 .chk{display:flex;flex-direction:column;gap:6px}
+.askbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-top:10px;border:1px solid currentColor;background:none;color:inherit;border-radius:8px;padding:7px 12px;font-weight:700;font-size:13px}
+.askrow{margin:4px 0 12px}
+.fx-all{width:100%;min-height:56px;margin-top:14px;border-radius:12px;background:var(--accent);border:2px solid var(--accent);color:#fff;font:800 16px var(--display);padding:8px 12px;text-align:center}
+.fx-all span{display:block;font:500 12.5px/1.35 var(--sans);opacity:.95;margin-top:3px}
+#asksheet{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+#asksheet[hidden]{display:none}
+#asksheet .sh{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--surface);color:var(--ink);border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+#asksheet h3{margin:0;font:800 18px var(--display)}
+#asksheet textarea{width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:10px;font:16px/1.4 var(--sans);background:var(--bg);color:var(--ink)}
+#asksheet #askq{min-height:76px}
+#asksheet #askprev{min-height:120px;font-size:12.5px;color:var(--muted)}
+#asksheet .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#asksheet .acts a,#asksheet .acts button{display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:12px;font:800 15px/1.2 var(--display);text-align:center;padding:4px 8px;text-decoration:none;border:2px solid var(--ink)}
+#asksheet .acts .p1{background:var(--ink);color:var(--bg)}
+#asksheet .acts .p2{background:var(--surface);color:var(--ink)}
+#asksheet .x{justify-self:end;border:0;background:none;color:var(--muted);font-weight:700;font-size:14px;min-height:44px;padding:0 4px}
 .handoff{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;color:var(--ink);min-height:56px}
 .handoff b{display:block;font:700 15px var(--display)}
 .handoff span{display:block;font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
@@ -370,7 +386,7 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 body.focus{overflow:hidden;overscroll-behavior:none}
 body.focus .wrap,body.focus.hasbar .wrap{max-width:430px;height:100vh;height:100dvh;display:flex;flex-direction:column;padding-top:calc(64px + env(safe-area-inset-top,0px));padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
 body.focus .abar{display:none!important}
-.fx-hd.bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;max-width:430px;margin:0 auto;height:56px;z-index:30;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:0 max(8px,env(safe-area-inset-right,0px)) 0 max(8px,env(safe-area-inset-left,0px));background:var(--bg);border-bottom:1px solid var(--line)}
+.fx-hd.bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;max-width:430px;margin:0 auto;height:56px;z-index:30;display:grid;grid-template-columns:48px 48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:0 max(8px,env(safe-area-inset-right,0px)) 0 max(8px,env(safe-area-inset-left,0px));background:var(--bg);border-bottom:1px solid var(--line)}
 .fx-ib{width:48px;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:28px;line-height:1;padding:0 0 3px}
 .fx-t{min-width:0}
 .fx-t h2{font:800 16px/1.2 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1367,7 +1383,7 @@ function adultSedationEligible(){const a=ageNum();return a!=null&&a>=13&&!(S.wt!
 function teenSedationNote(){const a=ageNum();return a!=null&&a>=13&&a<18?`<div class="fx-lock" id="teen-sedation-note" role="note"><b>Age ${a}: adolescent.</b> AAP/AAPD pediatric sedation guidance applies under 18. Check every fixed dose against weight-based limits, and confirm airway, rescue and recovery arrangements for this age. ${srcLink('aapdsed')}</div>`:''}
 function adultSedationGate(){return '<div class="fx-lock" id="adult-sedation-gate" role="note"><b>Office sedation pathway: confirm age 13 or older (and weight 40 kg or more, if entered).</b><p>For a younger or smaller child, establish an age-appropriate anesthesia plan, personnel, rescue and recovery arrangements. Adult doses and adult OSA screening are not a pediatric assessment.</p><button class="go" data-view="calc">Enter age and weight</button></div>'}
 function reconciledTreeOutcome(m,n){if(m.id!=='pain')return n;const a=ageNum(),risk=patientMedicationRisk();
- if(a==null||a<18||(S.wt!=null&&S.wt<50))return {...n,out:'Individual age- and weight-appropriate analgesic plan required; the generic adult regimen is withheld.',ex:'Confirm age, weight where needed, contraindications and the actual medication plan. Adult options remain in the reference material.',tone:'action'};
+ if((a==null&&!S.adultOK)||(a!=null&&a<18)||(S.wt!=null&&S.wt<50))return {...n,out:'Individual age- and weight-appropriate analgesic plan required; the generic adult regimen is withheld.',ex:'Confirm age, weight where needed, contraindications and the actual medication plan. Adult options remain in the reference material.',tone:'action'};
  if(risk.organ||(risk.withhold&&!risk.nsaid))return {...n,out:'Individual analgesic plan required for the recorded medication/medical precautions.',ex:'Use the reconciled assessment and coordinate with the prescriber; do not automatically add an opioid.',tone:'action'};
  if(risk.nsaid)return {...M('pain').nodes.oApap,tone:'action'};
  if(S.ans.pain?.a!==false)return {...n,out:'Complete the analgesic contraindication and interaction screen before selecting a regimen.',ex:'Open Post-op analgesia. Missing information is not a negative medication history.',tone:'action'};
@@ -1769,7 +1785,7 @@ function refHTML(){
  const q=(S.refq||'').toLowerCase().trim();
  const list=REF.filter(r=>!q||(r.t+' '+r.k+' '+r.i.join(' ')).toLowerCase().includes(q));
  return `<div class="wtbar" style="grid-template-columns:1fr"><label class="fld" for="in-refq">Search reference<input id="in-refq" data-refq placeholder="e.g. cleft, socket shield, parotid" value="${esc(S.refq||'')}"></label></div>
- ${list.map(r=>{const b=basisOf(r.src,r.i.join(' '));const body=`<ul>${r.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small" style="margin-top:8px">${r.src.map(srcLink).join(' · ')}</div>`;return`<details class="box"><summary><span>${esc(r.t)} ${basisChip(b)}</span></summary><div class="inner look">${b==='au'?auWrap(body):body}</div></details>`}).join('')||'<p class="caveat">No match.</p>'}
+ ${list.map(r=>{const b=basisOf(r.src,r.i.join(' '));const body=`<ul>${r.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small" style="margin-top:8px">${r.src.map(srcLink).join(' · ')}</div>`;return`<details class="box"><summary><span>${esc(r.t)} ${basisChip(b)}</span></summary><div class="inner look">${b==='au'?auWrap(body):body}${askBtn('ref:'+REF.indexOf(r))}</div></details>`}).join('')||'<p class="caveat">No match.</p>'}
  <p class="caveat">Reference cards summarize your notes and cited sources; your personal protocols are labeled as such.</p>`;
 }
 const LA=[
@@ -1991,8 +2007,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top">${S.view&&S.view!=='decide'?'<button class="icon-btn homebtn" data-home aria-label="Home">⌂</button>':''}<h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.24.0';
+const VER='3.25.0';
 const CHANGES=[
+{v:'3.25.0',d:'Nov 12, 2026',i:['Author mode: source-unverified content shows without the “Enable draft material” tap; it keeps its Unverified draft label and adds one line to the note. Colleague mode is unchanged.','Pre-op clearance, Author mode: “Healthy adult 18+ · No to all 6” answers the six screen questions in one tap, records ASA I and lifts the age hold on analgesia (the analgesic contraindication screen is still required). Any data input or photo triage that says otherwise stops it at that question.','Ask Claude (module, finding and Ref card screens): copies a de-identified prompt with your answers and the Compass text, then opens Claude or ChatGPT. Nothing clinical goes in the link. Compass calculates doses; the assistant explains.','Copied note: the “LA maximum: weight not entered” line is left out when no weight is entered.','Fix: on module screens the SOS button sat on top of the first chip since the Home button was added in v3.24.0; it is back in the top bar.']},
 {v:'3.24.0',d:'Nov 12, 2026',i:['Sedation card: obese patients (weight >120% of ideal or BMI ≥30, needs height and sex) get Precedex on adjusted body weight and ketamine on ideal body weight; fixed doses unchanged; never above actual weight. Actual-weight doses and a 1:1 ketofol line (propofol 10 mg/mL 10 mL + ketamine 50 mg/mL 2 mL ≈ 8.3 mg/mL each) under More. Tagged verify.','Height in cm or feet + inches (they mirror each other); weight already takes kg or lb.','Home button (⌂) on every page: top bar of SOS, Calc, Ref, Patient and What’s new; module, finding and assessment headers.','Before-sedation handout: no smoking or vaping for at least 2 days before (was 12 hours), all four languages.']},
 {v:'3.23.1',d:'Nov 6, 2026',i:['Consultation workspace removed (tab, Home card and its buttons). Kept from v3.23.0: the audit corrections, the draft gate for unverified content, office sedation from age 13, and every earlier feature.']},
 {v:'3.23.0',d:'Nov 6, 2026',i:['New EMR-neutral consultation workspace: initial consultation, before-booking review and surgery-day confirmation; implants/full arch, mucosal lesions, jaw radiolucency, medical/anesthesia suitability and complete postoperative symptom review.','Reviewed text intake, case-specific medical and prosthetic-lab requests with owners/status/review points, state-specific source prompts for NY/CT/RI/MA/NH and a concise copy-ready EMR handoff. Clinical data stays in memory; no direct EMR connection, order entry or persistent task monitoring.','Corrected audited clinical branches, contradictory inputs and copied unanswered answers. Office sedation requires confirmed age 13 or older (weight 40 kg or more, if entered), with an adolescent note for 13–17; analgesia uses shared risk restrictions. Only content labelled Unverified draft and 12 specialty modules need explicit clinician draft selection; urgent outcomes always show in full.','Every baseline feature retained. Full node/path, preservation and browser acceptance checks added; software verification does not establish clinical validity. Full-text specialty-source review and real-device usability review remain pending.']},
@@ -3351,7 +3368,7 @@ function miniHTML(p){return`<span class="dtag sm d-${DISP[p.d][1]}">${esc(DISP[p
 function findHTML(f){
  return`<div class="bar"><button class="icon-btn back" data-home aria-label="Home">⌂</button><h2><span class="ft">${esc(f.t)}</span><span id="fmini">${miniHTML(fPlan(f))}</span></h2><button class="icon-btn sos" data-view="emergency" aria-label="Emergency">SOS</button></div>
  <div class="fcls">${esc(f.kind)} · ${esc(f.cls)}${S.fhit?` · matched “${esc(S.fhit)}”`:''}</div>
- <div id="fdyn">${fDynHTML(f)}</div>${fbHTML(f.t)}`}
+ <div id="fdyn">${fDynHTML(f)}</div><div class="askrow">${askBtn()}</div>${fbHTML(f.t)}`}
 function openFind(id,hit){const f=FX[id];if(!f)return home();S.mod=null;S.view='find';S.fid=id;S.fhit=hit||'';applyPreset(id,hit);
  prune();app.innerHTML=findHTML(f);window.scrollTo(0,0);try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}updBar()}
 function redraw(){const a=document.activeElement,id=a&&a.id,pos=a&&a.selectionStart;prune();
@@ -3463,7 +3480,7 @@ function newPatient(){
  S.changes=[];delete S.compare;delete S.compareEligible;document.body.classList.remove('kb');
  ['consult','autoOverrides'].forEach(k=>{delete S[k]});S.draftMode=false;
  ['pf','ans','inp','rcri','io','bx','cx'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
- ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','emOpen','hoOpen','mod','ioSig','ioReset','labPick','casePick'].forEach(k=>{delete S[k]});
+ ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','adultOK','fast','emOpen','hoOpen','mod','ioSig','ioReset','labPick','casePick'].forEach(k=>{delete S[k]});
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
@@ -3675,7 +3692,7 @@ function flowHTML(m){
   if(o.scr)items.push([`<li><b>Not covered by this screen:</b> ${escV(o.scr)}</li>`,0]);
   const go=[o.go,o.go2].filter(Boolean).map(g=>`<button class="go" data-open="${g}">Open ${esc(M(g).title)} ›</button>`).join(' ');
   const bas=basisOf([o.src,o.src2,...notes.map(s=>s.n.src)],[o.out,o.ex,...notes.map(s=>s.n.x)].join(' '));
-  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${m.id==='biopsy'?bxHTML():''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}${(OG_FOR[m.id]||[]).map(g=>` <button class="go" data-ho="${g}">Option grid: ${esc(OG.find(x=>x.id===g).o.en.join(' vs '))} ›</button>`).join('')}</div>`:''}${colleague()?'':`<div><button class="go" data-reg>Log to outcomes registry ›</button></div>`}${m.id==='preop'?todayHTML(w):''}<details class="more"><summary>More · sources and review status</summary>${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div></details><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>Close this decision</button></div></div>`}
+  return`<div class="plan ${o.tone||''}" role="region" aria-label="Plan"><div class="pbody"><div class="lab">${o.tone==='urgent'?'Stop · act now':o.tone==='action'?'Plan · with conditions':o.scr?'Screen result · not a clearance':'Plan'} ${basisChip(bas)}</div>${col&&bas==='au'?auWrap(`<div class="pt">${esc(o.out)}</div>${items.length?`<ol>${items.map(x=>x[0]).join('')}</ol>`:''}`):`<div class="pt">${esc(o.out)}</div>${split(items)}`}${go?`<div>${go}</div>`:''}${m.id==='biopsy'?bxHTML():''}${HANDOUTS_LIVE&&(HO_FOR[m.id]||FAQ_FOR[m.id])?`<div>${HO_FOR[m.id]?`<button class="go" data-ho="${HO_FOR[m.id]}">Patient handout ›</button> `:''}${FAQ_FOR[m.id]?`<button class="go" data-ho="${FAQ_FOR[m.id]}">Patient FAQ ›</button>`:''}${(OG_FOR[m.id]||[]).map(g=>` <button class="go" data-ho="${g}">Option grid: ${esc(OG.find(x=>x.id===g).o.en.join(' vs '))} ›</button>`).join('')}</div>`:''}${colleague()?'':`<div><button class="go" data-reg>Log to outcomes registry ›</button></div>`}${m.id==='preop'?todayHTML(w):''}${askBtn()}<details class="more"><summary>More · sources and review status</summary>${srcs.length?`<div class="meta">${srcs.map(srcLink).join('')}</div>`:''}<div class="rev">${esc(reviewLine(srcs))}</div></details><textarea id="copybox" class="copybox" hidden aria-label="Plan text"></textarea></div><div class="pact"><button class="p1" data-copy>Copy note</button><button class="p2" data-endsess>Close this decision</button></div></div>`}
  return'<div class="plan action"><div class="pbody"><div class="pt">Path incomplete — step back.</div></div></div>';
 }
 /* Biopsy result tracking: a copy-ready EHR block. Owner is a role, never a name; the due date is an interval, never a calendar date. */
@@ -3708,6 +3725,7 @@ function fxChips(m){const id=m.id,c=[];
  const w0=walk(m),first=!w0.steps.some(s=>!s.note&&s.val!==undefined&&!s.auto),autoStep=!!(w0.cur&&w0.cur.n.auto);
  if(TRI_MODS.includes(id)&&(first||S.tri))c.push(`<button class="fx-chip${S.tri?' c-mod':''}" data-drawer="tri">📷 ${S.tri?'Triage loaded':'Photo triage'}</button>`);
  if((m.inputs||[]).length){const i=S.inp[id]||{},set=Object.keys(i).some(k=>i[k]!==''&&i[k]!=null&&i[k]!==false);if(first||set||autoStep)c.push(`<button class="fx-chip${set?' c-ok':''}" data-drawer="inputs">${set?'✓ ':''}Data inputs</button>`)}
+ c.push('<button class="fx-chip" data-ask>Ask Claude ↗</button>');
  return c.join('')}
 function critHTML(m,w){const n=w.cur&&w.cur.n;if(!n)return'<p class="small">No open question.</p>';const r=w.r,ah=n.ah?n.ah(r):'';
  return`<div class="q" style="font-weight:700;margin-bottom:6px">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'<p class="small">No extra criteria for this step.</p>'}`}
@@ -3784,8 +3802,8 @@ function todayHTML(w){if(!tdShow(w))return'';const t=S.today||{},a=t.asa;
  ${HANDOUTS_LIVE?`<h4>Patient handout</h4><div class="hob">${ho.map(([k,l])=>`<button class="go" data-ho="${k}">${esc(l)} ›</button>`).join('')}</div>`:''}</div>`}
 function todayText(w){if(!tdShow(w))return[];const t=S.today||{},L=['Today’s plan:'];
  L.push(`- ASA class: ${t.asa?TD_ASA[t.asa]:'not recorded'}`);
- if(S.wt)L.push(`- LA maximum (${wtLine()}): `+laRows(S.wt,laKid()).map(r=>r.blocked?`${r.n} not under ${r.minAge} y`:`${r.n} ${r.mg} mg (${r.carp} carps)`).join('; '));else L.push('- LA maximum: weight not entered');
- L.push('- Analgesia: '+tdAnalg(w).replace(/<[^>]+>/g,''));return L}
+ if(S.wt)L.push(`- LA maximum (${wtLine()}): `+laRows(S.wt,laKid()).map(r=>r.blocked?`${r.n} not under ${r.minAge} y`:`${r.n} ${r.mg} mg (${r.carp} carps)`).join('; '));
+ L.push('- Analgesia: '+tdAnalg(w).replace(/<[^>]+>/g,''));if(S.fast&&S.adultOK)L.push('- Clinician confirmed in one tap: adult 18 or older; all six screen questions No.');return L}
 /* v3.12 Registry link: a de-identified CR1 line for the Surgical Outcomes Registry (paste there). Copied only; nothing is sent. */
 const REG_URL='https://claude.ai/artifact/CYcfCKQHUD67fTtnb9GF3g';
 function regProc(m,w){const o=w.out?w.out.out:'';return{extraction:'Third molar extraction',implant:/^Immediate/i.test(o)?'Immediate implant':'Implant placement',graft:'Ridge augmentation',sinus:/Transcrestal/i.test(o)?'Sinus lift – crestal':/Lateral/i.test(o)?'Sinus lift – lateral':'',arch:'Full-arch (All-on-X)',biopsy:'Biopsy',lesion:'Biopsy'}[m.id]||''}
@@ -3914,16 +3932,59 @@ const CW_DRAFT_MODULES=new Set(['mandfx','lac','displaced','oac','canine','dyspl
    Author's-practice content keeps its existing handling: shown in Author mode, folded behind “Show Author’s Clinical Protocol” in Colleague mode. */
 function cwDraftRequired(m,w){if(!w.out)return false;return CW_DRAFT_MODULES.has(m.id)||(m.id==='lesion'&&w.steps.some(s=>s.id.startsWith('d_')))||basisOf([w.out.src,w.out.src2].filter(Boolean),[w.out.out,w.out.ex].join(' '))==='un'}
 function cwNeedsSourceReview(keys,text=''){return basisOf(keys,text)==='un'}
+/* v3.25.0 (Steven, Nov 12, 2026): Author mode shows source-unverified content without the per-encounter tap. Labels stay; Colleague mode keeps the gate. */
+function cwDraftOpen(){return !!S.draftMode||!colleague()}
 function cwSourceGate(){return '<div class="cw-card cw-warn"><b>Source verification incomplete</b><p>Enable clinician-selected draft mode to view these retained recommendations. Verify the source and applicability before clinical use.</p><button class="go" data-cw-enable-draft>Enable draft material for this encounter</button></div>'}
 const cwOldSedHTML=sedHTML;sedHTML=function(){return !adultSedationEligible()?adultSedationGate():cwOldSedHTML()};
-const cwOldRefHTML=refHTML;refHTML=function(){const h=cwOldRefHTML();if(S.draftMode)return '<p class="caveat">Clinician-selected draft mode: verify source limitations and applicability before clinical use.</p>'+h;
+const cwOldRefHTML=refHTML;refHTML=function(){const h=cwOldRefHTML();if(!S.draftMode&&!colleague())return h;if(S.draftMode)return '<p class="caveat">Clinician-selected draft mode: verify source limitations and applicability before clinical use.</p>'+h;
  /* Gate only cards labelled Unverified draft; author's and guideline cards render exactly as before. */
  const t=document.createElement('div');if(!('innerHTML' in t)||!t.querySelectorAll)return h;t.innerHTML=h;t.querySelectorAll('details.box').forEach(d=>{if(d.querySelector('summary .b-un')){const body=d.querySelector('.inner');if(body){const links=body.querySelector('.small');body.innerHTML=cwSourceGate()+(links?links.outerHTML:'')}}});return t.innerHTML};
 // All consumers of finding plans, including the full assessment and its exports,
 // use the same gated result. Risk dispositions and urgent escalation are retained.
-const cwOldBaseFindingPlan=baseFindingPlan;baseFindingPlan=function(f){const p=cwOldBaseFindingPlan(f);if(S.draftMode||!cwNeedsSourceReview(p.src||[],[p.act,...p.steps].join(' ')))return p;return {...p,d:DRANK[p.d]<DRANK.investigate?'investigate':p.d,prov:true,basis:'un',act:'Source verification incomplete. Independently verify the applicable recommendation or select clinician draft mode to review it.',steps:['The original recommendation remains available in explicit draft mode. Missing facts and risk restrictions remain unresolved.'],miss:[...p.miss,'Source verification / clinician review']}};
-const cwOldFlow=flowHTML;flowHTML=function(m){const w=walk(m);if(m.id==='sed'&&!adultSedationEligible())return cwOldFlow(m);if(cwDraftRequired(m,w)){const warning=`<div class="cw-card cw-warn" role="note"><b>Source verification incomplete · clinician-review draft</b><p>Detailed recommendations in this pathway require independent verification for the patient, technique and setting. Draft selection does not bypass missing information, contraindications or age restrictions.</p>${S.draftMode?'':'<button class="go" data-cw-enable-draft>Enable draft material for this encounter</button>'}</div>`;if(w.out.tone==='urgent')return warning+cwOldFlow(m);return warning+(S.draftMode?cwOldFlow(m):'<p class="small">The decision path and original features are retained. Select draft mode to display the source-unverified recommendation.</p>')};return (m.id==='sed'?teenSedationNote():'')+cwOldFlow(m)};
-const cwOldPlanText=planText;planText=function(m,w){if(m.id==='sed'&&!adultSedationEligible())return 'Office sedation pathway withheld: confirm age 13 or older (and weight 40 kg or more, if entered). Use an age-appropriate anesthesia evaluation for younger patients.';if(cwDraftRequired(m,w)&&!S.draftMode&&w.out?.tone!=='urgent')return 'SOURCE VERIFICATION INCOMPLETE — detailed recommendation withheld. Select clinician draft mode and review before exporting.';return cwOldPlanText(m,w)+w.steps.filter(s=>S.autoOverrides?.[m.id+':'+s.id]).map(s=>'\nClinical override: '+s.n.q+' — '+S.autoOverrides[m.id+':'+s.id].reason).join('')+(cwDraftRequired(m,w)?'\nDRAFT MODE SELECTED — source-unverified content requires independent clinical verification.':'')};
+const cwOldBaseFindingPlan=baseFindingPlan;baseFindingPlan=function(f){const p=cwOldBaseFindingPlan(f);if(cwDraftOpen()||!cwNeedsSourceReview(p.src||[],[p.act,...p.steps].join(' ')))return p;return {...p,d:DRANK[p.d]<DRANK.investigate?'investigate':p.d,prov:true,basis:'un',act:'Source verification incomplete. Independently verify the applicable recommendation or select clinician draft mode to review it.',steps:['The original recommendation remains available in explicit draft mode. Missing facts and risk restrictions remain unresolved.'],miss:[...p.miss,'Source verification / clinician review']}};
+const cwOldFlow=flowHTML;flowHTML=function(m){const w=walk(m);if(m.id==='sed'&&!adultSedationEligible())return cwOldFlow(m);if(cwDraftRequired(m,w)&&!S.draftMode&&!colleague()){const un=basisOf([w.out.src,w.out.src2].filter(Boolean),[w.out.out,w.out.ex].join(' '))==='un';return (m.id==='sed'?teenSedationNote():'')+(un?'':'<p class="caveat" id="cw-au-draft">Draft content: source not independently verified.</p>')+cwOldFlow(m)}if(cwDraftRequired(m,w)){const warning=`<div class="cw-card cw-warn" role="note"><b>Source verification incomplete · clinician-review draft</b><p>Detailed recommendations in this pathway require independent verification for the patient, technique and setting. Draft selection does not bypass missing information, contraindications or age restrictions.</p>${S.draftMode?'':'<button class="go" data-cw-enable-draft>Enable draft material for this encounter</button>'}</div>`;if(w.out.tone==='urgent')return warning+cwOldFlow(m);return warning+(S.draftMode?cwOldFlow(m):'<p class="small">The decision path and original features are retained. Select draft mode to display the source-unverified recommendation.</p>')};return (m.id==='sed'?teenSedationNote():'')+cwOldFlow(m)};
+const cwOldPlanText=planText;planText=function(m,w){if(m.id==='sed'&&!adultSedationEligible())return 'Office sedation pathway withheld: confirm age 13 or older (and weight 40 kg or more, if entered). Use an age-appropriate anesthesia evaluation for younger patients.';if(cwDraftRequired(m,w)&&!cwDraftOpen()&&w.out?.tone!=='urgent')return 'SOURCE VERIFICATION INCOMPLETE — detailed recommendation withheld. Select clinician draft mode and review before exporting.';return cwOldPlanText(m,w)+w.steps.filter(s=>S.autoOverrides?.[m.id+':'+s.id]).map(s=>'\nClinical override: '+s.n.q+' — '+S.autoOverrides[m.id+':'+s.id].reason).join('')+(cwDraftRequired(m,w)?(S.draftMode?'\nDRAFT MODE SELECTED — source-unverified content requires independent clinical verification.':'\nDraft content: source not independently verified.'):'')};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-cw-enable-draft]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();S.draftMode=true;if(S.mod)refresh();else view(S.view)},true);
+
+/* ===== v3.25.0: healthy-adult shortcut and Ask-Claude handoff (Steven, Nov 12, 2026) =====
+   Shortcut: Author mode only, Pre-op clearance, first question, nothing answered and no photo triage loaded.
+   It answers No only where the walk is waiting for a manual answer; entered data that auto-answers a step, or a
+   triage suggestion, is never overridden. ASA I and the adult analgesic plan follow only when every step ended No.
+   Handoff: the prompt is copied to the clipboard; the link carries no clinical data. */
+function cwAllNoEligible(m,w){return m.id==='preop'&&!colleague()&&!!w.cur&&w.cur.id===m.start&&w.cur.sug===undefined&&!S.tri&&!Object.keys(S.ans.preop||{}).length}
+function cwFastValid(){if(!S.fast)return false;const w=walk(M('preop'));return !!w.out&&w.out.tone!=='urgent'&&w.steps.filter(s=>!s.note).every(s=>s.val===false)}
+function cwAllNo(){const m=M('preop'),before=planBeforeEdit(),a=S.ans.preop=S.ans.preop||{};
+ for(let g=0;g<12;g++){const w=walk(m);if(!w.cur||w.cur.sug!==undefined)break;a[w.cur.id]=false}
+ S.fast={t:1};
+ if(cwFastValid()){S.adultOK=true;if(!(S.today&&S.today.asa)){S.today={...(S.today||{}),asa:1};S.fast.asa=1}}else delete S.fast;
+ recordPlanEdit(before,'screen:preop:allno');refresh()}
+function cwFastSync(){if(S.fast&&!cwFastValid()){if(S.fast.asa&&S.today&&S.today.asa===1)delete S.today.asa;delete S.fast;delete S.adultOK}}
+const cwFlow325=flowHTML;flowHTML=function(m){if(m.id==='preop')cwFastSync();const h=cwFlow325(m);if(m.id!=='preop')return h;const w=walk(m);if(!cwAllNoEligible(m,w))return h;
+ const btn='<button class="fx-all" data-allno>Healthy adult 18+ · No to all 6<span>No unstable condition · no endocarditis-risk heart condition · no blood thinner · no bone drug or jaw radiation · no SGLT2 or GLP-1 · local anesthesia only</span></button>';
+ return h.replace('</div><div class="fx-act">',btn+'</div><div class="fx-act">')};
+const cwPlanText325=planText;planText=function(m,w){if(m.id==='preop')cwFastSync();return cwPlanText325(m,w)};
+
+const ASK_URL='https://claude.ai/new',ASK_ALT='https://chatgpt.com/';
+function askBtn(k){return`<button class="askbtn" data-ask${k?`="${k}"`:''}>Ask Claude ↗</button>`}
+function askContext(k){
+ if(k&&k.startsWith('ref:')){const r=REF[+k.slice(4)];if(r)return{t:'Reference card: '+r.t,b:'Compass card text ('+BASIS[basisOf(r.src,r.i.join(' '))]+'):\n'+r.i.map(x=>'- '+x).join('\n')}}
+ if(S.mod){const m=M(S.mod),w=walk(m),L=[planText(m,w)];if(w.cur){L.push('Open question: '+w.cur.n.q);if(w.cur.n.h)L.push('Criteria shown: '+w.cur.n.h.join('; '))}return{t:m.title,b:L.join('\n')}}
+ if(S.view==='find'&&S.fid&&FX[S.fid]){const f=FX[S.fid],p=fPlan(f);return{t:f.t+' ('+f.kind+')',b:['Compass disposition: '+(DISP[p.d]?DISP[p.d][0]:p.d),p.act,...(p.steps||[]).map(x=>'- '+x),...((p.miss||[]).length?['Still missing: '+p.miss.join('; ')]:[])].filter(Boolean).join('\n')}}
+ return{t:'General question',b:''}}
+function askPrompt(k,q){const c=askContext(k),a=ageNum(),facts=[a!=null?'age '+a:'',S.wt?'weight '+S.wt+' kg':''].filter(Boolean).join(', ');
+ return['I am an oral and maxillofacial surgeon. This comes from OMS Compass v'+VER+', my chairside decision aid ('+(colleague()?'Colleague':'Author')+' mode). The case is de-identified.','',
+  'Where I am: '+c.t,facts?'Patient: '+facts:'',c.b?'\nWhat Compass shows:\n'+c.b:'','',
+  'My question: '+((q||'').trim()||'[type your question here]'),'',
+  'How to answer:','- Answer first, in 150 words or fewer. OMS level; skip fundamentals.','- Separate guideline-backed points from opinion. Cite primary sources with year.','- Say what finding would change the plan.','- Do not recalculate doses; Compass does the arithmetic. Flag any dose you think is wrong.','- If you disagree with what Compass shows, say so and why.'].filter(x=>x!=='').join('\n').replace(/\n(Where I am|My question|How to answer)/g,'\n\n$1')}
+function askSheet(k){let el=document.getElementById('asksheet');if(!el){el=document.createElement('div');el.id='asksheet';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','Ask Claude');document.body.appendChild(el)}
+ S.askK=k||'';
+ el.innerHTML=`<div class="sh"><button class="x" data-ask-close>Close</button><h3>Ask Claude about this</h3><label class="small" for="askq">Your question. No names, dates of birth or record numbers.</label><textarea id="askq" placeholder="e.g. Does a recent stent change the plan?" autocomplete="off"></textarea><div class="acts"><a class="p1" data-ask-go href="${ASK_URL}" target="_blank" rel="noopener">Copy &amp; open Claude</a><a class="p2" data-ask-go href="${ASK_ALT}" target="_blank" rel="noopener">Copy &amp; open ChatGPT</a></div><p class="small" id="askst" role="status">The prompt is copied; paste it in the chat. The link carries no clinical data.</p><details><summary class="small">What gets copied</summary><textarea id="askprev" readonly aria-label="Prompt preview"></textarea></details></div>`;
+ el.hidden=false;const prev=el.querySelector('#askprev'),qi=el.querySelector('#askq'),upd=()=>{prev.value=askPrompt(S.askK,qi.value)};qi.addEventListener('input',upd);upd()}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ if(t.closest('[data-allno]')){e.preventDefault();e.stopImmediatePropagation();cwAllNo();return}
+ const ab=t.closest('button[data-ask]');if(ab){e.preventDefault();e.stopImmediatePropagation();askSheet(ab.getAttribute('data-ask'));return}
+ const el=document.getElementById('asksheet');if(!el||el.hidden)return;
+ if(t.closest('[data-ask-close]')||t===el){e.preventDefault();e.stopImmediatePropagation();el.hidden=true;return}
+ if(t.closest('[data-ask-go]')){const txt=askPrompt(S.askK,(el.querySelector('#askq')||{}).value);const st=el.querySelector('#askst');const fail=()=>{const p=el.querySelector('#askprev');if(p){p.closest('details').open=true;p.value=txt;p.focus();p.select()}if(st)st.textContent='Copy did not work here. Select the text below and copy it.'};try{navigator.clipboard.writeText(txt).then(()=>{if(st)st.textContent='Copied. Paste it in the chat.'},fail)}catch(x){fail()}e.stopImmediatePropagation()}},true);
 </script>
 </body></html>

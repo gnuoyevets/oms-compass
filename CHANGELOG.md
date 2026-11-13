@@ -2,6 +2,19 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.25.0 — Nov 12, 2026 (PREVIEW — awaiting Steven's review; not published) — Author-mode gate, healthy-adult shortcut, Ask-Claude handoff
+
+From the Nov 12 audit. Steven's choices: optimize for himself and office staff; remove the draft gate in Author mode; build the Ask-Claude handoff first; include the "No to all six" shortcut.
+
+- Author mode: source-unverified content shows without the "Enable draft material" tap (module plans, finding plans, the 5 Unverified-draft Ref cards). The Unverified draft label stays, and the copied note carries one line: "Draft content: source not independently verified." Colleague mode is unchanged: same gate, same withheld note.
+- Pre-op clearance, Author mode, first question only: "Healthy adult 18+ · No to all 6" answers the six screen questions No in one tap and lists them on the button. It answers only steps waiting for a manual answer; a data input that auto-answers a step, or a loaded photo triage, is never overridden (the button is hidden once triage is loaded or anything is answered). When all six end No it records ASA I and treats the patient as an adult for the analgesia age hold. An entered age under 18 or weight under 50 kg still withholds the adult plan. Changing any answer to Yes clears the ASA I and the adult assertion. The note records "Clinician confirmed in one tap".
+- Not changed: the analgesic contraindication and interaction screen. After the shortcut the analgesia line still asks for that screen; no regimen is chosen for the clinician.
+- Ask Claude: a chip on module screens and a button on plan, finding and Ref card screens. It opens a sheet for the question and copies a prompt holding the module, answers, open question and criteria, age and weight if entered, the Compass text shown, and answer rules (answer first, cite primary sources, do not recalculate doses). Links are https://claude.ai/new and https://chatgpt.com/ with no query string; clinical text travels by clipboard only. Not on SOS.
+- Copied note: the "LA maximum: weight not entered" line is omitted when no weight is entered.
+- Fix (v3.24.0 regression): the module top bar had three grid columns for four buttons after Home was added, so SOS dropped onto the chip row and covered the first chip. Now four columns.
+- Open label question, not changed here: the healthy Pre-op result reads "Unverified draft" only because no source key is attached to that outcome.
+- Tests: browser 719 (25 new: section 33 plus one Ref-gate check split into Author and Colleague; the service-worker update check failed once in four runs and passed on rerun); graph 29; reconciliation 78; clinical workflow 39. Software behavior only, not clinical validation. Not tested on a real iPhone or installed PWA.
+
 ## v3.24.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — obese sedation scaling
 
 - Sedation card: when weight >120% of ideal or BMI ≥30 (height and sex from the Body weight card), Precedex load, re-bolus and fast load use adjusted body weight; ASA I–II ketamine uses ideal body weight. Midazolam, propofol touches, Decadron and glycopyrrolate stay fixed. Never above actual weight. Steven's choices, Nov 12, 2026.
