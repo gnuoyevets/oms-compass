@@ -153,6 +153,32 @@ details.em[open]>summary::after{content:'−'}
 .ctab th{font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);border-top:0}
 .ctab td b{font-size:15px}
 .chk{display:flex;flex-direction:column;gap:6px}
+.recs{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;margin:10px 0 0;padding:2px}
+.recs::-webkit-scrollbar{display:none}
+.recs .lab{flex:none;margin:0 2px 0 0}
+.recs .pin{flex:none;min-height:44px;padding:0 12px;border-radius:22px;font-size:14px;white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis}
+.staffhome .mod{min-height:72px}
+body.staff #abar,body.staff .fx-tools [data-goasmt],body.staff .fx-tools [data-atab]{display:none!important}
+#sosrun{margin:0 0 12px}
+.sr-idle{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sr-idle p{grid-column:1/-1;margin:0}
+.sr-btn{min-height:52px;border-radius:12px;font:800 15px/1.2 var(--display);border:2px solid var(--ink);background:var(--surface);color:var(--ink);padding:6px 10px;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center}
+.sr-btn.pri{background:var(--ink);color:var(--bg)}
+.sr-911{background:#a50000!important;border-color:#a50000!important;color:#fff!important}
+.sr-top{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--surface);border:2px solid #a50000;border-radius:12px;padding:8px 10px}
+.sr-top.drill{border-style:dashed}
+.sr-top b{font:800 28px/1 var(--display);font-variant-numeric:tabular-nums}
+.sr-top span{font-size:12.5px;color:var(--muted);line-height:1.35;min-width:0}
+.sr-chips{display:flex;gap:6px;margin:10px 0;overflow-x:auto;scrollbar-width:none;padding:2px}
+.sr-chips::-webkit-scrollbar{display:none}
+.sr-chips button{flex:none;white-space:nowrap}
+.sr-chips button{min-height:44px;border-radius:22px;padding:0 12px;font-weight:700;font-size:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.sr-add{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.sr-add input,.sr-script input{min-height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;font:16px var(--sans);background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
+.sr-script{border:2px solid #a50000;border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--surface)}
+.sr-script ol{margin:6px 0 8px;padding-left:20px;line-height:1.5}
+.sr-log{margin-top:10px}.sr-log ol{margin:6px 0 0;padding-left:0;list-style:none;font-size:13.5px;line-height:1.6;font-variant-numeric:tabular-nums}
+.sr-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .askbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-top:10px;border:1px solid currentColor;background:none;color:inherit;border-radius:8px;padding:7px 12px;font-weight:700;font-size:13px}
 .askrow{margin:4px 0 12px}
 .fx-all{width:100%;min-height:56px;margin-top:14px;border-radius:12px;background:var(--accent);border:2px solid var(--accent);color:#fff;font:800 16px var(--display);padding:8px 12px;text-align:center}
@@ -1784,8 +1810,8 @@ const REF=[
 function refHTML(){
  const q=(S.refq||'').toLowerCase().trim();
  const list=REF.filter(r=>!q||(r.t+' '+r.k+' '+r.i.join(' ')).toLowerCase().includes(q));
- return `<div class="wtbar" style="grid-template-columns:1fr"><label class="fld" for="in-refq">Search reference<input id="in-refq" data-refq placeholder="e.g. cleft, socket shield, parotid" value="${esc(S.refq||'')}"></label></div>
- ${list.map(r=>{const b=basisOf(r.src,r.i.join(' '));const body=`<ul>${r.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small" style="margin-top:8px">${r.src.map(srcLink).join(' · ')}</div>`;return`<details class="box"><summary><span>${esc(r.t)} ${basisChip(b)}</span></summary><div class="inner look">${b==='au'?auWrap(body):body}${askBtn('ref:'+REF.indexOf(r))}</div></details>`}).join('')||'<p class="caveat">No match.</p>'}
+ return `<p class="small" id="refchk-sum" style="margin:0 0 8px">${REF.filter(r=>r.chk).length} of ${REF.length} cards have a last-checked date.</p><div class="wtbar" style="grid-template-columns:1fr"><label class="fld" for="in-refq">Search reference<input id="in-refq" data-refq placeholder="e.g. cleft, socket shield, parotid" value="${esc(S.refq||'')}"></label></div>
+ ${list.map(r=>{const b=basisOf(r.src,r.i.join(' '));const body=`<ul>${r.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="small" style="margin-top:8px">${r.src.map(srcLink).join(' · ')}</div><div class="small refchk">${r.chk?'Last checked against sources: '+esc(r.chk):'Not yet checked against sources'}</div>`;return`<details class="box"><summary><span>${esc(r.t)} ${basisChip(b)}</span></summary><div class="inner look">${b==='au'?auWrap(body):body}${askBtn('ref:'+REF.indexOf(r))}</div></details>`}).join('')||'<p class="caveat">No match.</p>'}
  <p class="caveat">Reference cards summarize your notes and cited sources; your personal protocols are labeled as such.</p>`;
 }
 const LA=[
@@ -2007,8 +2033,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top">${S.view&&S.view!=='decide'?'<button class="icon-btn homebtn" data-home aria-label="Home">⌂</button>':''}<h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.25.0';
+const VER='3.26.0';
 const CHANGES=[
+{v:'3.26.0',d:'Nov 12, 2026',i:['Home: a Recent row shows the last four modules you opened that are not already pinned. Everything else stays where it was. The list is kept on this device.','Staff view (Settings): shows only Post-op call triage, patient handouts and SOS. Search, decision modules, Calc, Ref, Assessment and Ask Claude are hidden. “Clinician view” switches back.','SOS run mode: Start emergency timer or Start drill. Elapsed time, time since the last entry, one-tap entries (O₂ on, epinephrine IM, CPR started, EMS arrived…), a typed entry for drug and dose, and a copyable record. Opening a card is logged. The log stays on this device until you clear it; New patient does not clear it. No names.','Call 911: dials from this phone and shows what to say, with the office address and call-back number. In a drill it shows the script and does not dial. The address is typed once per office and saved on this device.','Ref: each card shows its last-checked date. All 25 currently read “Not yet checked against sources”; dates are added only after a card is checked.']},
 {v:'3.25.0',d:'Nov 12, 2026',i:['Author mode: source-unverified content shows without the “Enable draft material” tap; it keeps its Unverified draft label and adds one line to the note. Colleague mode is unchanged.','Pre-op clearance, Author mode: “Healthy adult 18+ · No to all 6” answers the six screen questions in one tap, records ASA I and lifts the age hold on analgesia (the analgesic contraindication screen is still required). Any data input or photo triage that says otherwise stops it at that question.','Ask Claude (module, finding and Ref card screens): copies a de-identified prompt with your answers and the Compass text, then opens Claude or ChatGPT. Nothing clinical goes in the link. Compass calculates doses; the assistant explains.','The Pre-op results “No exclusion found by this screen” are labelled Screen result, not Unverified draft, in both modes: they report what the screen found and cite no recommendation.','Copied note: the “LA maximum: weight not entered” line is left out when no weight is entered.','Fix: on module screens the SOS button sat on top of the first chip since the Home button was added in v3.24.0; it is back in the top bar.']},
 {v:'3.24.0',d:'Nov 12, 2026',i:['Sedation card: obese patients (weight >120% of ideal or BMI ≥30, needs height and sex) get Precedex on adjusted body weight and ketamine on ideal body weight; fixed doses unchanged; never above actual weight. Actual-weight doses and a 1:1 ketofol line (propofol 10 mg/mL 10 mL + ketamine 50 mg/mL 2 mL ≈ 8.3 mg/mL each) under More. Tagged verify.','Height in cm or feet + inches (they mirror each other); weight already takes kg or lb.','Home button (⌂) on every page: top bar of SOS, Calc, Ref, Patient and What’s new; module, finding and assessment headers.','Before-sedation handout: no smoking or vaping for at least 2 days before (was 12 hours), all four languages.']},
 {v:'3.23.1',d:'Nov 6, 2026',i:['Consultation workspace removed (tab, Home card and its buttons). Kept from v3.23.0: the audit corrections, the draft gate for unverified content, office sedation from age 13, and every earlier feature.']},
@@ -2082,7 +2109,7 @@ function gate(go){
  <li>A clinician-review draft for decision support by dental and OMS clinicians.</li>
  <li>Not an institutional protocol or the standard of care. It does not replace your judgment, your institution’s policies or current guidelines.</li>
  <li>Check every dose against the drug label and your crash-cart concentrations.</li>
- <li>Enter no patient identifiers. Nothing you type is saved.</li></ul>
+ <li>Enter no patient identifiers. Nothing clinical you type is saved, except the SOS event log, which stays on this device until you clear it.</li></ul>
  <button class="gobtn" data-ack>I understand</button></div>`;
  app.querySelector('[data-ack]').addEventListener('click',e=>{e.stopPropagation();try{localStorage.setItem(ACK,'1')}catch(x){}go()},{once:true});
 }
@@ -3641,7 +3668,7 @@ function home(){
  app.innerHTML=topHTML(1)+tabsHTML('decide')+
  `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab or topic: Eliquis, INR, dry socket" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="pins"${S.q?' hidden':''}>${qsetHTML(on)}${pinsHTML()}</div><div id="groups"${S.q?' hidden':''}>`+
  groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`<details class="box sets" id="settings"${S.setOpen?' open':''}><summary><span>Settings <em class="setsum">On-call ${on?'on':'off'} · ${colleague()?'Colleague':'Author'} mode</em></span></summary><div class="inner">${oncallHTML(on)}${pmodeHTML()}<div class="toggles" style="margin-top:10px">${hcHTML()}</div></div></details>`+`</div>`+
- `<p class="foot">Search shows a finding’s implications first. Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing you enter is saved. No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
+ `<p class="foot">Search shows a finding’s implications first. Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing clinical you enter is saved, except the SOS event log (this device, until cleared). No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);S.fid=null;updBar();
 }
 function inputsHTML(m){
@@ -3725,7 +3752,7 @@ function fxChips(m){const id=m.id,c=[];
  const w0=walk(m),first=!w0.steps.some(s=>!s.note&&s.val!==undefined&&!s.auto),autoStep=!!(w0.cur&&w0.cur.n.auto);
  if(TRI_MODS.includes(id)&&(first||S.tri))c.push(`<button class="fx-chip${S.tri?' c-mod':''}" data-drawer="tri">📷 ${S.tri?'Triage loaded':'Photo triage'}</button>`);
  if((m.inputs||[]).length){const i=S.inp[id]||{},set=Object.keys(i).some(k=>i[k]!==''&&i[k]!=null&&i[k]!==false);if(first||set||autoStep)c.push(`<button class="fx-chip${set?' c-ok':''}" data-drawer="inputs">${set?'✓ ':''}Data inputs</button>`)}
- c.push('<button class="fx-chip" data-ask>Ask Claude ↗</button>');
+ if(!(typeof staff==='function'&&staff()))c.push('<button class="fx-chip" data-ask>Ask Claude ↗</button>');
  return c.join('')}
 function critHTML(m,w){const n=w.cur&&w.cur.n;if(!n)return'<p class="small">No open question.</p>';const r=w.r,ah=n.ah?n.ah(r):'';
  return`<div class="q" style="font-weight:700;margin-bottom:6px">${esc(n.q)}</div>${ah?`<div class="autohint">${esc(ah)}</div>`:''}${n.h?`<div class="h"><ul>${n.h.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'<p class="small">No extra criteria for this step.</p>'}`}
@@ -3967,7 +3994,7 @@ const cwFlow325=flowHTML;flowHTML=function(m){if(m.id==='preop')cwFastSync();con
 const cwPlanText325=planText;planText=function(m,w){if(m.id==='preop')cwFastSync();return cwPlanText325(m,w)};
 
 const ASK_URL='https://claude.ai/new',ASK_ALT='https://chatgpt.com/';
-function askBtn(k){return`<button class="askbtn" data-ask${k?`="${k}"`:''}>Ask Claude ↗</button>`}
+function askBtn(k){if(typeof staff==='function'&&staff())return'';return`<button class="askbtn" data-ask${k?`="${k}"`:''}>Ask Claude ↗</button>`}
 function askContext(k){
  if(k&&k.startsWith('ref:')){const r=REF[+k.slice(4)];if(r)return{t:'Reference card: '+r.t,b:'Compass card text ('+BASIS[basisOf(r.src,r.i.join(' '))]+'):\n'+r.i.map(x=>'- '+x).join('\n')}}
  if(S.mod){const m=M(S.mod),w=walk(m),L=[planText(m,w)];if(w.cur){L.push('Open question: '+w.cur.n.q);if(w.cur.n.h)L.push('Criteria shown: '+w.cur.n.h.join('; '))}return{t:m.title,b:L.join('\n')}}
@@ -3988,5 +4015,72 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  const el=document.getElementById('asksheet');if(!el||el.hidden)return;
  if(t.closest('[data-ask-close]')||t===el){e.preventDefault();e.stopImmediatePropagation();el.hidden=true;return}
  if(t.closest('[data-ask-go]')){const txt=askPrompt(S.askK,(el.querySelector('#askq')||{}).value);const st=el.querySelector('#askst');const fail=()=>{const p=el.querySelector('#askprev');if(p){p.closest('details').open=true;p.value=txt;p.focus();p.select()}if(st)st.textContent='Copy did not work here. Select the text below and copy it.'};try{navigator.clipboard.writeText(txt).then(()=>{if(st)st.textContent='Copied. Paste it in the chat.'},fail)}catch(x){fail()}e.stopImmediatePropagation()}},true);
+
+/* ===== v3.26.0 (Steven, Nov 12, 2026): Recent row, Staff view, SOS run mode with a saved log and 911 script, Ref card dates =====
+   Saved on this device: recent module ids, the staff-view switch, the SOS event log and the typed office address. No patient identifiers. */
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){const m=S._ls||{};return k in m?m[k]:null}},set(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){S._ls=S._ls||{};if(v==null)delete S._ls[k];else S._ls[k]=v}}};
+const RC_KEY='oms_compass_recents',ST_KEY='oms_compass_staff',SR_KEY='oms_compass_sos_run',AD_KEY='oms_compass_addr_',SITE_KEY='oms_compass_site';
+function recents(){try{const a=JSON.parse(LS.get(RC_KEY)||'[]');return Array.isArray(a)?a.filter(id=>typeof id==='string'&&M(id)):[]}catch(e){return[]}}
+function noteRecent(id){if(!M(id))return;LS.set(RC_KEY,JSON.stringify([id,...recents().filter(x=>x!==id)].slice(0,12)))}
+function recentsHTML(){const pin=new Set(PINS.map(p=>p[0])),r=recents().filter(id=>!pin.has(id)).slice(0,4);if(!r.length)return'';
+ return`<div class="recs" id="recents" role="group" aria-label="Recently opened"><span class="lab">Recent</span>${r.map(id=>`<button class="pin" data-open="${id}">${esc(M(id).title)}</button>`).join('')}</div>`}
+const pins326=pinsHTML;pinsHTML=function(){return recentsHTML()+pins326()};
+
+const staff=()=>LS.get(ST_KEY)==='1';
+const STAFF_VIEWS=['emergency','handouts'];
+function staffHome(){S.mod=null;S.retMod=null;S.view='decide';S.fid=null;try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+ app.innerHTML=topHTML(0)+tabsHTML('decide')+`<div class="lab group">Staff view</div><div class="mods staffhome"><button class="mod" data-open="calltri"><div><b>Post-op phone call triage</b><span>Phone script · 911, come in now, same day, or reassure</span></div><i aria-hidden="true">›</i></button><button class="mod" data-view="handouts"><div><b>Patient handouts and QR</b><span>Post-op instructions and FAQs · English, Español, Kriolu, 中文</span></div><i aria-hidden="true">›</i></button><button class="mod" data-view="emergency"><div><b>SOS</b><span>Emergency cards · timer and event log · Call 911</span></div><i aria-hidden="true">›</i></button></div><p class="foot">Staff view shows call triage, handouts and SOS only. Clinical decisions stay with the surgeon. No patient identifiers.</p><p><button class="go" data-staff="0">Clinician view</button></p>`+fbHTML('Staff home');
+ window.scrollTo(0,0);updBar()}
+const tabs326=tabsHTML;tabsHTML=function(v){if(!staff())return tabs326(v);return`<div class="tabs" role="tablist"><button class="${v==='decide'?'on':''}" data-view="decide">Home</button><button class="em${v==='emergency'?' on':''}" data-view="emergency">SOS</button><button class="${v==='handouts'?'on':''}" data-view="handouts">Patient</button></div>`};
+const home326=home;home=function(){return staff()?staffHome():home326()};
+const view326=view;view=function(v){if(staff()&&v!=='decide'&&!STAFF_VIEWS.includes(v))return home();return view326(v)};
+const open326=open;open=function(id){if(staff()&&id!=='calltri')return home();noteRecent(id);return open326(id)};
+const openFind326=openFind;openFind=function(id,hit){if(staff())return home();return openFind326(id,hit)};
+const pmode326=pmodeHTML;pmodeHTML=function(){return pmode326()+'<div class="toggles" style="margin-top:10px"><button class="tg" data-staff="1">Switch to Staff view · call triage, handouts and SOS only</button></div>'};
+
+function sosRun(){try{const r=JSON.parse(LS.get(SR_KEY)||'null');return r&&typeof r.t0==='number'&&Array.isArray(r.ev)?r:null}catch(e){return null}}
+function sosSave(r){LS.set(SR_KEY,r?JSON.stringify(r):null)}
+function sosStart(drill){if(sosRun())return;sosSave({t0:Date.now(),drill:!!drill,ev:[[Date.now(),drill?'DRILL started':'Timer started']]})}
+function sosLog(text){const r=sosRun();if(!r||r.end)return;const t=String(text||'').trim().slice(0,160);if(!t)return;r.ev.push([Date.now(),t]);if(r.ev.length>300)r.ev.splice(1,r.ev.length-300);sosSave(r)}
+const mmss=ms=>{const x=Math.max(0,Math.floor(ms/1000));return String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0')};
+const clk=ms=>{const d=new Date(ms),p=n=>String(n).padStart(2,'0');return p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())};
+function sosSite(){if(colleague())return'own';return S.site||LS.get(SITE_KEY)||'young'}
+const SR_ADDR={bayside:'1265 Fall River Ave, Seekonk, MA 02771'};
+function sosAddr(){const k=sosSite();return LS.get(AD_KEY+k)||SR_ADDR[k]||''}
+function sosPhone(){if(colleague()){const d=ownPh();return d?phFmt(d):''}return HO_SITES[sosSite()==='bayside'?'bayside':'young'].ph}
+const SR_PRESETS=['O₂ on','Monitors on','IV access','Epinephrine IM','AED attached','CPR started','Reversal given','Glucose given','EMS arrived'];
+function sosScriptHTML(r){const a=sosAddr(),ph=sosPhone(),k=sosSite();
+ return`<div class="sr-script" id="sr-script" role="note"><b>${r&&r.drill?'DRILL · say to 911 (not dialed)':'Say to 911'}</b><ol><li>“Medical emergency at an oral surgery office.”</li><li>Address: <b>${a?esc(a):'add the address below'}</b></li><li>What happened. Is the patient awake? Breathing?</li><li>Call-back number: <b>${ph?esc(ph):'this phone'}</b></li><li>Stay on the line. Send one person to the door to meet EMS.</li></ol>${colleague()?'':`<div class="toggles" style="margin-bottom:8px">${[['young','Dr. Young'],['bayside','Bayside']].map(([c,n])=>`<button class="tg${k===c?' on':''}" data-sr-site="${c}" aria-pressed="${k===c}">${n}</button>`).join('')}</div>`}<label class="small" for="sr-addr">Office address for 911 (saved on this device)</label><input id="sr-addr" data-sr-addr autocomplete="off" placeholder="Street, town, state" value="${esc(a)}"></div>`}
+function sosRunHTML(){const r=sosRun();
+ if(!r)return`<div id="sosrun"><div class="sr-idle"><button class="sr-btn pri" data-sr="start">Start emergency timer</button><button class="sr-btn" data-sr="drill">Start drill · no dialing</button><a class="sr-btn sr-911" data-sr="911" href="tel:911" style="grid-column:1/-1">Call 911 · starts the timer</a><p class="small">Times are logged on this device until you clear them. No names.</p></div></div>`;
+ const now=Date.now(),end=r.end||0,last=r.ev[r.ev.length-1],n=r.ev.length;
+ const top=`<div class="sr-top${r.drill?' drill':''}"><b id="sr-el" aria-label="Elapsed">${mmss((end||now)-r.t0)}</b><span>${r.drill?'<b style="font:800 12.5px var(--sans)">DRILL</b> · ':''}${end?'Ended '+clk(end):'Started '+clk(r.t0)}<br><span id="sr-last">${end?esc(n+' entries'):'Last: '+esc(last[1])+' · '+mmss(now-last[0])+' ago'}</span></span>${end?'':r.drill?'<button class="sr-btn sr-911" data-sr="911">911 · drill</button>':'<a class="sr-btn sr-911" data-sr="911" href="tel:911">Call 911</a>'}</div>`;
+ const ol=`<ol>${r.ev.map(([t,x])=>`<li>+${mmss(t-r.t0)} · ${clk(t)} · ${esc(x)}</li>`).join('')}</ol>`;const log=`<details class="sr-log" open><summary class="small">Event log · ${n}</summary>${ol}</details>`;
+ if(end)return`<div id="sosrun">${top}${log}<div class="sr-row"><button class="sr-btn pri" data-sr="copy">Copy record</button><button class="sr-btn" data-sr="clear">${S.srClear?'Tap again to erase':'Clear log'}</button></div><p class="small">Saved on this device until cleared. Times come from this phone’s clock; check them against the monitor and the anesthesia record.</p></div>`;
+ return`<div id="sosrun">${top}${S.srScript?sosScriptHTML(r):''}<div class="sr-chips">${SR_PRESETS.map(x=>`<button data-sr-log="${esc(x)}">${esc(x)}</button>`).join('')}</div><div class="sr-add"><input id="sr-note" maxlength="120" autocomplete="off" enterkeyhint="done" placeholder="Drug, dose, route. No names." aria-label="Log entry"><button class="sr-btn" data-sr="add">Log</button></div><details class="sr-log"${S.srLogOpen||S.srEnd?' open':''}><summary class="small">Event log · ${n} · copy · end</summary>${ol}<div class="sr-row"><button class="sr-btn" data-sr="copy">Copy record</button><button class="sr-btn" data-sr="end">${S.srEnd?'Tap again to end':'End'}</button></div></details></div>`}
+function sosRecord(){const r=sosRun();if(!r)return'';const d=new Date(r.t0),p=n=>String(n).padStart(2,'0');
+ return[`OMS Compass v${VER} · Emergency event record${r.drill?' (DRILL)':''} · no patient identifiers`,`Started ${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${clk(r.t0)}`,...r.ev.map(([t,x])=>`+${mmss(t-r.t0)}  ${clk(t)}  ${x}`),r.end?`Ended ${clk(r.end)} · duration ${mmss(r.end-r.t0)}`:'Still running when copied',"Times are from this device's clock. Verify against the monitor and the anesthesia record."].join('\n')}
+function srRender(){const el=document.getElementById('sosrun');if(!el)return;const keep=(document.getElementById('sr-note')||{}).value,ld=el.querySelector&&el.querySelector('.sr-log');if(ld)S.srLogOpen=!!ld.open;el.outerHTML=sosRunHTML();const i=document.getElementById('sr-note');if(i&&keep)i.value=keep}
+const em326=emHTML;emHTML=function(){return sosRunHTML()+em326()};
+function srTick(){const r=sosRun();if(!r||r.end)return;const a=document.getElementById('sr-el'),b=document.getElementById('sr-last');if(!a)return;const now=Date.now(),last=r.ev[r.ev.length-1];a.textContent=mmss(now-r.t0);if(b)b.textContent='Last: '+last[1]+' · '+mmss(now-last[0])+' ago'}
+try{if(typeof setInterval==='function')setInterval(srTick,1000)}catch(e){}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ const sb=t.closest('[data-staff]');if(sb){e.preventDefault();e.stopImmediatePropagation();LS.set(ST_KEY,sb.getAttribute('data-staff')==='1'?'1':null);document.body.classList.toggle('staff',staff());home();return}
+ const site=t.closest('[data-sr-site]');if(site){e.preventDefault();e.stopImmediatePropagation();S.site=site.getAttribute('data-sr-site');LS.set(SITE_KEY,S.site);srRender();return}
+ const pl=t.closest('[data-sr-log]');if(pl){e.preventDefault();e.stopImmediatePropagation();sosLog(pl.getAttribute('data-sr-log'));srRender();return}
+ const b=t.closest('[data-sr]');if(!b)return;const k=b.getAttribute('data-sr');e.stopImmediatePropagation();
+ if(k==='911'){const was=sosRun();if(!was)sosStart(false);const r=sosRun();if(r&&!r.end)sosLog(r.drill?'DRILL: 911 call simulated':'911 dialed from this phone');S.srScript=true;if(r&&r.drill)e.preventDefault();try{setTimeout(srRender,0)}catch(x){srRender()}return}
+ e.preventDefault();
+ if(k==='start'||k==='drill'){sosStart(k==='drill');S.srScript=false;S.srEnd=S.srClear=false}
+ else if(k==='add'){const i=document.getElementById('sr-note');if(i&&i.value.trim()){sosLog(i.value);i.value=''}}
+ else if(k==='end'){if(!S.srEnd){S.srEnd=true}else{const r=sosRun();if(r){r.ev.push([Date.now(),'Ended']);r.end=Date.now();sosSave(r)}S.srEnd=false;S.srScript=false}}
+ else if(k==='clear'){if(!S.srClear){S.srClear=true}else{sosSave(null);S.srClear=false}}
+ else if(k==='copy'){const txt=sosRecord();const ok=()=>{b.textContent='Copied'};const fail=()=>{let x=document.getElementById('sr-copybox');if(!x){x=document.createElement('textarea');x.id='sr-copybox';x.className='copybox';x.setAttribute('aria-label','Emergency record');b.closest('#sosrun').appendChild(x)}x.value=txt;x.focus();x.select()};try{navigator.clipboard.writeText(txt).then(ok,fail)}catch(x){fail()}return}
+ srRender()},true);
+document.addEventListener('change',e=>{const t=e.target;if(t&&t.matches&&t.matches('[data-sr-addr]')){LS.set(AD_KEY+sosSite(),t.value.trim().slice(0,160)||null)}},true);
+document.addEventListener('keydown',e=>{const t=e.target;if(e.key==='Enter'&&t&&t.id==='sr-note'){e.preventDefault();if(t.value.trim()){sosLog(t.value);t.value='';srRender();const i=document.getElementById('sr-note');i&&i.focus()}}},true);
+document.addEventListener('toggle',e=>{const d=e.target;if(d&&d.classList&&d.classList.contains('em')&&d.open&&d.id){const r=sosRun();if(r&&!r.end){const c=EMS.find(x=>'em-'+x.id===d.id);if(c){const last=r.ev[r.ev.length-1];if(last[1]!=='Opened card: '+c.t){sosLog('Opened card: '+c.t);srTick()}}}}},true);
+/* The first screen is drawn before this section loads; redraw home once so the Recent row or Staff view shows at launch. */
+try{if(staff())document.body.classList.add('staff');if(acked()){if(staff()){if(S.view==='mod'&&S.mod==='calltri'){}else if(STAFF_VIEWS.includes(S.view))view(S.view);else home()}else if(S.view==='decide'&&!S.mod&&!S.q&&recents().length)home()}}catch(e){}
 </script>
 </body></html>

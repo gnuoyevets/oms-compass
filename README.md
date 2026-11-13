@@ -2,7 +2,7 @@
 
 Offline web app version of OMS Compass. This repo is the canonical copy; the "OMS Compass" artifact mirrors it. Changes: see CHANGELOG.md.
 
-Clinical information stays in memory and is lost on reload. v3.23.0 added audit corrections and a draft gate for source-unverified content; its consultation workspace was removed in v3.23.1.
+Clinical information stays in memory and is lost on reload. Saved on the device (v3.26.0): settings, the recent-module list, the staff-view switch, a typed office address, and the SOS event log until it is cleared. v3.23.0 added audit corrections and a draft gate for source-unverified content; its consultation workspace was removed in v3.23.1.
 
 See [IMPLEMENTATION-REVIEW.md](IMPLEMENTATION-REVIEW.md) for corrections, feature preservation, source limits and remaining clinical review (the every-node audit ledger is kept privately). Software checks do not establish clinical validity.
 
