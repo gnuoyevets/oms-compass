@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.27.0 — Nov 18, 2026 (pending review)
+## v3.27.0 — Nov 18, 2026 (approved by Steven Nov 18, 2026) — provisional safer assumption, SOAP note
 
 - **Unknown → provisional safer assumption.** `walk()` is unchanged: Unknown still halts and no plan is finalized. The pending panel now adds “What this answer decides” (where Yes and where No lead) and, for 124 of 180 questions with a curated safer answer (`CZ`), continues the path on that answer as **Provisional · not a plan**, with the next question or the provisional outcome and the list of assumptions. The 56 measurement, exam and treatment-choice questions have no default and stay paused. Draft-gated and sedation-age-gated content stays withheld in the provisional view. The copied note adds the provisional lines and a “Verify before finalizing” list.
 - The safer answers are the author's clinical-safety judgement (e.g. NSAID contraindicated? → assume Yes; fasting met? → assume No; call-triage red flags → assume Yes), not a source recommendation. A tone-based automatic rule was rejected because it chose unsafe branches (e.g. NSAID contraindicated → No).
