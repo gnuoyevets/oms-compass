@@ -2033,8 +2033,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top">${S.view&&S.view!=='decide'?'<button class="icon-btn homebtn" data-home aria-label="Home">⌂</button>':''}<h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.26.0';
+const VER='3.27.0';
 const CHANGES=[
+{v:'3.27.0',d:'Nov 18, 2026',i:['Unknown answers: the pending panel now shows what Yes and No would each lead to and, for 124 safety and risk questions, continues on the more cautious answer, labelled Provisional, with a Verify-before-finalizing list. Measurement, exam and treatment-choice questions stay paused. Nothing is finalized while an answer is Unknown.','Copy SOAP note: one de-identified note for the whole encounter (Subjective, Objective, Assessment, Plan) from every module used plus the Assessment. Available on module plans and in the Assessment.']},
 {v:'3.26.0',d:'Nov 12, 2026',i:['Home: a Recent row shows the last four modules you opened that are not already pinned. Everything else stays where it was. The list is kept on this device.','Staff view (Settings): shows only Post-op call triage, patient handouts and SOS. Search, decision modules, Calc, Ref, Assessment and Ask Claude are hidden. “Clinician view” switches back.','SOS run mode: Start emergency timer or Start drill. Elapsed time, time since the last entry, one-tap entries (O₂ on, epinephrine IM, CPR started, EMS arrived…), a typed entry for drug and dose, and a copyable record. Opening a card is logged. The log stays on this device until you clear it; New patient does not clear it. No names.','Call 911: dials from this phone and shows what to say, with the office address and call-back number. In a drill it shows the script and does not dial. Both office addresses are built in; Colleague mode types its own once.','Ref: each card shows its last-checked date. All 25 currently read “Not yet checked against sources”; dates are added only after a card is checked.']},
 {v:'3.25.0',d:'Nov 12, 2026',i:['Author mode: source-unverified content shows without the “Enable draft material” tap; it keeps its Unverified draft label and adds one line to the note. Colleague mode is unchanged.','Pre-op clearance, Author mode: “Healthy adult 18+ · No to all 6” answers the six screen questions in one tap, records ASA I and lifts the age hold on analgesia (the analgesic contraindication screen is still required). Any data input or photo triage that says otherwise stops it at that question.','Ask Claude (module, finding and Ref card screens): copies a de-identified prompt with your answers and the Compass text, then opens Claude or ChatGPT. Nothing clinical goes in the link. Compass calculates doses; the assistant explains.','The Pre-op results “No exclusion found by this screen” are labelled Screen result, not Unverified draft, in both modes: they report what the screen found and cite no recommendation.','Copied note: the “LA maximum: weight not entered” line is left out when no weight is entered.','Fix: on module screens the SOS button sat on top of the first chip since the Home button was added in v3.24.0; it is back in the top bar.']},
 {v:'3.24.0',d:'Nov 12, 2026',i:['Sedation card: obese patients (weight >120% of ideal or BMI ≥30, needs height and sex) get Precedex on adjusted body weight and ketamine on ideal body weight; fixed doses unchanged; never above actual weight. Actual-weight doses and a 1:1 ketofol line (propofol 10 mg/mL 10 mL + ketamine 50 mg/mL 2 mL ≈ 8.3 mg/mL each) under More. Tagged verify.','Height in cm or feet + inches (they mirror each other); weight already takes kg or lb.','Home button (⌂) on every page: top bar of SOS, Calc, Ref, Patient and What’s new; module, finding and assessment headers.','Before-sedation handout: no smoking or vaping for at least 2 days before (was 12 hours), all four languages.']},
@@ -3975,6 +3976,71 @@ const cwOldFlow=flowHTML;flowHTML=function(m){const w=walk(m);if(m.id==='sed'&&!
 const cwOldPlanText=planText;planText=function(m,w){if(m.id==='sed'&&!adultSedationEligible())return 'Office sedation pathway withheld: confirm age 13 or older (and weight 40 kg or more, if entered). Use an age-appropriate anesthesia evaluation for younger patients.';if(cwDraftRequired(m,w)&&!cwDraftOpen()&&w.out?.tone!=='urgent')return 'SOURCE VERIFICATION INCOMPLETE — detailed recommendation withheld. Select clinician draft mode and review before exporting.';return cwOldPlanText(m,w)+w.steps.filter(s=>S.autoOverrides?.[m.id+':'+s.id]).map(s=>'\nClinical override: '+s.n.q+' — '+S.autoOverrides[m.id+':'+s.id].reason).join('')+(cwDraftRequired(m,w)?(S.draftMode?'\nDRAFT MODE SELECTED — source-unverified content requires independent clinical verification.':'\nDraft content: source not independently verified.'):'')};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-cw-enable-draft]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();S.draftMode=true;if(S.mod)refresh();else view(S.view)},true);
 
+/* ===== v3.27.0 · Unknown → provisional safer assumption; SOAP encounter note (Steven, Nov 18, 2026) =====
+   walk() is unchanged: Unknown still halts and nothing is finalized. Where a question has a curated safer answer (CZ: 1 = assume Yes,
+   0 = assume No), the pending panel also shows where the path leads on that answer, labelled Provisional, and every assumption goes on a
+   Verify-before-finalizing list. Measurement, exam and treatment-choice questions have no safer default and stay paused.
+   CZ entries are the author's clinical-safety judgement, not a source recommendation. */
+const CZ={preop:{a:1,b:1,ieProcedure:1,c:1,d:1,d2:1,e:1,f:1,g:1},sed:{a:1,b:1,c:1,d:0,e:1,e1:1,eEsc:1,e2:1},dm:{b:1,c:1},htn:{a:1,b:1},
+ renal:{a:1},liver:{a:1},preg:{b:1},onc:{therapy:1,b:1,c:1},steroid:{a:1,b:1,c:0,d:1},pain:{a:1,b:0,c:1},
+ calltri:{a:1,b:1,b2:1,c:1,d:1,e:1,f:1,g:1,h:1},ao:{a:1},bleed:{a:1,b:1,c:1},nerve:{implantEarly:1,a:1,b:1,c:1},displaced:{a:0},
+ trauma:{a:1,b:1,c:1,d:1},mandfx:{a:1,b:1},lac:{a:1,b:1,c:1,d:1,e:1},dentotrauma:{a:1},extraction:{a:1,c:1},
+ implant:{a:0,b:1,c:0,d:0},graft:{a:0,b:0},sinus:{a:1},arch:{a:0,b:1,bx:1,c:0},infection:{a:1,b:1,c:0,d:1},dns:{a:1,b:0,c:1,d:1,e:0},
+ periimpl:{a:1,b:1,d:0,e:0},biopsy:{a:1,c:1},lacx:{b:1,c:1,f:1},jawom:{a:1,c:1,b:1,d:1},ods:{a:1,a2:1,c:1},osaref:{b:1,c:1},
+ salivary:{a:1,b:1,d:1},lesion:{a:1,b:0,d_a:1,d_b:1},dysplasia:{a:1,b:1},mronj:{eligibleDrug:1,b:1,c:1,d:1},jaw:{a:1,b:0,c:0},tmd:{a:1,c:1,d:1,e:1}};
+function czVal(mid,id){const z=CZ[mid]?.[id];return z===undefined?undefined:!!z}
+/* Walk on cloned answers: each Unknown with a curated safer answer is replaced by it; S.ans is restored. */
+function walkProv(m){const has0=Object.prototype.hasOwnProperty.call(S.ans,m.id),orig=S.ans[m.id],a={...(orig||{})},assumed=[];let w;
+ try{for(let i=0;i<40;i++){S.ans[m.id]=a;w=walk(m);if(!w.unk)break;const z=czVal(m.id,w.unk.id);if(z===undefined)break;a[w.unk.id]=z;assumed.push({id:w.unk.id,q:w.unk.n.q,v:z})}}
+ finally{if(has0)S.ans[m.id]=orig;else delete S.ans[m.id]}
+ return{...w,assumed}}
+function czGated(m,w){return(m.id==='sed'&&!adultSedationEligible())||(cwDraftRequired(m,w)&&!cwDraftOpen()&&w.out?.tone!=='urgent')}
+function czLead(m,id){let n=m.nodes[id],g=0;while(n&&n.note&&g++<40)n=m.nodes[n.next];if(!n)return'';if(n.out){const o=reconciledTreeOutcome(m,n),w={out:o,steps:[]};return czGated(m,w)?'source-unverified recommendation (draft mode to view)':o.out}return'next question: '+n.q}
+function czHTML(m,w){const n=w.unk.n,z=czVal(m.id,w.unk.id),yn=v=>v?'Yes':'No';
+ let h=`<div class="fsec cz" id="cz-decides"><div class="lab">What this answer decides</div><ul><li><b>If Yes:</b> ${escV(czLead(m,n.yes))}</li><li><b>If No:</b> ${escV(czLead(m,n.no))}</li></ul></div>`;
+ if(z===undefined)return h+'<p class="small" id="cz-none">No safer default for this question (a measurement, exam finding or treatment choice). Verify it to continue.</p>';
+ const p=walkProv(m),as=p.assumed.map(x=>`<li>${esc(x.q)} <b>assumed ${yn(x.v)}</b></li>`).join('');
+ h+=`<div class="fsec warn cz" id="cz-prov"><div class="lab">Provisional · safer assumption · not a plan</div><p class="small" style="margin:2px 0 6px">Continues as if the unknown answers were the more cautious ones. Verify them before acting.</p><ul>${as}</ul>`;
+ if(p.invalid||p.conflict)h+='<p><b>Entered data disagree with an assumption.</b> Verify the answer.</p>';
+ else if(p.cur)h+=`<div class="lab" style="margin-top:8px">Next question on this path</div><div class="step"><div class="qt">${esc(p.cur.n.q)}</div><div class="seg"><button data-a="${p.cur.id}" data-v="1">Yes</button><button data-a="${p.cur.id}" data-v="0">No</button><button class="unk" data-a="${p.cur.id}" data-v="u" aria-label="Unknown">?</button></div></div>`;
+ else if(p.unk)h+=`<p>Paused again at “${esc(p.unk.n.q)}”: no safer default. Verify it.</p>`;
+ else if(p.out)h+=czGated(m,p)?'<p>Provisional outcome withheld: source verification incomplete (draft mode to view).</p>':`<div class="pt" id="cz-out">${escV(p.out.out)}</div>${p.out.ex?`<p class="small">${escV(p.out.ex)}</p>`:''}`;
+ return h+'</div>'}
+const czOldFlow=flowHTML;flowHTML=function(m){let h=czOldFlow(m);const w=walk(m);
+ if(w.unk&&!(m.id==='sed'&&!adultSedationEligible()))h=h.replace('<textarea id="copybox"',czHTML(m,w)+'<textarea id="copybox"');
+ if((w.unk||w.out)&&h.includes('id="copybox"'))h=h.replace('<textarea id="copybox"','<button class="go" data-soap>Copy SOAP note · whole encounter</button><textarea id="copybox"');
+ return h};
+const czOldPlanText=planText;planText=function(m,w){const t=czOldPlanText(m,w);if(!w.unk||(m.id==='sed'&&!adultSedationEligible()))return t;
+ const p=walkProv(m);if(!p.assumed.length)return t+'\nNo safer default for this question; verify it to continue.';
+ const L=['PROVISIONAL (not a plan) on safer assumptions: '+p.assumed.map(x=>`${x.q} -> assumed ${x.v?'Yes':'No'}`).join('; ')];
+ if(p.out)L.push('Provisional outcome: '+(czGated(m,p)?'withheld (source verification incomplete)':p.out.out));else if(p.cur)L.push('Provisional path: next question - '+p.cur.n.q);else if(p.unk)L.push('Provisional path paused at: '+p.unk.n.q);
+ L.push('Verify before finalizing: '+p.assumed.map(x=>x.q).join('; '));return t+'\n'+L.join('\n')};
+/* SOAP note for the whole encounter: the Assessment note's blocks re-filed as S/O/A/P, plus every decision module used. Plain ASCII, de-identified. */
+const SOAP_HX=new Set(['Start here','Anesthesia & medical']);
+function soapMods(){return MODS.filter(m=>Object.values(S.ans[m.id]||{}).some(v=>v!==undefined)||Object.values(S.inp[m.id]||{}).some(v=>v!==undefined&&v!==''))}
+function soapText(){const base=asmtText().split('\n\n'),blk=h=>(base.find(b=>b.startsWith(h+':'))||'').split('\n').slice(1);
+ const Sx=[...blk('HISTORY')],O=[],A=[...blk('FINDINGS & RISK')],P=[...blk('ANESTHESIA & LIMITS'),...blk('PLAN & ALERTS').filter(x=>!/^- Decision support only/.test(x))],V=[];
+ const t=S.today||{};O.push(`- Weight: ${S.wt?wtLine():'not entered'}; ASA: ${t.asa?'ASA '+['I','II','III','IV'][t.asa-1]:'not recorded'}`);
+ const ans=s=>s.val==='u'?'UNKNOWN':s.val?'yes':'no';
+ soapMods().forEach(m=>{const w=walk(m),st=w.steps.filter(s=>!s.note&&s.val!==undefined);
+  if(m.id!=='preop'&&st.length)(SOAP_HX.has(m.g)||m.id==='calltri'?Sx:O).push(`- ${m.title}: `+st.map(s=>`${s.n.q.replace(/\?$/,'')} - ${ans(s)}${s.auto?' (from entered data)':''}`).join('; '));
+  const pt=planText(m,w);
+  if(/^(SOURCE VERIFICATION INCOMPLETE|Office sedation pathway withheld)/.test(pt)){A.push(`- ${m.title}: ${pt}`);return}
+  if(w.out){const ns=w.steps.filter(s=>s.note),srcs=[w.out.src,w.out.src2,...ns.map(s=>s.n.src)],au=basisOf(srcs,[w.out.out,w.out.ex].join(' '))==='au'||srcs.some(k=>SRC_AU.includes(k));
+   A.push(`- ${m.title}: ${w.out.out}${au?" (includes author's practice content)":''}`);if(w.out.ex)P.push(`- ${m.title}: ${w.out.ex}`);ns.forEach(s=>P.push(`- ${s.n.t}: ${s.n.x}`));if(m.id==='preop')todayText(w).slice(1).forEach(x=>P.push(x))}
+  else if(w.unk){const p=walkProv(m);A.push(`- ${m.title}: PENDING - "${w.unk.n.q}" unknown`);V.push(w.unk.n.q);
+   if(p.assumed.length){p.assumed.slice(1).forEach(x=>V.push(x.q));A.push(`  Provisional (safer assumption): ${p.out?(czGated(m,p)?'withheld - source verification incomplete':p.out.out):p.cur?'next question - '+p.cur.n.q:p.unk?'paused at - '+p.unk.n.q:'incomplete'}`)}}
+  else if(w.conflict){A.push(`- ${m.title}: BLOCKED - entered data and manual answer disagree on "${w.conflict.n.q}"`);V.push(`${m.title}: resolve data/answer conflict on "${w.conflict.n.q}"`)}
+  else if(w.invalid){A.push(`- ${m.title}: BLOCKED - invalid measurement(s): ${w.invalid.join(', ')}`);V.push(`${m.title}: correct invalid measurement(s) ${w.invalid.join(', ')}`)}
+  else if(w.cur)A.push(`- ${m.title}: incomplete (next: ${w.cur.n.q})`)});
+ if(V.length)P.push('- VERIFY BEFORE FINALIZING: '+[...new Set(V)].join('; '));
+ P.push('- Decision support only; clinician judgment applies. Verify doses against the label.');
+ const B=(h,a)=>[h,...(a.length?a:['- none recorded'])].join('\n');
+ return asciiT([`OMS Compass v${VER} - SOAP note (de-identified; no names, dates or identifiers)`,B('S - SUBJECTIVE (history, screen, reported symptoms)',Sx),B('O - OBJECTIVE (examination and entered data)',O),B('A - ASSESSMENT',A),B('P - PLAN',P)].join('\n\n'))}
+const czOldDT=decisionToolsHTML;decisionToolsHTML=function(m,r){return czOldDT(m,r)+'<button class="go" data-soap>Copy SOAP note · whole encounter</button>'};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-soap]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();const t=soapText();
+ const fb=()=>{let x=document.getElementById('copybox');if(!x){b.insertAdjacentHTML('afterend','<textarea id="copybox" class="copybox" aria-label="SOAP note"></textarea>');x=document.getElementById('copybox')}x.hidden=false;x.value=t;x.focus();x.select()};
+ try{navigator.clipboard.writeText(t).then(()=>{b.textContent='Copied SOAP note'},fb)}catch(x){fb()}},true);
 /* ===== v3.25.0: healthy-adult shortcut and Ask-Claude handoff (Steven, Nov 12, 2026) =====
    Shortcut: Author mode only, Pre-op clearance, first question, nothing answered and no photo triage loaded.
    It answers No only where the walk is waiting for a manual answer; entered data that auto-answers a step, or a

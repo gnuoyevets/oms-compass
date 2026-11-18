@@ -2,6 +2,13 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.27.0 — Nov 18, 2026 (approved by Steven Nov 18, 2026) — provisional safer assumption, SOAP note
+
+- **Unknown → provisional safer assumption.** `walk()` is unchanged: Unknown still halts and no plan is finalized. The pending panel now adds “What this answer decides” (where Yes and where No lead) and, for 124 of 180 questions with a curated safer answer (`CZ`), continues the path on that answer as **Provisional · not a plan**, with the next question or the provisional outcome and the list of assumptions. The 56 measurement, exam and treatment-choice questions have no default and stay paused. Draft-gated and sedation-age-gated content stays withheld in the provisional view. The copied note adds the provisional lines and a “Verify before finalizing” list.
+- The safer answers are the author's clinical-safety judgement (e.g. NSAID contraindicated? → assume Yes; fasting met? → assume No; call-triage red flags → assume Yes), not a source recommendation. A tone-based automatic rule was rejected because it chose unsafe branches (e.g. NSAID contraindicated → No).
+- **Copy SOAP note · whole encounter.** One plain-ASCII, de-identified note: S (context, pre-op screen, medical modules, phone triage), O (weight, ASA, exam/procedure module answers), A (findings, overall disposition, each module's outcome or pending/provisional status), P (anesthetic limits, plan and alerts, module plans, Verify before finalizing). Built from the existing Assessment note plus every decision module used. Nothing is stored or sent.
+- Fixed before merge (found by automated review, verified): the Yes/No branch preview now applies the age/weight/medication reconciliation, so a child no longer sees the adult acetaminophen dose; the SOAP note now reports modules blocked by a data/answer conflict or invalid measurement.
+- Tests: 12 new graph checks for the assumption map, non-mutation of answers, gating, reconciled previews and the SOAP note.
 ## v3.26.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — Recent row, Staff view, SOS run mode, Ref card dates
 
 Steven's choices, Nov 12, 2026: staff see call triage, handouts and SOS only; the SOS log stays on the device until cleared; Call 911 dials and shows a script; home gets a Recent row and nothing else moves.
