@@ -2,6 +2,13 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.24.0 — Nov 18, 2026 (pending review)
+
+- **Unknown → provisional safer assumption.** `walk()` is unchanged: Unknown still halts and no plan is finalized. The pending panel now adds “What this answer decides” (where Yes and where No lead) and, for 124 of 180 questions with a curated safer answer (`CZ`), continues the path on that answer as **Provisional · not a plan**, with the next question or the provisional outcome and the list of assumptions. The 56 measurement, exam and treatment-choice questions have no default and stay paused. Draft-gated and sedation-age-gated content stays withheld in the provisional view. The copied note adds the provisional lines and a “Verify before finalizing” list.
+- The safer answers are the author's clinical-safety judgement (e.g. NSAID contraindicated? → assume Yes; fasting met? → assume No; call-triage red flags → assume Yes), not a source recommendation. A tone-based automatic rule was rejected because it chose unsafe branches (e.g. NSAID contraindicated → No).
+- **Copy SOAP note · whole encounter.** One plain-ASCII, de-identified note: S (context, pre-op screen, medical modules, phone triage), O (weight, ASA, exam/procedure module answers), A (findings, overall disposition, each module's outcome or pending/provisional status), P (anesthetic limits, plan and alerts, module plans, Verify before finalizing). Built from the existing Assessment note plus every decision module used. Nothing is stored or sent.
+- Tests: new graph checks for the assumption map, non-mutation of answers, gating and the SOAP note.
+
 ## v3.23.1 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
 
 - Consultation workspace removed at Steven's request: the Consult tab, its Home card, “Return to consultation” and “Review all symptom groups” buttons, `consultation.js`, `consultation.css` and the consultation browser suite. The original post-op call triage is unchanged.

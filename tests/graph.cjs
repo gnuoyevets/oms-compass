@@ -34,6 +34,18 @@ check('source gates render every finding without bypassing risk state',`FIND.eve
 check('unverified treatment gated without removing original',`newPatient();S.ans.oac={a:false,b:false,c:false};const m=M('oac');const w=walk(m);!w.out||flowHTML(m).includes('Enable draft material')`);
 check('no clinical persistence introduced',`[...storage.keys()].every(k=>['omsCompassAck','oms_compass_practice_mode'].includes(k))`);
 
+// v3.24.0 provisional safer assumption and SOAP note.
+check('every CZ key is a real question node',`Object.entries(CZ).every(([mid,o])=>M(mid)&&Object.keys(o).every(id=>M(mid).nodes[id]&&M(mid).nodes[id].q))`);
+check('Unknown still halts walk; provisional walk does not mutate answers',`newPatient();S.pf.age='40';S.ans.pain={a:'u'};const before=JSON.stringify(S.ans);const p=walkProv(M('pain'));!walk(M('pain')).out&&!!walk(M('pain')).unk&&JSON.stringify(S.ans)===before&&p.assumed[0].v===true&&/Acetaminophen/.test(p.out.out)`);
+check('provisional walk restores an absent module key',`newPatient();walkProv(M('htn'));!('htn' in S.ans)`);
+check('NSAID unknown assumes contraindicated; fasting unknown assumes not met',`czVal('pain','a')===true&&czVal('sed','d')===false&&czVal('pain','b')===false`);
+check('measurement questions have no safer default and stay paused',`newPatient();S.ans.oac={a:false,b:'u'};const h=flowHTML(M('oac'));czVal('oac','b')===undefined&&walkProv(M('oac')).assumed.length===0&&(h.includes('cz-none')||h.includes('Enable draft material'))`);
+check('pending panel shows both branches and the provisional path',`newPatient();S.pf.age='40';S.ans.htn={a:false,b:'u'};const h=flowHTML(M('htn'));h.includes('cz-decides')&&h.includes('cz-prov')&&h.includes('Defer elective')&&h.includes('Plan pending')`);
+check('copied pending note keeps the pending line and adds verify list',`const t=planText(M('htn'),walk(M('htn')));t.includes('Plan pending')&&t.includes('PROVISIONAL (not a plan)')&&t.includes('Verify before finalizing')`);
+check('provisional outcome respects the draft gate',`newPatient();S.pf.age='40';const m=M('lac');S.ans.lac={a:false,b:false,c:false,d:false,e:'u'};const p=walkProv(m);!!p.out&&czGated(m,p)&&!flowHTML(m).includes(p.out.out)`);
+check('SOAP note has four sections, module outcomes and verify list',`newPatient();S.pf.age='40';S.ans.htn={a:false,b:'u'};S.ans.extraction={a:false,b:false};const t=soapText();['S - SUBJECTIVE','O - OBJECTIVE','A - ASSESSMENT','P - PLAN'].every(x=>t.includes(x))&&t.includes('Hypertension: PENDING')&&t.includes('VERIFY BEFORE FINALIZING')&&t.includes('Third molars & extractions:')&&asciiT(t)===t`);
+check('SOAP note respects the draft gate',`newPatient();S.pf.age='40';const m=M('lac');S.ans.lac={a:false,b:false,c:false,d:false,e:false};const w=walk(m);const t=soapText();!!w.out&&!t.includes(asciiT(w.out.out))&&t.includes('SOURCE VERIFICATION INCOMPLETE')`);
+
 // All original feature IDs/languages/helpers must remain reachable in the source.
 const baseline=JSON.parse(fs.readFileSync(path.join(__dirname,'feature-baseline.json'),'utf8'));sandbox.baseline=baseline;
 check('every baseline module and node retained',`baseline.modules.every(b=>{const m=M(b.id);return m&&b.nodeIds.every(id=>m.nodes[id])})`);
