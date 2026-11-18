@@ -2,13 +2,50 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.24.0 — Nov 18, 2026 (pending review)
+## v3.27.0 — Nov 18, 2026 (pending review)
 
 - **Unknown → provisional safer assumption.** `walk()` is unchanged: Unknown still halts and no plan is finalized. The pending panel now adds “What this answer decides” (where Yes and where No lead) and, for 124 of 180 questions with a curated safer answer (`CZ`), continues the path on that answer as **Provisional · not a plan**, with the next question or the provisional outcome and the list of assumptions. The 56 measurement, exam and treatment-choice questions have no default and stay paused. Draft-gated and sedation-age-gated content stays withheld in the provisional view. The copied note adds the provisional lines and a “Verify before finalizing” list.
 - The safer answers are the author's clinical-safety judgement (e.g. NSAID contraindicated? → assume Yes; fasting met? → assume No; call-triage red flags → assume Yes), not a source recommendation. A tone-based automatic rule was rejected because it chose unsafe branches (e.g. NSAID contraindicated → No).
 - **Copy SOAP note · whole encounter.** One plain-ASCII, de-identified note: S (context, pre-op screen, medical modules, phone triage), O (weight, ASA, exam/procedure module answers), A (findings, overall disposition, each module's outcome or pending/provisional status), P (anesthetic limits, plan and alerts, module plans, Verify before finalizing). Built from the existing Assessment note plus every decision module used. Nothing is stored or sent.
 - Fixed before merge (found by automated review, verified): the Yes/No branch preview now applies the age/weight/medication reconciliation, so a child no longer sees the adult acetaminophen dose; the SOAP note now reports modules blocked by a data/answer conflict or invalid measurement.
 - Tests: 12 new graph checks for the assumption map, non-mutation of answers, gating, reconciled previews and the SOAP note.
+## v3.26.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — Recent row, Staff view, SOS run mode, Ref card dates
+
+Steven's choices, Nov 12, 2026: staff see call triage, handouts and SOS only; the SOS log stays on the device until cleared; Call 911 dials and shows a script; home gets a Recent row and nothing else moves.
+
+- Home: one-line Recent row above Pinned with the last four modules opened that are not already pinned. Module order is unchanged. Stored on the device as module ids only.
+- Staff view: a switch in Settings. Shows Post-op phone call triage, patient handouts/QR and SOS. Search, decision modules, findings, Calc, Ref, What's new, Assessment, Intraop and Ask Claude are blocked or hidden, including when the app launches on a saved link to one of them. "Clinician view" switches back; there is no passcode. Practice mode (Author or Colleague) is unchanged underneath, so handouts keep the office details.
+- SOS run mode: Start emergency timer, or Start drill (no dialing). A sticky bar shows elapsed time and time since the last entry. One-tap entries (O₂ on, Monitors on, IV access, Epinephrine IM, AED attached, CPR started, Reversal given, Glucose given, EMS arrived), a typed entry for drug, dose and route, and automatic "Opened card" entries. Copy record gives a timestamped text record. End and Clear each need a second tap. The log is saved on the device until cleared; New patient and reload do not clear it. It holds no patient fields; typed entries are the user's responsibility ("No names").
+- Call 911: a tel:911 link that also starts the timer and logs the call, plus a script: nature of the emergency, office address, patient status, call-back number, stay on the line and send someone to the door. In a drill the button shows the script and does not dial. Both office addresses are built in (Johnston: 1414 Atwood Ave, Suite 340, Johnston, RI 02919, given by Steven Nov 12, 2026); either can be overridden on the device. Colleague mode uses the user's own saved phone and typed address.
+- Ref: each card shows "Last checked against sources" or "Not yet checked against sources", with a count at the top (0 of 25 today). No card has been given a date; a date is added only after that card is checked.
+- Saved-data wording updated on the first-use screen and home footer: nothing clinical is saved except the SOS event log.
+- Launch: the first screen is drawn before this section loads, so home is redrawn once at launch when there is a Recent row or Staff view to show.
+- Tests: browser 756 (36 new in section 34, served over local http so storage persists across reloads; three storage checks now allow the recent-module list); graph 29; reconciliation 78; clinical workflow 39. Software behavior only, not clinical validation. Not tested on a real iPhone or the installed app: tel: dialing, clipboard and storage there are unverified.
+
+## v3.25.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — Author-mode gate, healthy-adult shortcut, Ask-Claude handoff
+
+From the Nov 12 audit. Steven's choices: optimize for himself and office staff; remove the draft gate in Author mode; build the Ask-Claude handoff first; include the "No to all six" shortcut.
+
+- Author mode: source-unverified content shows without the "Enable draft material" tap (module plans, finding plans, the 5 Unverified-draft Ref cards). The Unverified draft label stays, and the copied note carries one line: "Draft content: source not independently verified." Colleague mode is unchanged: same gate, same withheld note.
+- Pre-op clearance, Author mode, first question only: "Healthy adult 18+ · No to all 6" answers the six screen questions No in one tap and lists them on the button. It answers only steps waiting for a manual answer; a data input that auto-answers a step, or a loaded photo triage, is never overridden (the button is hidden once triage is loaded or anything is answered). When all six end No it records ASA I and treats the patient as an adult for the analgesia age hold. An entered age under 18 or weight under 50 kg still withholds the adult plan. Changing any answer to Yes clears the ASA I and the adult assertion. The note records "Clinician confirmed in one tap".
+- Not changed: the analgesic contraindication and interaction screen. After the shortcut the analgesia line still asks for that screen; no regimen is chosen for the clinician.
+- Ask Claude: a chip on module screens and a button on plan, finding and Ref card screens. It opens a sheet for the question and copies a prompt holding the module, answers, open question and criteria, age and weight if entered, the Compass text shown, and answer rules (answer first, cite primary sources, do not recalculate doses). Links are https://claude.ai/new and https://chatgpt.com/ with no query string; clinical text travels by clipboard only. Not on SOS.
+- Copied note: the "LA maximum: weight not entered" line is omitted when no weight is entered.
+- Fix (v3.24.0 regression): the module top bar had three grid columns for four buttons after Home was added, so SOS dropped onto the chip row and covered the first chip. Now four columns.
+- Label: the two Pre-op results "No exclusion found by this screen" (local anesthesia; office sedation) carried "Unverified draft" only because no source key is attached. They are now labelled Screen result with no draft chip, gate or note line, in both modes (Steven, Nov 12, 2026). Any [verify] text or cited source restores the normal label.
+- Kept at Steven's choice: the analgesic contraindication screen guard after the shortcut.
+- Tests: browser 720 (26 new or changed: section 33 plus one Ref-gate check split into Author and Colleague; the service-worker update check failed once in four runs and passed on rerun); graph 29; reconciliation 78; clinical workflow 39. Software behavior only, not clinical validation. Not tested on a real iPhone or installed PWA.
+
+## v3.24.0 — Nov 12, 2026 (approved by Steven Nov 12, 2026) — obese sedation scaling
+
+- Sedation card: when weight >120% of ideal or BMI ≥30 (height and sex from the Body weight card), Precedex load, re-bolus and fast load use adjusted body weight; ASA I–II ketamine uses ideal body weight. Midazolam, propofol touches, Decadron and glycopyrrolate stay fixed. Never above actual weight. Steven's choices, Nov 12, 2026.
+- Actual-weight doses kept under "More", plus a 1:1 ketofol line (propofol 10 mg/mL 10 mL + ketamine 50 mg/mL 2 mL = 12 mL, ≈8.3 mg/mL each).
+- Without height or sex, the card shows actual-weight doses and a one-line prompt. Typing height updates the table live.
+- New source: dexmedetomidine on adjusted weight in obese ICU patients (Atyia 2023; Robertson 2025) — infusion data, not office bolus; ketamine on ideal weight is convention. Tagged verify.
+- Height in cm or feet + inches (Body weight card); the fields mirror each other and feed BMI, ideal/lean weight and the sedation table. Weight already takes kg or lb.
+- Home button (⌂) on every page: top bar of SOS, Calc, Ref, Patient and What's new; module, finding and assessment headers (finding/assessment ‹ now shows ⌂ — same action). The standalone patient page already returns to its topic list on every page.
+- Before-sedation handout: no smoking or vaping for at least 2 days before (was 12 hours); cannabis 3 days unchanged. EN/ES/Kriolu/中文, app and standalone page. Translations pending native-speaker review, as before.
+- Tests: browser 694 (23 new, sections 31–32); graph 29; reconciliation 78; clinical workflow 39.
 
 ## v3.23.1 — Nov 6, 2026 (approved by Steven Nov 6, 2026)
 

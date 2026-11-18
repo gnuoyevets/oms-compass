@@ -193,7 +193,9 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  await E(page,()=>{newPatient();S.draftMode=true;open('preop')});for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await page.click(`.cur [data-a="${id}"][data-v="${v}"]`);
  const plan=await page.locator('.plan').innerText();
  ok(/Screen result · not a clearance/i.test(plan)&&/Not covered by this screen/.test(plan),'Short screen labelled “not a clearance” with what it did not cover');
- ok(await page.locator('.plan .bas').count()===1&&await page.locator('.plan .rev').count()===1,'Module plan shows basis chip and review line');
+ ok(await page.locator('.plan .bas').count()===0&&await page.locator('.plan .rev').count()===1,'Uncited screen result: no basis chip (v3.25.0); review line kept');
+ await E(page,()=>{newPatient();S.draftMode=true;S.pf.age='40';S.ans.preop={a:false,b:true};open('preop')});ok(await page.locator('.plan .bas').count()===1||await page.locator('.cur').count()===1,'Cited module plan still shows its basis chip');
+ await E(page,()=>{newPatient();S.draftMode=true;open('preop')});for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await page.click(`.cur [data-a="${id}"][data-v="${v}"]`);
  await E(page,()=>{open('sed');S.pf.age='40';S.ans.sed={a:false,b:true,c:false,d:true,e:false};refresh()});ok(/Author’s practice|Unverified draft/i.test(await page.locator('#flow').innerText()),'Personal sedation note labelled author’s practice / unverified');
  await E(page,()=>{newPatient();S.draftMode=true;openFind('doac','Eliquis')});
  ok(await page.locator('#ftop .bas').count()===1,'Finding shows a basis chip');ok(/Provisional action/i.test(await page.locator('#ftop').innerText()),'Finding with missing context says “Provisional”');
@@ -318,7 +320,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  await page.click('#abar [data-newpt]');await page.click('#abar [data-newpt]');
  const st5=await E(page,()=>({wt:S.wt,wtIn:S.wtIn,age:S.pf.age,ls:Object.keys(localStorage).sort()}));
  ok(!st5.wt&&!st5.wtIn&&!st5.age,'New patient clears age, kg and lb');
- ok(st5.ls.every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode'].includes(k)),'Storage holds only device preferences '+st5.ls.join(','));
+ ok(st5.ls.every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','oms_compass_recents'].includes(k)),'Storage holds only device preferences '+st5.ls.join(','));
  await E(page,()=>view('calc'));const small=await E(page,()=>[...document.querySelectorAll('.pmode .tg,.wtbar input,.audisc,.toggles .tg')].filter(b=>b.offsetParent).map(b=>b.getBoundingClientRect().height).filter(h=>h<44).length);
  await E(page,()=>home());const small2=await E(page,()=>[...document.querySelectorAll('.pmode .tg')].filter(b=>b.offsetParent).map(b=>b.getBoundingClientRect().height).filter(h=>h<44).length);
  ok(small===0&&small2===0,'New controls ≥44 px tall');
@@ -529,7 +531,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  // Reset through the bottom bar double tap
  await page.click('.abar [data-newpt]');await page.click('.abar [data-newpt]');
  ok(await E(page,()=>!hasPatient()&&!S.changes.length&&S.compare===undefined&&!document.querySelector('.delta')),'New patient (double tap) clears context, comparison, change history');
- ok(await E(page,()=>{const k=Object.keys(localStorage);return k.every(x=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode'].includes(x))&&sessionStorage.length===0}),'Storage holds settings only, no patient data');
+ ok(await E(page,()=>{const k=Object.keys(localStorage);return k.every(x=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','oms_compass_recents'].includes(x))&&JSON.parse(localStorage.getItem('oms_compass_recents')||'[]').every(x=>!!M(x))&&sessionStorage.length===0}),'Storage holds settings only, no patient data');
 
  // Offline and update behavior via a real service worker over HTTP
  {const fs=require('fs'),os=require('os'),http=require('http');const root=fs.mkdtempSync(path.join(os.tmpdir(),'compass-'));const app=path.join(root,'oms-compass');fs.mkdirSync(app);
@@ -718,7 +720,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(io.resetMsg,'Checklist says which checks were reset');
   ok(io.cleared&&io.sig,'New patient clears checklist statuses and their plan signatures');
   ok(await X(()=>{newPatient();S.draftMode=true;S.atab='io';asmtView();return document.querySelectorAll('.iohid').length===0&&/not entered: all checks shown/.test(document.getElementById('iobody').innerText)}),'Unset context folds nothing and says so (never assumed)');
-  ok(await X(()=>Object.keys(localStorage).every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','omsCompassContrast'].includes(k))&&sessionStorage.length===0),'v3.10 state stays in memory (storage holds settings only)');
+  ok(await X(()=>Object.keys(localStorage).every(k=>['omsCompassAck','omsCompassOnCall','oms_compass_practice_mode','omsCompassContrast','oms_compass_recents'].includes(k))&&JSON.parse(localStorage.getItem('oms_compass_recents')||'[]').every(x=>!!M(x))&&sessionStorage.length===0),'v3.10 state stays in memory (storage holds settings only)');
   // E. Phone layouts
   for(const w of [320,360,390,430]){await p.setViewportSize({width:w,height:780});
    const ov=await X(async()=>{const res=[];const chk=n=>{if(document.documentElement.scrollWidth>innerWidth+1)res.push(n)};
@@ -1159,13 +1161,162 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   const dn=await X(()=>{newPatient();const m=M('dns'),k=Object.keys(m.nodes).find(k=>m.nodes[k].out&&m.nodes[k].tone==='urgent');return planText(m,{out:m.nodes[k],steps:[]})});
   ok(!/SOURCE VERIFICATION INCOMPLETE/.test(dn)&&dn.length>40,'Default: urgent deep-space infection outcome shown in full');
   await X(()=>{newPatient();view('ref')});
-  ok(await p.locator('#vbody details.box').count()===25&&await p.locator('#vbody details.box [data-cw-enable-draft]').count()===5,'Default Ref: 25 cards; only the 5 labelled Unverified draft are gated');
+  ok(await p.locator('#vbody details.box').count()===25&&await p.locator('#vbody details.box [data-cw-enable-draft]').count()===0,'Author Ref (v3.25.0): 25 cards, none gated');
+  await X(()=>{setPmode('colleague');newPatient();view('ref')});
+  ok(await p.locator('#vbody details.box').count()===25&&await p.locator('#vbody details.box [data-cw-enable-draft]').count()===5,'Colleague Ref: 25 cards; only the 5 labelled Unverified draft are gated');
+  await X(()=>{setPmode('author')});
   await X(()=>{newPatient();S.pf.age='13';view('calc')});
   ok(await p.locator('#adult-sedation-gate').count()===0&&await p.locator('#teen-sedation-note').count()===1,'Age 13: sedation shown with adolescent (AAP/AAPD) note');
   await X(()=>{newPatient();S.pf.age='12';view('calc')});ok(await p.locator('#adult-sedation-gate').count()===1,'Age 12: sedation gated');
   await X(()=>{newPatient();S.pf.age='15';S.wt=35;view('calc')});ok(await p.locator('#adult-sedation-gate').count()===1,'Age 15, 35 kg: sedation gated by weight');
   await X(()=>{newPatient();S.pf.age='15';S.wt=60;open('sed')});ok(await p.locator('#adult-sedation-gate').count()===0&&await p.locator('#teen-sedation-note').count()===1,'Age 15, 60 kg: Office sedation pathway open with adolescent note');
   await c30.close()}
+
+ console.log('31. v3.24.0: obese sedation scaling (adjusted weight for Precedex, ideal for ketamine)');
+ {page=await fresh(ctx);
+  const T=()=>page.locator('#sedtab').innerText();
+  await E(page,()=>{newPatient();S.draftMode=true;S.pf.age='50';S.wt=120;S.asa='12';view('calc')});
+  ok(/0\.5 mcg\/kg|60 mcg/.test(await T())&&/Add height and sex/.test(await T()),'120 kg without height/sex: actual-weight doses plus prompt');
+  await E(page,()=>{S.cx={sex:'m',ht:'170'};view('calc')});let t=await T();
+  ok(/44 mcg/.test(t)&&/16–33 mg/.test(t)&&/Obese \(182% of ideal/.test(t),'170 cm male 120 kg: Precedex 44 mcg (adjusted 87.6 kg), ketamine 16–33 mg (ideal 65.9 kg) — got '+t.slice(0,160));
+  ok(/More/.test(t)&&/60 mcg/.test(await page.locator('#sedtab details').textContent()),'Actual-weight doses kept under More');
+  ok(/21\.9 mcg/.test(t),'Fast load scaled: 0.25 mcg/kg × 87.6 = 21.9 mcg');
+  await E(page,()=>{S.asa='3';view('calc')});t=await T();
+  ok(/26–44 mcg/.test(t)&&/9–18 mcg/.test(t)&&/10–20 mg touches/.test(t),'ASA III obese: load 26–44, re-bolus 9–18 mcg, ketamine touches fixed');
+  await E(page,()=>{S.asa='12';S.wt=68;S.cx={sex:'f',ht:'165'};view('calc')});t=await T();
+  ok(/34 mcg/.test(t)&&/17–34 mg/.test(t)&&!/Obese/.test(t),'Non-obese 68 kg female 165 cm (119% of ideal, BMI 25): actual weight');
+  await E(page,()=>{S.wt=120;S.cx={sex:'m'};view('calc')});await E(page,()=>{document.getElementById('cx-ht').closest('details').open=true});await page.fill('#cx-ht','170');
+  ok(/44 mcg/.test(await T()),'Typing height updates the sedation table live');
+  ok(/8\.3 mg\/mL each/.test(await page.locator('#sedtab').textContent()),'Ketofol 1:1 line present');
+  await page.close()}
+
+ console.log('32. v3.24.0: height in cm or ft/in; Home on every page; pre-sedation smoking 2 days');
+ {page=await fresh(ctx);
+  await E(page,()=>{newPatient();S.draftMode=true;S.pf.age='50';S.wt=120;S.cx={sex:'m'};view('calc')});
+  await E(page,()=>{document.getElementById('cx-ht').closest('details').open=true});
+  await page.fill('#cx-htft','5');await page.fill('#cx-htin','7');
+  ok(await page.inputValue('#cx-ht')==='170.2','5 ft 7 in → 170.2 cm');
+  ok(/ideal 66\.1 kg/.test(await page.locator('#cxo-bw').innerText()),'Body weight card uses converted height');
+  ok(/44 mcg/.test(await page.locator('#sedtab').innerText()),'Sedation table updates from ft/in');
+  await page.fill('#cx-ht','180');ok(await page.inputValue('#cx-htft')==='5'&&await page.inputValue('#cx-htin')==='10.9','180 cm → 5 ft 10.9 in');
+  await page.fill('#in-lb','220');ok(await E(page,()=>S.wt)===99.8,'Weight in lb converts to kg (220 lb → 99.8 kg)');
+  for(const v of ['emergency','calc','ref','new','handouts']){await E(page,v=>view(v),v);
+   const n=await page.locator('[data-home]').count();ok(n>=1,'Home button on '+v);if(v==='ref'){await page.locator('.homebtn').click();ok(await page.locator('#in-q').count()===1,'Home button returns to the search page')}}
+  await E(page,()=>home());ok(await page.locator('.homebtn').count()===0,'No Home button on the home page itself');
+  await E(page,()=>open('sed'));ok(await page.locator('.fx-hd [data-home]').count()===1,'Module page has Home');
+  await E(page,()=>openFind('doac','Eliquis'));ok(await page.locator('.bar [data-home]').count()>=1,'Finding page has Home');
+  const so=await E(page,()=>JSON.stringify(HO));ok(/at least 2 days and no cannabis/.test(so)&&!/No smoking for 12 hours/.test(so),'Before-sedation handout: no smoking ≥2 days');
+  await page.close()}
+
+ console.log('33. v3.25.0: Author mode opens draft content; healthy-adult shortcut; Ask-Claude handoff');
+ {const c33=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c33.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1');localStorage.setItem('oms_compass_practice_mode','author')}catch(e){};window.__clip='';try{navigator.clipboard.writeText=async t=>{window.__clip=t}}catch(e){}});
+  const p=await c33.newPage();await p.route(/^https?:\/\//,localOnly);await p.goto(FILE);await p.waitForSelector('#in-q');const X=(f,a)=>p.evaluate(f,a);
+  await X(()=>{newPatient();open('preop')});
+  ok(await p.locator('[data-allno]').count()===1,'Author: shortcut button on the first Pre-op question');
+  await p.click('[data-allno]');
+  ok(await p.locator('.plan').count()===1&&await p.locator('[data-cw-enable-draft]').count()===0,'Shortcut: plan shown in one tap, no draft gate');
+  const n1=await X(()=>planText(M('preop'),walk(M('preop'))));
+  ok(/ASA class: ASA I|ASA class: I\b|ASA I/.test(n1)&&!/not recorded/.test(n1),'Shortcut note: ASA I recorded');
+  ok(!/weight not entered/.test(n1)&&!/generic adult regimen is withheld/.test(n1),'Shortcut note: no empty LA line; age hold on analgesia lifted');
+  ok(/Clinician confirmed in one tap: adult 18 or older/.test(n1)&&!/Draft content|DRAFT MODE SELECTED/.test(n1)&&await p.locator('.plan .b-un').count()===0,'Shortcut note: one-tap assertion; screen result carries no draft label or line');
+  ok(await X(()=>Object.values(S.ans.preop).length===6&&Object.values(S.ans.preop).every(v=>v===false)),'Shortcut: exactly the six questions answered No');
+  await X(()=>{S.ans.preop.c=true;refresh()});
+  ok(await X(()=>!S.fast&&!S.adultOK&&!(S.today&&S.today.asa)),'Changing an answer to Yes clears the shortcut ASA I and adult assertion');
+  await X(()=>{newPatient();S.pf.age='15';open('preop')});await p.click('[data-allno]');
+  ok(/generic adult regimen is withheld/.test(await X(()=>planText(M('preop'),walk(M('preop'))))),'Entered age under 18 still withholds the adult analgesic plan');
+  await X(()=>{newPatient();S.wt=45;open('preop')});await p.click('[data-allno]');
+  ok(/generic adult regimen is withheld/.test(await X(()=>planText(M('preop'),walk(M('preop'))))),'Entered weight under 50 kg still withholds the adult analgesic plan');
+  await X(()=>{newPatient();open('preop')});await p.click('.cur [data-a="a"][data-v="0"]');
+  ok(await p.locator('[data-allno]').count()===0,'Shortcut only before the first answer');
+  ok(await X(()=>{newPatient();return !S.fast&&!S.adultOK}),'New patient clears the shortcut state');
+  await X(()=>{setPmode('colleague');newPatient();open('preop')});
+  ok(await p.locator('[data-allno]').count()===0,'Colleague: no shortcut');
+  for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await p.click(`.cur [data-a="${id}"][data-v="${v}"]`);
+  ok(await p.locator('[data-cw-enable-draft]').count()===0&&await p.locator('.plan').count()===1&&await p.locator('.plan .b-un').count()===0,'Colleague: healthy screen result shown, no draft label');
+  await X(()=>{newPatient();S.pf.age='40';S.ans.oac={a:false,b:false,c:false};open('oac')});
+  ok(await X(()=>{const m=M('oac'),w=walk(m);return !w.out||(flowHTML(m).includes('Enable draft material')&&/SOURCE VERIFICATION INCOMPLETE/.test(planText(m,w)))}),'Colleague: gate and withheld note unchanged on a listed specialty module');
+  await X(()=>{setPmode('author');newPatient();S.pf.age='40';S.ans.oac={a:false,b:false,c:false};open('oac')});
+  ok(await X(()=>{const m=M('oac'),w=walk(m);return !w.out||(!flowHTML(m).includes('Enable draft material')&&flowHTML(m).includes('plan'))}),'Author: listed specialty module plan shown without the gate');
+  await X(()=>{newPatient();S.pf.age='52';S.wt=80;open('preop')});await p.click('.cur [data-a="a"][data-v="0"]');
+  ok(await p.locator('.fx-chip[data-ask]').count()===1,'Ask Claude chip on a module question');
+  ok(await X(()=>{const h=document.querySelector('.fx-hd').getBoundingClientRect(),b=document.querySelector('.fx-sos').getBoundingClientRect(),c=document.querySelector('.fx-chip').getBoundingClientRect();return b.bottom<=h.bottom+1&&b.top>=h.top-1&&c.top>=b.bottom}),'SOS stays inside the top bar and clear of the chips');
+  await p.click('.fx-chip[data-ask]');await p.fill('#askq','Does a drug-eluting stent 4 months ago change this?');
+  const prev=await p.inputValue('#askprev');
+  ok(/OMS Compass v3\.\d+\.\d+/.test(prev)&&/Pre-op clearance/.test(prev)&&/Unstable or unoptimized medical condition\? No/.test(prev)&&/Open question: High-risk cardiac/.test(prev)&&/age 52, weight 80 kg/.test(prev)&&/drug-eluting stent/.test(prev)&&/Do not recalculate doses/.test(prev),'Handoff prompt: version, module, answers, open question, age/weight, question, dose rule');
+  const hrefs=await p.locator('#asksheet [data-ask-go]').evaluateAll(a=>a.map(x=>x.getAttribute('href')));
+  ok(hrefs.length===2&&hrefs[0]==='https://claude.ai/new'&&hrefs[1]==='https://chatgpt.com/'&&hrefs.every(h=>!/[?#]/.test(h)),'Handoff links carry no query or clinical data');
+  await p.locator('#asksheet [data-ask-go]').first().evaluate(a=>{a.addEventListener('click',e=>e.preventDefault());a.click()});
+  ok(await X(()=>window.__clip)===prev,'Handoff: the previewed prompt is what gets copied');
+  await p.click('[data-ask-close]');ok(await p.locator('#asksheet').isHidden(),'Handoff sheet closes');
+  await X(()=>{newPatient();view('ref')});await p.locator('#vbody details.box summary').first().click();await p.locator('#vbody details.box [data-ask]').first().click();
+  ok(/Reference card: /.test(await p.inputValue('#askprev')),'Ask Claude on a Ref card names the card');
+  await p.click('[data-ask-close]');
+  await X(()=>{newPatient();openFind('doac','Eliquis')});await p.click('.askrow [data-ask]');
+  ok(/Compass disposition: /.test(await p.inputValue('#askprev'))&&!/eliquis/i.test(await p.evaluate(()=>location.href)),'Ask Claude on a finding; URL stays clean');
+  await p.click('[data-ask-close]');
+  await X(()=>{newPatient();view('emergency')});ok(await p.locator('[data-ask]').count()===0,'No Ask Claude on SOS');
+  await p.close();await c33.close()}
+
+ console.log('34. v3.26.0: Recent row, Staff view, SOS run mode and 911 script, Ref card dates');
+ {const c34=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});
+  await c34.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1');if(!localStorage.getItem('oms_compass_practice_mode'))localStorage.setItem('oms_compass_practice_mode','author')}catch(e){};window.__clip='';try{navigator.clipboard.writeText=async t=>{window.__clip=t}}catch(e){}});
+  /* Served over http so device storage persists across reloads, as it does on the installed app. */
+  const http34=require('http'),fs34=require('fs'),root34=path.resolve(__dirname,'..'),T34={html:'text/html',js:'text/javascript',png:'image/png',webmanifest:'application/manifest+json'};
+  const srv34=http34.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const f=path.join(root34,u);if(!f.startsWith(root34)||!fs34.existsSync(f)){r.writeHead(404);return r.end()}r.writeHead(200,{'content-type':T34[f.split('.').pop()]||'application/octet-stream','cache-control':'no-cache'});fs34.createReadStream(f).pipe(r)});
+  await new Promise(r=>srv34.listen(0,'127.0.0.1',r));const URL34=`http://127.0.0.1:${srv34.address().port}/index.html`;
+  const p=await c34.newPage();await p.route(/^https?:\/\//,localOnly);await p.goto(URL34);await p.waitForSelector('#in-q');const X=(f,a)=>p.evaluate(f,a);
+  ok(await p.locator('#recents').count()===0,'No Recent row before anything is opened');
+  await X(()=>{open('preop');home()});ok(await p.locator('#recents').count()===0,'Pinned modules do not repeat in Recent');
+  await X(()=>{for(const id of ['dm','htn','renal','liver','preg'])open(id);home()});
+  const rc=await p.locator('#recents .pin').allInnerTexts();
+  ok(rc.length===4&&/Pregnancy/.test(rc[0])&&/Liver/.test(rc[1])&&!rc.some(x=>/Diabetes/.test(x)),'Recent row: last four opened, newest first');
+  ok(await X(()=>document.getElementById('recents').getBoundingClientRect().height<=60&&document.querySelector('#groups .mod').getBoundingClientRect().top<760),'Recent row is one line; first module still on the first screen');
+  ok(await X(()=>{const a=[...document.querySelectorAll('#groups .mod b')].map(b=>b.textContent);return a[0]==='Pre-op clearance'&&a.indexOf('Diabetes')<a.indexOf('Hypertension')}),'Module list order unchanged');
+  await p.reload();await p.waitForSelector('#recents');ok(await p.locator('#recents .pin').count()===4,'Recent row survives reload');
+  ok(await X(()=>!/eliquis|INR|age/i.test(localStorage.getItem('oms_compass_recents'))&&JSON.parse(localStorage.getItem('oms_compass_recents')).every(x=>typeof x==='string'&&!!M(x))),'Recent list stores module ids only');
+  await X(()=>{S.setOpen=true;home()});await p.click('[data-staff="1"]');
+  ok(await p.locator('.staffhome .mod').count()===3&&await p.locator('#in-q').count()===0&&await p.locator('.tabs button').count()===3,'Staff view: three tools, no search, three tabs');
+  await X(()=>view('calc'));ok(await p.locator('.staffhome').count()===1,'Staff: Calc blocked');
+  await X(()=>view('ref'));ok(await p.locator('.staffhome').count()===1,'Staff: Ref blocked');
+  await X(()=>open('preop'));ok(await p.locator('.staffhome').count()===1,'Staff: decision modules blocked');
+  await X(()=>openFind('doac','Eliquis'));ok(await p.locator('.staffhome').count()===1,'Staff: findings blocked');
+  await p.click('.staffhome [data-open="calltri"]');ok(await p.locator('.cur, .plan').count()>=1&&await p.locator('[data-ask]').count()===0,'Staff: call triage opens; no Ask Claude');
+  ok(await X(()=>{const v=s=>{const e=document.querySelector(s);return !e||getComputedStyle(e).display==='none'};return v('.fx-tools [data-goasmt]')&&v('.fx-tools [data-atab]')}),'Staff: Assessment and Intraop buttons hidden');
+  await X(()=>home());await p.click('.staffhome [data-view="handouts"]');ok(await p.locator('#vbody').count()===1&&/POST-OP|Post-op/i.test(await p.locator('#vbody').innerText()),'Staff: handouts open');
+  await p.reload();await p.waitForSelector('#vbody');ok(await p.locator('.tabs button').count()===3&&await X(()=>document.body.classList.contains('staff')),'Staff view survives reload on an allowed page');
+  await p.goto(URL34+'#calc');await p.reload();await p.waitForSelector('.staffhome');ok(await p.locator('.tabs button').count()===3,'Staff: launching on a blocked page lands on staff home');
+  await p.click('[data-staff="0"]');ok(await p.locator('#in-q').count()===1&&await X(()=>!document.body.classList.contains('staff')),'Clinician view restores the full home');
+  await X(()=>view('emergency'));
+  ok(await p.locator('#sosrun [data-sr="start"]').count()===1&&await p.locator('#sosrun [data-sr="drill"]').count()===1&&await p.locator('#sosrun a[href="tel:911"]').count()===1,'SOS idle: start, drill and Call 911');
+  ok(await p.locator('details.em').count()===16,'SOS: all 16 cards still listed');
+  await p.click('[data-sr="drill"]');
+  ok(await p.locator('.sr-top.drill').count()===1&&await p.locator('#sosrun a[href^="tel:"]').count()===0,'Drill: running, no dialing link anywhere');
+  await p.click('.sr-top [data-sr="911"]');await p.waitForSelector('#sr-script');
+  ok(/DRILL/.test(await p.locator('#sr-script').innerText())&&/1414 Atwood Ave, Suite 340, Johnston, RI 02919/.test(await p.locator('#sr-script').innerText())&&/\(401\) 273-7802/.test(await p.locator('#sr-script').innerText()),'Drill 911: script shown with the Johnston address and call-back number');
+  await p.click('[data-sr-site="bayside"]');ok(/1265 Fall River Ave, Seekonk, MA 02771/.test(await p.locator('#sr-script').innerText())&&/\(508\) 422-5007/.test(await p.locator('#sr-script').innerText()),'Bayside: address and number in the script');
+  await p.click('[data-sr-site="young"]');await p.fill('#sr-addr','1 Test Street, Johnston, RI');await p.locator('#sr-addr').dispatchEvent('change');await p.click('[data-sr-log="O₂ on"]');
+  ok(/1 Test Street, Johnston, RI/.test(await p.locator('#sr-script').innerText()),'Typed address is saved and shown');
+  await p.fill('#sr-note','epinephrine 0.3 mg IM');await p.click('[data-sr="add"]');
+  await p.locator('#em-anaph summary').click();await p.waitForFunction(()=>JSON.parse(localStorage.getItem('oms_compass_sos_run')).ev.some(e=>e[1]==='Opened card: Anaphylaxis'));
+  const log1=await X(()=>JSON.parse(localStorage.getItem('oms_compass_sos_run')).ev.map(e=>e[1]));
+  ok(log1[0]==='DRILL started'&&log1.includes('DRILL: 911 call simulated')&&log1.includes('O₂ on')&&log1.includes('epinephrine 0.3 mg IM')&&log1.some(x=>/^Opened card: /.test(x)),'Log: start, 911, preset, typed entry and opened card');
+  const el1=await p.locator('#sr-el').innerText();await X(()=>new Promise(r=>setTimeout(r,2100)));const el2=await p.locator('#sr-el').innerText();ok(/^\d\d:\d\d$/.test(el2)&&el2>el1,'Elapsed timer runs ('+el1+' → '+el2+')');
+  ok(await p.locator('#em-anaph').evaluate(d=>d.open),'Timer ticks do not close the open card');
+  await X(()=>newPatient());await p.reload();await p.waitForSelector('#in-q');await X(()=>view('emergency'));
+  ok(await p.locator('.sr-top').count()===1&&await X(()=>JSON.parse(localStorage.getItem('oms_compass_sos_run')).ev.length)===log1.length,'Log survives New patient and reload');
+  ok(await X(()=>document.getElementById('sosrun').getBoundingClientRect().height<260),'Run panel stays compact so the cards are near the top');
+  await p.click('.sr-log summary');await p.click('[data-sr="copy"]');const rec=await X(()=>window.__clip);
+  ok(/Emergency event record \(DRILL\) · no patient identifiers/.test(rec)&&/epinephrine 0\.3 mg IM/.test(rec)&&/Still running when copied/.test(rec),'Copied record: header, entries and status');
+  await p.click('[data-sr="end"]');ok(await X(()=>!JSON.parse(localStorage.getItem('oms_compass_sos_run')).end),'End needs a second tap');
+  await p.click('[data-sr="end"]');ok(await X(()=>!!JSON.parse(localStorage.getItem('oms_compass_sos_run')).end)&&await p.locator('[data-sr="clear"]').count()===1,'Second tap ends the run; log kept');
+  await p.click('[data-sr="clear"]');ok(await X(()=>!!localStorage.getItem('oms_compass_sos_run')),'Clear needs a second tap');
+  await p.click('[data-sr="clear"]');ok(await X(()=>!localStorage.getItem('oms_compass_sos_run'))&&await p.locator('[data-sr="start"]').count()===1,'Second tap erases the log');
+  await p.locator('#sosrun a[data-sr="911"]').evaluate(a=>{a.addEventListener('click',e=>e.preventDefault());a.click()});await p.waitForSelector('#sr-script');
+  ok(await X(()=>{const r=JSON.parse(localStorage.getItem('oms_compass_sos_run'));return !r.drill&&r.ev[1][1]==='911 dialed from this phone'})&&await p.locator('.sr-top a[href="tel:911"]').count()===1,'Live Call 911 starts the timer, logs the call and keeps a dial link');
+  await X(()=>{localStorage.removeItem('oms_compass_sos_run');view('ref')});
+  ok(/0 of 25 cards have a last-checked date/.test(await p.locator('#refchk-sum').innerText())&&await p.locator('.refchk').count()===25,'Ref: every card shows its check status; none dated yet');
+  await p.close();await c34.close();await new Promise(r=>srv34.close(r))}
 
  await browser.close();
  
