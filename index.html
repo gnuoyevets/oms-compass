@@ -3915,7 +3915,7 @@ function walkProv(m){const has0=Object.prototype.hasOwnProperty.call(S.ans,m.id)
  finally{if(has0)S.ans[m.id]=orig;else delete S.ans[m.id]}
  return{...w,assumed}}
 function czGated(m,w){return(m.id==='sed'&&!adultSedationEligible())||(cwDraftRequired(m,w)&&!S.draftMode&&w.out?.tone!=='urgent')}
-function czLead(m,id){let n=m.nodes[id],g=0;while(n&&n.note&&g++<40)n=m.nodes[n.next];if(!n)return'';if(n.out){const w={out:n,steps:[]};return czGated(m,w)?'source-unverified recommendation (draft mode to view)':n.out}return'next question: '+n.q}
+function czLead(m,id){let n=m.nodes[id],g=0;while(n&&n.note&&g++<40)n=m.nodes[n.next];if(!n)return'';if(n.out){const o=reconciledTreeOutcome(m,n),w={out:o,steps:[]};return czGated(m,w)?'source-unverified recommendation (draft mode to view)':o.out}return'next question: '+n.q}
 function czHTML(m,w){const n=w.unk.n,z=czVal(m.id,w.unk.id),yn=v=>v?'Yes':'No';
  let h=`<div class="fsec cz" id="cz-decides"><div class="lab">What this answer decides</div><ul><li><b>If Yes:</b> ${escV(czLead(m,n.yes))}</li><li><b>If No:</b> ${escV(czLead(m,n.no))}</li></ul></div>`;
  if(z===undefined)return h+'<p class="small" id="cz-none">No safer default for this question (a measurement, exam finding or treatment choice). Verify it to continue.</p>';
@@ -3937,7 +3937,7 @@ const czOldPlanText=planText;planText=function(m,w){const t=czOldPlanText(m,w);i
  L.push('Verify before finalizing: '+p.assumed.map(x=>x.q).join('; '));return t+'\n'+L.join('\n')};
 /* SOAP note for the whole encounter: the Assessment note's blocks re-filed as S/O/A/P, plus every decision module used. Plain ASCII, de-identified. */
 const SOAP_HX=new Set(['Start here','Anesthesia & medical']);
-function soapMods(){return MODS.filter(m=>Object.values(S.ans[m.id]||{}).some(v=>v!==undefined))}
+function soapMods(){return MODS.filter(m=>Object.values(S.ans[m.id]||{}).some(v=>v!==undefined)||Object.values(S.inp[m.id]||{}).some(v=>v!==undefined&&v!==''))}
 function soapText(){const base=asmtText().split('\n\n'),blk=h=>(base.find(b=>b.startsWith(h+':'))||'').split('\n').slice(1);
  const Sx=[...blk('HISTORY')],O=[],A=[...blk('FINDINGS & RISK')],P=[...blk('ANESTHESIA & LIMITS'),...blk('PLAN & ALERTS').filter(x=>!/^- Decision support only/.test(x))],V=[];
  const t=S.today||{};O.push(`- Weight: ${S.wt?wtLine():'not entered'}; ASA: ${t.asa?'ASA '+['I','II','III','IV'][t.asa-1]:'not recorded'}`);
@@ -3950,6 +3950,8 @@ function soapText(){const base=asmtText().split('\n\n'),blk=h=>(base.find(b=>b.s
    A.push(`- ${m.title}: ${w.out.out}${au?" (includes author's practice content)":''}`);if(w.out.ex)P.push(`- ${m.title}: ${w.out.ex}`);ns.forEach(s=>P.push(`- ${s.n.t}: ${s.n.x}`));if(m.id==='preop')todayText(w).slice(1).forEach(x=>P.push(x))}
   else if(w.unk){const p=walkProv(m);A.push(`- ${m.title}: PENDING - "${w.unk.n.q}" unknown`);V.push(w.unk.n.q);
    if(p.assumed.length){p.assumed.slice(1).forEach(x=>V.push(x.q));A.push(`  Provisional (safer assumption): ${p.out?(czGated(m,p)?'withheld - source verification incomplete':p.out.out):p.cur?'next question - '+p.cur.n.q:p.unk?'paused at - '+p.unk.n.q:'incomplete'}`)}}
+  else if(w.conflict){A.push(`- ${m.title}: BLOCKED - entered data and manual answer disagree on "${w.conflict.n.q}"`);V.push(`${m.title}: resolve data/answer conflict on "${w.conflict.n.q}"`)}
+  else if(w.invalid){A.push(`- ${m.title}: BLOCKED - invalid measurement(s): ${w.invalid.join(', ')}`);V.push(`${m.title}: correct invalid measurement(s) ${w.invalid.join(', ')}`)}
   else if(w.cur)A.push(`- ${m.title}: incomplete (next: ${w.cur.n.q})`)});
  if(V.length)P.push('- VERIFY BEFORE FINALIZING: '+[...new Set(V)].join('; '));
  P.push('- Decision support only; clinician judgment applies. Verify doses against the label.');

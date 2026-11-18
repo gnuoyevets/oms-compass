@@ -46,6 +46,9 @@ check('provisional outcome respects the draft gate',`newPatient();S.pf.age='40';
 check('SOAP note has four sections, module outcomes and verify list',`newPatient();S.pf.age='40';S.ans.htn={a:false,b:'u'};S.ans.extraction={a:false,b:false};const t=soapText();['S - SUBJECTIVE','O - OBJECTIVE','A - ASSESSMENT','P - PLAN'].every(x=>t.includes(x))&&t.includes('Hypertension: PENDING')&&t.includes('VERIFY BEFORE FINALIZING')&&t.includes('Third molars & extractions:')&&asciiT(t)===t`);
 check('SOAP note respects the draft gate',`newPatient();S.pf.age='40';const m=M('lac');S.ans.lac={a:false,b:false,c:false,d:false,e:false};const w=walk(m);const t=soapText();!!w.out&&!t.includes(asciiT(w.out.out))&&t.includes('SOURCE VERIFICATION INCOMPLETE')`);
 
+check('branch preview applies age reconciliation (no adult dose for a child)',`newPatient();S.pf.age='8';S.ans.pain={a:'u'};const h=flowHTML(M('pain'));!h.includes('1000 mg')&&h.includes('generic adult regimen is withheld')`);
+check('SOAP reports blocked modules (conflict, invalid data)',`newPatient();S.pf.age='40';S.ans.sinus={a:false,b:false,c:true};S.inp.sinus={rbh:'1'};const t1=soapText();newPatient();S.inp.sinus={rbh:'-1'};const t2=soapText();t1.includes('Sinus lift: BLOCKED')&&t1.includes('VERIFY BEFORE FINALIZING')&&t2.includes('invalid measurement')`);
+
 // All original feature IDs/languages/helpers must remain reachable in the source.
 const baseline=JSON.parse(fs.readFileSync(path.join(__dirname,'feature-baseline.json'),'utf8'));sandbox.baseline=baseline;
 check('every baseline module and node retained',`baseline.modules.every(b=>{const m=M(b.id);return m&&b.nodeIds.every(id=>m.nodes[id])})`);
