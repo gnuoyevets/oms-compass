@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.27.1 — Nov 19, 2026 (pending Steven's approval) — source citation fixes
+## v3.27.1 — Nov 19, 2026 (approved by Steven Nov 19, 2026) — source citation fixes
 
 Checked against the source page on Nov 19, 2026 (`chk` added; display only, no gating change):
 - **boneDx:** Debs et al., *Radiology* 2024;311(1):e231348 (SABR, percutaneous bone biopsy in adult chronic nonspinal osteomyelitis). Still not jaw-specific.
