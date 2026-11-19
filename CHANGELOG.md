@@ -2,6 +2,12 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.27.1 — Nov 19, 2026 (pending Steven's approval) — source citation fixes
+
+- **boneDx:** now cites Debs et al., *Radiology* 2024;311(1):e231348 (Society of Academic Bone Radiologists, percutaneous bone biopsy in adult chronic nonspinal osteomyelitis). It replaces "year not recorded". Still marked not jaw-specific: the jaw and mandible were not found in the text read.
+- **osaDx:** Kapur et al., *J Clin Sleep Med* 2017;13(3):479–504, confirmed against PMC5337595.
+- **cacRev:** Schiroli et al., *Cureus* 2025;17(10):e94585. This is a single-case review, so the note is "confirm with carotid imaging". The URL moved to pmc.ncbi.nlm.nih.gov and the date format is normalized.
+- **Not checked, network blocked in this session:** odsDx, odsTx, padss (PubMed cookie wall), saltri (NSW Health), fdaGaba, fdaOpBz (FDA), paxSpc, tramLbl, mtxLbl (DailyMed US labels), spaqi (BJA). Their labels are unchanged.
 ## v3.27.0 — Nov 18, 2026 (approved by Steven Nov 18, 2026) — provisional safer assumption, SOAP note
 
 - **Unknown → provisional safer assumption.** `walk()` is unchanged: Unknown still halts and no plan is finalized. The pending panel now adds “What this answer decides” (where Yes and where No lead) and, for 124 of 180 questions with a curated safer answer (`CZ`), continues the path on that answer as **Provisional · not a plan**, with the next question or the provisional outcome and the list of assumptions. The 56 measurement, exam and treatment-choice questions have no default and stay paused. Draft-gated and sedation-age-gated content stays withheld in the provisional view. The copied note adds the provisional lines and a “Verify before finalizing” list.
