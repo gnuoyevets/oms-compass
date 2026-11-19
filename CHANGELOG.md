@@ -2,6 +2,13 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.27.2 — Nov 19, 2026 (pending Steven's approval) — 繁體中文 handouts
+
+- **Chinese handouts converted from Simplified to Traditional (Taiwan).** This covers every 中文 handout, FAQ, option grid and patient-page UI string, in both the app and `/handouts/`, plus the PDF QR sheets (regenerated). The language button now reads 繁體中文, and the page language is `zh-Hant-TW`. The `#…-zh` links and printed QR codes are unchanged.
+- **Method:** OpenCC `s2twp`, then manual corrections for clinical terms. OpenCC made errors that would have misled patients: 乾槽症 had become 幹槽症 (dry socket); 只 had become 隻 ("only"); 局部麻醉 had become 區域性麻醉; and 第3天後 had come out as 第3天后. Mainland terms were changed to Taiwan usage: 乙醯胺酚 (acetaminophen), 非類固醇消炎藥 (NSAID), 阿斯匹靈, 鴉片類, 上顎竇, 顳顎關節, 植牙/植體, 切片檢查, 齒顎矯正醫師, 醫師, 沖牙機, 洋芋片, QR Code and 週. Advil and Tylenol now appear by their English brand names, followed by the generic drug name.
+- **Needs review:** a fluent Taiwanese Mandarin speaker should still review the translation. The existing "translation draft" notice stays.
+- Tests: Chinese string expectations updated; all suites pass.
+
 ## v3.27.1 — Nov 19, 2026 (approved by Steven Nov 19, 2026) — source citation fixes
 
 Checked against the source page on Nov 19, 2026 (`chk` added; display only, no gating change):

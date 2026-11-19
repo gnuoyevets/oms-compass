@@ -39,10 +39,10 @@ UI = {
              all='Tudu asuntu', s=['Dipôs di sirurjia', 'Sobri bu prusedimentu', 'Sobri bu diagnóstiku'], ph='Purgunta? Txoma',
              tip='Txiga telemóvel pertu pa só un kódigu fika na ekran.',
              foot='Informason jeral. Si bu sirurjion fla-bu otu kuza, sigi bu sirurjion. Emerjénsia: txoma 911.'),
- 'zh': dict(h='患者须知', sub='请用手机相机扫描二维码，查看术后须知和常见问题解答。',
-            all='所有主题', s=['术后须知', '关于您的手术', '关于您的诊断'], ph='有疑问？请致电',
-            tip='请把手机靠近，让屏幕上只出现一个二维码。',
-            foot='一般性说明。如果您的医生另有指示，请遵从医生的指示。紧急情况：请拨打911。'),
+ 'zh': dict(h='患者須知', sub='請用手機相機掃描QR Code，檢視術後須知和常見問題解答。',
+            all='所有主題', s=['術後須知', '關於您的手術', '關於您的診斷'], ph='有疑問？請致電',
+            tip='請把手機靠近，讓螢幕上只出現一個QR Code。',
+            foot='一般性說明。如果您的醫師另有指示，請遵從醫師的指示。緊急情況：請撥打911。'),
 }
 ACCENT, MUTED, LINE = HexColor('#0f6a5e'), HexColor('#5a6b67'), HexColor('#b9c6be')
 W, H = letter
