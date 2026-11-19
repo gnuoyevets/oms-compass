@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.29.0 — Nov 19, 2026 (pending Steven's approval) — chairside/on-call spec: gate labels, on-call drawer, docked intraop bar
+## v3.29.0 — Nov 19, 2026 (approved by Steven Nov 19, 2026; draft checklist steps still author's draft) — chairside/on-call spec: gate labels, on-call drawer, docked intraop bar
 
 From the Nov 19 chairside PWA spec. These are updates to the existing app, as decided: the spec's 56 px header, stacked 48 px+ targets, swipe and system back, reference drawer, AAA contrast, sub-100 ms transitions, QR handoff and client-only state were already in place (v3.6, v3.22, v3.28) and are unchanged.
 - **Buttons stay Yes / No / Unknown** (Oct 23 and Nov 19 decision). Only the **medical gate result** is labelled:
