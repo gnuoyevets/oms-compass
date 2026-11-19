@@ -22,7 +22,7 @@ Partly checked:
 
 Clinical changes (approved by Steven, Nov 19, 2026):
 - **Salivary pathway, first question:** now also asks about sialadenitis that is unresponsive to treatment, occurs in an immunocompromised patient, or comes with facial nerve palsy. Yes → emergency assessment, matching the NSW emergency criteria. Still unchanged: the oMed and oDental branches cite saltri but have no NSW counterpart.
-- **Methotrexate prescribing check:** adds "confirm with the prescriber before nitrous oxide" (US label §7: nitrous oxide potentiates methotrexate's effect on folate-dependent pathways). The NSAID/penicillin wording now follows the label ("raise methotrexate levels"). The `[verify against the US label]` tag is removed now that the label has been checked, so the methotrexate plan is no longer draft-gated.
+- **Methotrexate prescribing check:** adds "avoid nitrous oxide sedation" (US label §7: "Avoid nitrous oxide anesthesia in patients receiving methotrexate"; it potentiates the drug's effect on folate-dependent pathways). Corrected before merge from a softer "confirm with the prescriber" wording, which an automated review caught. The NSAID/penicillin wording now follows the label ("raise methotrexate levels"). The `[verify against the US label]` tag is removed now that the label has been checked, so the methotrexate plan is no longer draft-gated.
 - Tests: 2 new graph checks.
 
 ## v3.27.0 — Nov 18, 2026 (approved by Steven Nov 18, 2026) — provisional safer assumption, SOAP note
