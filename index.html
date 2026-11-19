@@ -291,6 +291,13 @@ ul.hol li.warn{background:var(--red-bg);border:1px solid var(--red-line);color:v
 .ctxsum{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px}
 .alink span{display:block;font-size:13px;color:var(--muted);line-height:1.45;margin-top:2px}
 body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+#iodock{position:fixed;left:0;right:0;bottom:env(safe-area-inset-bottom,0px);z-index:30;max-width:430px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;padding:4px 8px;background:var(--ink);color:var(--bg);border-radius:12px 12px 0 0}
+#iodock button{min-height:48px;border:0;border-radius:10px;font:600 14px/1.2 var(--body,inherit);font-family:inherit;cursor:pointer;text-align:left;padding:0 10px;background:transparent;color:inherit}
+#iodock .iod-reset{border:2px solid currentColor;text-align:center}#iodock .iod-reset.arm{background:var(--red-ink);border-color:var(--red-ink);color:#fff}
+body.hasbar #iodock{bottom:calc(64px + env(safe-area-inset-bottom,0px))}body.focus #iodock{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+body.iodock .wrap{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}body.iodock.hasbar .wrap{padding-bottom:calc(140px + env(safe-area-inset-bottom,0px))}body.focus.iodock .wrap,body.focus.iodock.hasbar .wrap{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
+.fx-qr{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.fx-qr .go{min-height:48px}
+.ocq .pin{min-height:48px}
 .abar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px max(12px,env(safe-area-inset-left,0px)) calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line);max-width:680px;margin:0 auto}
 .abar[hidden],body.kb .abar{display:none}
 .abtn{min-height:48px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:15px;color:var(--ink);padding:0 14px}
@@ -310,6 +317,7 @@ body.hasbar .wrap{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .mgate.g-ok{border-color:var(--ok-ink);background:var(--ok-bg);color:var(--ok-ink)}
 .mgate.g-mod{border-color:var(--warn-ink);background:var(--warn-bg);color:var(--warn-ink)}
 .mgate.g-def{border-color:var(--red-ink);background:var(--red-bg);color:var(--red-ink)}
+.mgate .gdec{display:inline-block;font:800 13px/1.2 var(--display);text-transform:uppercase;letter-spacing:.04em;border:2px solid currentColor;border-radius:8px;padding:4px 8px;margin:2px 0 6px}
 .mgate .gt{display:flex;align-items:center;gap:8px;font:800 15px/1.35 var(--display)}
 .mgate .gt .dot{flex:none;width:12px;height:12px;border-radius:50%;background:currentColor}
 .mgate ul{margin:6px 0 0;padding-left:20px;font-size:13.5px;line-height:1.45}
@@ -2036,8 +2044,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top">${S.view&&S.view!=='decide'?'<button class="icon-btn homebtn" data-home aria-label="Home">⌂</button>':''}<h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.28.1';
+const VER='3.29.0';
 const CHANGES=[
+{v:'3.29.0',d:'Nov 19, 2026',i:['Medical gate result is labelled Proceed (screen result, not a clearance), Address first, Verify first, Defer elective or Escalate, with the defer reasons.','On-call mode now changes the reference drawer: red flags from facial trauma, fracture and infection, plus SOS and Bleeding. Outpatient mode shows chairside limits instead. On-call Home has a quick row: trauma, fracture, infection, bleeding, SOS and SOAP note.','Intraop checklist docks: once a step is set, a slim bar on every screen shows time-out, total and sign-out progress. Tap it to open; Next patient (tap twice) resets. New draft steps for extraction, graft and implant cases.']},
 {v:'3.28.1',d:'Nov 19, 2026',i:['Home on every screen: the Ask Claude sheet now has a Home button, and the new patient-journey page has All topics at the top. A test now checks every screen, module and finding.']},
 {v:'3.28.0',d:'Nov 19, 2026',i:['Patient tab: a new Send to patient composer (Author mode). You pick the procedure, the stage, chips that apply to the patient and the language, and it shows a QR code. The new patient pages (Options, Risks, Recovery, with day-by-day cards) are a draft for your review. Until you approve them, the QR still opens the current approved handout, and Preview shows the draft.','The patient page now works offline after its first visit.']},
 {v:'3.27.2',d:'Nov 19, 2026',i:['中文 patient handouts are now 繁體中文 (Traditional characters, Taiwan wording), including drug names such as 乙醯胺酚 for acetaminophen. The PDF QR sheets were regenerated. Translation still needs review by a fluent speaker.']},
@@ -3542,7 +3551,21 @@ function newPatient(){
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
-function updBar(){document.body.classList.toggle('focus',S.view==='mod');let b=document.getElementById('abar');if(!b){b=document.createElement('div');b.id='abar';b.className='abar';document.body.appendChild(b)}
+/* v3.29 docked intraop bar: once any checklist item is set, a slim bar stays on every screen until reset. Memory only. */
+function ioActive(){return Object.keys(S.io||{}).length>0}
+function ioSecCount(sec){const it=sec[1].filter(([k])=>!ioFold(k));return[it.filter(([k])=>['done','na'].includes(ioVal(k))).length,it.length]}
+function ioSummary(){const secs=[IO[0],...(ioEncounter().length?[['enc',ioEncounter()]]:[]),...IO.slice(1)];let d=0,n=0;secs.forEach(x=>{const[a,b]=ioSecCount(x);d+=a;n+=b});
+ const so=IO.find(x=>x[0].startsWith('Sign-out'));return{d,n,to:ioSecCount(IO[0]),so:ioSecCount(so)}}
+let ioArm=0;
+function updDock(){let d=document.getElementById('iodock');const on=ioActive()&&!(S.view==='asmt'&&S.atab==='io')&&S.view!=='gate';
+ if(!d){if(!on)return;d=document.createElement('div');d.id='iodock';d.setAttribute('role','region');d.setAttribute('aria-label','Intraop checklist');document.body.appendChild(d)}
+ d.hidden=!on;document.body.classList.toggle('iodock',on);if(!on)return;const x=ioSummary(),ok=([a,b])=>b&&a===b?'✓':`${a}/${b}`;
+ d.innerHTML=`<button class="iod-open" data-iodock aria-label="Open intraop checklist"><b>Intraop</b> · Time-out ${ok(x.to)} · ${x.d}/${x.n} · Sign-out ${ok(x.so)}</button><button class="iod-reset${ioArm?' arm':''}" data-iodreset>${ioArm?'Tap again':'Next patient'}</button>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-iodock],[data-iodreset]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();
+ if(b.hasAttribute('data-iodock')){S.atab='io';return asmtView()}
+ if(ioArm){ioArm=0;S.io={};S.ioSig={};delete S.ioReset;const ib=document.getElementById('iobody');if(ib)ib.innerHTML=ioHTML();return updBar()}
+ ioArm=1;updDock();setTimeout(()=>{if(ioArm){ioArm=0;updDock()}},3500)},true);
+function updBar(){updDock();document.body.classList.toggle('focus',S.view==='mod');let b=document.getElementById('abar');if(!b){b=document.createElement('div');b.id='abar';b.className='abar';document.body.appendChild(b)}
  if(S.io&&Object.keys(S.io).length)ioSync();const n=(S.asmt||[]).length,io=Object.values(S.io||{}).filter(v=>v===true||v==='done').length,on=(hasPatient()||S.view==='mod'||S.view==='asmt')&&S.view!=='gate';b.hidden=!on;document.body.classList.toggle('hasbar',on);b.classList.add('three');
  const cur=t=>S.view==='asmt'&&(S.atab||'find')===t?' aria-current="page"':'';
  b.innerHTML=`<button class="abtn" data-asmt${cur('find')}>Assessment${n?` · <b>${n}</b>`:''}</button><button class="abtn" data-ioopen${cur('io')}>Intraop${io?` · <b>${io}</b>`:''}</button><button class="abtn np${npArm?' arm':''}" data-newpt>${npArm?'Tap again':'New patient'}</button>`}
@@ -3601,12 +3624,15 @@ function topQHTML(m){if(!m.A.length)return'';const o=openItems(m.A,m.miss,rankQu
  const ctx=['proc','anes','urg'].includes(it.k);
  const q=ctx?chipRow({k:it.k,...CTXQ[it.k],ctx:0},S.pf[it.k]):qHTML(it.q);
  return`<details class="gtq"${S.topqOpen?' open':''} data-topq><summary><b>Changes the plan:</b> ${esc(itemLab(it))}${o.dec.length>1?` <span class="small">· 1 of ${o.dec.length}</span>`:''}</summary>${q.replace(/ (id|for)="(question|pf)-/g,' $1="top-$2-')}${condHTML(it)}</details>`}
+/* v3.29 gate decision label. Buttons stay Yes / No / Unknown (Oct 23 decision); only the gate result is labelled. Unknown or incomplete never reads as Proceed. */
+function GATE_LABEL(g){return g.tone==='def'?(S.pf.urg==='urg'?'Escalate · monitored or hospital setting':'Defer elective'):g.tone==='mod'?(g.unk.length||!g.done?'Verify first':'Address first'):g.tone==='ok'?'Proceed · screen result, not a clearance':''}
 function gateHTML(id){if(!GATED.includes(id))return'';const g=gateModel();
  const items=[...g.hits.map(h=>h[1]),...g.unk.map(q=>`Unknown: ${q}`)];
  const m=asmtModel(),t=g.t;
  /* The procedure view shows the same overall disposition, reason and next action as Assessment and the copied note. */
  const ov=m.od?`<div class="gov"><span class="dtag sm d-${DISP[m.od][1]}">${esc(DISP[m.od][0])}</span>${m.prov?' <span class="small" style="color:inherit">provisional</span>':''}<div class="small" style="color:inherit"><b>Why:</b> ${esc(m.why)}. <b>Next:</b> ${escV(m.act)}</div></div>`:'';
- return`<div class="mgate g-${g.tone}" role="status"><div class="lab" style="color:inherit;opacity:.85">Medical gate</div><div class="gt"><span class="dot" aria-hidden="true"></span>${esc(t)}</div>${items.length?`<ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${g.tone==='ok'?'<div class="small" style="color:inherit">Screen result · not a clearance.</div>':''}${ov}<div class="gb"><button class="go" data-open="preop">${g.tone==='none'?'Run pre-op screen ›':'Pre-op clearance ›'}</button>${m.od?`<button class="go" data-goasmt>Assessment: ${esc(DISP[m.od][0])} ›</button>`:''}</div></div>`}
+ const gl=GATE_LABEL(g),dc=g.tone==='def'?g.hits.filter(h=>h[0]==='def').map(h=>h[1]):[];
+ return`<div class="mgate g-${g.tone}" role="status"><div class="lab" style="color:inherit;opacity:.85">Medical gate</div>${gl?`<div class="gdec" id="gdec-${id}">${esc(gl)}</div>`:''}<div class="gt"><span class="dot" aria-hidden="true"></span>${esc(t)}</div>${dc.length?`<div class="small" style="color:inherit"><b>Defer because:</b> ${dc.map(esc).join('; ')}. Re-run the pre-op screen once optimized.</div>`:''}${items.length?`<ul>${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${g.tone==='ok'?'<div class="small" style="color:inherit">Screen result · not a clearance.</div>':''}${ov}<div class="gb"><button class="go" data-open="preop">${g.tone==='none'?'Run pre-op screen ›':'Pre-op clearance ›'}</button>${m.od?`<button class="go" data-goasmt>Assessment: ${esc(DISP[m.od][0])} ›</button>`:''}</div></div>`}
 
 /* Hospital on-call: a remembered preference (not patient data). */
 const OC_KEY='omsCompassOnCall',ONCALL=['trauma','lac','mandfx','dentotrauma','infection','dns','calltri'];
@@ -3641,9 +3667,20 @@ const IO=[
   ['frag','All teeth, roots and fragments accounted for'],
   ['spec','Specimen labeled; requisition complete',[['biopsy','Biopsy']]],
   ['lot','Implant and graft lot numbers recorded'],
-  ['hem','Hemostasis confirmed'],
+  ['hem','Hemostasis confirmed',[['bleed','Bleeding']]],
   ['po','Instructions, prescriptions and after-hours number given'],
   ['dc','If sedated: discharge criteria met and escort present']]],
+ ['If extraction · author’s draft',[
+  ['exroot','Removed tooth and roots matched against the preoperative image; nothing left unintentionally',[['displaced','Displaced root']]],
+  ['exsock','Socket debrided and irrigated as planned; sharp bone edges smoothed'],
+  ['exsin','Upper molar or premolar near the sinus: sinus checked before closure',[['oac','Sinus opening']]]]],
+ ['If bone graft or socket preservation · author’s draft',[
+  ['grcl','Graft contained and membrane stable; closure or planned exposure as intended'],
+  ['grpt','Patient told a few graft granules may come out in the first days']]],
+ ['If implant · author’s draft',[
+  ['imppos','Position checked against the plan or guide: depth, angulation, distance to teeth and to the nerve or sinus',[['nerve','Nerve']]],
+  ['imptq','Insertion torque or stability recorded; cover screw or healing abutment chosen to match'],
+  ['imprad','Post-placement radiograph taken if planned']]],
  ['If All-on-X (full-arch, immediate load)',[
   ['axplan','Prosthetic plan confirmed before reduction: vertical dimension, midline, smile line and planned prosthesis space',[['arch','Full-arch']]],
   ['axscan','Fiducial markers placed; photogrammetry or scans captured before surgery'],
@@ -3657,8 +3694,8 @@ const IO=[
 /* v3.10 encounter checklist. Status per item: done / pend / na (legacy true = done). Items that do not apply to the
    entered procedure or anesthesia fold away (never removed); unset context shows everything. Each status remembers
    the plan facts it depended on and resets when they change. Statuses never feed back into the clinical model. */
-const IO_DEP={axscan:['proc'],axpost:['proc'],axplan:['proc'],axred:['proc'],axguide:['proc'],axtq:['proc'],axmua:['proc'],axconv:['proc'],axrec:['proc'],id:['proc'],cons:['proc','anes','plan'],gate:['plan'],img:['proc'],kit:['proc'],em:['anes'],mon:['anes'],iv:['anes'],npo:['anes','plan'],la:['wt'],vit:['anes'],stop:['proc'],spec:['proc'],lot:['proc'],frag:['proc'],hem:['plan'],po:['plan'],dc:['anes']};
-const IO_FOLD={mon:'sed',iv:'sed',npo:'sed',vit:'sed',dc:'sed',kit:'impl',lot:'impl',img:'surg',frag:'surg',spec:'surg',axscan:'impl',axpost:'impl',axplan:'impl',axred:'impl',axguide:'impl',axtq:'impl',axmua:'impl',axconv:'impl',axrec:'impl'};
+const IO_DEP={exroot:['proc'],exsock:['proc'],exsin:['proc'],grcl:['proc'],grpt:['proc'],imppos:['proc'],imptq:['proc'],imprad:['proc'],axscan:['proc'],axpost:['proc'],axplan:['proc'],axred:['proc'],axguide:['proc'],axtq:['proc'],axmua:['proc'],axconv:['proc'],axrec:['proc'],id:['proc'],cons:['proc','anes','plan'],gate:['plan'],img:['proc'],kit:['proc'],em:['anes'],mon:['anes'],iv:['anes'],npo:['anes','plan'],la:['wt'],vit:['anes'],stop:['proc'],spec:['proc'],lot:['proc'],frag:['proc'],hem:['plan'],po:['plan'],dc:['anes']};
+const IO_FOLD={exroot:'surg',exsock:'surg',exsin:'surg',grcl:'impl',grpt:'impl',imppos:'impl',imptq:'impl',imprad:'impl',mon:'sed',iv:'sed',npo:'sed',vit:'sed',dc:'sed',kit:'impl',lot:'impl',img:'surg',frag:'surg',spec:'surg',axscan:'impl',axpost:'impl',axplan:'impl',axred:'impl',axguide:'impl',axtq:'impl',axmua:'impl',axconv:'impl',axrec:'impl'};
 function ioFold(k){const a=S.pf.anes,p=S.pf.proc,t=IO_FOLD[k];
  if(t==='sed')return a==='la'?'local anesthesia only':null;
  if(t==='impl')return p==='none'||p==='low'?'no implant or graft at the entered procedure tier':null;
@@ -3694,10 +3731,12 @@ function pinsHTML(){return`<div class="lab group">Pinned</div><div class="pins">
  /* Photo triage opens Claude with the full prompt (also copied); the CT1 code is pasted back in Pre-op clearance. */
  if(id==='tri')return`<a class="${cl}" data-triage href="https://claude.ai/new?q=${encodeURIComponent(TRIAGE_PROMPT)}" target="_blank" rel="noopener">📷 ${esc(t)}<span>${esc(d)}</span></a>`;
  return`<button class="${cl}" ${id==='ho'?'data-view="handouts"':`data-open="${id}"`}>${esc(t)}<span>${esc(d)}</span></button>`}).join('')}</div>`}
+const OC_QUICK=[['trauma','Facial trauma'],['mandfx','Mandible fracture'],['infection','Infection · deep space'],['bleed','Bleeding']];
+function ocQuickHTML(){return`<div class="lab group">On-call quick access</div><div class="pins ocq" id="ocq">${OC_QUICK.filter(([id])=>M(id)).map(([id,t])=>`<button class="pin" data-open="${id}">${esc(t)}</button>`).join('')}<button class="pin" data-view="emergency">SOS protocols</button><button class="pin" data-soap>Copy SOAP note</button></div>`}
 function home(){
  S.mod=null;S.retMod=null;S.view='decide';try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}const ORDER=['Start here','Anesthesia & medical','Dentoalveolar & acute','Post-op & complications','Trauma','Implants','Pathology & pain'];const on=onCall(),GO=['Hospital on-call',...ORDER],gm=MODS.map(m=>[m,homeGroup(m,on)]).filter(x=>x[1]);const groups=[...new Set(gm.map(x=>x[1]))].sort((x,y)=>GO.indexOf(x)-GO.indexOf(y));
  app.innerHTML=topHTML(1)+tabsHTML('decide')+
- `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab or topic: Eliquis, INR, dry socket" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="pins"${S.q?' hidden':''}>${qsetHTML(on)}${pinsHTML()}</div><div id="groups"${S.q?' hidden':''}>`+
+ `<div class="srch"><input id="in-q" data-q type="search" enterkeyhint="search" autocomplete="off" placeholder="Drug, lab or topic: Eliquis, INR, dry socket" aria-label="Search everything" value="${esc(S.q||'')}"></div><div id="hits">${S.q?hitsHTML(S.q):''}</div><div id="pins"${S.q?' hidden':''}>${qsetHTML(on)}${on?ocQuickHTML():''}${pinsHTML()}</div><div id="groups"${S.q?' hidden':''}>`+
  groups.map(g=>`<div class="lab group${g==='Hospital on-call'?' oc':''}">${esc(g)}</div><div class="mods">${gm.filter(x=>x[1]===g).map(x=>x[0]).map(m=>`<button class="mod" data-open="${m.id}"><div><b>${esc(m.title)}</b><span>${esc(m.d)}</span></div><i aria-hidden="true">›</i></button>`).join('')}</div>`).join('')+`<details class="box sets" id="settings"${S.setOpen?' open':''}><summary><span>Settings <em class="setsum">On-call ${on?'on':'off'} · ${colleague()?'Colleague':'Author'} mode</em></span></summary><div class="inner">${oncallHTML(on)}${pmodeHTML()}<div class="toggles" style="margin-top:10px">${hcHTML()}</div></div></details>`+`</div>`+
  `<p class="foot">Search shows a finding’s implications first. Coverage map: AAOMS Parameters of Care (2023). Clinician-review draft for decision support. Answer the questions; the plan appears when the path settles. Nothing clinical you enter is saved, except the SOS event log (this device, until cleared). No patient identifiers.<br><b>Shared for colleague discussion.</b> Not an institutional protocol or standard of care; follow your institution’s policies and current guidelines.</p>`+fbHTML('Home');
  window.scrollTo(0,0);S.fid=null;updBar();
@@ -3792,8 +3831,13 @@ const HC_KEY='omsCompassContrast';
 function applyHC(){const r=document.documentElement;if(!r||!r.dataset)return;let v=null;try{v=localStorage.getItem(HC_KEY)}catch(e){v=S.hcv||null}if(v)r.dataset.contrast=v;else delete r.dataset.contrast}
 function toggleHC(){const v=hcOn()?'normal':'high';S.hcv=v;try{localStorage.setItem(HC_KEY,v)}catch(e){}applyHC()}
 function hcHTML(){const on=hcOn();return`<button class="tg${on?' on':''}" data-hc aria-pressed="${on}">High contrast (operatory light) · ${on?'on':'off'}</button>`}
+/* v3.29 drawer leads with the setting: on-call shows red flags reused from the trauma, fracture and infection modules plus SOS; outpatient shows chairside limits. No new clinical text. */
+const OC_RED=['trauma','mandfx','infection'];
+function modeRefHTML(id){if(onCall())return`<div class="fx-sec" id="sec-oncall"><div class="lab">On-call · red flags and escalation</div>${OC_RED.filter(k=>k!==id&&M(k)&&M(k).red).map(k=>`<details class="box"><summary>${esc(M(k).title)}</summary><div class="inner"><div class="red">${M(k).red}</div><button class="go" data-open="${k}">Open ${esc(M(k).title)} ›</button></div></details>`).join('')}<div class="fx-qr"><button class="go" data-view="emergency">SOS protocols ›</button><button class="go" data-open="bleed">Bleeding ›</button></div></div>`;
+ return`<div class="fx-sec" id="sec-outpt"><div class="lab">Chairside quick reference</div><div class="fx-qr"><button class="go" data-view="calc">Local anesthetic maximum · Calc ›</button><button class="go" data-open="preop">Pre-op clearance ›</button><button class="go" data-open="sed">Office sedation ›</button></div></div>`}
 function drawerHTML(m){const id=m.id;
  return`<div class="fx-scrim" data-drclose${S.drOpen?'':' hidden'}></div><section class="fx-sheet${S.drOpen?' open':''}" id="fxsheet" aria-label="Reference drawer"><button class="fx-handle" data-drawer aria-expanded="${!!S.drOpen}" aria-controls="fxbody"><span class="grip" aria-hidden="true"></span><span>Reference · answers</span><span class="chev" aria-hidden="true">${S.drOpen?'▾':'▴'}</span></button><div class="fx-body" id="fxbody"${S.drOpen?'':' inert'}>
+ ${modeRefHTML(id)}
  <div class="fx-sec" id="sec-crit"><div class="lab">This step</div><div id="fxcrit"></div></div>
  <div class="fx-sec" id="sec-path"><div class="lab">Your answers · tap to change</div><div id="fxpath"></div></div>
  ${GATED.includes(id)?'<div class="fx-sec" id="sec-gate"><div id="fxgate"></div></div>':''}

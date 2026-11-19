@@ -2,6 +2,28 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.29.0 — Nov 19, 2026 (pending Steven's approval) — chairside/on-call spec: gate labels, on-call drawer, docked intraop bar
+
+From the Nov 19 chairside PWA spec. These are updates to the existing app, as decided: the spec's 56 px header, stacked 48 px+ targets, swipe and system back, reference drawer, AAA contrast, sub-100 ms transitions, QR handoff and client-only state were already in place (v3.6, v3.22, v3.28) and are unchanged.
+- **Buttons stay Yes / No / Unknown** (Oct 23 and Nov 19 decision). Only the **medical gate result** is labelled:
+  - **Proceed · screen result, not a clearance**: the screen is complete with no hit.
+  - **Address first**: there are hits to deal with.
+  - **Verify first**: an answer is Unknown or the screen is incomplete; this never reads as Proceed.
+  - **Defer elective**: an unstable condition, with a "Defer because" line listing the criteria.
+  - **Escalate · monitored or hospital setting**: the same, with an urgent need.
+- **On-call mode adapts:**
+  - The reference drawer leads with red flags from Facial trauma, Mandible fracture and Odontogenic infection, reused verbatim from those modules (no new clinical text), plus SOS and Bleeding.
+  - In outpatient mode, the drawer leads with chairside quick reference instead: local anesthetic maximum (Calc), Pre-op clearance, Office sedation.
+  - On-call Home adds a quick row: Facial trauma, Mandible fracture, Infection, Bleeding, SOS protocols, Copy SOAP note.
+- **Docked intraop checklist:** once any checklist step is set, a slim bar stays on every screen, above the bottom bar or drawer handle. It reads "Time-out x/7 · done/total · Sign-out x/7". Tap it to open the checklist; it hides on the checklist itself. **Next patient** (two taps) clears the checklist; New patient also clears it. Memory only.
+- **New checklist steps (author's draft, adapted from WHO 2009):**
+  - If extraction: roots matched to the image; socket debrided and irrigated; sinus checked for upper posterior teeth.
+  - If graft: graft contained, membrane stable; patient told about granules.
+  - If implant: position against plan or guide; torque or stability recorded with cover screw or healing abutment to match; radiograph if planned.
+  - These fold away when the procedure is "no bleeding expected". Sign-out "Hemostasis confirmed" now links to Bleeding.
+- **Colleague mode on first start:** already the behavior when no choice is stored; now tested.
+- Tests: browser section 37 covers colleague default, gate labels (Unknown never Proceed), defer criteria, on-call quick row, drawer switching and persistence, SOAP copy, dock position, reset, New patient and storage privacy.
+
 ## v3.28.1 — Nov 19, 2026 (approved by Steven Nov 19, 2026) — Home on every screen
 
 - **Audit:** every app screen was opened in a phone-size browser: Decide, SOS, Calc, Ref, Patient, What's new, all modules, all findings, Assessment and Intraop. All already had Home, except Home itself and Staff view, which are home screens.
