@@ -4,10 +4,25 @@ Newest first. Every change is reviewed by Steven before publishing. The app show
 
 ## v3.27.1 — Nov 19, 2026 (pending Steven's approval) — source citation fixes
 
-- **boneDx:** now cites Debs et al., *Radiology* 2024;311(1):e231348 (Society of Academic Bone Radiologists, percutaneous bone biopsy in adult chronic nonspinal osteomyelitis). It replaces "year not recorded". Still marked not jaw-specific: the jaw and mandible were not found in the text read.
-- **osaDx:** Kapur et al., *J Clin Sleep Med* 2017;13(3):479–504, confirmed against PMC5337595.
-- **cacRev:** Schiroli et al., *Cureus* 2025;17(10):e94585. This is a single-case review, so the note is "confirm with carotid imaging". The URL moved to pmc.ncbi.nlm.nih.gov and the date format is normalized.
-- **Not checked, network blocked in this session:** odsDx, odsTx, padss (PubMed cookie wall), saltri (NSW Health), fdaGaba, fdaOpBz (FDA), paxSpc, tramLbl, mtxLbl (DailyMed US labels), spaqi (BJA). Their labels are unchanged.
+Checked against the source page on Nov 19, 2026 (`chk` added; display only, no gating change):
+- **boneDx:** Debs et al., *Radiology* 2024;311(1):e231348 (SABR, percutaneous bone biopsy in adult chronic nonspinal osteomyelitis). Still not jaw-specific.
+- **osaDx:** Kapur et al., *J Clin Sleep Med* 2017;13(3):479–504.
+- **cacRev:** Schiroli et al., *Cureus* 2025;17(10):e94585. Single-case review.
+- **odsDx / odsTx:** Craig et al., *IFAR* 2021;11(8):1235–48 and 2020;10(7):901–12 (PubMed via NCBI E-utilities).
+- **saltri:** NSW page "current as at Mar 23, 2026".
+- **fdaGaba:** the old URL was dead (404). It now points to the FDA safety page (posted 12/19/2019), and COPD was added to the risk factors.
+- **fdaOpBz:** `fda.gov/media/99679` returned 404 without `www`, so the host was corrected. The document is FDA's 2016 template safety labeling change notice for opioid analgesics, and the source is relabeled to say so.
+- **paxSpc:** now the US label (DailyMed, rev. 02/2026). It agrees with the UK SPC on oral and parenteral midazolam.
+- **tramLbl:** US label on DailyMed (rev. 10/2026), §5.9 and §5.10.
+- **mtxLbl:** US methotrexate tablet label on DailyMed (Oct 2026), §7. Penicillins and NSAIDs may increase exposure.
+
+Partly checked:
+- **padss:** the old PMID 8519409 was an unrelated orthopedic paper. It now cites Chung, *Can J Anaesth* 1995;42(11):1056–8, which defines the modified PADSS, and names the original (Chung, Chan & Ong, *J Clin Anesth* 1995;7(6):500–6). Item wording is still not checked because the table isn't in the abstract.
+- **spaqi:** now cites the primary paper, Oprea et al., *BJA* 2026;136(6):1776–99. The BJA full text returned 403 and the abstract doesn't state the minor-procedure recommendation, so it stays [verify]. The note was reworded.
+
+Flagged for Steven, not changed:
+- **Salivary pathway vs NSW:** NSW lists *sialadenitis in an immunocompromised patient* and *sialadenitis with facial nerve palsy* as **emergency** criteria. The app sends the first to same-day assessment (oInfect) and the second to expedited mass workup (oMass). The oMed and oDental branches cite saltri but have no NSW counterpart.
+- **Methotrexate label §7:** nitrous oxide potentiates methotrexate's effect on folate-dependent pathways. The app doesn't mention this.
 ## v3.27.0 — Nov 18, 2026 (approved by Steven Nov 18, 2026) — provisional safer assumption, SOAP note
 
 - **Unknown → provisional safer assumption.** `walk()` is unchanged: Unknown still halts and no plan is finalized. The pending panel now adds “What this answer decides” (where Yes and where No lead) and, for 124 of 180 questions with a curated safer answer (`CZ`), continues the path on that answer as **Provisional · not a plan**, with the next question or the provisional outcome and the list of assumptions. The 56 measurement, exam and treatment-choice questions have no default and stay paused. Draft-gated and sedation-age-gated content stays withheld in the provisional view. The copied note adds the provisional lines and a “Verify before finalizing” list.
