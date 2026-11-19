@@ -83,6 +83,7 @@ details.box>summary em{font-style:normal;font-weight:600;font-size:12px;color:va
 .fld{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
 .fld input,.fld select{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 10px;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
 .toggles{display:flex;flex-wrap:wrap;gap:6px}
+.v2c .tg{min-height:48px;min-width:48px;font-size:15px}.v2c{margin-bottom:8px}
 .tg{border:1px solid var(--line);background:var(--bg);border-radius:18px;padding:7px 11px;font-size:13px;min-height:36px;color:var(--muted)}
 .tg.on{background:var(--chip);border-color:var(--chip);color:var(--chip-ink);font-weight:700}
 .calc{margin-top:10px;font-size:13px;font-weight:600;color:var(--chip-ink);background:var(--chip);border-radius:8px;padding:7px 10px;font-variant-numeric:tabular-nums}
@@ -485,6 +486,7 @@ html[data-contrast="high"] .fx-sheet{box-shadow:none;border:2px solid #000;borde
 
 <div class="wrap" id="app"></div>
 
+<script src="handouts/v2.js"></script>
 <script>
 /* ===== Sources (checked Oct 21, 2026) ===== */
 const SRC={
@@ -2033,8 +2035,9 @@ function offHTML(){return`<span class="offl" id="offl"${swOK()?'':' hidden'} tit
 function topHTML(btn){return`<div class="top">${S.view&&S.view!=='decide'?'<button class="icon-btn homebtn" data-home aria-label="Home">⌂</button>':''}<h1><span>✳</span> OMS Compass</h1><span class="small">${offHTML()}<b style="color:var(--warn-ink)">DRAFT</b> · ${btn?`<button class="vbtn" data-view="new" aria-label="What’s new in v${VER}">v${VER}</button>`:`v${VER}`}</span></div>`}
 
 /* ===== Version, change log, disclaimer ===== */
-const VER='3.27.2';
+const VER='3.28.0';
 const CHANGES=[
+{v:'3.28.0',d:'Nov 19, 2026',i:['Patient tab: a new Send to patient composer (Author mode). You pick the procedure, the stage, chips that apply to the patient and the language, and it shows a QR code. The new patient pages (Options, Risks, Recovery, with day-by-day cards) are a draft for your review. Until you approve them, the QR still opens the current approved handout, and Preview shows the draft.','The patient page now works offline after its first visit.']},
 {v:'3.27.2',d:'Nov 19, 2026',i:['中文 patient handouts are now 繁體中文 (Traditional characters, Taiwan wording), including drug names such as 乙醯胺酚 for acetaminophen. The PDF QR sheets were regenerated. Translation still needs review by a fluent speaker.']},
 {v:'3.27.1',d:'Nov 19, 2026',i:['Sources: 12 citations checked against the source page and dated, including the odontogenic sinusitis consensus papers, NSW salivary referral criteria, the FDA gabapentinoid and opioid–benzodiazepine notices, and US labels for Paxlovid, tramadol and methotrexate. Fixed a wrong PADSS reference link and two dead FDA links.','Salivary swelling: sialadenitis that is unresponsive to treatment, in an immunocompromised patient or with facial nerve palsy now routes to emergency assessment (NSW criteria).','Methotrexate check: avoid nitrous oxide sedation (US label).']},
 {v:'3.27.0',d:'Nov 18, 2026',i:['Unknown answers: the pending panel now shows what Yes and No would each lead to and, for 124 safety and risk questions, continues on the more cautious answer, labelled Provisional, with a Verify-before-finalizing list. Measurement, exam and treatment-choice questions stay paused. Nothing is finalized while an answer is Unknown.','Copy SOAP note: one de-identified note for the whole encounter (Subjective, Objective, Assessment, Plan) from every module used plus the Assessment. Available on module plans and in the Assessment.']},
@@ -2254,10 +2257,12 @@ function patientFooter(l){const u=PATIENT_UI[l]||PATIENT_UI.en;return`OMS Compas
 function patientStatusHTML(l){return`<p class="caveat" lang="${HL(l)}">${esc(patientFooter(l))}</p>`}
 function patientFullText(){const e=S.hoExport;if(!e)return'';const l=S.lang||'en';
  if(e.kind==='grid'){const g=OG.find(x=>x.id===e.id);return g?ogText(g,l):''}
+ if(e.kind==='v2'){const h=HO.find(x=>x.id===V2.LEGACY[v2State().proc]);return hoText(h,l)}
  const h=HO.find(x=>x.id===e.id),f=FAQ.find(x=>x.id===e.id);return h?hoText(h,l):f?faqText(f,l):'';
 }
 /* What the card shows and the short text says: title, call line, up to 3 call-us/911 lines, link. */
 function patientExport(){const e=S.hoExport;if(!e)return null;const l=S.lang||'en',ph=officePh();let L=l,t='',warn=[];
+ if(e.kind==='v2')return v2ok()?v2Export(l,ph):null;
  const h=HO.find(x=>x.id===e.id),f=FAQ.find(x=>x.id===e.id),g=e.kind==='grid'?OG.find(x=>x.id===e.id):null;
  if(g){L=g.t[l]?l:'en';t=g.t[L]}else if(h){t=h.t[l];warn=hoItems(h,l).filter(x=>x.w).slice(0,3).map(x=>({ic:x.ic,t:x.t.replace('[office phone]',ph||'your surgeon’s office')}))}else if(f){L=faqL(l);t=f.t[L]}else return null;
  /* A recorded medication precaution or age/weight limit withholds the general pain doses; the patient page shows them, so no link or QR. */
@@ -2271,9 +2276,10 @@ function ophFieldHTML(id){const d=ownPh();return`<label class="oph" for="${id}">
 function patientPreviewHTML(){const x=patientExport();if(!x)return'';const u=PATIENT_UI[x.l]||PATIENT_UI.en,P=PT[x.l]||PT.en,ln=(HO_LANGS.find(z=>z[0]===x.L)||['','English'])[1];
  const need=x.ph?'':`<div class="red" id="oph-need"><b>Add your office phone first.</b> Every patient message carries a number to call. Saved on this device only.<div style="margin-top:8px">${ophFieldHTML('oph-in')}</div></div>`;
  const card=`<div class="pcard" lang="${HL(x.L)}"><b class="pct">${esc(x.t)}</b>${x.ph?`<a class="pcall" href="${telOf(x.ph)}">📞 ${esc(P.call)} · ${esc(x.ph)}</a>`:''}${x.warn.length?`<ul class="hol">${x.warn.map(w=>`<li class="warn"><span class="ic" aria-hidden="true">${w.ic}</span>${esc(w.t)}</li>`).join('')}</ul>`:''}${x.hold?`<p class="pmeds">${esc(u.meds+(patientMedicationRisk().nsaid?' '+u.nsaid:''))}</p>`:`<p class="plink">${esc(P.full)} ›</p>`}</div>`;
- const qr=!x.ph?'':x.hold?`<p class="small" id="qr-held"><b>No QR or link for this patient.</b> The patient page lists the general pain doses, and a medication precaution or age/weight limit is recorded. Send the full text (it withholds them) and give the written medication plan.</p>`:`<div class="qrwrap">${qrSVG(x.url,'QR code: opens these instructions on the patient’s phone')}<p class="small">Patient scans with the phone camera. Opens in ${esc(ln)}, with every handout and FAQ one tap away. Nothing is sent from your phone; the link carries no patient details.</p></div>`;
+ const qr=!x.ph?'':x.hold?`<p class="small" id="qr-held"><b>No QR or link for this patient.</b> The patient page lists the general pain doses, and a medication precaution or age/weight limit is recorded. Send the full text (it withholds them) and give the written medication plan.</p>`:`<div class="qrwrap">${qrSVG(x.url,'QR code: opens these instructions on the patient’s phone')}<p class="small">Patient scans with the phone camera. Opens in ${esc(ln)}, with every handout and FAQ one tap away. Nothing is sent from your phone; the link carries no patient details.</p>${x.v2?`<p class="small" id="v2-len"><b>${x.url.length} characters</b> ${x.url.length<150?'✓ under 150':'✗ over 150'} · QR error correction M</p>`:''}</div>`;
+ const v2n=x.v2?`${x.v2.live?'':`<p class="small" id="v2-gate"><b>v2 draft, pending your review.</b> Until you approve it, this QR and text open the approved handout: ${esc(x.v2.legacy)}.</p>`}<a class="go" id="v2-preview" href="${esc(x.v2.preview)}" target="_blank" rel="noopener">Preview patient view${x.v2.live?'':' (draft)'} ↗</a>`:'';
  const btns=x.ph?`<button class="gobtn" data-patient-confirm>Copy ${x.hold?'full text':'text'} for front desk</button><button class="go" data-patient-share>Share from my phone ↗</button>`:'';
- return`<section class="box inner" id="patient-export-preview" role="region" aria-label="Patient export preview"><h3>Send to patient</h3>${need}${card}${qr}${btns}<button class="go" data-patient-cancel>${esc(u.cancel)}</button><p class="small">Check language, practice phone, medication precautions and doses. Translations need fluent-speaker review. “Share from my phone” sends from your own number.</p><details class="more"><summary>Show full text</summary><textarea class="copybox" rows="12" readonly aria-label="Patient export text">${esc(x.hold?patientFullText():patientShortText()+'\n\n— Full text —\n\n'+patientFullText())}</textarea></details></section>`}
+ return`<section class="box inner" id="patient-export-preview" role="region" aria-label="Patient export preview"><h3>Send to patient</h3>${need}${card}${qr}${v2n}${btns}<button class="go" data-patient-cancel>${esc(u.cancel)}</button><p class="small">Check language, practice phone, medication precautions and doses. Translations need fluent-speaker review. “Share from my phone” sends from your own number.</p><details class="more"><summary>Show full text</summary><textarea class="copybox" rows="12" readonly aria-label="Patient export text">${esc(x.hold?patientFullText():patientShortText()+'\n\n— Full text —\n\n'+patientFullText())}</textarea></details></section>`}
 
 const TEACH={ext:['What will you do if it is still bleeding at home?','What should you not do in the first 24 hours?','When would you call us, and when would you call 911?'],
  imp:['What should you not do with your tongue, lip or denture near the surgery site?','When can you chew on that side?','What would make you call us?'],
@@ -2439,13 +2445,32 @@ function hoHTML(){const l=S.lang||'en';
  return `${HANDOUTS_LIVE?'':'<div class="red"><b>DRAFT — pending Dr. Young’s review.</b> Not linked in the app yet. Approve to make them visible in the app.</div>'}
  ${colleague()?`<div class="lab" id="ho-neutral" style="margin-bottom:8px">${esc(HO_NEUTRAL)}</div>`:`<div class="toggles" id="ho-site" style="margin-bottom:6px">${[['young','Dr. Young'],['bayside','Bayside']].map(([c,n])=>`<button class="tg${(S.site||'young')===c?' on':''}" data-site="${c}" aria-pressed="${(S.site||'young')===c}">${n}</button>`).join('')}</div>`}
  <div class="toggles" style="margin-bottom:10px">${HO_LANGS.map(([c,n])=>`<button class="tg${l===c?' on':''}" data-lang="${c}" lang="${HL(c)}" aria-pressed="${l===c}">${n}</button>`).join('')}</div>
- ${patientPreviewHTML()}${patientStatusHTML(l)}<div class="lab" id="ho-sec-post">Post-op instructions</div>
+ ${v2HTML()}${patientPreviewHTML()}${patientStatusHTML(l)}<div class="lab" id="ho-sec-post">Post-op instructions</div>
  ${HO.map(h=>`<details class="box" id="ho-${h.id}"${S.hoOpen===h.id?' open':''}><summary>${esc(h.t[l])}</summary><div class="inner look"><ul class="hol">${hoItems(h,l).map(x=>`<li${x.w?' class="warn"':''}><span class="ic" aria-hidden="true">${x.ic}</span>${esc(x.t)}</li>`).join('')}</ul>${teachHTML(h.id)}<button class="go" data-share="${h.id}">${esc(PATIENT_UI[l].preview)} ›</button> <span class="small">${h.src.map(srcLink).join(' · ')}</span></div></details>`).join('')}
  ${[['proc','Procedure FAQs'],['dx','Diagnosis FAQs']].map(([k,n])=>`<div class="lab" id="ho-sec-${k}" style="margin-top:14px">${n}</div>${faqL(l)!==l?`<p class="small">FAQs are in English and Español for now — English shown.</p>`:''}${FAQ.filter(f=>f.k===k).map(f=>{const L=faqL(l);return`<details class="box" id="ho-${f.id}"${S.hoOpen===f.id?' open':''}><summary lang="${HL(L)}">${esc(f.t[L])}</summary><div class="inner look" lang="${HL(L)}">${f.i[L].map(([q,a])=>`<p><b>${esc(q)}</b><br>${esc(a)}</p>`).join('')}<button class="go" data-share="${f.id}">${HO_UI[L].sh} ↗</button> <span class="small">${f.src.map(srcLink).join(' · ')}</span></div></details>`}).join('')}`).join('')}
  <div class="lab" id="ho-sec-og" style="margin-top:14px">Choosing a treatment · option grids</div><p class="small">Spanish, Kriolu and 中文 are machine-drafted, pending native-speaker review.</p>${OG.map(g=>ogHTML(g,l)).join('')}
  ${d7HTML(l)}
  <textarea id="copybox" class="copybox" hidden aria-label="Handout text"></textarea><p class="caveat">Option grids follow the Option Grid format (one page, patients’ common questions, side by side) ${srcLink('optgrid')}; teach-back per AHRQ ${srcLink('teachback')}. Plain-language drafts written from published patient instructions; edit to match your practice. FAQs are general information, not a substitute for the visit.</p>`}
 async function shareTxt(title,t,btn){try{if(navigator.share){await navigator.share({title,text:t});return}}catch(e){if(e&&e.name==='AbortError')return}try{await navigator.clipboard.writeText(t);btn.textContent='Copied'}catch(e){showCopy(t)}}
+/* ===== v2 composer: procedure → stage → modifier chips → language → QR. Data and link rules come from handouts/v2.js.
+   Until V2.V2_LIVE, the QR opens the approved handout for that procedure; only the preview link shows the draft. Author mode only while draft. ===== */
+const V2L={proc:[['ext3','3rd molars / extraction'],['imp','Implant + graft'],['aox','All-on-X']],stage:[['c','Consult'],['r','Post-op'],['a','Full journey']]};
+function v2ok(){return typeof V2!=='undefined'&&(V2.V2_LIVE||!colleague())}
+function v2State(){return S.v2||(S.v2={proc:'ext3',stage:'r',mods:[]})}
+/* A recorded medication precaution or age/weight limit adds nd: the patient page then hides the general pain doses. */
+function v2Mods(){const m=[...v2State().mods];if(patientMedicationRisk().withhold)m.push('nd');return V2.MODS.filter(x=>m.includes(x))}
+function v2URL(draft){const v=v2State(),q=colleague()?(ownPh()?'?ph='+ownPh():''):(S.site==='bayside'?'?site=bayside':'');return HO_URL+q+'#'+V2.hashV2({proc:v.proc,stage:v.stage,mods:v2Mods(),lang:S.lang||'en',draft:!!draft})}
+function v2HTML(){if(!v2ok())return'';const v=v2State(),seg=(xs,k,cur)=>`<div class="toggles v2c">${xs.map(([c,n])=>`<button class="tg${cur(c)?' on':''}" data-${k}="${c}" aria-pressed="${cur(c)}">${esc(n)}</button>`).join('')}</div>`;
+ return`<section class="box inner" id="v2-composer" aria-label="Send to patient composer"><h3>Patient link${V2.V2_LIVE?'':' <em class="small">v2 draft · author only</em>'}</h3>
+ <div class="lab">1 · Procedure</div>${seg(V2L.proc,'v2p',c=>v.proc===c)}<div class="lab">2 · Stage</div>${seg(V2L.stage,'v2s',c=>v.stage===c)}
+ <div class="lab">3 · Applies to this patient</div>${seg(V2.MODS.filter(k=>k!=='nd').map(k=>[k,V2.M[k].en.label]),'v2m',c=>v.mods.includes(c))}
+ ${patientMedicationRisk().withhold?'<p class="small" id="v2-nd">A medication precaution or age/weight limit is recorded: the patient page will hide the general pain doses.</p>':''}
+ <p class="small">4 · Language: the buttons above. The QR card follows.</p></section>`}
+function v2Export(l,ph){const v=v2State(),leg=V2.LEGACY[v.proc],h=HO.find(x=>x.id===leg);
+ const warn=hoItems(h,l).filter(x=>x.w).slice(0,3).map(x=>({ic:x.ic,t:x.t.replace('[office phone]',ph||'your surgeon’s office')}));
+ const v2={live:V2.V2_LIVE,preview:v2URL(true),legacy:h.t[l]};
+ if(!V2.V2_LIVE)return{l,L:l,t:h.t[l],ph,warn,hold:patientMedicationRisk().withhold,url:patientURL(leg,l),v2};
+ return{l,L:l,t:V2.P[v.proc].en.consult.headline,ph,warn,hold:false,url:v2URL(false),v2}}
 function shareHO(id){S.hoExport={kind:'handout',id};rebody();document.getElementById('patient-export-preview')?.scrollIntoView({block:'start'})}
 
 
@@ -3511,7 +3536,7 @@ function newPatient(){
  S.changes=[];delete S.compare;delete S.compareEligible;document.body.classList.remove('kb');
  ['consult','autoOverrides'].forEach(k=>{delete S[k]});S.draftMode=false;
  ['pf','ans','inp','rcri','io','bx','cx'].forEach(k=>{S[k]={}});S.asmt=[];S.atab='find';
- ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','adultOK','fast','emOpen','hoOpen','mod','ioSig','ioReset','labPick','casePick'].forEach(k=>{delete S[k]});
+ ['tri','triErr','wt','wtIn','lkc','asa','today','q','refq','fid','fhit','adultOK','fast','emOpen','hoOpen','mod','ioSig','ioReset','labPick','casePick','v2'].forEach(k=>{delete S[k]});
  home()}
 function hasPatient(){return!!((S.asmt&&S.asmt.length)||Object.keys(S.lkc||{}).length||Object.keys(S.pf||{}).length||Object.values(S.ans||{}).some(o=>o&&Object.keys(o).length)||Object.values(S.inp||{}).some(o=>o&&Object.keys(o).length)||S.tri||S.wt||Object.values(S.rcri||{}).some(Boolean)||Object.values(S.io||{}).some(Boolean))}
 let npArm=0;
@@ -3898,6 +3923,7 @@ app.addEventListener('click',e=>{
  if(b.dataset.ho){S.hoOpen=b.dataset.ho;view('handouts');const d=document.getElementById('ho-'+b.dataset.ho);d&&d.scrollIntoView({block:'start'});return}
  if(b.dataset.lang){S.lang=b.dataset.lang;return rebody()}
  if(b.dataset.site){S.site=b.dataset.site;return rebody()}
+ if(b.dataset.v2p||b.dataset.v2s||b.dataset.v2m){const v=v2State();if(b.dataset.v2p)v.proc=b.dataset.v2p;if(b.dataset.v2s)v.stage=b.dataset.v2s;if(b.dataset.v2m){const k=b.dataset.v2m;v.mods=v.mods.includes(k)?v.mods.filter(x=>x!==k):[...v.mods,k]}S.hoExport={kind:'v2'};return rebody()}
  if(b.dataset.share){S.hoExport={kind:'handout',id:b.dataset.share};rebody();document.getElementById('patient-export-preview')?.scrollIntoView({block:'start'});return}
  if(b.dataset.ogshare){S.hoExport={kind:'grid',id:b.dataset.ogshare};rebody();document.getElementById('patient-export-preview')?.scrollIntoView({block:'start'});return}
  if(b.hasAttribute('data-patient-cancel')){delete S.hoExport;return rebody()}

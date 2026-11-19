@@ -537,6 +537,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  // Offline and update behavior via a real service worker over HTTP
  {const fs=require('fs'),os=require('os'),http=require('http');const root=fs.mkdtempSync(path.join(os.tmpdir(),'compass-'));const app=path.join(root,'oms-compass');fs.mkdirSync(app);
   for(const f of fs.readdirSync(path.resolve(__dirname,'..')))if(/\.(html|js|css|png|webmanifest)$/.test(f))fs.copyFileSync(path.resolve(__dirname,'..',f),path.join(app,f));
+  fs.mkdirSync(path.join(app,'handouts'));for(const f of ['index.html','v2.js'])fs.copyFileSync(path.resolve(__dirname,'..','handouts',f),path.join(app,'handouts',f));
   const T={html:'text/html',js:'text/javascript',css:'text/css',png:'image/png',webmanifest:'application/manifest+json'};
   const srv=http.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const f=path.join(root,u);if(!f.startsWith(root)||!fs.existsSync(f)){r.writeHead(404);return r.end()}r.writeHead(200,{'content-type':T[f.split('.').pop()]||'application/octet-stream','cache-control':'no-cache'});fs.createReadStream(f).pipe(r)});
   await new Promise(r=>srv.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${srv.address().port}/oms-compass/`;
@@ -558,6 +559,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(JSON.stringify(upd)==='["compass-test-update"]','Update activates after old clients close and deletes old cache ('+upd+')');
   await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: online open serves the new version');
   await oc.setOffline(true);await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: new version available offline');
+  await op.goto(base+'handouts/?site=bayside#v-ext3-r-sed-en-d');await op.waitForSelector('.v2');ok(await op.locator('[data-pane="rec"]').isVisible()&&/508/.test(await op.locator('a.call').innerText()),'Offline: patient page and v2 draft open from the cache');
   await oc.close();srv.close();fs.rmSync(root,{recursive:true,force:true})}
 
  console.log('16. v3.6 chairside focus mode — one decision per screen, header, drawer, back-step, latency, contrast');
@@ -1318,6 +1320,38 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{localStorage.removeItem('oms_compass_sos_run');view('ref')});
   ok(/0 of 25 cards have a last-checked date/.test(await p.locator('#refchk-sum').innerText())&&await p.locator('.refchk').count()===25,'Ref: every card shows its check status; none dated yet');
   await p.close();await c34.close();await new Promise(r=>srv34.close(r))}
+
+ console.log('35. v3.28.0: v2 composer (author, draft) and patient journey page');
+ {const c35=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await c35.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const page=await c35.newPage();page.on('pageerror',e=>{fail++;fails.push('v2 composer pageerror: '+e.message)});await page.route(/^https?:\/\//,localOnly);await page.goto(FILE);await page.waitForSelector('#in-q');
+  const X=(f,a)=>page.evaluate(f,a);
+  ok(await X(()=>typeof V2==='object'&&JSON.stringify(V2L.proc.map(x=>x[0]))===JSON.stringify(V2.PROCS)&&JSON.stringify(V2L.stage.map(x=>x[0]))===JSON.stringify(V2.STAGES)),'Composer uses the v2 code lists from handouts/v2.js');
+  await X(()=>{setPmode('colleague');newPatient();S.lang='en';view('handouts')});ok(await page.locator('#v2-composer').count()===0,'Colleague mode: no v2 composer while v2 is a draft');
+  await X(()=>{setPmode('author');newPatient();S.lang='en';S.site='bayside';view('handouts')});
+  ok(await page.locator('#v2-composer').count()===1&&await page.locator('#v2-composer [data-v2p]').count()===3&&await page.locator('#v2-composer [data-v2s]').count()===3&&await page.locator('#v2-composer [data-v2m]').count()===7,'Author mode: composer with 3 procedures, 3 stages, 7 modifier chips');
+  ok(await page.locator('#v2-composer .tg').evaluateAll(bs=>bs.every(b=>{const r=b.getBoundingClientRect();return r.height>=48&&r.width>=48})),'Composer buttons are at least 48 px');
+  await page.click('[data-v2p="imp"]');await page.click('[data-v2s="a"]');await page.click('[data-v2m="sin"]');await page.click('[data-v2m="sed"]');
+  const x=await X(()=>({e:patientExport(),pv:v2URL(true),len:document.getElementById('v2-len')?.textContent||'',gate:!!document.getElementById('v2-gate'),qr:!!document.querySelector('#patient-export-preview svg.qr'),href:document.getElementById('v2-preview')?.getAttribute('href')}));
+  ok(x.e.url==='https://gnuoyevets.github.io/oms-compass/handouts/?site=bayside#imp-en'&&x.gate&&x.qr,'Draft: QR opens the approved implant handout, with a notice');
+  ok(x.href===x.pv&&/#v-imp-a-sed\.sin-en-d$/.test(x.pv),'Preview link opens the v2 draft with chips in canonical order');
+  ok(/characters/.test(x.len)&&/under 150/.test(x.len),'Character count shown and under 150');
+  await X(()=>{S.ans.pain={a:true};rebody()});
+  ok(await X(()=>/\.nd-en-d$/.test(v2URL(true))&&!!document.getElementById('v2-nd')&&!!document.getElementById('qr-held')),'Medication precaution: preview adds nd; draft QR still withheld as today');
+  await X(()=>{newPatient()});ok(await X(()=>!S.v2),'New patient clears the composer');
+  const hp=await c35.newPage();hp.on('pageerror',e=>{fail++;fails.push('v2 page error: '+e.message)});await hp.route(/^https?:\/\//,localOnly);
+  const HP=FILE.replace(/index\.html$/,'handouts/index.html');
+  await hp.goto(HP+'?site=bayside&name=Jane#v-ext3-a-sed.ant-en-d');await hp.waitForSelector('.v2');
+  ok(!/name=/.test(hp.url())&&/\?site=bayside#/.test(hp.url()),'Patient page drops an unexpected query parameter and keeps ?site=');
+  ok(await hp.locator('.v2draft').count()===1&&await hp.locator('[data-v2tab]').count()===3&&/508/.test(await hp.locator('a.call').innerText()),'Draft link: banner, 3 tabs, Bayside phone');
+  ok(await hp.locator('[data-v2tab]').evaluateAll(bs=>bs.every(b=>b.getBoundingClientRect().height>=48)),'Patient tabs are at least 48 px');
+  await hp.click('[data-v2tab="risk"]');ok(await hp.locator('[data-pane="risk"]').isVisible()&&/Applies to your surgery/.test(await hp.locator('.applies').innerText())&&/does not replace/.test(await hp.locator('[data-pane="risk"]').innerText()),'Risks tab: applied modifier risks and education-only note');
+  await hp.click('[data-v2tab="rec"]');const rec=await hp.locator('[data-pane="rec"]').innerText();
+  ok(/Emergency/.test(rec)&&/911/.test(rec)&&!/Advil/.test(rec)&&/written plan/.test(rec)&&await hp.locator('.v2faq details').count()<=8,'Recovery: escalation, doses withheld for bleeding precaution, ≤ 8 FAQs');
+  ok(await hp.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'v2 page: no horizontal scroll at 390 px');
+  await hp.goto(HP+'#v-ext3-r-sed-zh');await hp.waitForSelector('h2');
+  ok(/#ext-zh$/.test(hp.url())&&/拔牙後須知/.test(await hp.locator('h2').innerText())&&await hp.locator('.v2').count()===0,'Non-draft link while v2 is a draft: opens the approved handout in the patient’s language');
+  await hp.goto(HP+'#v-ext3-r-jane-en');await hp.waitForSelector('.card');ok(await hp.locator('.v2').count()===0,'Malformed v2 link shows the topic list, nothing composed');
+  await hp.close();await c35.close()}
 
  await browser.close();
  

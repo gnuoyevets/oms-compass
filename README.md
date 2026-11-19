@@ -11,6 +11,7 @@ See [IMPLEMENTATION-REVIEW.md](IMPLEMENTATION-REVIEW.md) for corrections, featur
 - `manifest.webmanifest` — name, icon, full-screen mode
 - `sw.js` — offline cache
 - `CHANGELOG.md` — dated change log
+- `handouts/v2.js` — v2 patient-journey codes, link rules, composition and draft content (shared by app and patient page)
 - `handouts/index.html` — standalone patient page: post-op instructions and FAQs; text mirrors the Compass Patient tab (a test checks they match)
 - `handouts/qr/` — front-desk QR sheets (PDF, Dr. Young and Bayside; English, Spanish, Kriolu and 中文, two pages each). Regenerate after adding or renaming topics: `python3 handouts/qr/make_qr_sheets.py`
 - `*.png` — app icons
@@ -45,3 +46,9 @@ Software tests do not establish clinical validity.
 ## v3.16.0 clinical workflow repair
 
 See `CLINICAL-WORKFLOW-REVIEW.md` for the approved changes, primary sources and validation. Run `node tests/clinical-workflow.cjs` in addition to the existing suites. Set `COMPASS_REVIEW_OUTPUT` to an artifact directory to save the two mobile review screenshots during the browser suite. No patient data is included.
+
+## v3.28.0 patient journey (v2, draft)
+
+`handouts/v2.js` holds the v2 codes, link rules, `composeProtocol()` and the English draft content (procedures `ext3`, `imp`, `aox`; 7 modifier chips). The app's Patient tab composer (Author mode while in draft) and `handouts/index.html` both load it. Link format: `handouts/?site=bayside#v-ext3-r-sed.grf-en`; add `-d` for the draft preview. Only `?site=` or `?ph=` are allowed in the query string.
+
+To go live after clinical review: set `last_reviewed` in each module, set `V2_LIVE = true` in `handouts/v2.js`, bump `VERSION` in `sw.js`, update the `V2_LIVE` guard check in `tests/v2.cjs`, and run it plus the browser suite. Until then, QR codes open the approved handouts.

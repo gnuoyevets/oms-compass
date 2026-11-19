@@ -23,6 +23,8 @@ jobs:
         run: node tests/reconciliation.cjs
       - name: Clinical workflow regressions (no dependencies)
         run: node tests/clinical-workflow.cjs
+      - name: v2 link and composition checks (no dependencies)
+        run: node tests/v2.cjs
       - name: Full graph, audit-correction and feature-preservation checks
         run: node tests/graph.cjs
       - name: Install Playwright and Chromium

@@ -49,14 +49,28 @@ h3.sec{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--
 .qa p.warn{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:10px;padding:10px 12px;font-weight:600}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media print{.rev{border:1px solid #000}.rev a{border:0;justify-content:flex-start;min-height:0;color:#000}.rev a::after{content:' — ' attr(href);font-weight:400}body{background:#fff;color:#000;font-size:13pt}.lang,.back,.row,.noprint{display:none!important}.call{background:none;color:#000;justify-content:flex-start;margin:8px 0;padding:0;min-height:0}li.warn{background:none;color:#000;border:1px solid #000}}
+.v2tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:6px;margin:0 0 14px}.v2tabs button{min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:600 16px inherit;font-family:inherit;cursor:pointer}.v2tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.v2draft{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red-ink);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-weight:600;font-size:16px}
+.strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.strip div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:14px;color:var(--muted)}.strip b{display:block;color:var(--ink);font-size:16px;line-height:1.3;margin-top:2px}
+.opt,.day,.esc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 10px}.opt h3,.day h3{margin:0 0 6px;font-size:18px}.opt ul,.day ul,.v2 ul{margin:4px 0 8px;padding-left:22px}.opt li,.day li,.v2 li{margin:0 0 6px}
+.applies{border:2px solid var(--accent);border-radius:14px;padding:12px 14px;margin:12px 0}.applies h3{margin:0 0 6px;color:var(--accent);font-size:17px}
+.esc summary,.day summary,.v2faq summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer}.esc.red{background:var(--red-bg);border-color:var(--red-line);color:var(--red-ink)}.esc.amber{border-color:#d9a441}.esc.green{border-color:var(--accent)}
+.blk{font-size:14px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:8px 0 2px}
+.v2faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 14px;margin:0 0 8px}.v2faq p{margin:0 0 12px}
+@media print{.v2tabs,.v2draft{display:none!important}.v2 [hidden]{display:block!important}.v2 details{display:block}}
+.row a.btn{font:600 16px inherit;font-family:inherit;color:var(--ink)}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
+<script src="v2.js"></script>
 <script>
 /* Patient handouts — same text as OMS Compass (Patient tab, post-op instructions): EN/ES/Kriolu/中文. Edit both together. */
 
 const SITES={young:{ph:'(401) 273-7802',tel:'+14012737802',n:'Steven H. Young, DDS, OMS',u:'https://g.page/r/CWM8GLnZutc8EBE/review'},bayside:{ph:'(508) 422-5007',tel:'+15084225007',n:'Bayside Oral & Facial Surgery',u:'https://g.page/r/CVPfUjdMh6k6EBM/review'}};
+/* Zero-PHI: only ?site= or ?ph= (a practice phone) may be in the link. Any other parameter is dropped from the address bar and ignored. */
+const VQ=window.V2?V2.validateQuery(location.search):{ok:true,bad:[]};
+if(!VQ.ok){const keep=new URLSearchParams();if(VQ.site)keep.set('site',VQ.site);if(VQ.ph)keep.set('ph',VQ.ph);try{history.replaceState(null,'',location.pathname+(keep.toString()?'?'+keep:'')+location.hash)}catch(e){}}
 const QS=new URLSearchParams(location.search),PH_IN=(QS.get('ph')||'').replace(/\D/g,'').replace(/^1(?=\d{10}$)/,'');
 /* ?ph=4015551234 gives a colleague's office number (practice number only, never patient data); that page shows no review link. */
 const OWN=/^\d{10}$/.test(PH_IN)?{ph:`(${PH_IN.slice(0,3)}) ${PH_IN.slice(3,6)}-${PH_IN.slice(6)}`,tel:'+1'+PH_IN,n:'',u:''}:null;
@@ -269,7 +283,33 @@ function setHash(id){const h=id?`#${id}-${lang}`:(lang!=='en'?'#-'+lang:'');try{
 const isWarn=t=>/911|^Call us|^Llámenos|^Llame|^Txoma|^出現以下情況請致電/.test(t);
 const ICON={ext:['🩸','🧊','🥤','🚭','🧂','🥣','💊','⚠️','💊','🤢','ℹ️','📞','🚑'],imp:['🩸','🧊','✋','🥣','🫧','🦷','ℹ️','🤧','🚭','💊','⚠️','💊','📞','🚑'],arch:['🧊','🦷','🥣','🪥','🚭','💊','⚠️','🗣️','📞','📅'],presed:['🍽️','🥤','💊','🚭','🚗','👕','🤒'],sed:['🧑‍🤝‍🧑','🚗','👶','🥤','🛏️','💉','🚑']};
 function items(h,l){const xs=h.i[l].map((t,k)=>({t,ic:(ICON[h.id]||[])[k]||'',w:isWarn(t)}));return[...xs.filter(x=>x.w),...xs.filter(x=>!x.w)]}
-function render(){const id=parse(),u=UI[lang];document.documentElement.lang=HL(lang);
+/* ===== v2 patient journey (Options · Risks · Recovery). Draft until V2.V2_LIVE; only a -d link shows the draft. ===== */
+const V2T={tabs:{opt:'Options',risk:'Risks',rec:'Recovery'},strip:['Time in the chair','Back to normal activities','Healing'],pros:'Good points',trade:'Trade-offs',exp:'What to expect (normal)',applies:'Applies to your surgery',risks:'Possible risks',alt:'Other choices',consent:'This page explains common effects and risks. It does not replace the talk with your surgeon or the consent form you sign.',red:'Emergency',amber:'Call the office',green:'Normal healing',normal:'Normal',do:'Do',dont:'Don’t',faq:'Common questions',draft:'DRAFT — not yet reviewed by the surgeon. Not for patient use.',fb:'This page is in English for now.'};
+let v2tab=null;
+const V2TABS={c:['opt','risk'],r:['rec'],a:['opt','risk','rec']};
+function v2line(t){if(t===V2.DOSE){const h=HO.find(x=>x.id==='ext');return h.i.en[6]}if(t===V2.NODOSE){const p=PATIENT_UI.en;return p.meds+' '+p.nsaid}return t}
+function v2list(xs){return xs.length?`<ul>${xs.map(x=>`<li>${esc(v2line(x))}</li>`).join('')}</ul>`:''}
+function renderV2(v){const c=V2.composeProtocol(v),T=V2T,tabs=V2TABS[v.stage];if(!tabs.includes(v2tab))v2tab=tabs[0];
+ document.documentElement.lang='en';document.title=c.consult.headline;
+ const head=`<header><h1>${esc(UI.en.title)}</h1></header>`,call=`<a class="call top" href="tel:${TEL}">📞 ${UI.en.call} · ${PHONE}</a>`;
+ const warn=(v.draft?`<p class="v2draft">${T.draft}</p>`:'')+(v.lang!=='en'?`<p class="note" style="margin:0 0 10px">${T.fb}</p>`:'');
+ const tb=tabs.length>1?`<div class="v2tabs" role="tablist">${tabs.map(t=>`<button role="tab" data-v2tab="${t}" aria-selected="${t===v2tab}">${T.tabs[t]}</button>`).join('')}</div>`:'';
+ const s=c.consult.expectation_strip;
+ const opt=`<section data-pane="opt"${v2tab==='opt'?'':' hidden'}><p>${esc(c.consult.summary)}</p><div class="strip"><div>${T.strip[0]}<b>${esc(s.chair_time)}</b></div><div>${T.strip[1]}<b>${esc(s.social_downtime)}</b></div><div>${T.strip[2]}<b>${esc(s.full_bone_healing)}</b></div></div>${c.consult.decision_options.map(o=>`<div class="opt"><h3>${esc(o.option)}</h3><div class="blk">${T.pros}</div>${v2list(o.pros)}<div class="blk">${T.trade}</div>${v2list(o.tradeoffs)}</div>`).join('')}</section>`;
+ const ap=c.consent.applied_modifier_risks;
+ const risk=`<section data-pane="risk"${v2tab==='risk'?'':' hidden'}>${ap.length?`<div class="applies"><h3>${T.applies}</h3><ul>${ap.map(r=>`<li><b>${esc(r.risk)}.</b> ${esc(r.plain_english)}</li>`).join('')}</ul></div>`:''}<h3>${T.exp}</h3>${v2list(c.consent.expected_effects)}<h3>${T.risks}</h3><ul>${c.consent.material_risks.map(r=>`<li><b>${esc(r.risk)}.</b> ${esc(r.plain_english)}</li>`).join('')}</ul><h3>${T.alt}</h3>${v2list(c.consent.alternatives)}<p class="note">${T.consent}</p></section>`;
+ const E=c.escalation;
+ const rec=`<section data-pane="rec"${v2tab==='rec'?'':' hidden'}><details class="esc red" open><summary>🚑 ${T.red}</summary>${v2list(E.red_go_to_er)}</details><details class="esc amber" open><summary>📞 ${T.amber} · ${PHONE}</summary>${v2list(E.amber_call_office)}</details><details class="esc green"><summary>✅ ${T.green}</summary>${v2list(c.consent.expected_effects)}</details>
+ ${c.triage_days.map((d,k)=>`<details class="day"${k===0?' open':''} data-win="${d.window_id}"><summary>${esc(d.label)}</summary><div class="blk">${T.normal}</div>${v2list(d.normal)}<div class="blk">${T.do}</div>${v2list(d.do)}<div class="blk">${T.dont}</div>${v2list(d.dont)}</details>`).join('')}
+ <h3 class="sec">${T.faq}</h3><div class="v2faq">${c.faq.slice(0,8).map(f=>`<details data-faq="${f.id}"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('')}</div></section>`;
+ app.innerHTML=`${head}${call}${warn}<div class="v2"><h2>${esc(c.consult.headline)}</h2>${tb}${opt}${risk}${rec}</div><div class="row"><button class="btn" data-print>${UI.en.print}</button><a class="btn" style="display:flex;align-items:center;justify-content:center;text-decoration:none" href="#-${lang}" data-home>${UI.en.back.replace('‹ ','')}</a></div><p class="note">${UI.en.note}</p>`;
+ window.scrollTo(0,0)}
+/* Returns true when the hash is a v2 link and was handled (rendered, or redirected to the approved handout). */
+function routeV2(){if(!window.V2)return false;const v=V2.parseV2(location.hash);if(!v)return false;lang=v.lang;
+ if(v.draft||(V2.V2_LIVE&&V2.P[v.proc][v.lang])){renderV2(v);return true}
+ /* Not live (or not yet translated): open the approved handout for this procedure, in the patient's language. */
+ try{history.replaceState(null,'',location.pathname+location.search+`#${V2.LEGACY[v.proc]}-${v.lang}`)}catch(e){}return false}
+function render(){if(routeV2())return;const id=parse(),u=UI[lang];document.documentElement.lang=HL(lang);
  const top=`<header><h1>${u.title}</h1><div class="lang" role="group" aria-label="Language">${LANGS.map(([c,n])=>`<button data-l="${c}" lang="${HL(c)}" aria-pressed="${lang===c}">${n}</button>`).join('')}</div></header><p class="note" lang="${HL(lang)}">OMS Compass v${CONTENT_VERSION} · ${lang}<br>${esc(PATIENT_UI[lang].draft)}${lang==='en'?'':'<br>'+esc(PATIENT_UI[lang].translation)}</p>`;
  const call=`<a class="call top" href="tel:${TEL}">📞 ${u.call} · ${PHONE}</a>`,all=`<a class="all" href="#-${lang}" data-home>${u.all} ›</a>`;
  const rev=SITE.u?`<p class="revs"><a href="${esc(SITE.u)}" target="_blank" rel="noopener">★ ${esc(u.revBtn)} ↗</a></p>`:'';
@@ -283,6 +323,7 @@ function render(){const id=parse(),u=UI[lang];document.documentElement.lang=HL(l
  app.innerHTML=`${top}${call}<button class="back" data-home>${u.back}</button><h2>${esc(h.t[lang])}</h2><ul class="hol">${items(h,lang).map(x=>`<li${x.w?' class="warn"':''}><span class="ic" aria-hidden="true">${x.ic}</span><span>${esc(x.t)}</span></li>`).join('')}</ul><div class="row"><button class="btn" data-share>${u.share} ↗</button><button class="btn" data-print>${u.print}</button></div>${all}<p class="note">${u.note}</p>`;
  window.scrollTo(0,0)}
 app.addEventListener('click',async e=>{const b=e.target.closest('button,a[data-home]');if(!b)return;if(b.tagName==='A')e.preventDefault();
+ if(b.dataset.v2tab){v2tab=b.dataset.v2tab;document.querySelectorAll('[data-pane]').forEach(p=>p.hidden=p.dataset.pane!==v2tab);document.querySelectorAll('[data-v2tab]').forEach(x=>x.setAttribute('aria-selected',x.dataset.v2tab===v2tab));return}
  if(b.dataset.l){const id=parse();lang=b.dataset.l;setHash(id);render();return}
  if(b.hasAttribute('data-home')){setHash(null);render();return}
  if(b.hasAttribute('data-print')){window.print();return}
@@ -290,6 +331,8 @@ app.addEventListener('click',async e=>{const b=e.target.closest('button,a[data-h
   try{if(navigator.share){await navigator.share({title:h.t[lang]||h.t.en,url});return}}catch(x){if(x&&x.name==='AbortError')return}
   try{await navigator.clipboard.writeText(url);b.textContent=UI[lang].copied}catch(x){prompt('',url)}}});
 addEventListener('hashchange',render);render();
+/* Offline: the app's service worker also caches this page and v2.js after the first visit. */
+if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{}));
 </script>
 </body>
 </html>
