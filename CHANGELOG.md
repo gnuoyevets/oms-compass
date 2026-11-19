@@ -20,9 +20,11 @@ Partly checked:
 - **padss:** the old PMID 8519409 was an unrelated orthopedic paper. It now cites Chung, *Can J Anaesth* 1995;42(11):1056–8, which defines the modified PADSS, and names the original (Chung, Chan & Ong, *J Clin Anesth* 1995;7(6):500–6). Item wording is still not checked because the table isn't in the abstract.
 - **spaqi:** now cites the primary paper, Oprea et al., *BJA* 2026;136(6):1776–99. The BJA full text returned 403 and the abstract doesn't state the minor-procedure recommendation, so it stays [verify]. The note was reworded.
 
-Flagged for Steven, not changed:
-- **Salivary pathway vs NSW:** NSW lists *sialadenitis in an immunocompromised patient* and *sialadenitis with facial nerve palsy* as **emergency** criteria. The app sends the first to same-day assessment (oInfect) and the second to expedited mass workup (oMass). The oMed and oDental branches cite saltri but have no NSW counterpart.
-- **Methotrexate label §7:** nitrous oxide potentiates methotrexate's effect on folate-dependent pathways. The app doesn't mention this.
+Clinical changes (approved by Steven, Nov 19, 2026):
+- **Salivary pathway, first question:** now also asks about sialadenitis that is unresponsive to treatment, occurs in an immunocompromised patient, or comes with facial nerve palsy. Yes → emergency assessment, matching the NSW emergency criteria. Still unchanged: the oMed and oDental branches cite saltri but have no NSW counterpart.
+- **Methotrexate prescribing check:** adds "confirm with the prescriber before nitrous oxide" (US label §7: nitrous oxide potentiates methotrexate's effect on folate-dependent pathways). The NSAID/penicillin wording now follows the label ("raise methotrexate levels"). The `[verify against the US label]` tag is removed now that the label has been checked, so the methotrexate plan is no longer draft-gated.
+- Tests: 2 new graph checks.
+
 ## v3.27.0 — Nov 18, 2026 (approved by Steven Nov 18, 2026) — provisional safer assumption, SOAP note
 
 - **Unknown → provisional safer assumption.** `walk()` is unchanged: Unknown still halts and no plan is finalized. The pending panel now adds “What this answer decides” (where Yes and where No lead) and, for 124 of 180 questions with a curated safer answer (`CZ`), continues the path on that answer as **Provisional · not a plan**, with the next question or the provisional outcome and the list of assumptions. The 56 measurement, exam and treatment-choice questions have no default and stay paused. Draft-gated and sedation-age-gated content stays withheld in the provisional view. The copied note adds the provisional lines and a “Verify before finalizing” list.
