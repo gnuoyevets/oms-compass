@@ -1353,6 +1353,24 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await hp.goto(HP+'#v-ext3-r-jane-en');await hp.waitForSelector('.card');ok(await hp.locator('.v2').count()===0,'Malformed v2 link shows the topic list, nothing composed');
   await hp.close();await c35.close()}
 
+ console.log('36. v3.28.1: a Home button on every screen');
+ {const c36=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await c36.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1');localStorage.setItem('oms_compass_practice_mode','author')}catch(e){}});
+  const p=await c36.newPage();p.on('pageerror',e=>{fail++;fails.push('home audit pageerror: '+e.message)});await p.route(/^https?:\/\//,localOnly);await p.goto(FILE);await p.waitForSelector('#in-q');
+  const homes=()=>p.evaluate(()=>[...document.querySelectorAll('[data-home],[data-ask-home]')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0}).length);
+  const miss=[];const chk=async(n,f,a)=>{await p.evaluate(f,a);if(!(await homes()))miss.push(n)};
+  for(const v of ['emergency','calc','ref','handouts','new'])await chk('view '+v,v=>view(v),v);
+  for(const m of await p.evaluate(()=>MODS.filter(m=>!m.hidden).map(m=>m.id)))await chk('module '+m,m=>{newPatient();open(m)},m);
+  for(const f of await p.evaluate(()=>FIND.map(f=>f.id)))await chk('finding '+f,f=>{newPatient();S.asmt=[f];openFind(f)},f);
+  await chk('assessment',()=>{newPatient();S.asmt=['renal'];document.querySelector('[data-asmt]').click()});
+  await chk('intraop',()=>{document.querySelector('[data-ioopen]').click()});
+  ok(miss.length===0,'Every view, module, finding, Assessment and Intraop screen shows Home'+(miss.length?': missing on '+miss.join(', '):''));
+  await p.evaluate(()=>{newPatient();open('extraction')});await p.click('button[data-ask]');await p.click('[data-ask-home]');
+  ok(await p.evaluate(()=>S.view==='decide'&&document.getElementById('asksheet').hidden),'Ask Claude sheet: Home closes it and goes home');
+  const hp=await c36.newPage();await hp.route(/^https?:\/\//,localOnly);await hp.goto(FILE.replace(/index\.html$/,'handouts/index.html')+'#v-ext3-r-en-d');await hp.waitForSelector('.v2');
+  ok(await hp.locator('.v2').evaluate(v=>{const b=document.querySelector('button.back[data-home]');return!!b&&b.getBoundingClientRect().top<v.getBoundingClientRect().top}),'v2 patient page: All topics button at the top');
+  for(const h of ['#ext-en','#fao-es','#ogimp-zh']){await hp.goto(FILE.replace(/index\.html$/,'handouts/index.html')+h);await hp.waitForSelector('h2');ok(await hp.locator('button.back[data-home]').count()===1,'Patient page '+h+': All topics button')}
+  await c36.close()}
+
  await browser.close();
  
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
