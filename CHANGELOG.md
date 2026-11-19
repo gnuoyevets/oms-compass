@@ -2,6 +2,26 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.28.0 — Nov 19, 2026 (merge approved by Steven Nov 19, 2026; v2 content still a draft, not live) — v2 patient journey engine (content draft)
+
+Built from the "OMS Compass v2" handoff, as decided on Nov 19, 2026. The engine is live; the new clinical text is held back until you review it.
+- **`handouts/v2.js`**: one source for codes, link rules and content, shared by the app and the patient page. It holds procedures (`ext3`, `imp`, `aox`), stages (`c` consult, `r` post-op, `a` full journey), modifier chips (`sed grf sin ner ant prf imm`, plus `nd`) and languages (`en es kea zh`). `composeProtocol()` is pure and deterministic. Modifiers merge in a fixed order and add to "Applies to your surgery", to the right day window (day 0, days 1–2, 3–5, 6–14) and to the call-office or emergency lists. Modifier FAQs come first and are deduplicated by id. A missing translation falls back to English and is flagged.
+- **Link:** `/handouts/?site=…#v-ext3-r-sed.grf-zh`, plus `-d` for a draft preview. It extends the existing hash format and the `?site=`/`?ph=` practice parameter, so the brief's `/p/` route was not used. Codes only; no names, dates, tooth numbers or free text. Parsing is strict. The patient page removes any query parameter other than `site` or `ph` from the address bar. The longest possible link is 110 characters, and every combination is tested to stay under 150. The QR uses error correction M.
+- **Pain doses:** a bleeding precaution (`ant`) or a recorded medication precaution or age/weight limit (`nd`, added automatically) replaces the general dose line with "use your written plan". This applies once v2 is live; while it's a draft, the QR for the approved handout is still withheld as before.
+- **Composer:** sits at the top of the Patient tab, in Author mode only while v2 is a draft. You choose procedure, stage, chips and language (the existing toggles). It shows the existing Send-to-patient card and QR, plus a character count and "Preview patient view". **While v2 is a draft, the QR and front-desk text open the approved handout for that procedure** (ext, imp or arch), in the chosen language. Only Preview opens the draft. New patient clears it.
+- **Patient page:** sticky call bar; Options, Risks and Recovery tabs (the stage decides which); an expectation strip; option cards with good points and trade-offs; an "Applies to your surgery" callout; and an education-only note ("does not replace the talk with your surgeon or the consent form you sign"). Recovery has emergency, call-office and normal-healing banners, day cards with Normal/Do/Don't, and up to 8 "Common questions". All touch targets are at least 48 px. A draft link shows a red banner. A non-draft link opens the approved handout until `V2_LIVE` is set to true.
+- **Offline:** the service worker precaches `handouts/` and `v2.js`, and the patient page registers it, so it works offline after its first visit.
+- **Content:** **an unverified English draft** for 3 procedures and 7 modifiers. It's written from the approved handouts, FAQs and option grids, and cites existing source keys. Items new in this draft: the expectation-strip times, decision options, risk wording, the white-layer-in-socket and sharp-edge FAQs, the PRF and same-day temporary tooth chips, and the bleeding-precaution thresholds (30 min call us; 1 h, or feeling faint, emergency room). es/zh/kea come later, with back-translation, once you approve the English.
+- **To go live:** review the English (Preview, or read `handouts/v2.js`), set `last_reviewed`, and set `V2_LIVE = true`.
+- Tests: new `tests/v2.cjs` (427 checks: 73,728 links, strict parsing, the zero-PHI query validator, composition windows, FAQ dedup, dose withholding, readability) and browser section 35. CI runs `tests/v2.cjs`.
+
+## v3.27.2 — Nov 19, 2026 (approved by Steven Nov 19, 2026; fluent-speaker review still pending) — 繁體中文 handouts
+
+- **Chinese handouts converted from Simplified to Traditional (Taiwan).** This covers every 中文 handout, FAQ, option grid and patient-page UI string, in both the app and `/handouts/`, plus the PDF QR sheets (regenerated). The language button now reads 繁體中文, and the page language is `zh-Hant-TW`. The `#…-zh` links and printed QR codes are unchanged.
+- **Method:** OpenCC `s2twp`, then manual corrections for clinical terms. OpenCC made errors that would have misled patients: 乾槽症 had become 幹槽症 (dry socket); 只 had become 隻 ("only"); 局部麻醉 had become 區域性麻醉; and 第3天後 had come out as 第3天后. Mainland terms were changed to Taiwan usage: 乙醯胺酚 (acetaminophen), 非類固醇消炎藥 (NSAID), 阿斯匹靈, 鴉片類, 上顎竇, 顳顎關節, 植牙/植體, 切片檢查, 齒顎矯正醫師, 醫師, 沖牙機, 洋芋片, QR Code and 週. Advil and Tylenol now appear by their English brand names, followed by the generic drug name.
+- **Needs review:** a fluent Taiwanese Mandarin speaker should still review the translation. The existing "translation draft" notice stays.
+- Tests: Chinese string expectations updated; all suites pass.
+
 ## v3.27.1 — Nov 19, 2026 (approved by Steven Nov 19, 2026) — source citation fixes
 
 Checked against the source page on Nov 19, 2026 (`chk` added; display only, no gating change):

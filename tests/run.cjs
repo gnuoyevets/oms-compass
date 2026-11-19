@@ -179,15 +179,16 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  ok(await E(hp,()=>JSON.stringify({HO:HO.map(({id,t,i})=>({id,t,i})),FAQ:FAQ.map(({id,k,t,i})=>({id,k,t,i})),OG:OG.map(({id,t,o,r})=>({id,t,o,r}))}))===cmp,'Handouts page: post-op, FAQ and option-grid text identical to Compass');
  ok(await hp.locator('.card').count()===23&&await hp.locator('h3.sec').count()===4,'Handouts page home lists 5 instructions + 15 FAQs + 3 option grids in 4 sections');
  await E(hp,()=>{location.hash='#ogimp-es'});await hp.waitForFunction(()=>/Reemplazar/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.og h3').count()===6&&/promedios/.test(await hp.locator('#app').innerText()),'Handouts page: #ogimp-es opens the Spanish implant/bridge grid with the caveat');
- await E(hp,()=>{location.hash='#oggraft-zh'});await hp.waitForFunction(()=>/拔牙后/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.og h3').count()===5,'Handouts page: 中文 graft grid');
+ await E(hp,()=>{location.hash='#oggraft-zh'});await hp.waitForFunction(()=>/拔牙後/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.og h3').count()===5,'Handouts page: 中文 graft grid');
  await E(hp,()=>{location.hash='#ogcoro-kea'});await hp.waitForFunction(()=>/juízu/.test(document.querySelector('h2')?.textContent||''));ok(await E(hp,()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Handouts page: Kriolu coronectomy grid, no horizontal scroll');await E(hp,()=>{location.hash='#-en'});await hp.waitForSelector('.card');
  await E(hp,()=>{location.hash='#fao-es'});await hp.waitForSelector('.qa');ok(/Alveolitis seca/.test(await hp.locator('h2').innerText())&&await hp.locator('.qa h3').count()===5,'Handouts page: FAQ link #fao-es opens Spanish dry socket FAQ');
- await E(hp,()=>{location.hash='#finf-zh'});await hp.waitForFunction(()=>/牙齿感染/.test(document.querySelector('h2')?.textContent||''));ok(!/英文和西班牙文/.test(await hp.locator('#app').innerText())&&await hp.locator('.qa p.warn').count()===1,'Handouts page: 中文 FAQ in Chinese, no fallback note; 911 answer highlighted');
+ await E(hp,()=>{location.hash='#finf-zh'});await hp.waitForFunction(()=>/牙齒感染/.test(document.querySelector('h2')?.textContent||''));ok(!/英文和西班牙文/.test(await hp.locator('#app').innerText())&&await hp.locator('.qa p.warn').count()===1,'Handouts page: 中文 FAQ in Chinese, no fallback note; 911 answer highlighted');
  await E(hp,()=>{location.hash='#fao-kea'});await hp.waitForFunction(()=>/Alvéolu seku/.test(document.querySelector('h2')?.textContent||''));ok(await hp.locator('.qa h3').count()===5,'Handouts page: Kriolu dry socket FAQ link works');
  ok(await E(hp,()=>document.documentElement.scrollWidth<=window.innerWidth+1),'Handouts page FAQ: no horizontal scroll');await hp.close();
- ok(await E(page,()=>{S.lang='zh';view('handouts');const ok=!/English shown/.test(document.getElementById('vbody').textContent)&&/拔除智齿/.test(document.getElementById('ho-fwis').textContent);S.lang='kea';view('handouts');const ok2=/Tira denti di juízu/.test(document.getElementById('ho-fwis').textContent);S.lang='en';return ok&&ok2}),'Kriolu and 中文 FAQs show in their own language, no fallback note');
+ ok(await E(page,()=>{S.lang='zh';view('handouts');const ok=!/English shown/.test(document.getElementById('vbody').textContent)&&/拔除智齒/.test(document.getElementById('ho-fwis').textContent);S.lang='kea';view('handouts');const ok2=/Tira denti di juízu/.test(document.getElementById('ho-fwis').textContent);S.lang='en';return ok&&ok2}),'Kriolu and 中文 FAQs show in their own language, no fallback note');
+ ok(await E(page,()=>{S.lang='en';view('handouts');document.querySelector('#vbody button[data-lang="zh"]').click();const b=document.querySelector('#vbody button[data-lang="zh"]');const r=S.lang==='zh'&&/拔牙後須知/.test(document.getElementById('vbody').textContent)&&b.getAttribute('lang')==='zh-Hant-TW';S.lang='en';return r}),'Handouts tab: tapping 繁體中文 switches to Traditional Chinese (internal key zh, lang zh-Hant-TW)');
  ok(await E(page,()=>FAQ.every(f=>['kea','zh'].every(l=>f.t[l]&&f.i[l].length===f.i.en.length&&f.i[l].every(x=>x.length===2&&x[0]&&x[1])))),'FAQs: Kriolu and 中文 complete, question counts match English');
- ok(await E(page,()=>/^拔除智齿/.test(faqText(FAQ.find(f=>f.id==='fwis'),'zh'))&&/电话: /.test(faqText(FAQ[0],'zh'))),'中文 FAQ share text in Chinese with phone label');
+ ok(await E(page,()=>/^拔除智齒/.test(faqText(FAQ.find(f=>f.id==='fwis'),'zh'))&&/電話: /.test(faqText(FAQ[0],'zh'))),'中文 FAQ share text in Chinese with phone label');
 
  console.log('9. Basis, assumptions and review status shown');
  await E(page,()=>{newPatient();S.draftMode=true;open('preop')});for(const [id,v] of [['a',0],['b',0],['c',0],['d',0],['d2',0],['e',0]])await page.click(`.cur [data-a="${id}"][data-v="${v}"]`);
@@ -536,6 +537,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
  // Offline and update behavior via a real service worker over HTTP
  {const fs=require('fs'),os=require('os'),http=require('http');const root=fs.mkdtempSync(path.join(os.tmpdir(),'compass-'));const app=path.join(root,'oms-compass');fs.mkdirSync(app);
   for(const f of fs.readdirSync(path.resolve(__dirname,'..')))if(/\.(html|js|css|png|webmanifest)$/.test(f))fs.copyFileSync(path.resolve(__dirname,'..',f),path.join(app,f));
+  fs.mkdirSync(path.join(app,'handouts'));for(const f of ['index.html','v2.js'])fs.copyFileSync(path.resolve(__dirname,'..','handouts',f),path.join(app,'handouts',f));
   const T={html:'text/html',js:'text/javascript',css:'text/css',png:'image/png',webmanifest:'application/manifest+json'};
   const srv=http.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const f=path.join(root,u);if(!f.startsWith(root)||!fs.existsSync(f)){r.writeHead(404);return r.end()}r.writeHead(200,{'content-type':T[f.split('.').pop()]||'application/octet-stream','cache-control':'no-cache'});fs.createReadStream(f).pipe(r)});
   await new Promise(r=>srv.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${srv.address().port}/oms-compass/`;
@@ -557,6 +559,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   ok(JSON.stringify(upd)==='["compass-test-update"]','Update activates after old clients close and deletes old cache ('+upd+')');
   await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: online open serves the new version');
   await oc.setOffline(true);await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: new version available offline');
+  await op.goto(base+'handouts/?site=bayside#v-ext3-r-sed-en-d');await op.waitForSelector('.v2');ok(await op.locator('[data-pane="rec"]').isVisible()&&/508/.test(await op.locator('a.call').innerText()),'Offline: patient page and v2 draft open from the cache');
   await oc.close();srv.close();fs.rmSync(root,{recursive:true,force:true})}
 
  console.log('16. v3.6 chairside focus mode — one decision per screen, header, drawer, back-step, latency, contrast');
@@ -1317,6 +1320,38 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await X(()=>{localStorage.removeItem('oms_compass_sos_run');view('ref')});
   ok(/0 of 25 cards have a last-checked date/.test(await p.locator('#refchk-sum').innerText())&&await p.locator('.refchk').count()===25,'Ref: every card shows its check status; none dated yet');
   await p.close();await c34.close();await new Promise(r=>srv34.close(r))}
+
+ console.log('35. v3.28.0: v2 composer (author, draft) and patient journey page');
+ {const c35=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await c35.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){}});
+  const page=await c35.newPage();page.on('pageerror',e=>{fail++;fails.push('v2 composer pageerror: '+e.message)});await page.route(/^https?:\/\//,localOnly);await page.goto(FILE);await page.waitForSelector('#in-q');
+  const X=(f,a)=>page.evaluate(f,a);
+  ok(await X(()=>typeof V2==='object'&&JSON.stringify(V2L.proc.map(x=>x[0]))===JSON.stringify(V2.PROCS)&&JSON.stringify(V2L.stage.map(x=>x[0]))===JSON.stringify(V2.STAGES)),'Composer uses the v2 code lists from handouts/v2.js');
+  await X(()=>{setPmode('colleague');newPatient();S.lang='en';view('handouts')});ok(await page.locator('#v2-composer').count()===0,'Colleague mode: no v2 composer while v2 is a draft');
+  await X(()=>{setPmode('author');newPatient();S.lang='en';S.site='bayside';view('handouts')});
+  ok(await page.locator('#v2-composer').count()===1&&await page.locator('#v2-composer [data-v2p]').count()===3&&await page.locator('#v2-composer [data-v2s]').count()===3&&await page.locator('#v2-composer [data-v2m]').count()===7,'Author mode: composer with 3 procedures, 3 stages, 7 modifier chips');
+  ok(await page.locator('#v2-composer .tg').evaluateAll(bs=>bs.every(b=>{const r=b.getBoundingClientRect();return r.height>=48&&r.width>=48})),'Composer buttons are at least 48 px');
+  await page.click('[data-v2p="imp"]');await page.click('[data-v2s="a"]');await page.click('[data-v2m="sin"]');await page.click('[data-v2m="sed"]');
+  const x=await X(()=>({e:patientExport(),pv:v2URL(true),len:document.getElementById('v2-len')?.textContent||'',gate:!!document.getElementById('v2-gate'),qr:!!document.querySelector('#patient-export-preview svg.qr'),href:document.getElementById('v2-preview')?.getAttribute('href')}));
+  ok(x.e.url==='https://gnuoyevets.github.io/oms-compass/handouts/?site=bayside#imp-en'&&x.gate&&x.qr,'Draft: QR opens the approved implant handout, with a notice');
+  ok(x.href===x.pv&&/#v-imp-a-sed\.sin-en-d$/.test(x.pv),'Preview link opens the v2 draft with chips in canonical order');
+  ok(/characters/.test(x.len)&&/under 150/.test(x.len),'Character count shown and under 150');
+  await X(()=>{S.ans.pain={a:true};rebody()});
+  ok(await X(()=>/\.nd-en-d$/.test(v2URL(true))&&!!document.getElementById('v2-nd')&&!!document.getElementById('qr-held')),'Medication precaution: preview adds nd; draft QR still withheld as today');
+  await X(()=>{newPatient()});ok(await X(()=>!S.v2),'New patient clears the composer');
+  const hp=await c35.newPage();hp.on('pageerror',e=>{fail++;fails.push('v2 page error: '+e.message)});await hp.route(/^https?:\/\//,localOnly);
+  const HP=FILE.replace(/index\.html$/,'handouts/index.html');
+  await hp.goto(HP+'?site=bayside&name=Jane#v-ext3-a-sed.ant-en-d');await hp.waitForSelector('.v2');
+  ok(!/name=/.test(hp.url())&&/\?site=bayside#/.test(hp.url()),'Patient page drops an unexpected query parameter and keeps ?site=');
+  ok(await hp.locator('.v2draft').count()===1&&await hp.locator('[data-v2tab]').count()===3&&/508/.test(await hp.locator('a.call').innerText()),'Draft link: banner, 3 tabs, Bayside phone');
+  ok(await hp.locator('[data-v2tab]').evaluateAll(bs=>bs.every(b=>b.getBoundingClientRect().height>=48)),'Patient tabs are at least 48 px');
+  await hp.click('[data-v2tab="risk"]');ok(await hp.locator('[data-pane="risk"]').isVisible()&&/Applies to your surgery/.test(await hp.locator('.applies').innerText())&&/does not replace/.test(await hp.locator('[data-pane="risk"]').innerText()),'Risks tab: applied modifier risks and education-only note');
+  await hp.click('[data-v2tab="rec"]');const rec=await hp.locator('[data-pane="rec"]').innerText();
+  ok(/Emergency/.test(rec)&&/911/.test(rec)&&!/Advil/.test(rec)&&/written plan/.test(rec)&&await hp.locator('.v2faq details').count()<=8,'Recovery: escalation, doses withheld for bleeding precaution, ≤ 8 FAQs');
+  ok(await hp.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'v2 page: no horizontal scroll at 390 px');
+  await hp.goto(HP+'#v-ext3-r-sed-zh');await hp.waitForSelector('h2');
+  ok(/#ext-zh$/.test(hp.url())&&/拔牙後須知/.test(await hp.locator('h2').innerText())&&await hp.locator('.v2').count()===0,'Non-draft link while v2 is a draft: opens the approved handout in the patient’s language');
+  await hp.goto(HP+'#v-ext3-r-jane-en');await hp.waitForSelector('.card');ok(await hp.locator('.v2').count()===0,'Malformed v2 link shows the topic list, nothing composed');
+  await hp.close();await c35.close()}
 
  await browser.close();
  
