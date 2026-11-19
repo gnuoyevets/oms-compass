@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.28.1 — Nov 19, 2026 (pending Steven's approval) — Home on every screen
+## v3.28.1 — Nov 19, 2026 (approved by Steven Nov 19, 2026) — Home on every screen
 
 - **Audit:** every app screen was opened in a phone-size browser: Decide, SOS, Calc, Ref, Patient, What's new, all modules, all findings, Assessment and Intraop. All already had Home, except Home itself and Staff view, which are home screens.
 - **Ask Claude sheet:** now has **⌂ Home** next to Close.
