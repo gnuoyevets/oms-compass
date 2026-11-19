@@ -1371,6 +1371,36 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   for(const h of ['#ext-en','#fao-es','#ogimp-zh']){await hp.goto(FILE.replace(/index\.html$/,'handouts/index.html')+h);await hp.waitForSelector('h2');ok(await hp.locator('button.back[data-home]').count()===1,'Patient page '+h+': All topics button')}
   await c36.close()}
 
+ console.log('37. v3.29.0: colleague default, gate labels, on-call drawer and quick row, docked intraop bar');
+ {const c37=await browser.newContext({...devices['iPhone 13'],deviceScaleFactor:1});await c37.addInitScript(()=>{try{localStorage.setItem('omsCompassAck','1')}catch(e){};window.__clip='';try{navigator.clipboard.writeText=async t=>{window.__clip=t}}catch(e){}});
+  const p=await c37.newPage();p.on('pageerror',e=>{fail++;fails.push('v3.29 pageerror: '+e.message)});await p.route(/^https?:\/\//,localOnly);await p.goto(FILE);await p.waitForSelector('#in-q');const X=(f,a)=>p.evaluate(f,a);
+  ok(await X(()=>pmode()==='colleague'&&localStorage.getItem('oms_compass_practice_mode')!=='author'),'First start with no stored choice: Colleague mode');
+  ok(await X(()=>GATE_LABEL({tone:'none',unk:[],done:false})===''&&GATE_LABEL({tone:'mod',unk:['x'],done:false})==='Verify first'&&GATE_LABEL({tone:'mod',unk:[],done:false})==='Verify first'&&GATE_LABEL({tone:'mod',unk:[],done:true})==='Address first'&&/^Proceed · .*not a clearance$/.test(GATE_LABEL({tone:'ok',unk:[],done:true}))),'Gate label: Unknown or incomplete is Verify first, never Proceed; Proceed says not a clearance');
+  ok(await X(()=>{S.pf.urg='el';const a=GATE_LABEL({tone:'def',unk:[],done:true});S.pf.urg='urg';const b=GATE_LABEL({tone:'def',unk:[],done:true});delete S.pf.urg;return a==='Defer elective'&&/^Escalate/.test(b)}),'Gate label: unstable condition defers elective care and escalates urgent care');
+  ok(await X(()=>{newPatient();const h=gateHTML('extraction');return!/gdec/.test(h)}),'Gate not run: no decision label');
+  ok(await X(()=>{const g=gateModel;gateModel=()=>({tone:'def',t:'STOP · defer elective surgery',hits:[['def','Uncontrolled hypertension']],unk:[],done:true});const h=gateHTML('extraction');gateModel=g;return/Defer elective/.test(h)&&/Defer because:<\/b> Uncontrolled hypertension/.test(h)}),'Defer card names the defer criteria');
+  await X(()=>{setOnCall(false);newPatient();home()});ok(await p.locator('#ocq').count()===0,'Outpatient: no on-call quick row');
+  await X(()=>{setOnCall(true);home()});ok(await p.locator('#ocq [data-open]').count()===4&&await p.locator('#ocq [data-view="emergency"]').count()===1&&await p.locator('#ocq [data-soap]').count()===1,'On-call: quick row with trauma, fracture, infection, bleeding, SOS and SOAP note');
+  ok(await X(()=>localStorage.getItem('omsCompassOnCall')==='1'),'On-call switch remembered on the device');
+  await p.click('#ocq [data-soap]');ok(/SOAP note/.test(await X(()=>window.__clip)),'Quick row copies the SOAP note');
+  await X(()=>open('extraction'));await p.click('[data-drawer]');
+  ok(await p.locator('#sec-outpt').count()===0&&await X(()=>{const t=document.createElement('div'),ks=OC_RED.filter(k=>M(k).red),els=[...document.querySelectorAll('#sec-oncall details > .inner > .red')];return ks.length===2&&els.length===ks.length&&els.every((d,i)=>{t.innerHTML=M(ks[i]).red;return d.innerHTML===t.innerHTML})})&&await p.locator('#sec-oncall .fx-qr [data-open="mandfx"]').count()===1,'On-call drawer: trauma and infection red flags reused verbatim; Mandible fracture (no red-flag text) linked');
+  await X(()=>{S.drOpen=false;setOnCall(false);open('extraction')});await p.click('[data-drawer]');
+  ok(await p.locator('#sec-outpt [data-view="calc"]').count()===1&&await p.locator('#sec-oncall').count()===0,'Outpatient drawer: chairside quick reference instead');
+  await X(()=>{S.drOpen=false;newPatient();view('calc')});ok(!(await p.locator('#iodock').isVisible().catch(()=>false)),'No dock before any checklist item is set');
+  await X(()=>{S.pf.proc='none';S.atab='io';asmtView()});ok(await X(()=>['exroot','grcl','imppos'].every(k=>!!ioFold(k))),'No-bleeding procedure: extraction, graft and implant steps fold away');
+  await X(()=>{S.pf.proc='high';document.getElementById('iobody').innerHTML=ioHTML()});ok(await X(()=>['exroot','grcl','imppos'].every(k=>!ioFold(k)))&&/author’s draft/.test(await p.locator('#iobody').innerText()),'Surgical procedure: draft extraction, graft and implant steps shown');
+  await p.click('[data-io="id"]');await X(()=>view('ref'));ok(await p.locator('#iodock').isVisible()&&/Time-out 1\/7/.test(await p.locator('#iodock').innerText()),'Dock stays on other screens once a step is set');
+  await X(()=>open('extraction'));const db=await p.locator('#iodock').boundingBox(),hb=await p.locator('.fx-handle').boundingBox();
+  ok(await p.locator('#iodock').isVisible()&&db.y+db.height<=hb.y+1&&db.height>=48,'Dock in a module sits above the drawer handle, ≥ 48 px');
+  await p.click('[data-iodock]');ok(await X(()=>S.view==='asmt'&&S.atab==='io')&&!(await p.locator('#iodock').isVisible()),'Tapping the dock opens the checklist; dock hides there');
+  await X(()=>view('calc'));await p.click('[data-iodreset]');ok(await X(()=>Object.keys(S.io).length===1),'Next patient needs a second tap');
+  await p.click('[data-iodreset]');ok(await X(()=>Object.keys(S.io).length===0)&&!(await p.locator('#iodock').isVisible()),'Second tap resets the checklist and removes the dock');
+  ok(await X(()=>{newPatient();S.pf.proc='high';S.io={};ioSet('id','done');view('calc');const before=/Time-out 1\//.test(document.getElementById('iodock').textContent);S.pf.proc='low';updBar();return before&&!S.io.id&&document.getElementById('iodock').hidden}),'Dock re-syncs: a step reset by a context change is no longer counted');
+  await X(()=>{S.io={id:'done'};updBar();newPatient()});ok(!(await p.locator('#iodock').isVisible()),'New patient also clears the dock');
+  ok(await X(()=>{const k=Object.keys(localStorage);return!k.some(x=>/io|asmt|ans/i.test(x)&&!/oncall|contrast|practice/i.test(x))}),'Checklist and answers are not written to device storage');
+  await c37.close()}
+
  await browser.close();
  
  console.log(`\n${pass} passed, ${fail} failed`);if(fail){console.log(fails.join('\n'));process.exit(1)}
