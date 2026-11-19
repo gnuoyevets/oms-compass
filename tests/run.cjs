@@ -1396,6 +1396,7 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await p.click('[data-iodock]');ok(await X(()=>S.view==='asmt'&&S.atab==='io')&&!(await p.locator('#iodock').isVisible()),'Tapping the dock opens the checklist; dock hides there');
   await X(()=>view('calc'));await p.click('[data-iodreset]');ok(await X(()=>Object.keys(S.io).length===1),'Next patient needs a second tap');
   await p.click('[data-iodreset]');ok(await X(()=>Object.keys(S.io).length===0)&&!(await p.locator('#iodock').isVisible()),'Second tap resets the checklist and removes the dock');
+  ok(await X(()=>{newPatient();S.pf.proc='high';S.io={};ioSet('id','done');view('calc');const before=/Time-out 1\//.test(document.getElementById('iodock').textContent);S.pf.proc='low';updBar();return before&&!S.io.id&&document.getElementById('iodock').hidden}),'Dock re-syncs: a step reset by a context change is no longer counted');
   await X(()=>{S.io={id:'done'};updBar();newPatient()});ok(!(await p.locator('#iodock').isVisible()),'New patient also clears the dock');
   ok(await X(()=>{const k=Object.keys(localStorage);return!k.some(x=>/io|asmt|ans/i.test(x)&&!/oncall|contrast|practice/i.test(x))}),'Checklist and answers are not written to device storage');
   await c37.close()}

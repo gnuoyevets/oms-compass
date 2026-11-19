@@ -3557,7 +3557,7 @@ function ioSecCount(sec){const it=sec[1].filter(([k])=>!ioFold(k));return[it.fil
 function ioSummary(){const secs=[IO[0],...(ioEncounter().length?[['enc',ioEncounter()]]:[]),...IO.slice(1)];let d=0,n=0;secs.forEach(x=>{const[a,b]=ioSecCount(x);d+=a;n+=b});
  const so=IO.find(x=>x[0].startsWith('Sign-out'));return{d,n,to:ioSecCount(IO[0]),so:ioSecCount(so)}}
 let ioArm=0;
-function updDock(){let d=document.getElementById('iodock');const on=ioActive()&&!(S.view==='asmt'&&S.atab==='io')&&S.view!=='gate';
+function updDock(){if(S.io&&Object.keys(S.io).length)ioSync();let d=document.getElementById('iodock');const on=ioActive()&&!(S.view==='asmt'&&S.atab==='io')&&S.view!=='gate';
  if(!d){if(!on)return;d=document.createElement('div');d.id='iodock';d.setAttribute('role','region');d.setAttribute('aria-label','Intraop checklist');document.body.appendChild(d)}
  d.hidden=!on;document.body.classList.toggle('iodock',on);if(!on)return;const x=ioSummary(),ok=([a,b])=>b&&a===b?'✓':`${a}/${b}`;
  d.innerHTML=`<button class="iod-open" data-iodock aria-label="Open intraop checklist"><b>Intraop</b> · Time-out ${ok(x.to)} · ${x.d}/${x.n} · Sign-out ${ok(x.so)}</button><button class="iod-reset${ioArm?' arm':''}" data-iodreset>${ioArm?'Tap again':'Next patient'}</button>`}
