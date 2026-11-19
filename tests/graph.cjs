@@ -30,6 +30,8 @@ check('pediatric today withholds adult dose',`newPatient();S.pf.age='8';!/Ibupro
 check('liver context withholds generic fixed analgesia',`newPatient();S.pf.age='44';S.ans.liver={a:false};S.ans.pain={a:false,b:false};patientMedicationRisk().organ&&!/Ibuprofen 400|Acetaminophen 1000/.test(tdAnalg({}))`);
 check('off-anticoagulant INR has no borrowed 72-hour cutoff',`newPatient();S.pf={proc:'low',inr:'1.0',inrOn:'none',inrRef:'n',inrAge:'old',inrCurrent:'y'};S.draftMode=true;FX.inr.plan(S.pf).d==='proceed'&&!fQs(FX.inr).some(q=>q.k==='inrAge')`);
 check('off-anticoagulant clinical currency remains required',`S.pf.inrCurrent='u';FX.inr.plan(S.pf).prov&&FX.inr.plan(S.pf).d==='investigate'`);
+check('salivary: immunocompromised, refractory or facial-palsy sialadenitis is asked at the emergency question',`/immunocompromised/.test(M('salivary').nodes.a.q)&&/facial nerve palsy/.test(M('salivary').nodes.a.q)&&M('salivary').nodes.a.yes==='oED'`);
+check('methotrexate prescribing check flags nitrous oxide',`newPatient();S.pf={age:'50',rxSsri:'n',rxLi:'n',rxMtx:'y'};const f=FIND.find(x=>x.id==='rxint'),p=fPlan(f);/avoid nitrous oxide/.test(p.act)&&p.steps.some(x=>/avoid nitrous oxide .N2O. sedation/.test(x))&&p.src.includes('mtxLbl')`);
 check('source gates render every finding without bypassing risk state',`FIND.every(f=>{newPatient();S.asmt=[f.id];const m=asmtModel(),p=fPlan(f);return DISP[m.od]&&DISP[p.d]})`);
 check('unverified treatment gated without removing original',`newPatient();S.ans.oac={a:false,b:false,c:false};const m=M('oac');const w=walk(m);!w.out||flowHTML(m).includes('Enable draft material')`);
 check('no clinical persistence introduced',`[...storage.keys()].every(k=>['omsCompassAck','oms_compass_practice_mode'].includes(k))`);
