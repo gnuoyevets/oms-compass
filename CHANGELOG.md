@@ -2,6 +2,14 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.28.1 — Nov 19, 2026 (pending Steven's approval) — Home on every screen
+
+- **Audit:** every app screen was opened in a phone-size browser: Decide, SOS, Calc, Ref, Patient, What's new, all modules, all findings, Assessment and Intraop. All already had Home, except Home itself and Staff view, which are home screens.
+- **Ask Claude sheet:** now has **⌂ Home** next to Close.
+- **v2 patient-journey page:** "‹ All topics" now sits at the top, as on the other patient pages.
+- **Not changed:** the first-use "Before you use Compass" screen still has no Home, because the notice must be accepted first.
+- Tests: browser section 36 opens every screen and fails if one lacks Home.
+
 ## v3.28.0 — Nov 19, 2026 (merge approved by Steven Nov 19, 2026; v2 content still a draft, not live) — v2 patient journey engine (content draft)
 
 Built from the "OMS Compass v2" handoff, as decided on Nov 19, 2026. The engine is live; the new clinical text is held back until you review it.
