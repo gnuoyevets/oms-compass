@@ -12,7 +12,7 @@ From the Nov 19 chairside PWA spec. These are updates to the existing app, as de
   - **Defer elective**: an unstable condition, with a "Defer because" line listing the criteria.
   - **Escalate · monitored or hospital setting**: the same, with an urgent need.
 - **On-call mode adapts:**
-  - The reference drawer leads with red flags from Facial trauma, Mandible fracture and Odontogenic infection, reused verbatim from those modules (no new clinical text), plus SOS and Bleeding.
+  - The reference drawer leads with red flags from Facial trauma and Odontogenic infection, reused verbatim from those modules (no new clinical text), plus links to Mandible fracture (it has no red-flag text), SOS and Bleeding.
   - In outpatient mode, the drawer leads with chairside quick reference instead: local anesthetic maximum (Calc), Pre-op clearance, Office sedation.
   - On-call Home adds a quick row: Facial trauma, Mandible fracture, Infection, Bleeding, SOS protocols, Copy SOAP note.
 - **Docked intraop checklist:** once any checklist step is set, a slim bar stays on every screen, above the bottom bar or drawer handle. It reads "Time-out x/7 · done/total · Sign-out x/7". Tap it to open the checklist; it hides on the checklist itself. **Next patient** (two taps) clears the checklist; New patient also clears it. Memory only.
