@@ -38,7 +38,7 @@ Note: a public repo makes the site public. It contains no patient data.
 
 ## Validation
 
-Run `node tests/reconciliation.cjs` for dependency-free reconciliation and state-isolation checks.
+Run `node tests/preflight.cjs` for a single-command preflight check (version sync across `index.html`, `sw.js`, and `CHANGELOG.md`, Service Worker asset checks, plus all four dependency-free suites). Contributor and AI safety rules live in `AGENTS.md`.
 See `RECONCILIATION-REVIEW.md` for scope, source checks and limitations.
 The existing browser suite remains `node tests/run.cjs` (requires Playwright Chromium).
 Software tests do not establish clinical validity.

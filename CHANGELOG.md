@@ -2,6 +2,13 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
+## v3.29.1 — Nov 21, 2026 (engineering guardrails only; no clinical content changed — pending review) — Service Worker JS/CSS lockstep, AGENTS.md, preflight check
+
+- **Offline Service Worker (`sw.js`):** same-origin `.js` and `.css` assets (such as `handouts/v2.js` and future extracted modules) now use **network-first with cache fallback**, preventing version skew between a newly fetched `index.html` and an older cached script while a Service Worker update is waiting. Icons, manifest, and Google Fonts remain cache-first.
+- **Contributor & AI handbook (`AGENTS.md`):** documents OMS Compass's non-negotiable clinical-safety invariants, zero-PHI rules, zero-build architecture, version-sync rules, and PR workflow so every future session starts aligned.
+- **One-command preflight (`tests/preflight.cjs`):** verifies version sync across `index.html` (`VER` and `CHANGES[0]`), `sw.js` (`VERSION`), and `CHANGELOG.md`, checks that every `sw.js` `CORE` precache file exists on disk, guards against Service Worker JS/CSS cache regressions, and runs all four dependency-free test suites in one command. Wired into GitHub Actions (`.github/workflows/tests.yml`).
+- **Tests:** added a Service Worker version-lockstep check for `handouts/v2.js` in `tests/run.cjs` (both while an update is waiting and offline after activation).
+
 ## v3.29.0 — Nov 19, 2026 (approved by Steven Nov 19, 2026; draft checklist steps still author's draft) — chairside/on-call spec: gate labels, on-call drawer, docked intraop bar
 
 From the Nov 19 chairside PWA spec. These are updates to the existing app, as decided: the spec's 56 px header, stacked 48 px+ targets, swipe and system back, reference drawer, AAA contrast, sub-100 ms transitions, QR handoff and client-only state were already in place (v3.6, v3.22, v3.28) and are unchanged.
