@@ -19,14 +19,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Reconciliation checks (no dependencies)
-        run: node tests/reconciliation.cjs
-      - name: Clinical workflow regressions (no dependencies)
-        run: node tests/clinical-workflow.cjs
-      - name: v2 link and composition checks (no dependencies)
-        run: node tests/v2.cjs
-      - name: Full graph, audit-correction and feature-preservation checks
-        run: node tests/graph.cjs
+      - name: Preflight (version sync, service worker, and all dependency-free suites)
+        run: node tests/preflight.cjs
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save --no-package-lock playwright@1.63.0

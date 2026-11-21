@@ -550,15 +550,17 @@ const openSet=async page=>{if(!(await page.evaluate(()=>{const d=document.getEle
   await oc.setOffline(false);
   fs.writeFileSync(path.join(app,'sw.js'),fs.readFileSync(path.join(app,'sw.js'),'utf8').replace(/const VERSION = '[^']+'/,"const VERSION = 'compass-test-update'"));
   fs.writeFileSync(path.join(app,'index.html'),fs.readFileSync(path.join(app,'index.html'),'utf8').replace(/const VER='[^']+'/,"const VER='9.9.9-test'"));
+  fs.writeFileSync(path.join(app,'handouts','v2.js'),fs.readFileSync(path.join(app,'handouts','v2.js'),'utf8').replace(/const V2_VERSION = '[^']+'/,"const V2_VERSION = '9.9.9-v2test'"));
   await op.evaluate(()=>navigator.serviceWorker.getRegistration().then(r=>r.update()));
   await op.waitForFunction(async()=>!!(await navigator.serviceWorker.getRegistration()).waiting);
   ok(await op.evaluate(()=>S.pf.proc==='high'),'Update waits without resetting an active encounter');
+  ok(await op.evaluate(()=>fetch('./handouts/v2.js').then(r=>r.text()).then(t=>t.includes('9.9.9-v2test'))),'Update: JS assets fetch network-first (no version skew while old worker waits)');
   await op.close();op=await oc.newPage();await op.goto(base);
   await op.waitForFunction(async()=>!(await navigator.serviceWorker.getRegistration()).waiting);
   let upd=[];for(let i=0;i<30;i++){upd=await op.evaluate(()=>caches.keys());if(upd.length===1&&upd[0]==='compass-test-update')break;await op.waitForTimeout(100)}
   ok(JSON.stringify(upd)==='["compass-test-update"]','Update activates after old clients close and deletes old cache ('+upd+')');
-  await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: online open serves the new version');
-  await oc.setOffline(true);await op.reload();ok(await op.evaluate(()=>VER)==='9.9.9-test','Update: new version available offline');
+  await op.reload();ok(await op.evaluate(()=>VER==='9.9.9-test'&&V2.V2_VERSION==='9.9.9-v2test'),'Update: online open serves the new version and v2.js');
+  await oc.setOffline(true);await op.reload();ok(await op.evaluate(()=>VER==='9.9.9-test'&&V2.V2_VERSION==='9.9.9-v2test'),'Update: new version and v2.js available offline');
   await op.goto(base+'handouts/?site=bayside#v-ext3-r-sed-en-d');await op.waitForSelector('.v2');ok(await op.locator('[data-pane="rec"]').isVisible()&&/508/.test(await op.locator('a.call').innerText()),'Offline: patient page and v2 draft open from the cache');
   await oc.close();srv.close();fs.rmSync(root,{recursive:true,force:true})}
 
