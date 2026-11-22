@@ -1,6 +1,6 @@
 // OMS Compass offline cache.
 // To publish an update: edit index.html, bump VERSION, push. Phones pick it up on next open.
-const VERSION = 'compass-2026-11-19-v3.29.0';
+const VERSION = 'compass-2026-11-21-v3.29.1';
 const CORE = ['./', './index.html', './manifest.webmanifest',
   './apple-touch-icon.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png',
   './handouts/', './handouts/v2.js'];
@@ -40,7 +40,17 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Own files and Google Fonts: cache first, fill on first use.
+  // Own JS/CSS files (e.g. handouts/v2.js): network first so scripts stay in
+  // lockstep with network-first HTML during updates; fall back to cache offline.
+  const isCode = url.origin === self.location.origin && /\.(js|css)$/.test(url.pathname) && !url.pathname.endsWith('/sw.js');
+  if (isCode) {
+    e.respondWith(fetch(req, {cache: 'no-cache'})
+      .then(r => { if (!r.ok) throw new Error('Asset response not usable'); const copy = r.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return r; })
+      .catch(() => caches.match(req)));
+    return;
+  }
+
+  // Other own static files (icons, manifest) and Google Fonts: cache first, fill on first use.
   const fonts = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
   if (url.origin === self.location.origin || fonts) {
     e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => {
