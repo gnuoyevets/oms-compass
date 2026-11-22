@@ -2,7 +2,7 @@
 
 Newest first. Every change is reviewed by Steven before publishing. The app shows the same list under the version number (top right).
 
-## v3.29.1 — Nov 21, 2026 (engineering guardrails only; no clinical content changed — pending review) — Service Worker JS/CSS lockstep, AGENTS.md, preflight check
+## v3.29.1 — Nov 21, 2026 (approved by Steven Nov 21, 2026; engineering guardrails only, no clinical content changed) — Service Worker JS/CSS lockstep, AGENTS.md, preflight check
 
 - **Offline Service Worker (`sw.js`):** same-origin `.js` and `.css` assets (such as `handouts/v2.js` and future extracted modules) now use **network-first with cache fallback**, preventing version skew between a newly fetched `index.html` and an older cached script while a Service Worker update is waiting. Icons, manifest, and Google Fonts remain cache-first.
 - **Contributor & AI handbook (`AGENTS.md`):** documents OMS Compass's non-negotiable clinical-safety invariants, zero-PHI rules, zero-build architecture, version-sync rules, and PR workflow so every future session starts aligned.
